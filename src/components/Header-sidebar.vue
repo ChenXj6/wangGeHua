@@ -3,7 +3,6 @@
     <el-menu
       class="sidebar-el-menu"
       :default-active="onRoutes"
-      :collapse="collapse"
       mode="horizontal"
       background-color="#242f42"
       text-color="#bfcbd9"
@@ -105,14 +104,9 @@ export default {
     const onRoutes = computed(() => {
       return route.path;
     });
-
-    const store = useStore();
-    const collapse = computed(() => store.state.collapse);
-
     return {
       items,
       onRoutes,
-      collapse,
     };
   },
 };

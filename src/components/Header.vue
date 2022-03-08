@@ -160,7 +160,7 @@ export default {
 }
 .collapse-btn {
   float: left;
-  padding: 0 21px;
+  padding: 0 10px 0 25px;
   cursor: pointer;
   line-height: 70px;
 }
@@ -177,7 +177,7 @@ export default {
 }
 .header-right {
   float: right;
-  padding-right: 50px;
+  padding-right: 25px;
 }
 .header-user-con {
   display: flex;
