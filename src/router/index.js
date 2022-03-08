@@ -13,14 +13,7 @@ const routes = [
         component: Main,
         meta: {
             title: '南村街道社会治理网格化智能工作平台'
-        },
-        children: [
-            {
-                path: "/map",
-                name: "Map",
-                component: () => import ( /* webpackChunkName: "dashboard" */ "../views/main/map.vue")
-            },
-        ]
+        }
     },
     {
         path: "/home",
@@ -148,7 +141,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | vue-manage-system`;
+    document.title = `${to.meta.title}`;
     const role = localStorage.getItem('ms_username');
     if (!role && to.path !== '/login') {
         next('/login');

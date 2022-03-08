@@ -12,7 +12,8 @@ export default defineConfig({
     resolve: {
         //配置根路径别名： import('@/pages/login/login.vue')
         alias: {
-            "@": path.resolve(__dirname, "src")
+            "@": path.resolve(__dirname, "src"),
+            'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
         },
     },
     server: {
