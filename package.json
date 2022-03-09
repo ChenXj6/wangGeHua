@@ -6,7 +6,7 @@
     "dev": "vite",
     "dev:prc": "vite serve --mode prc",
     "dev:menarini": "vite serve --mode menarini",
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "serve": "vite preview"
   },
   "dependencies": {
