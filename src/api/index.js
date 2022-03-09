@@ -1,9 +1,7 @@
-import request from '../utils/request';
+import service from '@/utils/request';
 
 export const fetchData = query => {
-    return request({
-        url: './table.json',
-        method: 'get',
-        params: query
-    });
+  return service.post(
+    `/api/route/to/demo`, query
+  )
 };

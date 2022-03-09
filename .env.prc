@@ -1,0 +1,8 @@
+NODE_ENV = 'production'
+VITE_APP_NODE_ENV = 'stage'
+
+# base api
+VITE_APP_BASE_API = 'http://192.168.8.42:11111'
+VITE_APP_HD_API='*'
+VITE_APP_BASE_PARAM_API = 'http://192.168.8.42:20002'
+VITE_APP_LEDGER_API = 'http://192.168.8.42:20002'
