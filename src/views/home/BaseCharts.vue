@@ -47,6 +47,7 @@ export default {
     const line = ref(null)
     const pie = ref(null)
     const ring = ref(null)
+    const speech = ref(null)
     const { proxy } = getCurrentInstance()
     const initEchart = (el) => {
       const echart = proxy.$echart.init(el.value)
@@ -59,7 +60,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          orient : 'horizontal',
+          orient: 'horizontal',
           data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
         },
         grid: {
@@ -75,7 +76,7 @@ export default {
         },
         xAxis: {
           type: 'category',
-          boundaryGap: ['20%','20%'],
+          boundaryGap: ['20%', '20%'],
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
         },
         yAxis: {

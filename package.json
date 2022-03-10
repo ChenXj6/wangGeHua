@@ -16,10 +16,12 @@
     "element-plus": "1.0.2-beta.52",
     "moment": "^2.29.1",
     "qs": "^6.10.3",
+    "speak-tts": "^2.0.8",
     "vue": "^3.1.2",
     "vue-cropperjs": "^5.0.0",
     "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.10",
+    "vue-schart": "^2.0.0",
     "vuex": "^4.0.2",
     "wangeditor": "^4.7.4"
   },
