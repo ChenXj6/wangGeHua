@@ -12,7 +12,7 @@
     </div>
     <div class="header-right">
       <div class="header-user-con">
-        <div v-per="111" class="go-back" @click="pageChange()">
+        <div v-permission="111" class="go-back" @click="pageChange()">
           <i class="change-state el-icon-sort"></i>
           <span>{{ status }}</span>
         </div>
