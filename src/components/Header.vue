@@ -7,7 +7,7 @@
       <i v-else class="el-icon-data-line"></i>
     </div>
     <div class="logo">南村街道社会治理网格化智能工作平台</div>
-    <div v-if="pageStatus" class="header-context">
+    <div v-if="pageStatus" class="header-content">
       <header-sidebar />
     </div>
     <div class="header-right">
@@ -105,7 +105,7 @@ export default {
     };
     // 当前是地图显示页还是后台页面
     const pageStatus = computed(() => {
-      if (fullPath && fullPath === "/main") {
+      if (fullPath && (fullPath === "/main" || fullPath === '/map')) {
         // 前台地图页
         return true;
       } else {
@@ -169,7 +169,7 @@ export default {
   width: 375px;
   line-height: 70px;
 }
-.header-context {
+.header-content {
   float: left;
   padding-left: 20px;
   height: 70px;

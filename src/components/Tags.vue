@@ -51,7 +51,7 @@ export default {
             if (item) {
                 delItem.path === route.fullPath && router.push(item.path);
             } else {
-                router.push("/");
+                router.push("/dashboard");
             }
         };
 

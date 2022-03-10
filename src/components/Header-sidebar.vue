@@ -1,123 +1,75 @@
 <template>
   <div class="menu-box">
-    <el-menu
-      class="sidebar-el-menu"
-      :default-active="onRoutes"
-      mode="horizontal"
-      background-color="#242f42"
-      text-color="#bfcbd9"
-      active-text-color="#20a0ff"
-      unique-opened
-      router
-    >
-      <template v-for="item in items">
-        <template v-if="item.subs">
-          <el-submenu :index="item.index" :key="item.index">
-            <template #title>
-              <i :class="item.icon"></i>
-              <span>{{ item.title }}</span>
-            </template>
-            <template v-for="subItem in item.subs">
-              <el-submenu
-                v-if="subItem.subs"
-                :index="subItem.index"
-                :key="subItem.index"
-              >
-                <template #title>{{ subItem.title }}</template>
-                <el-menu-item
-                  v-for="(threeItem, i) in subItem.subs"
-                  :key="i"
-                  :index="threeItem.index"
-                >
-                  {{ threeItem.title }}</el-menu-item
-                >
-              </el-submenu>
-              <el-menu-item v-else :index="subItem.index" :key="subItem.index"
-                >{{ subItem.title }}
-              </el-menu-item>
-            </template>
-          </el-submenu>
-        </template>
-        <template v-else>
-          <el-menu-item :index="item.index" :key="item.index">
-            <i :class="item.icon"></i>
-            <template #title>{{ item.title }}</template>
-          </el-menu-item>
-        </template>
-      </template>
-    </el-menu>
+    <span v-for="item in menuList"
+          :key="item.id"
+          class="menu-item">{{item.title}}</span>
   </div>
 </template>
 
 <script>
-import { computed, watch } from "vue";
-import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { ref } from '@vue/reactivity';
+import { computed } from '@vue/runtime-core';
 export default {
   name: "header-sidebar",
-  setup() {
-    const items = [
+  setup () {
+    const menuList = [
       {
-        icon: "el-icon-lx-home",
-        index: "/dashboard",
-        title: "系统首页",
+        id: 1,
+        title: '党建引领',
       },
       {
-        icon: "el-icon-lx-cascades",
-        index: "/table",
-        title: "基础表格",
+        id: 2,
+        title: '网格治理',
       },
       {
-        icon: "el-icon-lx-copy",
-        index: "/tabs",
-        title: "tab选项卡",
+        id: 3,
+        title: '民生保障',
       },
       {
-        icon: "el-icon-lx-calendar",
-        index: "3",
-        title: "表单相关",
-        subs: [
-          {
-            index: "/form",
-            title: "基本表单",
-          },
-          {
-            index: "/upload",
-            title: "文件上传",
-          },
-          {
-            index: "4",
-            title: "三级菜单",
-            subs: [
-              {
-                index: "/editor",
-                title: "富文本编辑器",
-              },
-            ],
-          },
-        ],
+        id: 4,
+        title: '应急指挥',
       },
-    ];
-
-    const route = useRoute();
-
-    const onRoutes = computed(() => {
-      return route.path;
-    });
+      {
+        id: 5,
+        title: '智慧物业',
+      },
+      {
+        id: 6,
+        title: '经济运行',
+      },
+    ]
     return {
-      items,
-      onRoutes,
-    };
+      menuList,
+    }
   },
 };
 </script>
 <style scoped>
-.menu-box{
-    height: 70px;
-    display: flex;
-    align-items: center;
+.menu-box {
+  height: 70px;
+  width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 18px;
 }
-.el-menu.el-menu--horizontal {
-    border-bottom: none;
+.menu-item {
+  position: relative;
+  display: block;
+  height: 25px;
+  line-height: 25px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+.active::after {
+  content: " ";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 1px;
+  border-top: 1px solid #20A0ff;
+  -webkit-transform-origin: 0 0;
+  transform-origin: 0 0;
 }
 </style>

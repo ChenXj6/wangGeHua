@@ -13,7 +13,18 @@ const routes = [
     component: Main,
     meta: {
       title: '南村街道社会治理网格化智能工作平台'
-    }
+    },
+    children: [
+      {
+        path: "/map",
+        name: "Map",
+        meta: {
+          title: '地图'
+        },
+        component: () => import( /* webpackChunkName: "map" */ "@/views/main/map.vue")
+      }, 
+    ],
+    redirect:'/map'
   },
   {
     path: "/home",

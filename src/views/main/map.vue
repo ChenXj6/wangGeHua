@@ -1,19 +1,11 @@
 <template>
-  <div class="about">
-    <v-header />
-    <div class="main-content-box">
-      <router-view />
-    </div>
-  </div>
+      <div style="height: -moz-available;height: -webkit-fill-available;"
+           id="dituContent"></div>
 </template>
 <script>
-import vHeader from "../../components/Header.vue";
 import { onMounted } from "@vue/runtime-core";
 export default {
-  components: {
-    vHeader,
-  },
-  setup () {
+  setup () { 
     const VMapRender = function () {
       var vMap = new VMap();
       vMap.createMap("dituContent");
@@ -22,7 +14,7 @@ export default {
       //创建地图配置文件
       var config = new Config();
       //设置中心点和缩放层级
-      config.centerAndZoom(point, 3);
+      config.centerAndZoom(point, 4);
       //设置加载地图类型
       //1：三维地图
       //2：平面地图

@@ -2,6 +2,7 @@ import {createApp} from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import * as echarts from 'echarts';
 import installElementPlus from './plugins/element'
 // import Bus from '@/utils/bus.js'
 import './assets/css/icon.css'
@@ -17,6 +18,7 @@ per(app)
 import moment from 'moment'
 app.config.globalProperties.$moment = moment
 app.config.globalProperties.$message = DonMessage
+app.config.globalProperties.$echart = echarts
 
 
 console.log(`当前运行环境：${import.meta.env.MODE }`)

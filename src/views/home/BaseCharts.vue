@@ -1,158 +1,148 @@
 <template>
-    <div>
-        <div class="crumbs">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-pie-chart"></i> schart图表
-                </el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
-        <div class="container">
-            <div class="plugins-tips">
-                vue-schart：vue.js封装sChart.js的图表组件。
-                访问地址：
-                <a href="https://github.com/lin-xin/vue-schart" target="_blank">vue-schart</a>
-            </div>
-            <div class="schart-box">
-                <div class="content-title">柱状图</div>
-                <schart class="schart" canvasId="bar" :options="options1"></schart>
-            </div>
-            <div class="schart-box">
-                <div class="content-title">折线图</div>
-                <schart class="schart" canvasId="line" :options="options2"></schart>
-            </div>
-            <div class="schart-box">
-                <div class="content-title">饼状图</div>
-                <schart class="schart" canvasId="pie" :options="options3"></schart>
-            </div>
-            <div class="schart-box">
-                <div class="content-title">环形图</div>
-                <schart class="schart" canvasId="ring" :options="options4"></schart>
-            </div>
-        </div>
+  <div>
+    <div class="crumbs">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>
+          <i class="el-icon-pie-chart"></i> schart图表
+        </el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
+    <div class="container">
+      <div class="plugins-tips">
+        vue-schart：vue.js封装sChart.js的图表组件。
+        访问地址：
+        <a href="https://github.com/lin-xin/vue-div"
+           target="_blank">vue-div</a>
+      </div>
+      <div class="div-box">
+        <div class="content-title">柱状图</div>
+        <div class="div"
+             ref="bar"></div>
+      </div>
+      <div class="div-box">
+        <div class="content-title">折线图</div>
+        <div class="div"
+             ref="line"></div>
+      </div>
+      <div class="div-box">
+        <div class="content-title">饼状图</div>
+        <div class="div"
+             ref="pie"></div>
+      </div>
+      <div class="div-box">
+        <div class="content-title">环形图</div>
+        <div class="div"
+             ref="ring"></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import Schart from "vue-schart";
+import { getCurrentInstance, onMounted, ref } from '@vue/runtime-core';
 export default {
-    name: "basecharts",
-    components: {
-        Schart,
-    },
-    setup() {
-        const options1 = {
-            type: "bar",
-            title: {
-                text: "最近一周各品类销售图",
-            },
-            bgColor: "#fbfbfb",
-            labels: ["周一", "周二", "周三", "周四", "周五"],
-            datasets: [
-                {
-                    label: "家电",
-                    fillColor: "rgba(241, 49, 74, 0.5)",
-                    data: [234, 278, 270, 190, 230],
-                },
-                {
-                    label: "百货",
-                    data: [164, 178, 190, 135, 160],
-                },
-                {
-                    label: "食品",
-                    data: [144, 198, 150, 235, 120],
-                },
-            ],
-        };
-        const options2 = {
-            type: "line",
-            title: {
-                text: "最近几个月各品类销售趋势图",
-            },
-            bgColor: "#fbfbfb",
-            labels: ["6月", "7月", "8月", "9月", "10月"],
-            datasets: [
-                {
-                    label: "家电",
-                    data: [234, 278, 270, 190, 230],
-                },
-                {
-                    label: "百货",
-                    data: [164, 178, 150, 135, 160],
-                },
-                {
-                    label: "食品",
-                    data: [114, 138, 200, 235, 190],
-                },
-            ],
-        };
-        const options3 = {
-            type: "pie",
-            title: {
-                text: "服装品类销售饼状图",
-            },
-            legend: {
-                position: "left",
-            },
-            bgColor: "#fbfbfb",
-            labels: [
-                "T恤",
-                "牛仔裤",
-                "连衣裙",
-                "毛衣",
-                "七分裤",
-                "短裙",
-                "羽绒服",
-            ],
-            datasets: [
-                {
-                    data: [334, 278, 190, 235, 260, 200, 141],
-                },
-            ],
-        };
-        const options4 = {
-            type: "ring",
-            title: {
-                text: "环形三等分",
-            },
-            showValue: false,
-            legend: {
-                position: "bottom",
-                bottom: 40,
-            },
-            bgColor: "#fbfbfb",
-            labels: ["vue", "react", "angular"],
-            datasets: [
-                {
-                    data: [500, 500, 500],
-                },
-            ],
-        };
-        return {
-            options1,
-            options2,
-            options3,
-            options4,
-        };
-    },
+  name: "basecharts",
+  setup () {
+    const bar = ref(null)
+    const line = ref(null)
+    const pie = ref(null)
+    const ring = ref(null)
+    const { proxy } = getCurrentInstance()
+    const initEchart = (el) => {
+      const echart = proxy.$echart.init(el.value)
+      echart.setOption({
+        title: {
+          // text: 'Stacked Line',
+          top: '5%'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          orient : 'horizontal',
+          data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+        },
+        grid: {
+          left: '3%',
+          right: '0',
+          bottom: '0',
+          containLabel: true
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {}
+          }
+        },
+        xAxis: {
+          type: 'category',
+          boundaryGap: ['20%','20%'],
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            name: 'Email',
+            type: 'bar',
+            stack: 'Total',
+            data: [120, 132, 101, 134, 90, 230, 210]
+          },
+          {
+            name: 'Union Ads',
+            type: 'line',
+            stack: 'Total',
+            data: [220, 182, 191, 234, 290, 330, 310]
+          },
+          {
+            name: 'Video Ads',
+            type: 'line',
+            stack: 'Total',
+            data: [150, 232, 201, 154, 190, 330, 410]
+          },
+          {
+            name: 'Direct',
+            type: 'line',
+            stack: 'Total',
+            data: [320, 332, 301, 334, 390, 330, 320]
+          },
+          {
+            name: 'Search Engine',
+            type: 'line',
+            stack: 'Total',
+            data: [820, 932, 901, 934, 1290, 1330, 1320]
+          }
+        ]
+      });
+    }
+    onMounted(() => {
+      initEchart(line)
+    })
+    return {
+      bar,
+      pie,
+      line,
+      ring,
+    };
+  },
 };
 </script>
 
 <style scoped>
-.schart-box {
-    display: inline-block;
-    margin: 20px;
+.div-box {
+  display: inline-block;
+  margin: 20px;
 }
-.schart {
-    width: 600px;
-    height: 400px;
+.div {
+  width: 600px;
+  height: 400px;
 }
 .content-title {
-    clear: both;
-    font-weight: 400;
-    line-height: 50px;
-    margin: 10px 0;
-    font-size: 22px;
-    color: #1f2f3d;
+  clear: both;
+  font-weight: 400;
+  line-height: 50px;
+  margin: 10px 0;
+  font-size: 22px;
+  color: #1f2f3d;
 }
 </style>

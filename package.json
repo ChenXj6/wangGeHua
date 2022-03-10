@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.21.4",
     "dotenv": "^16.0.0",
+    "echarts": "^5.3.1",
     "element-plus": "1.0.2-beta.52",
     "moment": "^2.29.1",
     "qs": "^6.10.3",
@@ -19,7 +20,6 @@
     "vue-cropperjs": "^5.0.0",
     "vue-i18n": "^9.0.0",
     "vue-router": "^4.0.10",
-    "vue-schart": "^2.0.0",
     "vuex": "^4.0.2",
     "wangeditor": "^4.7.4"
   },
