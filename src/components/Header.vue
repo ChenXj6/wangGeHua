@@ -6,7 +6,7 @@
       <i v-else-if="!pageStatus" class="el-icon-s-unfold"></i>
       <i v-else class="el-icon-data-line"></i>
     </div>
-    <div class="logo">南村街道社会治理网格化智能工作平台</div>
+    <div class="logo" @click="router.push('/map')">南村街道社会治理网格化智能工作平台</div>
     <div v-if="pageStatus" class="header-content">
       <header-sidebar />
     </div>
@@ -136,6 +136,7 @@ export default {
     };
 
     return {
+      router,
       status,
       username,
       message,
@@ -168,6 +169,7 @@ export default {
   float: left;
   width: 375px;
   line-height: 70px;
+  cursor: pointer;
 }
 .header-content {
   float: left;

@@ -2,24 +2,26 @@
   <div class="menu-box">
     <span v-for="item in menuList"
           :key="item.id"
-          class="menu-item">{{item.title}}</span>
+          class="menu-item"
+          @click="router.push('/a')">{{item.title}}</span>
   </div>
 </template>
 
 <script>
 import { ref } from '@vue/reactivity';
 import { computed } from '@vue/runtime-core';
+import { useRouter } from 'vue-router';
 export default {
   name: "header-sidebar",
   setup () {
     const menuList = [
       {
         id: 1,
-        title: '党建引领',
+        title: '数字党建',
       },
       {
         id: 2,
-        title: '网格治理',
+        title: '网格政务',
       },
       {
         id: 3,
@@ -27,19 +29,21 @@ export default {
       },
       {
         id: 4,
-        title: '应急指挥',
+        title: '物业服务',
       },
       {
         id: 5,
-        title: '智慧物业',
+        title: '社区经济',
       },
       {
         id: 6,
-        title: '经济运行',
+        title: '共商共治',
       },
     ]
+    const router = useRouter()
     return {
       menuList,
+      router,
     }
   },
 };
@@ -68,7 +72,7 @@ export default {
   bottom: -5px;
   width: 100%;
   height: 1px;
-  border-top: 1px solid #20A0ff;
+  border-top: 1px solid #20a0ff;
   -webkit-transform-origin: 0 0;
   transform-origin: 0 0;
 }

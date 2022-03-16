@@ -1,13 +1,77 @@
 <template>
-      <div style="height: -moz-available;height: -webkit-fill-available;"
-           id="dituContent"></div>
+  <div class="vMap"
+       :style="{height:(!fullHeight?'100vh' : fullHeight +'px')}"
+       id="dituContent"></div>
+  <div class="sidebar">
+    <div class="sidebar-item">
+      <el-dropdown placement="left-start" trigger="click">
+        <el-button type="goon"
+                   size="mini"
+                   round
+                   style="width:88px">
+          党组织<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item @click="handleClick">党工委</el-dropdown-item>
+            <el-dropdown-item>直属党组织</el-dropdown-item>
+            <el-dropdown-item>党支部</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+    <div class="sidebar-item">
+      <el-dropdown placement="left-start" trigger="click">
+        <el-button type="goon"
+                   size="mini"
+                   style="width:88px"
+                   round>
+          食物<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>sssssssssss黄金糕</el-dropdown-item>
+            <el-dropdown-item>ssssssssss狮子头</el-dropdown-item>
+            <el-dropdown-item>sssssssss螺蛳粉</el-dropdown-item>
+            <el-dropdown-item>aaaaaaaaaaaaa双皮奶</el-dropdown-item>
+            <el-dropdown-item>ccccccccccccc蚵仔煎</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+    <div class="sidebar-item">
+      <el-dropdown placement="left-start" trigger="click">
+        <el-button type="goon"
+                   size="mini"
+                   style="width:88px"
+                   round>
+          更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>111111111</el-dropdown-item>
+            <el-dropdown-item>22222222222</el-dropdown-item>
+            <el-dropdown-item>32312312323</el-dropdown-item>
+            <el-dropdown-item>第三方水电费水电费水电费</el-dropdown-item>
+            <el-dropdown-item @click="showMyMapMark">显示标签</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+  </div>
+
 </template>
 <script>
-import { onMounted } from "@vue/runtime-core";
+import { getCurrentInstance, onBeforeUnmount, onMounted, ref, watch, } from "@vue/runtime-core";
+import { onBeforeRouteLeave } from 'vue-router';
 export default {
-  setup () { 
+  setup () {
+    let vMap = ref(null)
+    let fullHeight = ref('')
+    let timer = null
+    const { proxy } = getCurrentInstance()
     const VMapRender = function () {
-      var vMap = new VMap();
+      vMap = new VMap();
       vMap.createMap("dituContent");
       //设置中心点，目前是像素坐标
       var point = new Point(18000, 8194);
@@ -29,14 +93,76 @@ export default {
       config.setStop(false);
       //设置路名是否显示(默认不显示)
       config.setRoad(false);
+      //设置鼠标点击地图弹窗URL,如果为空则为系统默认URL
+      config.setPopUrl('http://domain/floor-map');
       //加载地图
       vMap.loadMap(config);
     }
-    onMounted(() => {
+    watch(fullHeight, () => {
+      reLoadMap()
       VMapRender()
+    })
+    //显示自定义地图标签
+    function showMyMapMark(){
+      var html = '<div style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>标签内容</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+      //vMap.showMapMark(18821,10596,html);
+      vMap.showMapMark(18624,8178,html);
+    }
+    onMounted(() => {
+      window.onresize = () => {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+          fullHeight.value = document.documentElement.clientHeight
+        }, 1000)
+      }
+      VMapRender()
+      vMap.onMapClick((x0, y0, id, title, identitycode) => {
+        vMap.showMapPopWin(x0, y0, title, 'http://60.175.65.213/ems/#/showareadata?areaCode=' + identitycode, 500, 370);
+      })
     });
+    // 恢复地图未加载默认状态
+    const reLoadMap = () => {
+      if (typeof (jv) != 'undefined') {
+        jv = false;
+      }
+      if (typeof (fz) != 'undefined') {
+        fz = false;
+      }
+    }
+    onBeforeRouteLeave(() => {
+      reLoadMap()
+    })
+    return {
+      fullHeight,
+      showMyMapMark
+    }
   },
 };
 </script>
 <style scoped>
+.sidebar {
+  position: absolute;
+  top: 50px;
+  right: 30px;
+  min-height: 250px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.sidebar-item {
+  margin-bottom: 20px;
+  box-shadow: 0 4px 4px #242f42;
+  border-radius: 20px;
+}
+.el-button + .el-button,
+.el-checkbox.is-bordered + .el-checkbox.is-bordered {
+  margin-left: 0;
+}
+.el-button--goon {
+  color: #fff;
+  background-color: #242f42;
+  border-color: #242f42;
+}
 </style>

@@ -23,6 +23,14 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "map" */ "@/views/main/map.vue")
       }, 
+      {
+        path: "/a",
+        name: "A",
+        meta: {
+          title: '安防平台'
+        },
+        component: () => import( /* webpackChunkName: "map" */ "@/views/main/a.vue")
+      }, 
     ],
     redirect:'/map'
   },
