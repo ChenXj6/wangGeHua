@@ -2,6 +2,16 @@ import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
 import path, { resolve } from "path";
 import viteCompression from 'vite-plugin-compression';
+import vueJsx from '@vitejs/plugin-vue-jsx'
+// 在这里祝福还在非被迫情况下坚持使用IE和旧版chrome的人____,使用落后产品上瘾吗?
+import legacyPlugin from '@vitejs/plugin-legacy'  // 兼容处理
+
+// 按需引入组件
+import Components from 'unplugin-vue-components/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import {
+  ElementPlusResolver
+} from 'unplugin-vue-components/resolvers'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
@@ -17,7 +27,18 @@ export default defineConfig(({ command, mode }) => {
         threshold: 10240, //压缩前最小文件大小
         algorithm: 'gzip',  //压缩算法
         ext: '.gz', //文件类型
-      })
+      }),
+      vueJsx(),
+      AutoImport({
+        resolvers: [ElementPlusResolver()],
+      }),
+      Components({
+        resolvers: [ElementPlusResolver()],
+      }),
+      legacyPlugin({
+        targets: ['chrome 52', 'ie >= 11'], // 需要兼容的目标列表，可以设置多个
+        additionalLegacyPolyfills: ['regenerator-runtime/runtime'] // 面向IE11时需要此插件
+      }),
     ],
     optimizeDeps: {
       include: ['schart.js']
@@ -57,11 +78,19 @@ export default defineConfig(({ command, mode }) => {
       },
       rollupOptions: {
         output: {
-          manualChunks: {
-            // 拆分代码，这个就是分包，配置完后自动按需加载，现在还比不上webpack的splitchunk，不过也能用了。
-            vue: ['vue', 'vue-router', 'vuex'],
-            echarts: ['echarts'],
+          manualChunks (id) { //静态资源分拆打包
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0].toString();
+            }
           },
+          // manualChunks: {
+          //   // 拆分代码，这个就是分包，配置完后自动按需加载，现在还比不上webpack的splitchunk，不过也能用了。
+          //   vue: ['vue', 'vue-router', 'vuex'],
+          //   echarts: ['echarts'],
+          // },
+          chunkFileNames: 'static/js/[name]-[hash].js',
+          entryFileNames: 'static/js/[name]-[hash].js',
+          assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
         },
       },
       brotliSize: false,

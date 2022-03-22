@@ -5,11 +5,13 @@
   "scripts": {
     "dev": "vite",
     "dev:prc": "vite serve --mode prc",
-    "dev:menarini": "vite serve --mode menarini",
+    "build:pro": "vite build --mode production",
     "build": "vite build",
+    "build:test": "vite build --mode test",
     "serve": "vite preview"
   },
   "dependencies": {
+    "@vue/cli": "^5.0.3",
     "axios": "^0.21.4",
     "dotenv": "^16.0.0",
     "echarts": "^5.3.1",
@@ -18,8 +20,10 @@
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-vue": "^8.5.0",
+    "force": "0.0.3",
     "moment": "^2.29.1",
     "qs": "^6.10.3",
+    "sortablejs": "^1.14.0",
     "speak-tts": "^2.0.8",
     "vite-plugin-compression": "^0.5.1",
     "vue": "^3.1.2",
@@ -31,11 +35,15 @@
     "wangeditor": "^4.7.4"
   },
   "devDependencies": {
+    "@vitejs/plugin-legacy": "^1.7.1",
     "@vitejs/plugin-vue": "^1.2.3",
+    "@vitejs/plugin-vue-jsx": "^1.3.8",
     "@vue/compiler-sfc": "^3.1.2",
     "@vue/eslint-config-prettier": "^7.0.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.6.0",
+    "unplugin-auto-import": "^0.6.6",
+    "unplugin-vue-components": "^0.18.0",
     "vite": "2.3.7"
   },
   "browserslist": [

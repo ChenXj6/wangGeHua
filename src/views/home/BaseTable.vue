@@ -30,6 +30,7 @@
                 border
                 class="table"
                 ref="multipleTable"
+                row-key="id"
                 header-cell-class-name="table-header">
         <el-table-column prop="id"
                          label="ID"
@@ -50,7 +51,8 @@
           </template>
         </el-table-column>
         <el-table-column prop="address"
-                         label="地址"></el-table-column>
+                         label="地址"
+                         Sortable></el-table-column>
         <el-table-column label="状态"
                          align="center">
           <template #default="scope">
@@ -67,7 +69,7 @@
         <el-table-column prop="date"
                          label="注册时间"></el-table-column>
         <el-table-column label="操作"
-                         width="180"
+                         width="300"
                          align="center">
           <template #default="scope">
             <el-button type="text"
@@ -115,9 +117,10 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { fetchData } from "@/api/index";
+import Sortable from "sortablejs";
 
 export default {
   name: "basetable",
@@ -128,17 +131,58 @@ export default {
       pageIndex: 1,
       pageSize: 10,
     });
-    const tableData = ref([]);
-    const pageTotal = ref(0);
+    const tableData = ref([
+      {
+        id:1,
+        name:'s',
+        money:'1',
+        thumb:'https://img2.baidu.com/it/u=2090606195,1473750087&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+        address: '上海市普陀区',
+        state: 'success'
+      },
+            {
+        id:2,
+        name:'sa',
+        money:'13',
+        thumb:'https://img2.baidu.com/it/u=2090606195,1473750087&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+        address: '上海市普陀区',
+        state: '失败'
+      },
+            {
+        id:3,
+        name:'sad',
+        money:'133',
+        thumb:'https://img2.baidu.com/it/u=2090606195,1473750087&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+        address: '上海市普陀区',
+        state: 'success'
+      },
+            {
+        id:4,
+        name:'sad撒',
+        money:'1333',
+        thumb:'https://img2.baidu.com/it/u=2090606195,1473750087&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+        address: '上海市普陀区',
+        state: '失败'
+      },
+            {
+        id:5,
+        name:'sad撒多',
+        money:'13332',
+        thumb:'https://img2.baidu.com/it/u=2090606195,1473750087&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500',
+        address: '上海市普陀区',
+        state: 'success'
+      },
+
+    ]);
+    const pageTotal = ref(5);
     // 获取表格数据
     const getData = () => {
       fetchData(query).then((res) => {
-        tableData.value = res.list;
-        pageTotal.value = res.pageTotal || 50;
+        // tableData.value = res.list;
+        // pageTotal.value = res.pageTotal || 50;
       });
     };
     getData();
-
     // 查询操作
     const handleSearch = () => {
       query.pageIndex = 1;
@@ -184,6 +228,26 @@ export default {
         tableData.value[idx][item] = form[item];
       });
     };
+
+    // 拖拽
+    const rowDrop = () => {
+      const tbody = document.querySelector('.el-table__body-wrapper tbody')
+      Sortable.create(tbody, {
+        onEnd({ newIndex, oldIndex }) {
+          console.log(newIndex,oldIndex,'/////')
+          const currRow = tableData.value.splice(oldIndex, 1)[0]
+          tableData.value.splice(newIndex, 0, currRow)
+        }
+      })
+    }
+
+    onMounted(()=>{
+      document.body.ondrag = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      rowDrop()
+    })
 
     return {
       query,

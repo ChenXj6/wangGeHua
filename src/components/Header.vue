@@ -34,7 +34,7 @@
         </div>
         <!-- 用户头像 -->
         <div class="user-avator">
-          <img src="../assets/img/img.jpg" />
+          <img src="@/assets/img/img.jpg" alt="author" />
         </div>
         <!-- 用户名下拉菜单 -->
         <el-dropdown class="user-name" trigger="click" @command="handleCommand">
@@ -119,7 +119,7 @@ export default {
       if (pageStatus.value) {
         status.value = "进入后台";
       } else {
-        status.value = "返回前台";
+        status.value = "驾驶舱";
       }
       if (document.body.clientWidth < 1500) {
         collapseChage();
