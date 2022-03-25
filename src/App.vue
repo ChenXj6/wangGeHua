@@ -2,8 +2,16 @@
     <router-view />
 </template>
 
+
 <script>
-export default {};
+import { useStore } from 'vuex'
+export default {
+  setup(){
+    const store = useStore()
+    store.dispatch('socketInit')
+  }
+};
+
 </script>
 
 <style>

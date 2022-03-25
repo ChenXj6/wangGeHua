@@ -121,6 +121,7 @@ import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { fetchData } from "@/api/index";
 import Sortable from "sortablejs";
+import useEmit from '@/utils/useEmit'
 
 export default {
   name: "basetable",
@@ -247,6 +248,7 @@ export default {
         e.stopPropagation();
       }
       rowDrop()
+      useEmit({'id':1,message:'你好'},console.log('你好'))
     })
 
     return {

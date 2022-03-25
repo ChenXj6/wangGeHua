@@ -100,6 +100,6 @@ let heartCheck = {	//心跳检测
   }
 }
 
-createSocket(wsUrl)
+// createSocket(wsUrl)
 
 export default { sendMsg }
