@@ -163,7 +163,7 @@ export default {
         { required: true, message: "请输入表单名称", trigger: "blur" },
       ],
     };
-    const { proxy } = getCurrentInstance()
+    const { proxy : {$message}} = getCurrentInstance()
     const formRef = ref(null);
     const form = reactive({
       name: "",
@@ -182,7 +182,7 @@ export default {
       formRef.value.validate((valid) => {
         if (valid) {
           console.log(form);
-          proxy.$message.success('sdsdsdsds')
+          $message.success('sdsdsdsds')
         } else {
           return false;
         }

@@ -9,7 +9,7 @@ export default createStore({
     tagsList: [],
     collapse: false,
     ws: null,
-    pressureHealthDegree: 1, // 液压系统健康度
+    pressureHealthDegree: 1, // 
   },
   mutations: {
     delTagsItem(state, data) {

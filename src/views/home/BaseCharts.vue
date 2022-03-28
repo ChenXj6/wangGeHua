@@ -48,9 +48,9 @@ export default {
     const pie = ref(null)
     const ring = ref(null)
     const speech = ref(null)
-    const { proxy } = getCurrentInstance()
+    const { proxy:{$echart} } = getCurrentInstance()
     const initEchart = (el) => {
-      const echart = proxy.$echart.init(el.value)
+      const echart = $echart.init(el.value)
       echart.setOption({
         title: {
           // text: 'Stacked Line',
