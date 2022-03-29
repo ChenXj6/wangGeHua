@@ -147,7 +147,6 @@ class VueSocket {
     } else if (state === this.ws.CONNECTING) {
       // 连接中轮询
       VueSocket.eventPoll(state, this.ws.OPEN, 500, () => {
-        
         this.ws.send(JSON.stringify(data))
         callback && callback()
         this.heartbeatDetect('emit')

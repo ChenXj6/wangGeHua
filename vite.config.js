@@ -50,6 +50,13 @@ export default defineConfig(({ command, mode }) => {
         'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
       },
     },
+    css: {
+      preprocessorOptions:{
+        scss: {
+          additionalData: ''
+        }
+      }
+    },
     server: {
       host: '0.0.0.0',  //配置host，0.0.0.0：时可以通过ip地址访问
       port: 8000,  // 配置启动端口
@@ -58,6 +65,11 @@ export default defineConfig(({ command, mode }) => {
       proxy: {
         '/api': {
           target: env.VITE_APP_BASE_API,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, '')
+        },
+        '/sc': {
+          target: 'http://192.168.1.7',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
         }
@@ -83,11 +95,6 @@ export default defineConfig(({ command, mode }) => {
               return id.toString().split('node_modules/')[1].split('/')[0].toString();
             }
           },
-          // manualChunks: {
-          //   // 拆分代码，这个就是分包，配置完后自动按需加载，现在还比不上webpack的splitchunk，不过也能用了。
-          //   vue: ['vue', 'vue-router', 'vuex'],
-          //   echarts: ['echarts'],
-          // },
           chunkFileNames: 'static/js/[name]-[hash].js',
           entryFileNames: 'static/js/[name]-[hash].js',
           assetFileNames: 'static/[ext]/[name]-[hash].[ext]',

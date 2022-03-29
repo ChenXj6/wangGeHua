@@ -5,3 +5,8 @@ export const fetchData = query => {
     `/api/route/to/demo`, query
   )
 };
+export const get = query => {
+  return service.post(
+    `/sc/route/to/demo`, query
+  )
+};

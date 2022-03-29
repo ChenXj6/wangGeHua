@@ -56,92 +56,26 @@ const routes = [
           title: '表格'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/BaseTable.vue")
-      }, {
-        path: "/charts",
-        name: "basecharts",
+      }, 
+      {
+        path: "/residentsReport",
+        name: "residentsReport",
         meta: {
-          title: '图表'
+          title: '居民上报事件'
         },
-        component: () => import( /* webpackChunkName: "charts" */ "@/views/home/BaseCharts.vue")
-      }, {
-        path: "/form",
-        name: "baseform",
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ResidentsReport/index.vue")
+      },
+      {
+        path: "/editResidentsReport",
+        name: "editResidentsReport",
         meta: {
-          title: '表单'
+          title: '上报事件',
+          getTitle: function(route) {
+            return `${route.query.operation == 1 ? '查看' : '编辑'}上报事件`
+          },
         },
-        component: () => import( /* webpackChunkName: "form" */ "@/views/home/BaseForm.vue")
-      }, {
-        path: "/tabs",
-        name: "tabs",
-        meta: {
-          title: 'tab标签'
-        },
-        component: () => import( /* webpackChunkName: "tabs" */ "@/views/home/Tabs.vue")
-      }, {
-        path: "/donate",
-        name: "donate",
-        meta: {
-          title: '鼓励作者'
-        },
-        component: () => import( /* webpackChunkName: "donate" */ "@/views/home/Donate.vue")
-      }, {
-        path: "/permission",
-        name: "permission",
-        meta: {
-          title: '权限管理',
-          permission: true
-        },
-        component: () => import( /* webpackChunkName: "permission" */ "@/views/home/Permission.vue")
-      }, {
-        path: "/i18n",
-        name: "i18n",
-        meta: {
-          title: '国际化语言'
-        },
-        component: () => import( /* webpackChunkName: "i18n" */ "@/views/home/I18n.vue")
-      }, {
-        path: "/upload",
-        name: "upload",
-        meta: {
-          title: '上传插件'
-        },
-        component: () => import( /* webpackChunkName: "upload" */ "@/views/home/Upload.vue")
-      }, {
-        path: "/icon",
-        name: "icon",
-        meta: {
-          title: '自定义图标'
-        },
-        component: () => import( /* webpackChunkName: "icon" */ "@/views/home/Icon.vue")
-      }, {
-        path: '/404',
-        name: '404',
-        meta: {
-          title: '找不到页面'
-        },
-        component: () => import(/* webpackChunkName: "404" */ '@/views/404.vue')
-      }, {
-        path: '/403',
-        name: '403',
-        meta: {
-          title: '没有权限'
-        },
-        component: () => import(/* webpackChunkName: "403" */ '@/views/403.vue')
-      }, {
-        path: '/user',
-        name: 'user',
-        meta: {
-          title: '个人中心'
-        },
-        component: () => import(/* webpackChunkName: "user" */ '@/views/home/User.vue')
-      }, {
-        path: '/editor',
-        name: 'editor',
-        meta: {
-          title: '富文本编辑器'
-        },
-        component: () => import(/* webpackChunkName: "editor" */ '@/views/home/Editor.vue')
-      }
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ResidentsReport/edit.vue")
+      },
     ]
   },
   {

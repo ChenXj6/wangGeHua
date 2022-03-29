@@ -21,6 +21,7 @@ declare module 'vue' {
     ElFormItem: typeof import('element-plus/es/el-form-item')['default']
     ElImage: typeof import('element-plus/es/el-image')['default']
     ElInput: typeof import('element-plus/es/el-input')['default']
+    ElLink: typeof import('element-plus/es/el-link')['default']
     ElMenu: typeof import('element-plus/es/el-menu')['default']
     ElMenuItem: typeof import('element-plus/es/el-menu-item')['default']
     ElOption: typeof import('element-plus/es/el-option')['default']
@@ -43,6 +44,7 @@ declare module 'vue' {
     Header: typeof import('./src/components/Header.vue')['default']
     HeaderSidebar: typeof import('./src/components/Header-sidebar.vue')['default']
     Sidebar: typeof import('./src/components/Sidebar.vue')['default']
+    Table: typeof import('./src/components/Table/index.vue')['default']
     Tags: typeof import('./src/components/Tags.vue')['default']
   }
 }
