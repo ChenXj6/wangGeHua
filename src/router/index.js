@@ -58,6 +58,14 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/BaseTable.vue")
       }, 
       {
+        path: "/icon",
+        name: "icon",
+        meta: {
+          title: '图标'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Icon.vue")
+      }, 
+      {
         path: "/residentsReport",
         name: "residentsReport",
         meta: {

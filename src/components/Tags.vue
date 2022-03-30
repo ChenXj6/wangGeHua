@@ -50,7 +50,6 @@ export default {
 
     // 关闭单个标签
     const closeTags = (index) => {
-      console.log(index)
       const delItem = tagsList.value[index]
       store.commit('delTagsItem', { index })
       const item = tagsList.value[index]

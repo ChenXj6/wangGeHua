@@ -49,6 +49,11 @@ export default {
                 title: "基础表格",
             },
             {
+                icon: "el-icon-lx-cascades",
+                index: "/icon",
+                title: "图标",
+            },
+            {
                 icon: "el-icon-lx-calendar",
                 index: "1",
                 title: "事件处置",

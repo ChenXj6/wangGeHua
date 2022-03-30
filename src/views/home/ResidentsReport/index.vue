@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-form ref="form" :model="formData" label-width="80px">
+    <el-form ref="form" :model="searchForm" label-width="80px">
       <el-row>
         <el-col :span="6">
-          <el-form-item label="工单号">
+          <el-form-item label="工单号" prop="entryId">
             <el-input
-              v-model="formData.entryId"
+              v-model="searchForm.entryId"
               placeholder="请输入"
               size="small"
               clearable
@@ -15,7 +15,7 @@
         <el-col :span="6">
           <el-form-item label="事件名称">
             <el-input
-              v-model="formData.entryId"
+              v-model="searchForm.entryId"
               placeholder="请输入"
               size="small"
               clearable
@@ -25,7 +25,7 @@
         <el-col :span="6">
           <el-form-item label="发生时间">
             <el-date-picker
-              v-model="formData.entryId"
+              v-model="searchForm.entryId"
               type="datetimerange"
               range-separator="至"
               size="small"
@@ -38,7 +38,7 @@
         <el-col :span="6">
           <el-form-item label="事件状态">
             <el-input
-              v-model="formData.entryId"
+              v-model="searchForm.entryId"
               placeholder="请输入"
               size="small"
               clearable
@@ -48,7 +48,7 @@
         <el-col :span="6">
           <el-form-item label="事件类型">
             <el-select
-              v-model="formData.region"
+              v-model="searchForm.region"
               size="small"
               placeholder="please select your zone"
             >
@@ -60,7 +60,7 @@
         <el-col :span="6">
           <el-form-item label="事件查询">
             <el-input
-              v-model="formData.entryId"
+              v-model="searchForm.entryId"
               placeholder="请输入"
               size="small"
               clearable
@@ -70,7 +70,7 @@
         <el-col :span="6">
           <el-form-item label="事件来源">
             <el-input
-              v-model="formData.entryId"
+              v-model="searchForm.entryId"
               placeholder="请输入"
               size="small"
               clearable
@@ -79,8 +79,12 @@
         </el-col>
         <el-col :span="6">
           <div class="btn-box">
-            <el-button type="primary" size="small">查询</el-button>
-            <el-button type="primary" size="small">重置</el-button>
+            <el-button type="primary" size="small" @click="handleSearch"
+              >查询</el-button
+            >
+            <el-button type="primary" size="small" @click="handleReset(form)"
+              >重置</el-button
+            >
           </div>
         </el-col>
       </el-row>
@@ -97,7 +101,12 @@
       <el-table-column prop="date" label="所属网格" />
       <el-table-column prop="date" label="事件名称">
         <template #default="scope">
-          <el-link type="primary">{{ scope.row.name }}</el-link>
+          <el-link
+            type="success"
+            @click.prevent="handleOperation(1, scope.row)"
+            >{{ scope.row.name }}            
+            </el-link
+          >
         </template>
       </el-table-column>
       <el-table-column prop="date" label="事件发生地" />
@@ -127,17 +136,29 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="pagination">
+      <el-pagination
+        background
+        layout="total, prev, pager, next"
+        :current-page="searchForm.pageIndex"
+        :page-size="searchForm.pageSize"
+        :total="pageTotal"
+        @current-change="handlePageChange"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 <script>
 import { reactive, ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
-import { get } from "@/api/index";
+import { get } from '@/api/index'
+import { getCurrentInstance } from '@vue/runtime-core'
 export default {
   name: 'residentsReport',
   setup() {
     const router = useRouter()
-    const eventData = ref(null)
+    const form = ref(null)
+    const { proxy } = getCurrentInstance()
     const tableData = ref([
       {
         date: '2016-05-03',
@@ -164,20 +185,40 @@ export default {
         address: 'No. 189, Grove St, Los Angeles',
       },
     ])
-    const formData = reactive({})
+    const searchForm = reactive({
+      entryId: '',
+      pageIndex: 1,
+      pageSize: 10,
+    })
+    const pageTotal = ref(5)
     const getList = () => {
-      get().then(res=>{
-        console.log(res,'.....')
+      get(searchForm).then((res) => {
+        console.log(res, '.....')
       })
     }
+    const handleSearch = () => {
+      searchForm.pageIndex = 1
+      getList()
+    }
+    const handleReset = (formEL) => {
+      formEL.resetFields()
+      getList()
+    }
+    // 分页导航
+    const handlePageChange = (val) => {
+      searchForm.pageIndex = val
+      getList()
+    }
     // getList()
+    // 改变table行样式
     const tableRowClassName = ({ row }) => {
       if (row.isNew === 1) {
         return 'warning-row'
       } else if (row.isNew === 2) {
-        return 'success-row'
+        return 'danger-row'
       } else return ''
     }
+    // 查看/编辑
     const handleOperation = (type, rowData) => {
       router.push({
         path: '/editResidentsReport',
@@ -185,10 +226,15 @@ export default {
       })
     }
     return {
+      form,
       tableData,
-      formData,
+      searchForm,
+      pageTotal,
       tableRowClassName,
       handleOperation,
+      handlePageChange,
+      handleSearch,
+      handleReset,
     }
   },
 }
@@ -198,7 +244,7 @@ export default {
   background: #e6a23c;
 }
 
-/deep/ .el-table .success-row {
+/deep/ .el-table .danger-row {
   background: orangered;
 }
 </style>
