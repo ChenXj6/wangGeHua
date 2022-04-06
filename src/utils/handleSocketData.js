@@ -1,26 +1,24 @@
 export const handleData = (data, commit) => {
   // 当前任务
   const [task] = Object.keys(data)
-
   // 任务执行器
   const taskRunner = {
     healthRunner() {
+      // console.log(data)
       const {
-        message: { dataContent }
+        message
       } = data[task]
+      // console.log(message,'?')
       // 更新状态
-      dataContent &&
+      message &&
         commit('updateHealthDegree', {
           prop: task,
-          healthDegree: dataContent[0].health
+          healthDegree: 2,
+          eventName:message
         })
     },
     defaultRunner(mutation) {
-      const {
-        message: { dataContent }
-      } = data[task]
-      // 更新状态
-      dataContent && commit(mutation, dataContent)
+
     }
   }
 
@@ -28,8 +26,12 @@ export const handleData = (data, commit) => {
   const taskMap = {
     // 
     pressureHealthDegree() {
+      // console.log(1)
       taskRunner.healthRunner()
     },
+    b(){
+
+    }
   }
 
   // 执行任务

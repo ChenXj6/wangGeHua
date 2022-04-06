@@ -124,7 +124,7 @@
             <el-select
               v-model="formData.region"
               size="small"
-              placeholder="please select your zone"
+              placeholder="请选择事件规模"
             >
               <el-option label="Zone one" value="shanghai" />
               <el-option label="Zone two" value="beijing" />

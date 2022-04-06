@@ -119,8 +119,10 @@ class VueSocket {
    */
   subscribe() {
     this.ws.onmessage = (res) => {
-      if (res.data && typeof res.data !== 'string') {
-        const data = JSON.parse(res.data)
+      let data = res.data
+      data = data.replace(" [<a href='http://coolaf.com/tool/chattest'>http://coolaf.com</a>]",'')
+      if (data && String(data) !== "ping") {
+        data = JSON.parse(JSON.parse(data).data)
         // 根据任务类型，分发数据
         try {
           this.distributeData && this.distributeData(data, this.commit)

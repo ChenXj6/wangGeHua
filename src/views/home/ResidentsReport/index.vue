@@ -50,10 +50,11 @@
             <el-select
               v-model="searchForm.region"
               size="small"
-              placeholder="please select your zone"
+              placeholder="请选择事件类型"
+              clearable
             >
-              <el-option label="Zone one" value="shanghai" />
-              <el-option label="Zone two" value="beijing" />
+              <el-option label="Zone one" value="1" />
+              <el-option label="Zone two" value="2" />
             </el-select>
           </el-form-item>
         </el-col>
@@ -101,12 +102,9 @@
       <el-table-column prop="date" label="所属网格" />
       <el-table-column prop="date" label="事件名称">
         <template #default="scope">
-          <el-link
-            type="success"
-            @click.prevent="handleOperation(1, scope.row)"
-            >{{ scope.row.name }}            
-            </el-link
-          >
+          <el-link type="success" @click.prevent="handleOperation(1, scope.row)"
+            >{{ scope.row.name }}
+          </el-link>
         </template>
       </el-table-column>
       <el-table-column prop="date" label="事件发生地" />
@@ -152,7 +150,7 @@
 import { reactive, ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import { get } from '@/api/index'
-import { getCurrentInstance } from '@vue/runtime-core'
+import { getCurrentInstance, onMounted } from '@vue/runtime-core'
 export default {
   name: 'residentsReport',
   setup() {
@@ -187,6 +185,7 @@ export default {
     ])
     const searchForm = reactive({
       entryId: '',
+      region: '',
       pageIndex: 1,
       pageSize: 10,
     })
@@ -225,6 +224,7 @@ export default {
         query: { id: rowData.isNew, operation: type },
       })
     }
+    onMounted(() => {})
     return {
       form,
       tableData,

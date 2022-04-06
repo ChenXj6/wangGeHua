@@ -10,6 +10,7 @@ export default createStore({
     collapse: false,
     ws: null,
     pressureHealthDegree: 1, // 
+    eventName:'',
   },
   mutations: {
     delTagsItem(state, data) {
@@ -50,8 +51,9 @@ export default createStore({
       state.ws = new VueSocket(baseURL, commit, handleData)
     },
     // 更新数据
-    updateHealthDegree(state, { healthDegree, prop }) {
+    updateHealthDegree(state, { healthDegree, prop, eventName }) {
       state[prop] = healthDegree
+      state[eventName] = eventName
     },
   },
   actions: {

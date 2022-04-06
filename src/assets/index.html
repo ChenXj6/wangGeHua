@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>纯css3动画实现轨道旋转效果</title>
+<style type="text/css">
+  body{
+      background-color: #000000;
+  }
+  .ball-box{
+      width: 300px;
+      height: 300px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      margin: -150px 0 0 -150px;
+      perspective-origin: 50% 50%;
+      perspective: 3000px;
+  }
+  @keyframes rotate3d {
+      0%{
+          transform: rotateZ(-30deg) rotateY(0deg) rotateX(0deg);
+      }
+      100%{
+          transform: rotateZ(-30deg) rotateY(360deg) rotateX(360deg);
+      }
+  }
+  .ball{
+      height: 100%;
+      transform-style: preserve-3d;
+      animation: rotate3d 30s linear infinite;
+  }
+  .ball:after{
+      display: block;
+      content: '';
+      width: 1px;
+      height: 500px;
+      background-color: #ff0;
+      position: absolute;
+      top: -100px;
+      left: 150px;
+  }
+  .ball > div{
+      border: 1px #ffffff solid;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+  }
+  .ball .line1{
+      transform: rotateY(0deg);
+  }
+  .ball .line2{
+      transform: rotateY(36deg);
+  }
+  .ball .line3{
+      transform: rotateY(72deg);
+  }
+  .ball .line4{
+      transform: rotateY(108deg);
+  }
+  .ball .line1{
+      transform: rotateY(144deg);
+  }
+</style>
+</head>
+<body>
+  <div class="ball-box">
+    <div class="ball">
+        <div class="line1"></div>
+        <div class="line2"></div>
+        <div class="line3"></div>
+        <div class="line4"></div>
+        <div class="line5"></div>
+    </div>
+</div>
+</body>
+<script>
+  let a = document.querySelector('.ball');
+  a.addEventListener('click',()=>{
+    console.log(window.top.a123('你看是我吗？'))
+  })
+</script>
+</html>
