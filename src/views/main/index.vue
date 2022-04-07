@@ -4,29 +4,50 @@
     <div class="main-content-box">
       <router-view />
     </div>
+    <notice />
   </div>
 </template>
 <script>
-import vHeader from "../../components/Header.vue";
-import { onMounted } from "@vue/runtime-core";
-import { useStore } from 'vuex';
-import { computed } from 'vue'
+import { onMounted, ref, watch } from '@vue/runtime-core'
+import { useStore } from 'vuex'
+import { computed, h } from 'vue'
+import { ElNotification } from 'element-plus'
+import { useRoute } from 'vue-router'
+import vHeader from '@/components/Header.vue'
+import Notice from './components/notice.vue'
 export default {
   components: {
     vHeader,
+    Notice,
   },
-  setup () {
-    const store = useStore();
+  setup() {
+    const store = useStore()
+    const route = useRoute()
     const tagsList = computed(() =>
       store.state.tagsList.map((item) => item.name)
-    );
-    const collapse = computed(() => store.state.collapse);
+    )
+    // const notice = ElNotification({
+    //   title: 'Success',
+    //   message: 'This is a success message',
+    //   type: 'success',
+    //   position: 'bottom-right',
+    //   showClose: true,
+    //   offset: 60,
+    //   duration: 0,
+    // })
+    const collapse = computed(() => store.state.collapse)
+    // onMounted(() => {
+    //   notice()
+    // })
+    // watch(
+    //   () => route.path,
+    //   () => notice && notice.close()
+    // )
     return {
       tagsList,
       collapse,
-    };
+    }
   },
-};
+}
 </script>
-<style scoped>
-</style>
+<style lang="scss" scoped></style>

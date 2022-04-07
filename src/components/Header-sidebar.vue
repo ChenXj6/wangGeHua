@@ -1,19 +1,18 @@
 <template>
   <div class="menu-box">
-    <span v-for="item in menuList"
-          :key="item.id"
-          class="menu-item"
-          @click="router.push('/a')">{{item.title}}</span>
+    <span v-for="item in menuList" :key="item.id" class="menu-item">{{
+      item.title
+    }}</span>
   </div>
 </template>
 
 <script>
-import { ref } from '@vue/reactivity';
-import { computed } from '@vue/runtime-core';
-import { useRouter } from 'vue-router';
+import { ref } from '@vue/reactivity'
+import { computed } from '@vue/runtime-core'
+import { useRouter } from 'vue-router'
 export default {
-  name: "header-sidebar",
-  setup () {
+  name: 'header-sidebar',
+  setup() {
     const menuList = [
       {
         id: 1,
@@ -46,7 +45,7 @@ export default {
       router,
     }
   },
-};
+}
 </script>
 <style scoped>
 .menu-box {
@@ -66,7 +65,7 @@ export default {
   box-sizing: border-box;
 }
 .active::after {
-  content: " ";
+  content: ' ';
   position: absolute;
   left: 0;
   bottom: -5px;

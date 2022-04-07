@@ -90,6 +90,7 @@
         </el-col>
       </el-row>
     </el-form>
+    <VTable :table-config="tableConfig"></VTable>
     <el-table
       :data="tableData"
       border
@@ -151,12 +152,18 @@ import { reactive, ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import { get } from '@/api/index'
 import { getCurrentInstance, onMounted } from '@vue/runtime-core'
+
+import { renderTable } from './common/taxesTableHeader'
+import VTable from '@/components/table/index.vue'
+
 export default {
   name: 'residentsReport',
+  components: { VTable },
   setup() {
     const router = useRouter()
     const form = ref(null)
     const { proxy } = getCurrentInstance()
+    const { tableConfig } = renderTable()
     const tableData = ref([
       {
         date: '2016-05-03',
@@ -224,7 +231,9 @@ export default {
         query: { id: rowData.isNew, operation: type },
       })
     }
-    onMounted(() => {})
+    onMounted(() => {
+      tableConfig.data = tableData.value
+    })
     return {
       form,
       tableData,
@@ -235,6 +244,7 @@ export default {
       handlePageChange,
       handleSearch,
       handleReset,
+      tableConfig,
     }
   },
 }

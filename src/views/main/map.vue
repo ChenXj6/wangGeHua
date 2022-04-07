@@ -78,7 +78,9 @@ export default {
     let timer = null
     const store = useStore()
     const route = useRoute()
-    const { proxy } = getCurrentInstance()
+    const {
+      proxy: { $speak },
+    } = getCurrentInstance()
     const VMapRender = function () {
       vMap = new VMap()
       vMap.createMap('dituContent')
@@ -118,7 +120,7 @@ export default {
       vMap.showMapMark(18624, 8178, html)
     }
     onMounted(() => {
-      // 是否有紧急事件通知 具体数值store
+      // 是否有紧急事件通知 具体数值
       if (route.params.isHaveEmergency) {
         setTimeout(() => {
           vMap.showMapPopWin(
@@ -144,10 +146,10 @@ export default {
         vMap.showMapPopWin(x0, y0, title, 'https://www.baidu.com', 500, 370)
       })
     })
-    const a123 = (a) => {
-      alert(`我接收到来自地图的数据了,${a}`)
+    const speak = (a) => {
+      $speak('我收到消息了')
     }
-    window.a123 = a123
+    window.a123 = speak
     // 恢复地图未加载默认状态
     const reLoadMap = () => {
       if (typeof jv != 'undefined') {

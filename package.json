@@ -21,6 +21,7 @@
     "qs": "^6.10.3",
     "sortablejs": "^1.14.0",
     "speak-tts": "^2.0.8",
+    "swiper": "^8.0.7",
     "vite-plugin-compression": "^0.5.1",
     "vue": "^3.1.2",
     "vue-cropperjs": "^5.0.0",

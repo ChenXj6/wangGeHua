@@ -3,10 +3,10 @@
     :ref="tableConfig.name"
     :key="`${tableConfig.name}_${key}`"
     v-loading="loading"
-    class="table__wrapper__content"
     style="width: 100%"
     :data="tableConfig.data"
     border
+    size="mini"
     :max-height="tableConfig.height || '500px'"
     :row-class-name="tableConfig.rowClassFunc || rowClassFunc"
     :cell-class-name="tableConfig.cellClassFunc"
@@ -59,9 +59,9 @@
           <template v-else>{{ column.label }}</template>
         </template>
         <!-- 多级表头 -->
-        <template v-if="column.children && column.children.length > 0">
+        <!-- <template v-if="column.children && column.children.length > 0">
           <columns :column="column" />
-        </template>
+        </template> -->
         <!-- 表体 -->
         <template #scope>
           <template v-if="!column.render">
@@ -95,6 +95,7 @@
       </el-table-column>
     </template>
   </el-table>
+  {{ tableConfig }}
   <el-pagination
     v-if="tableConfig.pagination"
     background
@@ -139,7 +140,6 @@ export default {
         return ctx.props.render(h, params)
       },
     },
-    Columns,
   },
   props: {
     tableConfig: {
