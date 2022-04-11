@@ -90,106 +90,81 @@
         </el-col>
       </el-row>
     </el-form>
-    <VTable :table-config="tableConfig"></VTable>
-    <el-table
-      :data="tableData"
-      border
-      size="mini"
-      :row-class-name="tableRowClassName"
-      style="width: 100%"
-    >
-      <el-table-column type="index" width="30"> </el-table-column>
-      <el-table-column prop="date" label="工单号" />
-      <el-table-column prop="date" label="所属网格" />
-      <el-table-column prop="date" label="事件名称">
-        <template #default="scope">
-          <el-link type="success" @click.prevent="handleOperation(1, scope.row)"
-            >{{ scope.row.name }}
-          </el-link>
-        </template>
-      </el-table-column>
-      <el-table-column prop="date" label="事件发生地" />
-      <el-table-column prop="date" label="事件发生时间" />
-      <el-table-column prop="date" label="事项规模" />
-      <el-table-column prop="date" label="事项类型" />
-      <el-table-column prop="date" label="事项处理状态" />
-      <el-table-column prop="date" label="数据来源" />
-      <el-table-column prop="date" label="姓名" />
-      <el-table-column prop="date" label="联系电话" />
-      <el-table-column label="操作">
-        <template #default="scope">
-          <el-button
-            size="small"
-            @click="handleOperation(1, scope.row)"
-            icon="el-icon-lx-search"
-            circle
-            type="success"
-          />
-          <el-button
-            size="small"
-            icon="el-icon-lx-edit"
-            @click="handleOperation(2, scope.row)"
-            circle
-            type="priamry"
-          />
-        </template>
-      </el-table-column>
-    </el-table>
-    <div class="pagination">
-      <el-pagination
-        background
-        layout="total, prev, pager, next"
-        :current-page="searchForm.pageIndex"
-        :page-size="searchForm.pageSize"
-        :total="pageTotal"
-        @current-change="handlePageChange"
-      ></el-pagination>
-    </div>
+    <V-table :table-config="tableConfig">
+      <template v-slot:name="data">
+        <el-link
+          type="success"
+          @click.prevent="handleOperation(1, data.data)"
+          >{{ data.data.name }}</el-link
+        >
+      </template>
+      <template v-slot:operation="data">
+        <el-button
+          size="small"
+          @click="handleOperation(1, data.data)"
+          icon="el-icon-lx-search"
+          circle
+          type="success"
+        />
+        <el-button
+          size="small"
+          icon="el-icon-lx-edit"
+          @click="handleOperation(2, data.data)"
+          circle
+          type="priamry"
+        />
+      </template>
+    </V-table>
   </div>
 </template>
 <script>
 import { reactive, ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import { get } from '@/api/index'
-import { getCurrentInstance, onMounted } from '@vue/runtime-core'
+import {
+  defineComponent,
+  getCurrentInstance,
+  onBeforeMount,
+  onMounted,
+} from '@vue/runtime-core'
 
 import { renderTable } from './common/taxesTableHeader'
-import VTable from '@/components/table/index.vue'
+import VTable from '@/components/Table/index.vue'
 
-export default {
+export default defineComponent({
   name: 'residentsReport',
   components: { VTable },
   setup() {
     const router = useRouter()
     const form = ref(null)
     const { proxy } = getCurrentInstance()
-    const { tableConfig } = renderTable()
-    const tableData = ref([
+    const { tableConfig } = renderTable.call(proxy)
+    const tableData = [
       {
-        date: '2016-05-03',
+        date: '1649662472313',
         name: 'Tom',
         isNew: 1,
         address: 'No. 189, Grove St, Los Angeles',
       },
       {
-        date: '2016-05-02',
+        date: '1649662472313',
         name: 'Jerry',
         isNew: 2,
         address: 'No. 189, Grove St, Los Angeles',
       },
       {
-        date: '2016-05-04',
+        date: '1649662472313',
         name: 'Sam',
         isNew: '',
         address: 'No. 189, Grove St, Los Angeles',
       },
       {
-        date: '2016-05-01',
+        date: '1649662472313',
         name: 'Timi',
         isNew: 2,
         address: 'No. 189, Grove St, Los Angeles',
       },
-    ])
+    ]
     const searchForm = reactive({
       entryId: '',
       region: '',
@@ -231,8 +206,10 @@ export default {
         query: { id: rowData.isNew, operation: type },
       })
     }
-    onMounted(() => {
-      tableConfig.data = tableData.value
+
+    onBeforeMount(() => {
+      tableConfig.data = tableData
+      tableConfig.rowClassFunc = tableRowClassName
     })
     return {
       form,
@@ -247,14 +224,14 @@ export default {
       tableConfig,
     }
   },
-}
+})
 </script>
 <style scoped>
-/deep/ .el-table .warning-row {
+:deep(.el-table .warning-row) {
   background: #e6a23c;
 }
 
-/deep/ .el-table .danger-row {
+:deep(.el-table .danger-row) {
   background: orangered;
 }
 </style>

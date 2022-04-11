@@ -62,6 +62,7 @@ export default defineConfig(({ command, mode }) => {
       port: 8000,  // 配置启动端口
       open: true,  //项目启动自动在浏览器中打开
       https: false, //是否启用https
+      hmr:true,
       proxy: {
         '/api': {
           target: env.VITE_APP_BASE_API,

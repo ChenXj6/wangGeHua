@@ -13,6 +13,7 @@
     :default-sort="tableConfig.defaultSort"
     :cell-style="cellStyle"
     :row-style="rowStyle"
+    row-key="id"
     @selection-change="handleSelectionChange"
     @sort-change="handleSortChange"
   >
@@ -26,17 +27,20 @@
     <!-- 序号列 -->
     <el-table-column
       v-if="tableConfig.index"
-      label="序号"
+      label=""
       type="index"
-      width="50"
+      width="30"
       align="center"
+      fixed="left"
       :index="indexMethod"
     />
     <!-- 数据列 -->
-    <template v-for="(column, columnIndex) in tableConfig.columns">
+    <template
+      v-for="(column, columnIndex) in tableConfig.columns"
+      :key="columnIndex"
+    >
+      <!-- v-if="column.visible === undefined ? true : column.visible" -->
       <el-table-column
-        v-if="column.visible === undefined ? true : column.visible"
-        :key="columnIndex"
         :prop="column.prop"
         :label="column.label"
         :align="column.align ? column.align : 'center'"
@@ -46,101 +50,52 @@
         :min-width="column.minWidth"
         :sortable="column.sortable"
       >
-        <template #default="scope">
-          <template v-if="column.headerRender">
-            <expand-dom
-              :column="column"
-              :row="scope.row"
-              :render="column.headerRender"
-              :index="columnIndex"
-              :table-data="tableConfig.data"
-            />
-          </template>
-          <template v-else>{{ column.label }}</template>
-        </template>
-        <!-- 多级表头 -->
-        <!-- <template v-if="column.children && column.children.length > 0">
-          <columns :column="column" />
-        </template> -->
         <!-- 表体 -->
-        <template #scope>
-          <template v-if="!column.render">
-            <!-- 自定义formatter列 -->
-            <template v-if="column.formatter">
-              <span v-html="column.formatter(scope.row, column)" />
-            </template>
-            <!-- 数据比对 -->
-            <template v-if="column.contrast">
-              <span
-                :style="{ color: column.contrast(scope.row, column, true) }"
-                >{{ column.contrast(scope.row, column) }}</span
-              >
-            </template>
-            <!-- 普通列表 -->
-            <template v-else>
-              <span>{{ scope.row[column.prop] }}</span>
-            </template>
+        <template #default="scope">
+          <!-- 自定义时间格式 -->
+          <template v-if="column.formatter">
+            <span>
+              {{ dateFormat(scope.row[column.prop], column.formatter) }}</span
+            >
           </template>
-          <!-- 自定义render列 -->
-          <template v-else>
-            <expand-dom
-              :column="column"
-              :row="scope.row"
-              :render="column.render"
-              :index="columnIndex"
-              :table-data="tableConfig.data"
-            />
+          <!-- 正常格式 -->
+          <template v-else-if="!column.slot">
+            <span>{{ scope.row[column.prop] }}</span>
           </template>
+          <!-- 自定义插槽 -->
+          <slot v-else :name="column.slot" :data="scope.row"></slot>
         </template>
       </el-table-column>
     </template>
   </el-table>
-  {{ tableConfig }}
-  <el-pagination
-    v-if="tableConfig.pagination"
-    background
-    :current-page="currentPage"
-    :page-sizes="pageSizeList"
-    :page-size="currentPageSize"
-    layout="total, sizes, prev, pager, next, jumper"
-    :total="total"
-    class="page__wrapper"
-    @size-change="handleSizeChange"
-    @current-change="handleCurrentChange"
-  />
+  <div class="pagination">
+    <el-pagination
+      v-if="tableConfig.pagination"
+      background
+      :current-page="currentPage"
+      :page-sizes="pageSizeList"
+      :page-size="currentPageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      class="page__wrapper"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
 </template>
 <script>
-export default {
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  reactive,
+  ref,
+} from '@vue/runtime-core'
+import Sortable from 'sortablejs'
+
+export default defineComponent({
   name: 'VTable',
-  components: {
-    expandDom: {
-      functional: true, // 函数式组件 - 无 data 和 this 上下文 => better render
-      props: {
-        row: Object,
-        render: Function,
-        index: Number,
-        column: {
-          type: Object,
-          default: null,
-        },
-      },
-      /**
-       * @param {Function} h - 原生创建dom元素的方法
-       * @param {Object} ctx - 渲染的节点的this对象
-       * @argument 传递参数 row index
-       */
-      render: (h, ctx) => {
-        const params = {
-          row: ctx.props.row,
-          index: ctx.props.index,
-        }
-        if (ctx.props.column) {
-          params.column = ctx.props.column
-        }
-        return ctx.props.render(h, params)
-      },
-    },
-  },
   props: {
     tableConfig: {
       type: Object,
@@ -155,13 +110,46 @@ export default {
       default: () => {},
     },
   },
-  data() {
+  setup(props) {
+    const {
+      proxy: { $moment },
+    } = getCurrentInstance()
+    const loading = ref(false)
+    const currentPage = ref(1)
+    const currentPageSize = ref(10)
+    const total = ref(4)
+    const tableConfig = reactive(props.tableConfig)
+    total.value = tableConfig.data.length
+
+    const dateFormat = computed(() => (date, formatter) => {
+      return $moment(Number(date)).format(formatter)
+    })
+
+    // 拖拽
+    const rowDrop = () => {
+      if (!tableConfig.isSortable) return
+      const tbody = document.querySelector('.el-table__body-wrapper tbody')
+      Sortable.create(tbody, {
+        onEnd({ newIndex, oldIndex }) {
+          console.log(newIndex, oldIndex, '/////')
+        },
+      })
+    }
+    onMounted(() => {
+      document.body.ondrag = function (e) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+      rowDrop()
+    })
     return {
-      loading: false,
-      currentPage: 1, // 当前页
-      currentPageSize: 10, // 当前页个数
-      total: 0, // 总条数
+      loading,
+      currentPage,
+      currentPageSize,
+      total,
+      tableConfig,
+      dateFormat,
     }
   },
-}
+})
 </script>

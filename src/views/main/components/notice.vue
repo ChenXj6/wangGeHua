@@ -9,12 +9,16 @@
         ></i>
       </div>
     </div>
-    <ul v-if="isHaveNotice" ref="noticeListBox" class="notice-item-box">
-      <li v-for="item in noticeList" :key="item.id" class="notice-item">
-        <span class="notice-item-content">{{ item.message }}，</span>
-        <el-link type="warning">请查看</el-link>
-      </li>
-    </ul>
+    <template v-if="isHaveNotice">
+      <!-- <vue3-seamless-scroll :data="noticeList" class="warp"> -->
+        <ul ref="noticeListBox" class="notice-item-box">
+          <li v-for="item in noticeList" :key="item.id" class="notice-item">
+            <span class="notice-item-content">{{ item.message }}，</span>
+            <el-link type="warning">请查看</el-link>
+          </li>
+        </ul>
+      <!-- </vue3-seamless-scroll> -->
+    </template>
     <div v-else class="no-notice">暂无最新消息</div>
   </div>
 </template>

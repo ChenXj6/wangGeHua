@@ -257,7 +257,7 @@ export default {
         e.stopPropagation()
       }
       rowDrop()
-      useEmit({ pressureHealthDegree: { id: 1, message: '你好' } })
+      // useEmit({ pressureHealthDegree: { id: 1, message: '你好' } })
     })
 
     return {
