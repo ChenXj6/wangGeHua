@@ -62,7 +62,7 @@ service.interceptors.response.use(
         const msg =
           res.data.msg || res.data.ElMessage || '获取数据失败，请稍后重试'
           ElMessage({
-            Message: msg,
+            message: msg,
           type: 'error'
         })
         console.log('获取数据失败')
@@ -71,6 +71,7 @@ service.interceptors.response.use(
     return res.data
   },
   err => {
+    
     if (err && err.response) {
       // 重复请求关闭后重复正常
       if (err.response.config.isDebounce) {
@@ -123,16 +124,16 @@ service.interceptors.response.use(
     } else if (axios.isCancel(err)) {
       ElMessage.closeAll()
       ElMessage({
-        ElMessage: err.Message,
+        message: err.Message,
         type: 'warning',
         duration: 5 * 1000
       })
       return Promise.reject(err)
     } else {
-      err.ElMessage = '连接服务器失败!'
+      err.Message = '连接服务器失败!'
     }
     ElMessage({
-      ElMessage: err.Message,
+      message: err.Message,
       type: 'error',
       duration: 5 * 1000
     })

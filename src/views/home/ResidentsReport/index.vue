@@ -80,7 +80,7 @@
         </el-col>
         <el-col :span="6">
           <div class="btn-box">
-            <el-button type="primary" size="small" @click="handleSearch"
+            <el-button type="primary" size="small" @click="handleQuery"
               >查询</el-button
             >
             <el-button type="primary" size="small" @click="handleReset(form)"
@@ -90,7 +90,11 @@
         </el-col>
       </el-row>
     </el-form>
-    <V-table :table-config="tableConfig">
+    <V-table
+      ref="table"
+      :table-config="tableConfig"
+      @select-change="(val) => (multipleSelection = val)"
+    >
       <template v-slot:name="data">
         <el-link
           type="success"
@@ -122,14 +126,17 @@ import { reactive, ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
 import { get } from '@/api/index'
 import {
+  computed,
   defineComponent,
   getCurrentInstance,
   onBeforeMount,
   onMounted,
+  watch,
 } from '@vue/runtime-core'
 
 import { renderTable } from './common/taxesTableHeader'
 import VTable from '@/components/Table/index.vue'
+import { deepClone } from '@/utils/util'
 
 export default defineComponent({
   name: 'residentsReport',
@@ -139,6 +146,7 @@ export default defineComponent({
     const form = ref(null)
     const { proxy } = getCurrentInstance()
     const { tableConfig } = renderTable.call(proxy)
+    const table = ref(null)
     const tableData = [
       {
         date: '1649662472313',
@@ -168,29 +176,33 @@ export default defineComponent({
     const searchForm = reactive({
       entryId: '',
       region: '',
-      pageIndex: 1,
-      pageSize: 10,
     })
-    const pageTotal = ref(5)
-    const getList = () => {
-      get(searchForm).then((res) => {
-        console.log(res, '.....')
-      })
-    }
-    const handleSearch = () => {
-      searchForm.pageIndex = 1
-      getList()
+    const searchParams = ref({})
+    const multipleSelection = ref([])
+    const isHaveSelect = computed(
+      () => multipleSelection.value && multipleSelection.value.length > 0
+    )
+
+    // 表格查询
+    const handleQuery = () => {
+      searchParams.value = deepClone(searchForm)
+      table.currentPage = 1
+      handleQueryTable()
     }
     const handleReset = (formEL) => {
       formEL.resetFields()
-      getList()
+      searchParams.value = {}
+      searchForm = {}
+      handleQuery()
     }
-    // 分页导航
-    const handlePageChange = (val) => {
-      searchForm.pageIndex = val
-      getList()
+    const handleQueryTable = () => {
+      table.value.getTableData(searchForm, (res) => {
+        const data = res.data || []
+        tableConfig.data = data
+      })
     }
-    // getList()
+
+    //
     // 改变table行样式
     const tableRowClassName = ({ row }) => {
       if (row.isNew === 1) {
@@ -208,18 +220,19 @@ export default defineComponent({
     }
 
     onBeforeMount(() => {
-      tableConfig.data = tableData
       tableConfig.rowClassFunc = tableRowClassName
+    })
+    onMounted(() => {
+      handleQuery()
     })
     return {
       form,
+      table,
       tableData,
       searchForm,
-      pageTotal,
-      tableRowClassName,
+      multipleSelection,
       handleOperation,
-      handlePageChange,
-      handleSearch,
+      handleQuery,
       handleReset,
       tableConfig,
     }
