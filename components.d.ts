@@ -41,6 +41,7 @@ declare module 'vue' {
     ElTimePicker: typeof import('element-plus/es/el-time-picker')['default']
     ElTooltip: typeof import('element-plus/es/el-tooltip')['default']
     ElUpload: typeof import('element-plus/es/el-upload')['default']
+    Form: typeof import('./src/components/Form/index.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     HeaderSidebar: typeof import('./src/components/Header-sidebar.vue')['default']
     Sidebar: typeof import('./src/components/Sidebar.vue')['default']

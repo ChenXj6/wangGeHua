@@ -1,95 +1,6 @@
 <template>
   <div>
-    <el-form ref="form" :model="searchForm" label-width="80px">
-      <el-row>
-        <el-col :span="6">
-          <el-form-item label="工单号" prop="entryId">
-            <el-input
-              v-model="searchForm.entryId"
-              placeholder="请输入"
-              size="small"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="事件名称">
-            <el-input
-              v-model="searchForm.entryId"
-              placeholder="请输入"
-              size="small"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="发生时间">
-            <el-date-picker
-              v-model="searchForm.entryId"
-              type="datetimerange"
-              range-separator="至"
-              size="small"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            >
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="事件状态">
-            <el-input
-              v-model="searchForm.entryId"
-              placeholder="请输入"
-              size="small"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="事件类型">
-            <el-select
-              v-model="searchForm.region"
-              size="small"
-              placeholder="请选择事件类型"
-              clearable
-            >
-              <el-option label="Zone one" value="1" />
-              <el-option label="Zone two" value="2" />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="事件查询">
-            <el-input
-              v-model="searchForm.entryId"
-              placeholder="请输入"
-              size="small"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <el-form-item label="事件来源">
-            <el-input
-              v-model="searchForm.entryId"
-              placeholder="请输入"
-              size="small"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="6">
-          <div class="btn-box">
-            <el-button type="primary" size="small" @click="handleQuery"
-              >查询</el-button
-            >
-            <el-button type="primary" size="small" @click="handleReset(form)"
-              >重置</el-button
-            >
-          </div>
-        </el-col>
-      </el-row>
-    </el-form>
+    <VForm :form-data="formConfig" @reset="handleReset" @search="handleQuery"/>
     <V-table
       ref="table"
       :table-config="tableConfig"
@@ -124,7 +35,6 @@
 <script>
 import { reactive, ref } from '@vue/reactivity'
 import { useRouter } from 'vue-router'
-import { get } from '@/api/index'
 import {
   computed,
   defineComponent,
@@ -135,17 +45,14 @@ import {
 } from '@vue/runtime-core'
 
 import { renderTable } from './common/taxesTableHeader'
-import VTable from '@/components/Table/index.vue'
 import { deepClone } from '@/utils/util'
 
 export default defineComponent({
   name: 'residentsReport',
-  components: { VTable },
   setup() {
     const router = useRouter()
-    const form = ref(null)
     const { proxy } = getCurrentInstance()
-    const { tableConfig } = renderTable.call(proxy)
+    const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
     const tableData = [
       {
@@ -173,30 +80,24 @@ export default defineComponent({
         address: 'No. 189, Grove St, Los Angeles',
       },
     ]
-    const searchForm = reactive({
-      entryId: '',
-      region: '',
-    })
-    const searchParams = ref({})
+    let searchParams = ref({})
     const multipleSelection = ref([])
     const isHaveSelect = computed(
       () => multipleSelection.value && multipleSelection.value.length > 0
     )
 
     // 表格查询
-    const handleQuery = () => {
-      searchParams.value = deepClone(searchForm)
+    const handleQuery = (form) => {
+      searchParams.value = deepClone(form)
       table.currentPage = 1
       handleQueryTable()
     }
-    const handleReset = (formEL) => {
-      formEL.resetFields()
+    const handleReset = () => {
       searchParams.value = {}
-      searchForm = {}
       handleQuery()
     }
     const handleQueryTable = () => {
-      table.value.getTableData(searchForm, (res) => {
+      table.value.getTableData(searchParams.value, (res) => {
         const data = res.data || []
         tableConfig.data = data
       })
@@ -220,21 +121,20 @@ export default defineComponent({
     }
 
     onBeforeMount(() => {
-      tableConfig.rowClassFunc = tableRowClassName
+      tableConfig.rowClassFunc = tableRowClassName //  表格样式
     })
     onMounted(() => {
       handleQuery()
     })
     return {
-      form,
       table,
       tableData,
-      searchForm,
       multipleSelection,
+      tableConfig,
       handleOperation,
       handleQuery,
       handleReset,
-      tableConfig,
+      formConfig,
     }
   },
 })

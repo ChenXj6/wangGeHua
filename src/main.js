@@ -7,6 +7,8 @@ import installElementPlus from './plugins/element'
 import './assets/css/icon.css'
 
 
+import VTable from '@/components/Table/index.vue'
+import VForm from '@/components/Form/index.vue'
 import { DonMessage } from '@/utils/util'
 // import websocket from '@/utils/webSocket'
 import speak from '@/utils/speak'
@@ -30,4 +32,6 @@ permission(app)
 app
   .use(store)
   .use(router)
+  .component('VTable',VTable)
+  .component('VForm',VForm)
   .mount('#app')
