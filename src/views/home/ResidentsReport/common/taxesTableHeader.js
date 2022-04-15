@@ -138,8 +138,6 @@ export function renderTable(handleQuery, handleReset) {
         span: 6,
       },
     ],
-    rules: {
-    }
   }
   return {
     tableConfig,

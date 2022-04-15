@@ -81,7 +81,7 @@ export default defineComponent({
     const formRef = ref(null)
     const formModel = reactive(props.formModel)
     const formHandle = props.formHandle
-    const formRules = formData.rules ?? props.formRules
+    const formRules = (formData.rules && Object.getOwnPropertyNames(formData.rules).length !== 0) ? formData.rules : props.formRules
     return {
       formData,
       formRef,
