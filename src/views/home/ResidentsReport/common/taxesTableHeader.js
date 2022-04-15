@@ -1,15 +1,15 @@
 import { fetchData } from '@/api/index'
-import { eventStatus,eventType,eventSource } from '@/config/common'
+import { eventStatus, eventType, eventSource } from '@/config/common'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
-export function renderTable(handleQuery,handleReset) {
+export function renderTable(handleQuery, handleReset) {
   const tableConfig = {
     name: 'table',
     data: [],
-    pagination: true,
-    mutiSelect: false,
-    method: fetchData,
-    index: '', // 是否启用序号列
+    pagination: true, // 開啟分頁器
+    mutiSelect: false, // 開啟選擇
+    method: fetchData, // 請求api
+    index: false, // 是否启用序号列
     total: 0,
     isSortable: true, // 是否开启拖拽
     columns: [
@@ -68,9 +68,9 @@ export function renderTable(handleQuery,handleReset) {
         type: 'select',
         label: '事件状态',
         prop: 'status',
-        value:'',
-        placeholder:'请选择事件状态',
-        options:eventStatus,
+        value: '',
+        placeholder: '请选择事件状态',
+        options: eventStatus,
         isClearable: true,
         span: 6,
       },
@@ -112,9 +112,9 @@ export function renderTable(handleQuery,handleReset) {
         type: 'select',
         label: '事件类型',
         prop: 'type',
-        value:'',
-        placeholder:'请选择事件类型',
-        options:eventType,
+        value: '',
+        placeholder: '请选择事件类型',
+        options: eventType,
         isClearable: true,
         span: 6,
       },
@@ -131,21 +131,15 @@ export function renderTable(handleQuery,handleReset) {
         type: 'select',
         label: '事件来源',
         prop: 'source',
-        value:'',
-        placeholder:'请选择事件来源',
-        options:eventSource,
+        value: '',
+        placeholder: '请选择事件来源',
+        options: eventSource,
         isClearable: true,
         span: 6,
       },
-      {
-        type:'btns',
-        span:6,
-        btnsList:[
-          {type:'primary',label:'查询',use:'search'},
-          {type:'primary',label:'重置',use:'reset'},
-        ]
-      }
     ],
+    rules: {
+    }
   }
   return {
     tableConfig,

@@ -19,7 +19,7 @@
     "force": "0.0.3",
     "moment": "^2.29.1",
     "qs": "^6.10.3",
-    "sortablejs": "^1.14.0",
+    "sortablejs": "^1.15.0",
     "speak-tts": "^2.0.8",
     "swiper": "^8.0.7",
     "vite-plugin-compression": "^0.5.1",

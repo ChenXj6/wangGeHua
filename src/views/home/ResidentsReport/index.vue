@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VForm :form-data="formConfig" @reset="handleReset" @search="handleQuery"/>
+    <VForm :form-data="formConfig" :form-model="searchForm" :formRules="rules" :form-handle="formHandle"/>
     <V-table
       ref="table"
       :table-config="tableConfig"
@@ -45,7 +45,7 @@ import {
 } from '@vue/runtime-core'
 
 import { renderTable } from './common/taxesTableHeader'
-import { deepClone } from '@/utils/util'
+import { deepClone, formatterDate } from '@/utils/util'
 
 export default defineComponent({
   name: 'residentsReport',
@@ -54,45 +54,46 @@ export default defineComponent({
     const { proxy } = getCurrentInstance()
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
-    const tableData = [
-      {
-        date: '1649662472313',
-        name: 'Tom',
-        isNew: 1,
-        address: 'No. 189, Grove St, Los Angeles',
-      },
-      {
-        date: '1649662472313',
-        name: 'Jerry',
-        isNew: 2,
-        address: 'No. 189, Grove St, Los Angeles',
-      },
-      {
-        date: '1649662472313',
-        name: 'Sam',
-        isNew: '',
-        address: 'No. 189, Grove St, Los Angeles',
-      },
-      {
-        date: '1649662472313',
-        name: 'Timi',
-        isNew: 2,
-        address: 'No. 189, Grove St, Los Angeles',
-      },
-    ]
-    let searchParams = ref({})
-    const multipleSelection = ref([])
+    const searchForm = reactive({
+      date: []
+    }) // 表单数据
+    const rules = {
+      entryId: { required: true, message: '请输入活动名称', trigger: 'blur' },
+      // region: { required: true, message: '请输入活动名称', trigger: 'blur' },
+      status: { required: true, message: '请输入活动名称', trigger: 'blur' },
+      type: { required: true, message: '请输入活动名称', trigger: 'blur' },
+      source: { required: true, message: '请输入活动名称', trigger: 'blur' },
+    } // 表单验证
+    let searchParams = ref({}) // 表單數據備份
+    const multipleSelection = ref([]) // 選中表格數據
+    // 是否有選中數據
     const isHaveSelect = computed(
       () => multipleSelection.value && multipleSelection.value.length > 0
     )
 
-    // 表格查询
-    const handleQuery = (form) => {
-      searchParams.value = deepClone(form)
+    // 表格相關操作
+    const handleQuery = () => {
+      searchParams.value = deepClone(searchForm)
+      for (const key in searchParams.value) {
+        if (
+          Array.isArray(searchParams.value[key]) &&
+          searchParams.value[key].length > 0
+        ) {
+          searchParams.value[`${key}Start`] = formatterDate(
+            searchParams.value[key][0]
+          )
+          searchParams.value[`${key}End`] = formatterDate(
+            searchParams.value[key][1]
+          )
+          delete searchParams.value[key]
+        }
+      }
       table.currentPage = 1
       handleQueryTable()
     }
-    const handleReset = () => {
+    const handleReset = (formEL) => {
+      formEL.resetFields()
+      searchForm.value = {}
       searchParams.value = {}
       handleQuery()
     }
@@ -102,7 +103,11 @@ export default defineComponent({
         tableConfig.data = data
       })
     }
-
+    // 表單操作按鈕配置
+    const formHandle = [
+      {type:'primary',label:'查询',key:'search',handle:handleQuery},
+      {type:'primary',label:'重置',key:'reset',handle:handleReset},
+    ]
     //
     // 改变table行样式
     const tableRowClassName = ({ row }) => {
@@ -128,13 +133,15 @@ export default defineComponent({
     })
     return {
       table,
-      tableData,
       multipleSelection,
       tableConfig,
-      handleOperation,
+      formConfig,
+      searchForm,
+      rules,
+      formHandle,
       handleQuery,
       handleReset,
-      formConfig,
+      handleOperation,
     }
   },
 })

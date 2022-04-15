@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="formRef" :model="formModel">
+  <el-form ref="formRef" class="form" :model="formModel" :rules="formRules">
     <el-row :gutter="formData.gutter || 0">
       <el-col v-for="item in formData.formItems"
               :key="item.prop"
@@ -13,7 +13,7 @@
           </template>
           <!-- Input -->
           <template v-if="item.type === 'Input'">
-            <el-input v-model="formModel[item.prop]"
+            <el-input v-model.trim="formModel[item.prop]"
                       :placeholder="item.placeholder"
                       size="small"
                       :clearable="item.isClearable" />
@@ -30,6 +30,7 @@
                             type="datetimerange"
                             range-separator="至"
                             size="small"
+                            :format="item.format"
                             :value-format="item.format || 'YYYY-MM-DD HH:mm:ss'"
                             start-placeholder="开始日期"
                             end-placeholder="结束日期">
@@ -40,9 +41,11 @@
             <slot :name="item.slotName"></slot>
           </template>
         </el-form-item>
+      </el-col>
+      <el-col v-if="formHandle" :span="6">
         <!-- 按鈕組 -->
-        <div  v-if="item.type === 'btns'" class="btn-box" style="margin-top:-6px">
-          <el-button v-for="i in item.btnsList" :key="i" :type="i.type" :size="i.size??'small'" @click="i.use ==='search' ? handleQuery() : (i.use === 'reset' ? handleReset(formRef):'')"
+        <div  class="btn-box" style="margin-top:4px">
+          <el-button v-for="i in formHandle" :key="i.key" :type="i.type" :size="i.size??'small'" @click="i.handle && i.handle(formRef)"
           >{{i.label}}</el-button
         >
         </div>
@@ -59,44 +62,40 @@ export default defineComponent({
     formData: {
       type: Array,
       default: () => []
+    },
+    formModel: {
+      type:Object,
+      default:()=>{}
+    },
+    formHandle: {
+      type: Array,
+      default: () => []
+    },
+    formRules:{
+      type:Object,
+      default: () =>{}
     }
   },
-  emits:['reset','search'],
-  setup (props,{emit}) {
+  setup (props) {
     const formData = reactive(props.formData)
     const formRef = ref(null)
-    const initForm = (data) => {
-      if(!data.formItems) return
-      const modelObject = {}
-      forE(data,modelObject)
-      return modelObject
-    }
-    const forE = (data,modelObject) => {
-      data.formItems.forEach(item => {
-        if (item.prop) {
-          modelObject[item.prop] = item.value || ""
-        } else if(item.children){
-          forE(item.children,modelObject)
-        }
-      })
-    }
-    const formModel = reactive(initForm(formData))
-    const handleQuery = () => {
-      emit('search',formModel)
-    }
-    const handleReset = (formEL) => {
-      formEL.resetFields()
-      emit('reset')
-    }
+    const formModel = reactive(props.formModel)
+    const formHandle = props.formHandle
+    const formRules = formData.rules ?? props.formRules
     return {
       formData,
       formRef,
       formModel,
-      handleReset,
-      handleQuery,
+      formHandle,
+      formRules
     }
   },
 })
 </script>
+<style scoped>
+.form{
+  margin-bottom: 10px;
+}
+</style>
 
 

@@ -66,6 +66,14 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Icon.vue")
       }, 
       {
+        path: "/editor",
+        name: "editor",
+        meta: {
+          title: '富文本'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Editor.vue")
+      }, 
+      {
         path: "/residentsReport",
         name: "residentsReport",
         meta: {

@@ -88,6 +88,8 @@ import {
   computed,
   defineComponent,
   getCurrentInstance,
+  nextTick,
+  onBeforeUnmount,
   onMounted,
   reactive,
   ref,
@@ -232,20 +234,22 @@ export default defineComponent({
 
     // 拖拽
     const rowDrop = () => {
-      if (!tableConfig.isSortable) return
       const tbody = document.querySelector('.el-table__body-wrapper tbody')
       Sortable.create(tbody, {
+        animation: 1000,
         onEnd({ newIndex, oldIndex }) {
           console.log(newIndex, oldIndex, '/////')
         },
       })
     }
     onMounted(() => {
-      document.body.ondrag = function (e) {
-        e.preventDefault()
-        e.stopPropagation()
+      if(tableConfig.isSortable) {
+        document.body.ondrag = function (e) {
+          e.preventDefault()
+          e.stopPropagation()
+        }
+        nextTick(()=>rowDrop())
       }
-      rowDrop()
     })
     return {
       key,

@@ -54,6 +54,11 @@ export default {
                 title: "图标",
             },
             {
+                icon: "el-icon-lx-cascades",
+                index: "/editor",
+                title: "富文本",
+            },
+            {
                 icon: "el-icon-lx-calendar",
                 index: "1",
                 title: "事件处置",
