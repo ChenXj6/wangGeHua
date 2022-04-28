@@ -6,8 +6,8 @@ export function renderTable(handleQuery, handleReset) {
   const tableConfig = {
     name: 'table',
     data: [],
-    pagination: true, // 開啟分頁器
-    mutiSelect: false, // 開啟選擇
+    pagination: true, // 开启分页器
+    mutiSelect: false, // 开启选择
     method: fetchData, // 請求api
     index: false, // 是否启用序号列
     total: 0,

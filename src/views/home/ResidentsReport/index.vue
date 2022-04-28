@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VForm :form-data="formConfig" :form-model="searchForm" :formRules="rules" :form-handle="formHandle"/>
+    <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle"/>
     <V-table
       ref="table"
       :table-config="tableConfig"
@@ -57,15 +57,8 @@ export default defineComponent({
     const searchForm = reactive({
       date: []
     }) // 表单数据
-    const rules = {
-      entryId: { required: true, message: '请输入活动名称', trigger: 'blur' },
-      // region: { required: true, message: '请输入活动名称', trigger: 'blur' },
-      status: { required: true, message: '请输入活动名称', trigger: 'blur' },
-      type: { required: true, message: '请输入活动名称', trigger: 'blur' },
-      source: { required: true, message: '请输入活动名称', trigger: 'blur' },
-    } // 表单验证
-    let searchParams = ref({}) // 表單數據備份
-    const multipleSelection = ref([]) // 選中表格數據
+    let searchParams = ref({}) // 表单数据备份
+    const multipleSelection = ref([]) // 选中数据
     // 是否有選中數據
     const isHaveSelect = computed(
       () => multipleSelection.value && multipleSelection.value.length > 0
@@ -137,7 +130,6 @@ export default defineComponent({
       tableConfig,
       formConfig,
       searchForm,
-      rules,
       formHandle,
       handleQuery,
       handleReset,
