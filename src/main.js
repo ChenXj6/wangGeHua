@@ -14,6 +14,7 @@ import { DonMessage } from '@/utils/util'
 import speak from '@/utils/speak'
 import moment from 'moment'
 import permission from '@/utils/permission'
+import md5 from 'js-md5'
 
 
 const app = createApp(App)
@@ -21,6 +22,7 @@ const app = createApp(App)
 app.config.globalProperties.$moment = moment   // 时间处理插件
 app.config.globalProperties.$message = DonMessage  // 消息提醒
 app.config.globalProperties.$echart = echarts  // Echarts插件
+app.config.globalProperties.$md5 = md5  // md5
 app.config.globalProperties.$speak = speak   // 语音播报功能
 // app.config.globalProperties.$ws = websocket
 

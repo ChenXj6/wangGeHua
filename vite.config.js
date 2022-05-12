@@ -65,7 +65,7 @@ export default defineConfig(({ command, mode }) => {
       hmr:true,
       proxy: {
         '/api': {
-          target: env.VITE_APP_BASE_API,
+          target: env.VITE_BASE_API,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
         },

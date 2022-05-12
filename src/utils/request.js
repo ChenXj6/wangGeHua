@@ -8,7 +8,6 @@ import { ElMessage } from 'element-plus';
 
 const service = axios.create({
   baseURL: '',
-  timeout: 5000
 });
 
 service.interceptors.request.use(
@@ -19,10 +18,23 @@ service.interceptors.request.use(
       config.baseURL = ''
     }
     config.withCredentials = true
-    config.headers.post['Content-Type'] =
-      'application/x-www-form-urlencoded; charset=UTF-8'
-    if (config.headers['Content-Type'] !== 'application/json;chartset=uft-8') {
-      config.data = qs.stringify(config.data)
+    // config.headers.post['Content-Type'] =
+    //   'application/x-www-form-urlencoded; charset=UTF-8'
+    // if (config.headers['Content-Type'] !== 'application/json;chartset=uft-8') {
+    //   config.data = qs.stringify(config.data)
+    // }
+    
+    if (sessionStorage.getItem("Authorization")) {//localStorage.getItem('Authorization')
+      let userToken = sessionStorage.getItem("Authorization");
+      config.headers = {
+        'Authorization': userToken,
+        'Content-Type': 'application/json',
+        'withCredentials': true,
+        'changeOrigin': true,
+        'operatorId':sessionStorage.getItem("operatorId"),
+        'responseType': 'json'
+      };
+      config.timeout = 1000 * 60 * 10;
     }
     // 阻止重复请求。当上个请求未完成时，相同的请求不会进行（需要在请求中配置参数开启，默认不开启;isDebounce:true,开启）
     if (config.isDebounce) {
@@ -53,25 +65,23 @@ service.interceptors.response.use(
     // res.data = null
     // 请求成功，但是操作不成功时显示后端返回的错误信息
     if (
-      res.data.code &&
-      res.data.code !== '0' &&
-      res.data.msg !== '操作成功' &&
-      res.data.msg !== '成功'
+      res.data.resCode &&
+      res.data.resCode !== '000000' &&
+      res.data.message !== '成功'
     ) {
       if ( res.data.code !== 1 ) {
         const msg =
-          res.data.msg || res.data.ElMessage || '获取数据失败，请稍后重试'
+          res.data.message || res.data.ElMessage || '获取数据失败，请稍后重试'
           ElMessage({
             message: msg,
           type: 'error'
         })
-        console.log('获取数据失败')
       }
     }
     return res.data
   },
   err => {
-    
+    console.log(err)
     if (err && err.response) {
       // 重复请求关闭后重复正常
       if (err.response.config.isDebounce) {

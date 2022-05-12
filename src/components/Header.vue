@@ -69,7 +69,7 @@ export default {
     const { fullPath } = useRoute();
     const status = ref("进入后台");
     const fullscreen = ref(false);
-    const username = localStorage.getItem("ms_username");
+    const username = sessionStorage.getItem("operatorId");
     const message = 2;
     const store = useStore();
     const collapse = computed(() => store.state.collapse);
@@ -128,7 +128,7 @@ export default {
     // 用户名下拉菜单选择事件
     const handleCommand = (command) => {
       if (command == "loginout") {
-        localStorage.removeItem("ms_username");
+        sessionStorage.removeItem("user");
         router.push("/login");
       } else if (command == "user") {
         router.push("/user");

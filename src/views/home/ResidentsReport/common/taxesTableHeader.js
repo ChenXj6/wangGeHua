@@ -2,7 +2,7 @@ import { fetchData } from '@/api/index'
 import { eventStatus, eventType, eventSource } from '@/config/common'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
-export function renderTable(handleQuery, handleReset) {
+export function renderTable() {
   const tableConfig = {
     name: 'table',
     data: [],

@@ -92,6 +92,30 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/ResidentsReport/edit.vue")
       },
+      {
+        path: "/user",
+        name: "user",
+        meta: {
+          title: '用户管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/User.vue")
+      },
+      {
+        path: "/menu",
+        name: "menu",
+        meta: {
+          title: '菜单管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/Menu.vue")
+      },
+      {
+        path: "/role",
+        name: "role",
+        meta: {
+          title: '角色管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home//Sys/Role.vue")
+      },
     ]
   },
   {
@@ -100,7 +124,7 @@ const routes = [
     meta: {
       title: '登录'
     },
-    component: () => import( /* webpackChunkName: "login" */ "@/views/Login.vue")
+    component: () => import( /* webpackChunkName: "login" */ "@/views/Login/index.vue")
   }
 ];
 
@@ -111,16 +135,29 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   document.title = `${to.meta.title}`;
-  const role = localStorage.getItem('ms_username');
-  if (!role && to.path !== '/login') {
-    next('/login');
-  } else if (to.meta.permission) {
-    // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-    role === 'admin'
-      ? next()
-      : next('/403');
+  // 登录界面登录成功之后，会把用户信息保存在会话
+  // 存在时间为会话生命周期，页面关闭即失效。
+  let token = sessionStorage.getItem('Authorization');
+  let user = JSON.parse(sessionStorage.getItem("user"));
+  if (to.path === '/login') {
+    // 如果是访问登录界面，如果用户会话信息存在，代表已登录过，跳转到主页
+    if (user) {
+      next({path: '/'})
+    } else {
+      next()
+    }
   } else {
-    next();
+    if (!user) {
+      // 如果访问非登录界面，且户会话信息不存在，代表未登录，则跳转到登录界面
+      next({path: '/login'})
+    } else {
+      if (user == null) {
+        sessionStorage.removeItem("Authorization");
+        next({path: '/login'});
+      } else {
+        next()
+      }
+    }
   }
 });
 

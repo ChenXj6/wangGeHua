@@ -10,12 +10,14 @@
                             <span>{{ item.title }}</span>
                         </template>
                         <template v-for="subItem in item.subs">
+                          
                             <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index">
-                                <template #title>{{ subItem.title }}</template>
+                                <i :class="subItem.icon"></i>
+                                <template #title>{{ subItem.title }}111</template>
                                 <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.index">
                                     {{ threeItem.title }}</el-menu-item>
                             </el-submenu>
-                            <el-menu-item v-else :index="subItem.index" :key="subItem.index">{{ subItem.title }}
+                            <el-menu-item v-else :index="subItem.index" :key="subItem.index"><i :class="subItem.icon"></i>{{ subItem.title }}
                             </el-menu-item>
                         </template>
                     </el-submenu>
@@ -64,9 +66,31 @@ export default {
                 title: "事件处置",
                 subs: [
                     {
-                        icon: "el-icon-lx-calendar",
+                        icon: "el-icon-lx-service",
                         index: "/residentsreport",
                         title: "居民上报事件",
+                    },
+                ],
+            },
+            {
+                icon: "el-icon-lx-settings",
+                index: "2",
+                title: "系统管理",
+                subs: [
+                  {
+                        icon: "el-icon-lx-people",
+                        index: "/user",
+                        title: "用户管理",
+                    },
+                    {
+                        icon: "el-icon-lx-attention",
+                        index: "/role",
+                        title: "角色管理",
+                    },
+                    {
+                        icon: "el-icon-lx-cascades",
+                        index: "/menu",
+                        title: "菜单管理",
                     },
                 ],
             },
