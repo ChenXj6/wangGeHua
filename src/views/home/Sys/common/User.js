@@ -1,4 +1,4 @@
-import { fetchData } from '@/api/index'
+import { getUserList } from '@/api/sys'
 import { eventStatus, eventType, eventSource } from '@/config/common'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
@@ -8,7 +8,7 @@ export function renderTable() {
     data: [],
     pagination: true, // 开启分页器
     mutiSelect: false, // 开启选择
-    method: fetchData, // 請求api
+    method: getUserList, // 請求api
     index: false, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
@@ -43,8 +43,90 @@ export function renderTable() {
       },
     ],
   }
+  const addFormConfig = {
+    formItems: [
+      {
+        type: 'Input',
+        label: 'ID',
+        prop: 'id',
+        value: '',
+        placeholder: '请输入id',
+        isClearable: true,
+        span: 24,
+      },
+      {
+        type: 'Input',
+        label: '账号',
+        prop: 'operatorId',
+        value: '',
+        placeholder: '请输入账号',
+        isClearable: true,
+        span: 24,
+      },
+      {
+        type: 'Input',
+        label: '姓名',
+        prop: 'operatorName',
+        value: '',
+        placeholder: '请输入姓名',
+        isClearable: true,
+        span: 24,
+      },
+      {
+        type: 'Input',
+        label: '手机',
+        prop: 'mobile',
+        value: '',
+        placeholder: '请输入手机',
+        isClearable: true,
+        span: 24,
+      },
+      {
+        type: 'Input',
+        label: '邮箱',
+        prop: 'email',
+        value: '',
+        placeholder: '请输入邮箱',
+        isClearable: true,
+        span: 24,
+      },
+      {
+        type: 'select',
+        label: '部门',
+        prop: 'deptId',
+        value: '',
+        placeholder: '请选择部门',
+        isClearable: true,
+        span: 24,
+        options:[]
+      },
+      {
+        type: 'select',
+        label: '角色',
+        prop: 'roleId',
+        value: '',
+        placeholder: '请选择角色',
+        isClearable: true,
+        span: 24,
+        options:[]
+      },
+    ],
+    rules:{
+      operatorId: [
+        { required: true, message: '请输入用户登录账号', trigger: 'blur' },
+      ],
+      operatorName: [
+        { required: true, message: '请输入用户姓名', trigger: 'blur' },
+      ],
+      deptId: [
+        { required: true, message: '请选择所在部门', trigger: 'change' },
+      ],
+      roleId: [{ required: true, message: '请选择角色', trigger: 'change' }],
+    }
+  }
   return {
     tableConfig,
     formConfig,
+    addFormConfig,
   }
 }

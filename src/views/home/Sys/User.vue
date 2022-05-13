@@ -1,6 +1,10 @@
 <template>
   <div>
-    <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle"/>
+    <VForm
+      :form-data="formConfig"
+      :form-model="searchForm"
+      :form-handle="formHandle"
+    />
     <V-table
       ref="table"
       :table-config="tableConfig"
@@ -19,98 +23,26 @@
           icon="el-icon-lx-edit"
           @click="handleOperation(2, data.data)"
           circle
-          type="priamry"
+          type="primary"
         />
       </template>
-
-          <!--新增编辑界面-->
+    </V-table>
     <el-dialog
       :close-on-click-modal="false"
       :title="operation ? '新增' : '编辑'"
-      :visible="dialogVisible"
-      width="30%"
+      v-model="dialogVisible"
+      width="40%"
     >
-      <el-form
-        :model="dataForm"
-        :rules="dataFormRules"
-        :size="size"
-        label-position="right"
-        label-width="80px"
-        ref="dataForm"
-      >
-        <el-form-item label="ID" prop="id" v-if="false">
-          <el-input
-            :disabled="true"
-            auto-complete="off"
-            v-model="dataForm.id"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="账号" prop="operatorId">
-          <el-input
-            v-model="dataForm.operatorId"
-            auto-complete="off"
-            :disabled="editOperatorId"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" prop="operatorName">
-          <el-input
-            v-model="dataForm.operatorName"
-            auto-complete="off"
-            :disabled="editOperatorName"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="手机" prop="mobile">
-          <el-input v-model="dataForm.mobile" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dataForm.email" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="部门" prop="deptId">
-          <el-select
-            v-model="dataForm.deptId"
-            placeholder="请选择"
-            style="width: 100%"
-            filterable
-          >
-            <el-option
-              v-for="item in deptIdOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="角色" prop="roleId">
-          <el-select
-            v-model="dataForm.roleId"
-            placeholder="请选择"
-            style="width: 100%"
-          >
-            <el-option
-              v-for="item in this.roleIdOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </el-form>
+      <VForm :form-data="addFormConfig" :form-model="dataForm" />
       <template #footer>
-        <div class="dialog-footer">
-          <el-button :size="size" @click="dialogVisible = false"
-            >取消</el-button
-          >
-          <el-button
-            :loading="editLoading"
-            :size="size"
-            @click="submitForm"
-            type="primary"
-            >提交</el-button
-          >
-        </div>
-      </template>
+      <span class="dialog-footer">
+        <el-button size="mini" @click="dialogVisible = false">取消</el-button>
+        <el-button size="mini" type="primary" @click="dialogVisible = false"
+          >提交</el-button
+        >
+      </span>
+    </template>
     </el-dialog>
-    </V-table>
   </div>
 </template>
 <script>
@@ -123,17 +55,37 @@ export default {
   name: 'User',
   setup() {
     const { proxy }  = getCurrentInstance()
-    const { tableConfig,formConfig } = renderTable.call(proxy)
+    const { tableConfig,formConfig,addFormConfig } = renderTable.call(proxy)
     const table = ref(null)
     let searchParams = ref({}) // 表单数据备份
     const searchForm = reactive({
       operatorName:'',
     })
+    const dataForm = reactive({
+      id: 0,
+      operatorId: '',
+      operatorName: '',
+      deptId: '',
+      deptName: '',
+      roleId: '',
+      roleName: '',
+      email: '',
+      mobile: '',
+      status: 1,
+    })
+    const dialogVisible = ref(false)
+    const operation = ref(false) // true:新增, false:编辑
     // 表單操作按鈕配置
     const handleAdd = () => {
-      
+      operation.value = false,
+      addFormConfig.formItems.forEach(v=>{
+        if(v.prop === 'deptId') {
+          v.disabled = true
+        }
+      })
+      dialogVisible.value = true
     }
-            // 表格相關操作
+    // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm)
       for (const key in searchParams.value) {
@@ -164,7 +116,7 @@ export default {
       {type:'primary',label:'新增',key:'reset',handle:handleAdd},
     ]
     onMounted(() => {
-      handleQuery()
+      // handleQuery()
     })
     return {
       table,
@@ -172,10 +124,13 @@ export default {
       formHandle,
       tableConfig,
       formConfig,
+      dialogVisible,
+      handleAdd,
+      dataForm,
+      addFormConfig,
+      operation,
     }
   },
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

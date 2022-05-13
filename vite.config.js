@@ -70,7 +70,7 @@ export default defineConfig(({ command, mode }) => {
           rewrite: (path) => path.replace(/^\/api/, '')
         },
         '/sc': {
-          target: 'http://192.168.1.7',
+          target: 'http://192.168.1.146',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/sc/, '')
         }

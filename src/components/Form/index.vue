@@ -16,11 +16,12 @@
             <el-input v-model.trim="formModel[item.prop]"
                       :placeholder="item.placeholder"
                       size="small"
+                      :disabled="item.disabled"
                       :clearable="item.isClearable" />
           </template>
           <!-- Select -->
           <template v-if="item.type === 'select'">
-            <el-select v-model="formModel[item.prop]" :placeholder="item.placeholder" size="small" :clearable="item.isClearable">
+            <el-select v-model="formModel[item.prop]" :placeholder="item.placeholder" size="small" :clearable="item.isClearable" :disabled="item.disabled">
               <el-option v-for="i in item.options" :label="i.label" :value="i.value" :key="i.value"></el-option>
             </el-select>
           </template>
@@ -30,6 +31,7 @@
                             type="datetimerange"
                             range-separator="至"
                             size="small"
+                            :disabled="item.disabled"
                             :format="item.format"
                             :value-format="item.format || 'YYYY-MM-DD HH:mm:ss'"
                             start-placeholder="开始日期"
@@ -60,8 +62,8 @@ export default defineComponent({
   name: 'VForm',
   props: {
     formData: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     },
     formModel: {
       type:Object,

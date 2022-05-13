@@ -15,8 +15,8 @@
     :row-style="rowStyle"
     row-key="id"
     @selection-change="handleSelectionChange"
-    @sort-change="handleSortChange"
   >
+  <!-- @sort-change="handleSortChange" -->
     <!-- 多选列 -->
     <el-table-column
       v-if="tableConfig.mutiSelect"
@@ -75,6 +75,7 @@
       :current-page="currentPage"
       :page-sizes="pageSizeList"
       :page-size="currentPageSize"
+      :hide-on-single-page="isHide"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
       class="page__wrapper"
@@ -129,7 +130,7 @@ export default defineComponent({
     const selectedRow = ref([])
     const callbackFunc = ref(null)
     const tableConfig = reactive(props.tableConfig)
-
+    const isHide = ref(false)  // 不够一页时是否隐藏分页器
     // 获取表格数据
     const getTableData = (obj = {}, callback = () => {}) => {
       queryParams.value = deepClone(obj) // 请求参数备份
@@ -150,36 +151,7 @@ export default defineComponent({
               callbackFunc.value = callback
               resolve(callback(res))
             } else {
-              const data = res.data || {
-                data: [
-                  {
-                    date: '1649662472313',
-                    name: 'Tom',
-                    isNew: 1,
-                    address: 'No. 189, Grove St, Los Angeles',
-                  },
-                  {
-                    date: '1649662472313',
-                    name: 'Jerry',
-                    isNew: 2,
-                    address: 'No. 189, Grove St, Los Angeles',
-                  },
-                  {
-                    date: '1649662472313',
-                    name: 'Sam',
-                    isNew: '',
-                    address: 'No. 189, Grove St, Los Angeles',
-                  },
-                  {
-                    date: '1649662472313',
-                    name: 'Timi',
-                    isNew: 2,
-                    address: 'No. 189, Grove St, Los Angeles',
-                  },
-                ],
-                total: 4,
-                currentPage: 1,
-              }
+              const data = res.data
               if (tableConfig.pagination) {
                 currentPage.value = Number(data.current)
                 total.value = Number(data.total)
@@ -266,6 +238,7 @@ export default defineComponent({
       handleSelectionChange,
       indexMethod,
       rowClassFunc,
+      isHide,
     }
   },
 })

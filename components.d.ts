@@ -30,6 +30,8 @@ declare module 'vue' {
     ElSubmenu: typeof import('element-plus/es/el-submenu')['default']
     ElTable: typeof import('element-plus/es/el-table')['default']
     ElTableColumn: typeof import('element-plus/es/el-table-column')['default']
+    ElTabPane: typeof import('element-plus/es/el-tab-pane')['default']
+    ElTabs: typeof import('element-plus/es/el-tabs')['default']
     ElTag: typeof import('element-plus/es/el-tag')['default']
     ElTooltip: typeof import('element-plus/es/el-tooltip')['default']
     ElUpload: typeof import('element-plus/es/el-upload')['default']
