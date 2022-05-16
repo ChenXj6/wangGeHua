@@ -44,10 +44,10 @@
           </template>
         </el-form-item>
       </el-col>
-      <el-col v-if="formHandle" :span="6">
+      <el-col v-if="formHandle" :span="formHandle.span ?? 6">
         <!-- 按鈕組 -->
-        <div  class="btn-box" style="margin-top:4px">
-          <el-button v-for="i in formHandle" :key="i.key" :type="i.type" :size="i.size??'small'" @click="i.handle && i.handle(formRef)"
+        <div  class="btn-box" style="margin-top:4px" :style="{'text-align': formHandle.textAlign ?? 'left'}">
+          <el-button v-for="i in formHandle.btns" :key="i.key" :type="i.type" :size="i.size??'small'" @click="i.handle && i.handle(formRef)"
           >{{i.label}}</el-button
         >
         </div>
@@ -56,7 +56,7 @@
   </el-form>
 </template>
 <script>
-import { defineComponent, onBeforeMount, reactive, ref, watch } from 'vue'
+import { defineComponent, inject, nextTick, onBeforeMount, onBeforeUnmount, onUnmounted, onUpdated, reactive, ref, watch } from 'vue'
 
 export default defineComponent({
   name: 'VForm',
@@ -70,8 +70,8 @@ export default defineComponent({
       default:()=>{}
     },
     formHandle: {
-      type: Array,
-      default: () => []
+      type: Object,
+      default: () => {}
     },
     formRules:{
       type:Object,
@@ -89,7 +89,7 @@ export default defineComponent({
       formRef,
       formModel,
       formHandle,
-      formRules
+      formRules,
     }
   },
 })

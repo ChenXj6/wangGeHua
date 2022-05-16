@@ -13,18 +13,21 @@
       <template v-slot:operation="data">
         <el-button
           size="small"
-          @click="handleOperation(1, data.data)"
+          @click="handleEdit(data.data)"
           icon="el-icon-lx-search"
           circle
           type="success"
         />
-        <el-button
-          size="small"
-          icon="el-icon-lx-edit"
-          @click="handleOperation(2, data.data)"
-          circle
-          type="primary"
-        />
+        <el-popconfirm title="确定要删除该用户吗？" @confirm="handleDelete(data.data.operatorId)">
+          <template #reference>
+            <el-button
+              size="small"
+              icon="el-icon-lx-delete"
+              circle
+              type="danger"
+            />
+          </template>
+        </el-popconfirm>
       </template>
     </V-table>
     <el-dialog
@@ -33,35 +36,38 @@
       v-model="dialogVisible"
       width="40%"
     >
-      <VForm :form-data="addFormConfig" :form-model="dataForm" />
-      <template #footer>
-      <span class="dialog-footer">
-        <el-button size="mini" @click="dialogVisible = false">取消</el-button>
-        <el-button size="mini" type="primary" @click="dialogVisible = false"
-          >提交</el-button
-        >
-      </span>
-    </template>
+      <VForm
+        ref="form"
+        :key="timer"
+        :form-data="addFormConfig"
+        :form-model="dataForm"
+        :form-handle="AddFormHandle"
+      />
     </el-dialog>
   </div>
 </template>
 <script>
-
 import { renderTable } from './common/User'
 import { deepClone, formatterDate } from '@/utils/util'
 import { getCurrentInstance, onMounted, reactive, ref } from '@vue/runtime-core'
 
+import { saveUser, deleteUser } from '@/api/sys/user.js'
+import { listAssign, defaultObject } from '@/utils/util'
+
 export default {
   name: 'User',
   setup() {
-    const { proxy }  = getCurrentInstance()
-    const { tableConfig,formConfig,addFormConfig } = renderTable.call(proxy)
+    const { proxy } = getCurrentInstance()
+    const { tableConfig, formConfig, addFormConfig } = renderTable.call(proxy)
     const table = ref(null)
+    const form = ref(null)
+    const timer = ref(new Date().getTime())
     let searchParams = ref({}) // 表单数据备份
     const searchForm = reactive({
-      operatorName:'',
+      operatorName: '',
+      operatorId: '',
     })
-    const dataForm = reactive({
+    let dataForm = reactive({
       id: 0,
       operatorId: '',
       operatorName: '',
@@ -76,13 +82,67 @@ export default {
     const dialogVisible = ref(false)
     const operation = ref(false) // true:新增, false:编辑
     // 表單操作按鈕配置
-    const handleAdd = () => {
-      operation.value = false,
-      addFormConfig.formItems.forEach(v=>{
-        if(v.prop === 'deptId') {
-          v.disabled = true
+    // 根据添加、编辑不同的需求变换 disabled
+    const wholeDisabled = (arr) => {
+      return new Promise((resolve) => {
+        addFormConfig.formItems.forEach((v) => {
+          if (arr.length && arr.includes(v.prop)) {
+            v.disabled = true
+          } else {
+            v.disabled = false
+          }
+        })
+        resolve(true)
+      })
+    }
+    const handleEdit = async (data) => {
+      let disabledArr = ['operatorId', 'operatorName']
+      await wholeDisabled(disabledArr)
+      listAssign(dataForm, data)
+      timer.value = new Date().getTime() // 利用组件key来实现实时刷新组件
+      operation.value = false
+      dialogVisible.value = true
+    }
+    const handleSave = (formRef) => {
+      formRef.validate((valid) => {
+        if (valid) {
+          saveUser(dataForm).then((res) => {
+            if (res.code === 200) {
+              proxy.$message.success('操作成功')
+              handleQuery()
+              dialogVisible.value = false
+            }
+          })
+        } else {
+          return
         }
       })
+    }
+    const handleDelete = (operatorId) => {
+      deleteUser({operatorId}).then(res=>{
+        handleQuery()
+        proxy.$message.success('用户删除成功。')
+      })
+    }
+    const AddFormHandle = {
+      span: 23,
+      textAlign: 'right',
+      btns: [
+        {
+          type: 'default',
+          label: '取消',
+          key: 'search',
+          handle: () => (dialogVisible.value = false),
+        },
+        { type: 'primary', label: '提交', key: 'add', handle: handleSave },
+      ],
+    }
+
+    const handleAdd = async () => {
+      await wholeDisabled([])
+      defaultObject(dataForm)
+      timer.value = new Date().getTime()
+      operation.value = true
       dialogVisible.value = true
     }
     // 表格相關操作
@@ -107,28 +167,36 @@ export default {
     }
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
-        const data = res.data || []
+        const data = res.list || []
         tableConfig.data = data
       })
     }
-    const formHandle = [
-      {type:'primary',label:'查询',key:'search',handle:handleQuery},
-      {type:'primary',label:'新增',key:'reset',handle:handleAdd},
-    ]
+    // 表单按钮组
+    const formHandle = {
+      span: 4,
+      btns: [
+        { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
+        { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
+      ],
+    }
     onMounted(() => {
-      // handleQuery()
+      handleQuery()
     })
     return {
       table,
+      form,
       searchForm,
       formHandle,
       tableConfig,
       formConfig,
       dialogVisible,
-      handleAdd,
       dataForm,
       addFormConfig,
       operation,
+      timer,
+      handleEdit,
+      handleDelete,
+      AddFormHandle,
     }
   },
 }

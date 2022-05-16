@@ -1,4 +1,4 @@
-import { getUserList } from '@/api/sys'
+import { getUserList } from '@/api/sys/user'
 import { eventStatus, eventType, eventSource } from '@/config/common'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
@@ -7,6 +7,7 @@ export function renderTable() {
     name: 'table',
     data: [],
     pagination: true, // 开启分页器
+    paginationAlign: 'right', // 分页器靠左、靠右、中间
     mutiSelect: false, // 开启选择
     method: getUserList, // 請求api
     index: false, // 是否启用序号列
@@ -34,12 +35,21 @@ export function renderTable() {
     formItems: [
       {
         type: 'Input',
+        label: '账号',
+        prop: 'operatorId',
+        value: '',
+        placeholder: '请输入账号',
+        isClearable: true,
+        span: 4,
+      },
+      {
+        type: 'Input',
         label: '姓名',
         prop: 'operatorName',
         value: '',
         placeholder: '请输入姓名',
         isClearable: true,
-        span: 6,
+        span: 4,
       },
     ],
   }
@@ -91,25 +101,43 @@ export function renderTable() {
         span: 24,
       },
       {
-        type: 'select',
+        type: 'Input',
         label: '部门',
         prop: 'deptId',
         value: '',
-        placeholder: '请选择部门',
+        placeholder: '请输入部门',
         isClearable: true,
         span: 24,
-        options:[]
       },
       {
-        type: 'select',
+        type: 'Input',
         label: '角色',
         prop: 'roleId',
         value: '',
-        placeholder: '请选择角色',
+        placeholder: '请输入角色',
         isClearable: true,
         span: 24,
-        options:[]
       },
+      // {
+      //   type: 'select',
+      //   label: '部门',
+      //   prop: 'deptId',
+      //   value: '',
+      //   placeholder: '请选择部门',
+      //   isClearable: true,
+      //   span: 24,
+      //   options:[]
+      // },
+      // {
+      //   type: 'select',
+      //   label: '角色',
+      //   prop: 'roleId',
+      //   value: '',
+      //   placeholder: '请选择角色',
+      //   isClearable: true,
+      //   span: 24,
+      //   options:[]
+      // },
     ],
     rules:{
       operatorId: [

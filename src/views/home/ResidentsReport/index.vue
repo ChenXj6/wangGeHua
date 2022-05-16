@@ -97,10 +97,12 @@ export default defineComponent({
       })
     }
     // 表單操作按鈕配置
-    const formHandle = [
-      {type:'primary',label:'查询',key:'search',handle:handleQuery},
-      {type:'primary',label:'重置',key:'reset',handle:handleReset},
-    ]
+    const formHandle = {
+      btns: [
+        {type:'primary',label:'查询',key:'search',handle:handleQuery},
+        {type:'primary',label:'重置',key:'reset',handle:handleReset},
+      ]
+    }
     //
     // 改变table行样式
     const tableRowClassName = ({ row }) => {

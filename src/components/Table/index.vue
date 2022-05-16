@@ -15,6 +15,7 @@
     :row-style="rowStyle"
     row-key="id"
     @selection-change="handleSelectionChange"
+    @row-click="handleRowClick"
   >
   <!-- @sort-change="handleSortChange" -->
     <!-- 多选列 -->
@@ -68,7 +69,7 @@
       </el-table-column>
     </template>
   </el-table>
-  <div class="pagination">
+  <div class="pagination" :style="{'text-align':tableConfig.paginationAlign ?? 'right'}">
     <el-pagination
       v-if="tableConfig.pagination"
       background
@@ -115,7 +116,7 @@ export default defineComponent({
       default: () => {},
     },
   },
-  emits: ['selectChange', 'currentChange', 'sizeChange'],
+  emits: ['selectChange', 'currentChange', 'sizeChange', 'rowClick'],
   setup(props, { emit }) {
     const {
       proxy: { $moment },
@@ -140,7 +141,7 @@ export default defineComponent({
         let params = deepClone(obj)
         if (tableConfig.pagination) {
           const pageObj = {}
-          pageObj[tableConfig.pageField || 'current'] = currentPage.value
+          pageObj[tableConfig.pageField || 'num'] = currentPage.value
           pageObj[tableConfig.pageSizeField || 'size'] = currentPageSize.value
           params = Object.assign(params, pageObj)
         }
@@ -153,7 +154,7 @@ export default defineComponent({
             } else {
               const data = res.data
               if (tableConfig.pagination) {
-                currentPage.value = Number(data.current)
+                currentPage.value = Number(data.pageNum)
                 total.value = Number(data.total)
               }
               selectedRow.value = []
@@ -170,7 +171,7 @@ export default defineComponent({
     }
     // 计算属性处理时间格式
     const dateFormat = computed(() => (date, formatter) => {
-      return $moment(Number(date)).format(formatter)
+      return date && $moment(date).format(formatter)
     })
     const pageSizeList = computed(
       () => tableConfig.pageSizeList || [1, 2, 50, 100]
@@ -185,18 +186,21 @@ export default defineComponent({
       currentPage.value = 1
       currentPageSize.value = val
       selectedRow.value = []
-      getTableData()
+      getTableData(queryParams.value,callbackFunc.value)
       emit('sizeChange', selectedRow.value)
     }
     const handleCurrentChange = (val) => {
       currentPage.value = val
       selectedRow.value = []
-      getTableData()
+      getTableData(queryParams.value,callbackFunc.value)
       emit('currentChange', selectedRow.value)
     }
     const handleSelectionChange = (val) => {
       selectedRow.value = multipleSelection.value = val
       emit('selectChange', selectedRow.value)
+    }
+    const handleRowClick = (val) => {
+      emit('rowClick',val)
     }
     const rowClassFunc = ({ row, rowIndex }) => {
       if (selectedRow.value.includes(rowIndex)) {
@@ -236,6 +240,7 @@ export default defineComponent({
       handleCurrentChange,
       getTableData,
       handleSelectionChange,
+      handleRowClick,
       indexMethod,
       rowClassFunc,
       isHide,

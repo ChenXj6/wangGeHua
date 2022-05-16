@@ -10,6 +10,35 @@ const showMessage = Symbol('showMessage') // 为了实现Class的私有属性
  * 通用方法集合
  */
 
+// 把一个对象里面的变量赋值给有相同变量的对象
+ export const listAssign = (objA, objB) => Object.keys(objA).forEach((key) => { objA[key] = objB[key] || objA[key]})
+// 把一个对象回复成为没有值的初始状态
+export const defaultObject = (obj) => {
+  Object.keys(obj).forEach((key) => {
+    let type =  Object.prototype.toString.call(obj[key])
+    switch(type){
+      case type = "[object String]":
+        obj[key] = ''
+      break;
+      case type = "[object Number]":
+        obj[key] = 0
+      break;
+      case type = "[object Array]":
+        obj[key] = []
+      break;
+      case type = "[object Object]":
+        obj[key] = {}
+      break;
+      case type = "[object Boolean]":
+        obj[key] = true
+      break;
+      default:
+        obj[key] = ''
+      break;
+    }
+  })
+}
+
 /**
  * @param {Function} func
  * @param {number} wait
