@@ -122,7 +122,31 @@ const routes = [
         meta: {
           title: '角色管理'
         },
-        component: () => import( /* webpackChunkName: "table" */ "@/views/home//Sys/Role.vue")
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/Role.vue")
+      },
+      {
+        path: "/actualbuild",
+        name: "actualbuild",
+        meta: {
+          title: '实有楼栋'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ActualInfo/ActualBuild.vue")
+      },
+      {
+        path: "/actualhouse",
+        name: "actualhouse",
+        meta: {
+          title: '实有房屋'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ActualInfo/ActualHouse.vue")
+      },
+      {
+        path: "/actualpeople",
+        name: "actualpeople",
+        meta: {
+          title: '实有人口'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ActualInfo/ActualPeople.vue")
       },
     ]
   },

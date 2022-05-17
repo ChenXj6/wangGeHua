@@ -46,6 +46,28 @@ export default {
                 title: "系统首页",
             },
             {
+                icon: "el-icon-lx-sort",
+                index: "3",
+                title: "实有信息",
+                subs: [
+                    {
+                        icon: "el-icon-lx-group",
+                        index: "/actualbuild",
+                        title: "实有楼栋",
+                    },
+                    {
+                        icon: "el-icon-lx-friend",
+                        index: "/actualhouse",
+                        title: "实有房屋",
+                    },
+                    {
+                        icon: "el-icon-lx-profile",
+                        index: "/actualpeople",
+                        title: "实有人口",
+                    },
+                ],
+            },
+            {
                 icon: "el-icon-lx-cascades",
                 index: "/table",
                 title: "基础表格",

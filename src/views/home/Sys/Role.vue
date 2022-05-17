@@ -1,389 +1,269 @@
 <template>
   <div>
-    <!--工具栏-->
-    <el-form :inline="true" :model="filters" :size="size">
-      <el-form-item>
-        <el-input placeholder="角色名" v-model="filters.name"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <tbl-button @click="findPage(null)" icon="fa fa-search" label="查询" perms="sys:role:view" type="primary"/>
-      </el-form-item>
-      <el-form-item>
-        <tbl-button @click="handleAdd" icon="fa fa-plus" label="新增" perms="sys:role:add" type="primary" />
-      </el-form-item>
-    </el-form>
-    <!--表格内容栏-->
-    <kt-table :columns="columns" :data="pageResult" :highlightCurrentRow="true" :showBatchDelete="false" :reservedHeight="reservedHeight"
-              :stripe="true" :border="true" @findPage="findPage" @handleCurrentChange="handleRoleSelectChange" @handleDelete="handleDelete"
-              @handleEdit="handleEdit" permsDelete="sys:role:delete" permsEdit="sys:role:edit">
-    </kt-table>
-    <!-- </el-col> -->
-    <!--新增编辑界面-->
-    <el-dialog :close-on-click-modal="false" :title="operation?'新增':'编辑'" :visible.sync="dialogVisible" width="40%">
-      <el-form :model="dataForm" :rules="dataFormRules" :size="size" label-width="80px" ref="dataForm">
-        <el-form-item label="ID" prop="id" v-if="false">
-          <el-input :disabled="true" auto-complete="off" v-model="dataForm.id"></el-input>
-        </el-form-item>
-        <el-form-item label="角色名" prop="name">
-          <el-input auto-complete="off" v-model="dataForm.name"></el-input>
-        </el-form-item>
-        <el-form-item label="备注 " prop="remark">
-          <el-input auto-complete="off" type="textarea" v-model="dataForm.remark"></el-input>
-        </el-form-item>
-      </el-form>
-      <div class="dialog-footer" slot="footer">
-        <el-button :size="size" @click.native="dialogVisible = false">取消</el-button>
-        <el-button :loading="editLoading" :size="size" @click.native="submitForm" type="primary">提交</el-button>
-      </div>
-    </el-dialog>
-
-    <!--角色菜单，表格树内容栏-->
-    <div :v-if="true">
-      <div class="menu-header">
+    <VForm
+      :form-data="formConfig"
+      :form-model="searchForm"
+      :form-handle="formHandle"
+    />
+    <V-table
+      ref="table"
+      :table-config="tableConfig"
+      @select-change="(val) => (multipleSelection = val)"
+      @row-click="handleRowClick"
+    >
+      <template v-slot:operation="data">
+        <el-button
+          size="small"
+          @click="handleEdit(data.data)"
+          icon="el-icon-lx-edit"
+          circle
+          type="primary"
+        ></el-button>
+        <el-popconfirm title="确定要删除该角色吗？" @confirm="handleDelete(data.data.id)">
+          <template #reference>
+            <el-button
+              size="small"
+              icon="el-icon-lx-delete"
+              circle
+              type="danger"
+            />
+          </template>
+        </el-popconfirm>
+      </template>
+    </V-table>
+    <!-- 角色菜单授权 -->
+    <el-row>
+      <el-col :span="24" class="menu-header">
         <span><B>角色菜单授权</B></span>
-      </div>
-      <el-tree :check-strictly="true" :data="menuData" :props="defaultProps" :render-content="renderContent" @check-change="handleMenuCheckChange"
-               element-loading-text="拼命加载中" node-key="id" ref="menuTree"
-               show-checkbox :size="size" style="width: 100%;padding-top:10px;"
-               v-loading="menuLoading">
-      </el-tree>
-      <div style="float:left;padding-left:24px;padding-top:12px;padding-bottom:4px;">
-        <el-checkbox :disabled="this.selectRole.id == null" @change="handleCheckAll" v-model="checkAll"><b>全选</b></el-checkbox>
-      </div>
-      <div style="float:right;padding-right:24px;padding-top:4px;padding-bottom:4px;">
-        <tbl-button :disabled="this.selectRole.id != null" @click="resetSelection" label="重置" perms="sys:role:edit"
-                    type="primary"/>
-        <tbl-button :disabled="this.selectRole.id != null" :loading="authLoading" @click="submitAuthForm" label="提交"
-                    perms="sys:role:edit" type="primary"/>
-      </div>
-    </div>
+      </el-col>
+      <el-col :span="12">
+        <el-tree
+          ref="treeRef"
+          :data="items"
+          show-checkbox
+          :height="208"
+          accordion
+          node-key="id"
+        >
+          <template #default="{ node, data }">
+            <span class="custom-tree-node">
+              <span>{{ data.title }}</span>
+              <span class="tagClass"
+                ><el-button
+                  size="mini"
+                  :type="data.children ? 'info' : 'success'"
+                  >{{ data.children ? '目录' : '菜单' }}</el-button
+                ></span
+              >
+              <span><i :class="data.icon"></i></span>
+              <span>{{ data.index }}</span>
+            </span>
+          </template>
+        </el-tree>
+      </el-col>
+      <el-col :span="24" class="footerClass">
+        <div>
+          <el-checkbox
+            v-model="isCheckAll"
+            label="全选"
+            border
+            @change="checkAll"
+          />
+        </div>
+        <div>
+          <el-button type="primary" size="mini" @click="handleResetTree"
+            >重置</el-button
+          >
+          <el-button type="success" size="mini">提交</el-button>
+        </div>
+      </el-col>
+    </el-row>
+
+    <el-dialog
+      :close-on-click-modal="false"
+      :title="operation ? '新增' : '编辑'"
+      v-model="dialogVisible"
+      width="40%"
+    >
+      <VForm
+        ref="form"
+        :form-data="addFormConfig"
+        :form-model="dataForm"
+        :form-handle="AddFormHandle"
+      />
+    </el-dialog>
   </div>
 </template>
-
 <script>
-import KtTable from "@/components/KtTable"
-import TblButton from "@/components/TblButton/src"
-import TableTreeColumn from '@/components/TableTreeColumn'
-import { format } from "@/utils/datetime"
+import { renderTable } from './common/Role'
+import { deepClone, formatterDate, listAssign, defaultObject } from '@/utils/util'
+import { getCurrentInstance, onMounted, reactive, ref } from '@vue/runtime-core'
+
+import { saveRole, editRole, deleteRole } from '@/api/sys/role'
+import { items } from '@/config/menu'
+import _Row from 'element-plus/lib/el-row'
+
 export default {
-	components:{
-		KtTable,
-		TblButton,
-		TableTreeColumn
-	},
-	data() {
-		return {
-      reservedHeight:320, //kttable预留高度
-			size: 'small',
-			filters: {
-				name: ''
-			},
-			columns: [
-				{prop:"id", label:"ID", minWidth:50},
-				{prop:"name", label:"角色名", minWidth:120},
-				{prop:"remark", label:"备注", minWidth:120},
-				{prop:"createBy", label:"创建人", minWidth:120},
-				{prop:"createTime", label:"创建时间", minWidth:120, formatter:this.dateFormat}
-				// {prop:"lastUpdateBy", label:"更新人", minWidth:100},
-				// {prop:"lastUpdateTime", label:"更新时间", minWidth:120, formatter:this.dateFormat}
-			],
-			pageRequest: { pageNum: 1, pageSize: 10 },
-			pageResult: {},
-
-			operation: false, // true:新增, false:编辑
-			dialogVisible: false, // 新增编辑界面是否显示
-			editLoading: false,
-			dataFormRules: {
-				name: [
-					{ required: true, message: '请输入角色名', trigger: 'blur' }
-				]
-			},
-			// 新增编辑界面数据
-			dataForm: {
-				id: 0,
-				name: '',
-				remark: ''
-			},
-			selectRole: {},
-			menuData: [],
-			menuSelections: [],
-			menuLoading: false,
-			authLoading: false,
-			checkAll: false,
-			currentRoleMenus: [],
-			defaultProps: {
-				children: 'children',
-				label: 'name'
-			}
-		}
-	},
-	methods: {
-		// 获取分页数据
-		findPage: function (data) {
-      this.pageResult = {};
-		 if (data !== null) {
-        this.pageRequest = data.pageRequest;
+  name: 'Role',
+  setup() {
+    const { proxy } = getCurrentInstance()
+    const { tableConfig, formConfig, addFormConfig } = renderTable.call(proxy)
+    const table = ref(null)
+    const form = ref(null)
+    let searchParams = ref({}) // 表单数据备份
+    const searchForm = reactive({
+      name:''
+    })
+    const treeRef = ref(null)
+    const isCheckAll = ref(false)
+    const checkAll = () => {
+      if (isCheckAll.value) {
+        treeRef.value.setCheckedNodes(items)
+      } else {
+        treeRef.value.setCheckedNodes([])
       }
-      this.pageRequest.columnFilters = {
-        name: { name: "name", value: this.filters.name },
-      };
-      // this.$api.role.findPage(this.pageRequest).then((res) => {
-      // 	this.pageResult = res.data
-      // 	this.findTreeData()
-      // }).then(data!=null?data.callback:'')
-      this.$axios({
-        url: "/gateway/sys/role/findPage",
-        method: "post",
-        data: this.pageRequest,
-      }).then((res) => {
-        console.log('返回值',res)
-        this.pageResult = res.data.data;
-        console.log('返回数据',this.pageResult)
-        this.findTreeData();
-      }).then(
-          data != null ? data.callback : ""
-      ).catch(error => {
-        if(data!=null){data.callback();}
-        this.$message({type: 'warning',message: "请求错误，请稍后再试！"});
-      });
-		},
-		// 批量删除
-		handleDelete: function (data) {
-	    this.$axios({
-        url: "/gateway/sys/role/delete",
-        method: "post",
-        data: data.params,
-      }).then(data.callback);
-		},
-		// 显示新增界面
-		handleAdd: function () {
-      console.log('新增')
-			this.dialogVisible = true;
-			this.operation = true;
-			this.dataForm = {
-				id: 0,
-				name: '',
-				remark: ''
-			}
-		},
-		// 显示编辑界面
-		handleEdit: function (params) {
-			this.dialogVisible = true;
-			this.operation = false;
-			this.dataForm = Object.assign({}, params.row)
-		},
-		// 编辑
-		submitForm: function () {
-		 this.$refs.dataForm.validate((valid) => {
+    }
+    const handleResetTree = () => {
+      isCheckAll.value = false
+      checkAll()
+    }
+    const dataForm = reactive({
+      id:'',
+      name: '',
+      remark: '',
+    })
+    const dialogVisible = ref(false)
+    const operation = ref(false) // true:新增, false:编辑
+    // 表單操作按鈕配置
+    const handleEdit = async (data) => {
+      listAssign(dataForm, data)
+      operation.value = false
+      dialogVisible.value = true
+    }
+    const handleAdd = async () => {
+      defaultObject(dataForm)
+      operation.value = true
+      dialogVisible.value = true
+    }
+    const handleDelete = (id) => {
+      deleteRole({id}).then(res=>{
+        res.code === 200 && (handleQuery(),proxy.$message.success('用户删除成功。'))
+      })
+    }
+    // 表格行点击相關操作
+    const handleRowClick = (val) => {
+      console.log(val)
+    }
+    const handleQuery = () => {
+      searchParams.value = deepClone(searchForm)
+      table.currentPage = 1
+      handleQueryTable()
+    }
+    const handleQueryTable = () => {
+      table.value.getTableData(searchParams.value, (res) => {
+        const data = res.list || []
+        tableConfig.data = data
+      })
+    }
+    // 表单按钮组
+    const formHandle = {
+      span: 4,
+      btns: [
+        { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
+        { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
+      ],
+    }
+    const handleSave = (formRef) => {
+      formRef.validate((valid) => {
         if (valid) {
-          this.$confirm("确认提交吗？", "提示", {}).then(() => {
-            this.editLoading = true;
-            let params = Object.assign({}, this.dataForm);
-            params.createBy = sessionStorage.getItem('userid');
-            if (this.operation) {
-              console.log("新增操作");
-              this.$axios({
-                url: "/gateway/sys/role/save",
-                method: "post",
-                data: params,
-              }).then((res) => {
-                this.editLoading = false;
-                if (res.data.code == 200) {
-                  this.$message({ message: "操作成功", type: "success" });
-                  this.dialogVisible = false;
-                  this.$refs["dataForm"].resetFields();
-                } else {
-                  this.$message({
-                    message: "操作失败, " + res.data.msg,
-                    type: "error",
-                  });
-                }
-                this.findPage(null);
-              });
-            } else {
-              console.log("编辑操作",params);
-              this.$axios({
-                url: "/gateway/sys/role/update",
-                method: "post",
-                data: params,
-              }).then((res) => {
-                this.editLoading = false;
-                if (res.data.code == 200) {
-                  this.$message({ message: "操作成功", type: "success" });
-                  this.dialogVisible = false;
-                  this.$refs["dataForm"].resetFields();
-                  console.log('dataForm',this.dataForm)
-                  this.findPage(null)
-                } else {
-                  this.$message({
-                    message: "操作失败, " + res.data.msg,
-                    type: "error",
-                  });
-                }
-              });
-            }
-          });
-        }
-      });
-		},
-		// 获取数据
-		findTreeData: function () {
-			this.menuLoading = true;
-      this.menuData = [];
-    let name = JSON.parse(sessionStorage.getItem("user")).operatorId;
-      let sysUser = {
-        name: name,
-      };
-      this.$axios({
-        url: "/gateway/sys/menu/findNavTree",
-        method: "post",
-        data: sysUser,
-      }).then((res) => {
-        console.log(res);
-        this.menuData = res.data.data;
-        this.menuLoading = false;
-      });
-		},
-		// 角色选择改变监听
-		handleRoleSelectChange(val) {
-      this.selectRole = val.val
-			if(val == null || val.val == null) {
-        this.selectRole =  {}
-				return
-			}
-    let role = {
-        id: val.val.id,
-      };
-      this.$axios({
-        url: "/gateway/sys/role/findRoleMenus",
-        method: "post",
-        data: role,
-      }).then((res) => {
-        this.currentRoleMenus = res.data.data;
-        this.$refs.menuTree.setCheckedNodes(res.data.data);
-      });
-		},
-		// 树节点选择监听
-		handleMenuCheckChange(data, check, subCheck) {
-		  console.log("data=",data);
-		  console.log("check",check);
-		  console.log("subCheck",subCheck);
-			if(check) {
-				// 节点选中时同步选中父节点
-        subCheck = true;
-				let parentId = data.parentId;
-				this.$refs.menuTree.setChecked(parentId, true, false);
-        // 父节点选中时同步选中子节点
-        if(data.children != null) {
-          data.children.forEach(element => {
-            this.$refs.menuTree.setChecked(element.id, true, false)
-          });
-        }
-			} else {
-				// 节点取消选中时同步取消选中子节点
-				if(data.children != null) {
-					data.children.forEach(element => {
-						this.$refs.menuTree.setChecked(element.id, false, false)
-					});
-				}
-			}
-		},
-		// 重置选择
-		resetSelection() {
-			this.checkAll = false;
-			this.$refs.menuTree.setCheckedNodes(this.currentRoleMenus)
-		},
-		// 全选操作
-		handleCheckAll() {
-			if(this.checkAll) {
-				let allMenus = [];
-				this.checkAllMenu(this.menuData, allMenus);
-				this.$refs.menuTree.setCheckedNodes(allMenus);
-			} else {
-				this.$refs.menuTree.setCheckedNodes([]);
-			}
-		},
-		// 递归全选
-		checkAllMenu(menuData, allMenus) {
-			menuData.forEach(menu => {
-				allMenus.push(menu);
-				if(menu.children) {
-					this.checkAllMenu(menu.children, allMenus);
-				}
-			});
-		},
-		// 角色菜单授权提交
-		submitAuthForm() {
-		  let roleId = this.selectRole.id;
-		  if(roleId==null){
-		    this.$message({
-          message: "请先选择授权角色",
-          type: "warning"
-        });
-		    return;
-      }
-		  if ("admin" == this.selectRole.name) {
-		    this.$message({
-          message: "超级管理员拥有所有菜单权限，不允许修改！",
-          type: "error",
-        });
-        return;
-      }
-		  this.authLoading = true;
-		  let checkedNodes = this.$refs.menuTree.getCheckedNodes(false, true);
-		  let roleMenus = [];
-		  for (let i = 0, len = checkedNodes.length; i < len; i++) {
-		    let roleMenu = { roleId: roleId, menuId: checkedNodes[i].id };
-		    roleMenus.push(roleMenu);
-		  }
-      this.$axios({
-        url: "/gateway/sys/role/saveRoleMenus",
-        method: "post",
-        data: roleMenus,
-      }).then((res) => {
-        if (res.data.code == 200) {
-          this.$message({ message: "操作成功", type: "success" });
+          if (operation.value) {
+            saveRole(dataForm).then((res) => {
+              if (res.code === 200) {
+                proxy.$message.success('角色添加成功！')
+                handleQuery()
+                dialogVisible.value = false
+              }
+            })
+          } else {
+            editRole(dataForm).then((res) => {
+              if (res.code === 200) {
+                proxy.$message.success('角色修改成功！')
+                handleQuery()
+                dialogVisible.value = false
+              }
+            })
+          }
         } else {
-          this.$message({
-            message: "操作失败, " + res.data.msg,
-            type: "error",
-          });
+          return
         }
-        this.authLoading = false;
-      });
-		},
-
-		renderContent(h, { node, data, store }) {
-			return (
-			<div class="column-container">
-				<span style="text-algin:center;display:inline-block; width: 300px;">{data.name}</span>
-				<span style="text-algin:center;margin-right:80px;">
-					<el-tag type={data.type === 0?'':data.type === 1?'success':'info'} size="small">
-						{data.type === 0?'目录':data.type === 1?'菜单':'按钮'}
-					</el-tag>
-				</span>
-				<span style="text-algin:center;margin-right:80px;"> <i class={data.icon}></i></span>
-				<span style="text-algin:center;margin-right:80px;">{data.parentName?data.parentName:'顶级菜单'}</span>
-				<span style="text-algin:center;margin-right:80px;">{data.url?data.url:'\t'}</span>
-			</div>);
-      	},
-		// 时间格式化
-    dateFormat: function (row, column, cellValue, index){
-		  return format(row[column.property])
-		}
-
-	},
-	mounted() {
-	}
+      })
+    }
+    const AddFormHandle = {
+      span: 23,
+      textAlign: 'right',
+      btns: [
+        {
+          type: 'default',
+          label: '取消',
+          key: 'search',
+          handle: () => (dialogVisible.value = false),
+        },
+        { type: 'primary', label: '提交', key: 'add', handle: handleSave },
+      ],
+    }
+    onMounted(() => {
+      handleQuery()
+    })
+    return {
+      table,
+      handleRowClick,
+      form,
+      searchForm,
+      treeRef,
+      items,
+      isCheckAll,
+      checkAll,
+      handleResetTree,
+      // renderContent,
+      formHandle,
+      tableConfig,
+      formConfig,
+      dialogVisible,
+      dataForm,
+      addFormConfig,
+      operation,
+      AddFormHandle,
+      handleEdit,
+      handleDelete,
+    }
+  },
 }
 </script>
 <style scoped>
 .menu-header {
-	padding-left: 8px;
-	padding-bottom: 5px;
-	text-align: left;
-	font-size: 16px;
-	color: rgb(20, 89, 121);
-
+  padding-left: 8px;
+  padding-bottom: 5px;
+  text-align: left;
+  font-size: 16px;
+  color: rgb(20, 89, 121);
+}
+.custom-tree-node {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.custom-tree-node > span {
+  min-width: 100px;
+}
+.tagClass {
+  height: 30px;
+  transform: scale(0.8);
+}
+.footerClass {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 </style>

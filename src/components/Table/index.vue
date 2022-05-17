@@ -7,7 +7,7 @@
     :data="tableConfig.data"
     border
     size="mini"
-    :max-height="tableConfig.height || '500px'"
+    :max-height="tableConfig.height"
     :row-class-name="tableConfig.rowClassFunc || rowClassFunc"
     :cell-class-name="tableConfig.cellClassFunc"
     :default-sort="tableConfig.defaultSort"
@@ -59,6 +59,10 @@
               {{ dateFormat(scope.row[column.prop], column.formatter) }}</span
             >
           </template>
+          <!-- icon -->
+          <template v-else-if="column.icon">
+            <span><i :class="scope.row[column.prop]"></i></span>
+          </template>
           <!-- 正常格式 -->
           <template v-else-if="!column.slot">
             <span>{{ scope.row[column.prop] }}</span>
@@ -99,6 +103,8 @@ import {
 } from '@vue/runtime-core'
 import Sortable from 'sortablejs'
 import { deepClone } from '@/utils/util'
+
+import { items } from '@/config/menu'
 
 export default defineComponent({
   name: 'VTable',
@@ -141,10 +147,13 @@ export default defineComponent({
         let params = deepClone(obj)
         if (tableConfig.pagination) {
           const pageObj = {}
-          pageObj[tableConfig.pageField || 'num'] = currentPage.value
+          pageObj[tableConfig.pageField || 'num'] = isNaN(currentPage.value) ? 1 : currentPage.value
           pageObj[tableConfig.pageSizeField || 'size'] = currentPageSize.value
           params = Object.assign(params, pageObj)
         }
+        // resolve(callback(items))
+        // loading.value = false
+        // return  
         tableConfig
           .method(params)
           .then((res) => {

@@ -28,7 +28,7 @@ export function renderTable() {
         minWidth: '120',
         formatter: 'YYYY-MM-DD HH:mm:ss',
       },
-      { prop: '', label: '操作', slot: 'operation', minWidth: '100' },
+      { prop: '', label: '操作', slot: 'operation' },
     ],
   }
   const formConfig = {

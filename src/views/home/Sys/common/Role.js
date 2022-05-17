@@ -1,6 +1,4 @@
-import { getUserList } from '@/api/sys/role'
-import { eventStatus, eventType, eventSource } from '@/config/common'
-
+import { getRoleList } from '@/api/sys/menu'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const tableConfig = {
@@ -9,7 +7,7 @@ export function renderTable() {
     pagination: true, // 开启分页器
     paginationAlign: 'center', // 分页器方向
     mutiSelect: false, // 开启选择
-    method: getUserList, // 請求api
+    method: getRoleList, // 請求api
     index: false, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
