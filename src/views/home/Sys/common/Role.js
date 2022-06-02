@@ -1,4 +1,4 @@
-import { getRoleList } from '@/api/sys/menu'
+import { getRoleList } from '@/api/sys/role'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const tableConfig = {

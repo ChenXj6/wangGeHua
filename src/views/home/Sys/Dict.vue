@@ -1,245 +1,214 @@
-<!--
-  文件描述：
-  创建时间：2022/4/6 9:52
-  创建人：rxw
--->
 <template>
   <div>
-    <el-row style="margin-top: 13px">
-      <el-col align="left" :push="1">
-        <el-button size="mini" type="success" @click="addMain">添加主类型</el-button>
+    <el-row :gutter="10">
+      <el-col :span="4">
+        <el-button style="margin: 10px 20px"
+                   type="primary"
+                   size="mini" @click="handleAddType(1,{},1)">添加主类型</el-button>
       </el-col>
     </el-row>
-    <el-divider></el-divider>
-    <el-row>
-      <el-col>
-        <el-tabs tab-position="left" :data="dits">
-          <el-tab-pane
-            v-for="item in dits"
-            :label="item.description"
-            :key="item.sn"
-          >
-            <DictTable :data="item" @editMain="edit" @addChild="addChild" @editChild="edit" @deleteMain="deleteDict" @deleteChild="deleteDict"></DictTable>
+    <el-row :gutter="10">
+      <el-col :span="24">
+        <!-- v-model="activeTabs" -->
+        <el-tabs
+                  v-model="activeTabs"
+                 tab-position="left"
+                 class="demo-tabs"
+                 style="height: 600px"
+                 @tab-click="handleClick">
+          <el-tab-pane v-for="i in tabList" :key="i.value" :label="i.description" :name="i.description">
+            <el-row :gutter="10">
+              <el-col :span="4">
+                <el-button type="primary"
+                           style="margin: 10px 20px"
+                           size="mini"
+                           @click="handleAddType(1,i,2)">添加子类型</el-button>
+              </el-col>
+              <el-col :span="8" :offset="6">
+                <span><b>{{ i.description }}</b></span>
+              </el-col>
+            </el-row>
+            <el-table :data="i.list" size="mini" border header-cell-style="text-align:center" style="width: 100%">
+              <el-table-column prop="value" label="编码" align="center"/>
+              <el-table-column prop="description" label="描述" align="center" />
+              <el-table-column prop="createTime" label="创建时间" align="center">
+                <template #default="scope">
+                  <span>{{ dateFormat(scope.row.createTime, 'YYYY-MM-DD HH:mm:ss') }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column prop="delflag" label="是否禁用" align="center">
+                <template #default="scope">
+                  <span>{{ scope.row.delflag == 0 ? '可用' : '禁用' }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" width="150" align="center">
+                <template #default="scope">
+                  <el-button size="small" type="primary" icon="el-icon-lx-edit" circle @click="handleEdit(scope.row)"
+                    ></el-button
+                  >
+                  <el-popconfirm title="确定要删除该数据吗？" @confirm="handleDel(scope.row)">
+                    <template #reference>
+                      <el-button
+                        size="small"
+                        icon="el-icon-lx-delete"
+                        circle
+                        type="danger"
+                      />
+                    </template>
+                  </el-popconfirm>
+                </template>
+              </el-table-column>
+            </el-table>
           </el-tab-pane>
         </el-tabs>
       </el-col>
     </el-row>
-
-    <el-dialog title="编辑" :visible.sync="editVisible">
-      <el-form :model="editForm" size="mini" label-width="200px" :rules="formRules" ref="addForm">
-        <el-form-item label="基本类型">
-          <el-input v-model="editForm.basicType" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="名称">
-          <el-input v-model="editForm.basicTypeName" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="编码值" prop="value">
-          <el-input v-model="editForm.value" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="描述" prop="description">
-          <el-input v-model="editForm.description" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="创建人">
-          <el-input v-model="editForm.creator" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="创建人公司">
-          <el-input v-model="editForm.company" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="是否可用">
-          <el-radio-group v-model="editForm.delflag">
-            <el-radio :label="0">可用</el-radio>
-            <el-radio :label="1">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="editVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editDict">确 定</el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog title="添加" :visible.sync="addVisible">
-      <el-form :model="addForm" label-width="120px" size="mini" :rules="formRules" ref="addForm">
-        <el-form-item label="基本类型">
-          <el-input v-model="addForm.basicType" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="名称">
-          <el-input v-model="addForm.basicTypeName" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="编码值" prop="value">
-          <el-input v-model="addForm.value" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="描述" prop="description">
-          <el-input v-model="addForm.description" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="创建人">
-          <el-input v-model="addForm.creator" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="创建人公司">
-          <el-input v-model="addForm.creator" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="是否可用">
-          <el-radio-group v-model="addForm.delflag">
-            <el-radio :label="0">可用</el-radio>
-            <el-radio :label="1">禁用</el-radio>
-          </el-radio-group>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="addVisible = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="addVisible = false" size="mini">确 定</el-button>
-      </div>
+    <el-row style="margin-bottom:20px">&nbsp;</el-row>
+    <el-dialog :close-on-click-modal="false"
+               :title="operation ? '新增' : '编辑'"
+               v-model="dialogVisible"
+               width="40%">
+      <VForm ref="form"
+             :key="timer"
+             :form-data="addFormConfig"
+             :form-model="dataForm"
+             :form-handle="AddFormHandle" />
     </el-dialog>
   </div>
 </template>
-
 <script>
-// 这里可以导入其他文件（比如：组件，工具js，第三方插件js，json文件，图片文件等等）
-// 例如：import 《组件名称》 from '《组件路径》';
-// 例如：import uploadFile from '@/components/uploadFile/uploadFile'
-import DictTable from "./DictTable";
-import {dicts,post} from "@/api/baseInfo"
+import { renderTable } from './common/Dict'
+import { computed, getCurrentInstance, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref, watch } from '@vue/runtime-core'
+
+import { saveDict,editDict, getDictList,deleteDict } from '@/api/sys/dict.js'
+import { listAssign, defaultObject } from '@/utils/util'
+
 export default {
-  name: 'Dict',
-  // import引入的组件需要注入到对象中才能使用
-  components: {
-    DictTable
-  },
-  props: {
-    // patientIn: {
-    //   type: Object,
-    //   default () {
-    //     return {}
-    //   }
-    // }
-  },
-  data() {
-    // 这里存放数据
-    return {
-      availables: [
+  name: 'User',
+  setup () {
+    const { proxy } = getCurrentInstance()
+    const { addFormConfig } = renderTable.call(proxy)
+    const timer = ref(new Date().getTime())
+    let dataForm = reactive({
+      id:'',
+      basictype:'',
+      basictypename:'',
+      value:'',
+      description:'',
+      delflag:1,
+    })
+    let tabList = reactive([])
+    const searchCode = ref('')
+    const activeTabs = ref('')
+    const dialogVisible = ref(false)
+    const operation = ref(false) // true:新增, false:编辑
+    // 计算属性处理时间格式
+    const dateFormat = computed(() => (date, formatter) => {
+      return date && proxy.$moment(date).format(formatter)
+    })
+    // 表單操作按鈕配置
+    const handleEdit = (data) => {
+      listAssign(dataForm,data)
+      timer.value = new Date().getTime() // 利用组件key来实现实时刷新组件
+      operation.value = false
+      dialogVisible.value = true
+    }
+    const handleSave = (formRef) => {
+      formRef.validate((valid) => {
+        if (valid) {
+          if(operation.value){
+            saveDict(dataForm).then((res) => {
+              if (res.resCode === '000000') {
+                tabList.length = 0
+                proxy.$message.success('操作成功')
+                handleQuery()
+                dialogVisible.value = false
+              }
+            })
+          }else{
+            editDict(dataForm).then((res) => {
+              if (res.resCode === '000000') {
+                tabList.length = 0
+                proxy.$message.success('操作成功')
+                handleQuery()
+                dialogVisible.value = false
+              }
+            })
+          }
+        } else {
+          return
+        }
+      })
+    }
+    const AddFormHandle = {
+      span: 23,
+      textAlign: 'right',
+      btns: [
         {
-          lable: '可用',
-          value: 0
+          type: 'default',
+          label: '取消',
+          key: 'search',
+          handle: () => (dialogVisible.value = false),
         },
-        {
-          lable: '不可用',
-          value: 1
-
-        }
+        { type: 'primary', label: '提交', key: 'add', handle: handleSave },
       ],
-      editVisible: false,
-      addVisible: false,
-      editForm: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      },
-      addForm: {
-
-      },
-      formRules:{
-        value: [
-          { required: true, message: '请输入编码值', trigger: 'blur' },
-        ],
-        description: [
-          { required: true, message: '请填写描述', trigger: 'change' }
-        ]
-      },
-      dits:[]
-
     }
-  },
-  // 监听属性 类似于data概念
-  computed: {},
-  // 方法集合
-  methods: {
-    addMain() {
-      this.addForm.basicType = '0000'
-      this.addForm.basicTypeName = '类型列表'
-      this.addVisible = true
-    },
-    edit(data) {
-      console.log("子类型传的数据",data)
-      this.editForm = data
-      this.editVisible = true
-    },
-    editDict() {
-      this.editVisible = false
-      post('/staff/tjg/basic/dict/update/',this.editForm).then(res => {
-        if(res.data.resCode == '000000') {
-          this.queryDict()
-          this.$message.success('修改成功')
-        } else {
-          this.$message.error(res.data.message)
-        }
-      })
-    },
-    addChild(data) {
-      this.addForm.basicType = data.value
-      this.addForm.basicTypeName = data.description
-      this.addVisible = true
-    },
-    deleteDict(data) {
-      this.$confirm('此操作将永久该字典, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        });
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        });
-      });
-    },
-    queryDict() {
-      post('/staff/tjg/basic/dict/query',{}).then(res => {
-        console.log(res)
-        if(res.data.resCode == '000000') {
-          this.dits = res.data.data;
-        } else {
-          this.$message.error(res.data.message)
+    const handleAddType = (type,data={},level) => {
+      defaultObject(dataForm)
+      if(type == 1){
+        operation.value = true
+      } else{ operation.value = false }
+      dataForm.basictype = data?.value ?? '0000'
+      dataForm.basictypename = data?.description ?? '类型列表'
+      level == 1 && (dataForm.value = (Number(tabList[tabList.length - 1]?.value) + 1),addFormConfig.formItems[2].disabled = true)
+      level == 2 && (dataForm.value = '',addFormConfig.formItems[2].disabled = false)
+      timer.value = new Date().getTime()
+      dialogVisible.value = true
+    }
+    const handleDel = ({id}) => {
+      deleteDict({id}).then((res) => {
+        if (res.resCode === '000000') {
+          tabList.length = 0
+          proxy.$message.success('操作成功')
+          handleQuery()
+          dialogVisible.value = false
         }
       })
     }
+    const handleClick = (val) => {
+      activeTabs.value = val.props.label
+      sessionStorage.setItem('activeTabs',activeTabs.value) // 用来记录当前用户上次编辑的目录----小型记忆功能
+    }
+    // 表格查询
+    const handleQuery = () => {
+      getDictList({code:searchCode.value}).then(res=>{
+        tabList.push(...res.data)
+        activeTabs.value = sessionStorage.getItem('activeTabs') ? sessionStorage.getItem('activeTabs') : tabList[0].description
+      })
+    }
+    onBeforeMount(() => {
+      handleQuery()
+    })
+    onBeforeUnmount(()=>{
+      sessionStorage.removeItem('activeTabs')
+    })
+    return {
+      dialogVisible,
+      dataForm,
+      addFormConfig,
+      operation,
+      timer,
+      handleEdit,
+      AddFormHandle,
+      //
+      tabList,
+      handleAddType,
+      handleDel,
+      dateFormat,
+      activeTabs,
+      handleClick,
+    }
   },
-  // 监控data中的数据变化
-  watch: {},
-  // 生命周期 - 创建完成（可以访问当前this实例）
-  created() {
-
-  },
-  // 生命周期 - 挂载完成（可以访问DOM元素）
-  mounted() {
-    this.queryDict()
-  },
-  beforeCreate() {
-  }, // 生命周期 - 创建之前
-  beforeMount() {
-  }, // 生命周期 - 挂载之前
-  beforeUpdate() {
-  }, // 生命周期 - 更新之前
-  updated() {
-
-  }, // 生命周期 - 更新之后
-  beforeDestroy() {
-  }, // 生命周期 - 销毁之前
-  destroyed() {
-  }, // 生命周期 - 销毁完成
-  activated() {
-  } // 如果页面有keep-alive缓存功能，这个函数会触发
 }
 </script>
-
-<style scoped lang="scss">
-//@import url(); 引入公共css类
-</style>
+<style scoped></style>

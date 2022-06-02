@@ -109,6 +109,14 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/User.vue")
       },
       {
+        path: "/dict",
+        name: "dict",
+        meta: {
+          title: '字典管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/Dict.vue")
+      },
+      {
         path: "/menu",
         name: "menu",
         meta: {
@@ -123,6 +131,25 @@ const routes = [
           title: '角色管理'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/Role.vue")
+      },
+      {
+        path: "/organ",
+        name: "organ",
+        meta: {
+          title: '机构管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/Organ.vue")
+      },
+      {
+        path: "/editorgan",
+        name: "editorgan",
+        meta: {
+          title: '机构管理',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '新增' : '编辑'}机构`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/EditOrgan.vue")
       },
       {
         path: "/actualbuild",
@@ -147,6 +174,74 @@ const routes = [
           title: '实有人口'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/ActualInfo/ActualPeople.vue")
+      },
+      {
+        path: "/editactual",
+        name: "editactual",
+        meta: {
+          title: '实有信息',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'build' ? '楼栋' : (route.params.type == 'house' ? '房屋' : '人口')}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ActualInfo/EditActual.vue")
+      },
+      {
+        path: "/info",
+        name: "info",
+        meta: {
+          title: '基本信息'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/communityGrid/Info.vue")
+      },
+      {
+        path: "/borderInfo",
+        name: "borderInfo",
+        meta: {
+          title: '边界信息'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/communityGrid/borderInfo.vue")
+      },
+      {
+        path: "/staffInfo",
+        name: "staffInfo",
+        meta: {
+          title: '人员力量信息'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/communityGrid/staffInfo.vue")
+      },
+      {
+        path: "/editInfo",
+        name: "editInfo",
+        meta: {
+          title: '实有信息',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}基本信息`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/communityGrid/EditInfo.vue")
+      },
+      {
+        path: "/editBorderInfo",
+        name: "editBorderInfo",
+        meta: {
+          title: '实有信息',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}边界信息`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/communityGrid/EditBorderInfo.vue")
+      },
+      {
+        path: "/editStaffInfo",
+        name: "editStaffInfo",
+        meta: {
+          title: '实有信息',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}人员力量`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/communityGrid/EditStaffInfo.vue")
       },
     ]
   },

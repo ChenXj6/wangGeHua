@@ -69,10 +69,10 @@ export default defineConfig(({ command, mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
         },
-        '/sc': {
-          target: 'http://192.168.1.146',
+        '/real': {
+          target: env.VITE_BASE_API2,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/sc/, '')
+          rewrite: (path) => path.replace(/^\/real/, '')
         }
       }
     },

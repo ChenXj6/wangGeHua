@@ -10,7 +10,7 @@
         <el-link
           type="success"
           @click.prevent="handleOperation(1, data.data)"
-          >{{ data.data.name }}</el-link
+          >{{ data.data.eventName }}</el-link
         >
       </template>
       <template v-slot:operation="data">
@@ -92,7 +92,7 @@ export default defineComponent({
     }
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
-        const data = res.data || []
+        const data = res.list || []
         tableConfig.data = data
       })
     }
@@ -114,9 +114,10 @@ export default defineComponent({
     }
     // 查看/编辑
     const handleOperation = (type, rowData) => {
+      let data = JSON.stringify(rowData)
       router.push({
         path: '/editResidentsReport',
-        query: { id: rowData.isNew, operation: type },
+        query: { data: encodeURIComponent(data), operation: type },
       })
     }
 

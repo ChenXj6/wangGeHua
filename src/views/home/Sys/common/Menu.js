@@ -1,13 +1,13 @@
-import { getRoleList } from '@/api/sys/role'
+import { getMenuTree } from '@/api/sys/menu'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const tableConfig = {
     name: 'table',
     data: [],
-    pagination: true, // 开启分页器
+    pagination: false, // 开启分页器
     paginationAlign: 'right', // 分页器方向
     mutiSelect: false, // 开启选择
-    method: '', // 請求api
+    method: getMenuTree, // 請求api
     index: false, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
@@ -15,21 +15,19 @@ export function renderTable() {
       {
         prop: 'id',
         label: 'ID',
-        minWidth: '100',
+        minWidth: '60',
       },
-      { prop: 'title', label: '名称', minWidth: '100' },
-      { prop: '', label: '类型', slot:'type', minWidth: '100' },
-      { prop: 'icon', label: '图标', minWidth: '120', icon:'icon'},
-      { prop: 'index', label: '菜单URL' },
+      { prop: 'name', label: '名称', minWidth: '120' },
+      { prop: '', label: '类型', slot:'type', minWidth: '60' },
+      { prop: 'icon', label: '图标',icon:'icon'},
+      { prop: 'url', label: '菜单URL',minWidth:'150' },
       {
-        prop: 'a',
+        prop: 'perms',
         label: '授权标识',
-        minWidth: '120',
       },
       {
-        prop: 'b',
+        prop: 'orderNum',
         label: '排序',
-        minWidth: '120',
       },
       { prop: '', label: '操作', slot: 'operation', minWidth: '100' },
     ],
@@ -66,7 +64,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '菜单名称',
-        prop: 'title',
+        prop: 'name',
         value: '',
         placeholder: '菜单名称',
         isClearable: true,
@@ -92,7 +90,7 @@ export function renderTable() {
       },
     ],
     rules:{
-      title: [
+      name: [
         { required: true, message: '请输入角色名', trigger: 'blur' },
       ],
     }

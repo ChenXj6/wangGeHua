@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="formRef" class="form" :model="formModel" :rules="formRules">
+  <el-form ref="formRef" class="form" :model="formModel" :rules="formRules" :disabled="isDisabled">
     <el-row :gutter="formData.gutter || 0">
       <el-col
         v-for="item in formData.formItems"
@@ -8,13 +8,13 @@
       >
         <el-form-item
           :label="item.label"
-          :label-width="item.label ? '80px' : 0"
+          :label-width="item.label ? '120px' : 0"
           :prop="item.prop"
         >
-          <!-- 多層 -->
-          <template v-if="item.type === 'many'" style="margin-left: -80px">
-            <VForm :form-data="item.children" />
-          </template>
+        <!-- 多層 -->
+        <template v-if="item.type === 'many'" style="margin-left: -80px">
+          <VForm :form-data="item.children" :form-model="formModel" :disabled="isDisabled"/>
+        </template>
           <!-- Input -->
           <template v-if="item.type === 'Input' || item.type === ''">
             <el-input
@@ -25,8 +25,40 @@
               :clearable="item.isClearable"
             />
           </template>
+          <!--  -->
+          <template v-if="item.type === 'selectSearch'">
+            <el-select
+              v-model="formModel[item.prop]"
+              :placeholder="item.placeholder"
+              size="small"
+              :key="item.prop"
+              @focus="()=>{querySearchAsync(item.code)}"
+              :clearable="item.isClearable"
+              :disabled="item.disabled"
+              :loading="loading"
+            >            
+              <el-option
+                v-for="i in options[item.code]"
+                :label="i.label"
+                :value="i.value"
+                :key="i.value"
+              ></el-option>
+            </el-select>
+          </template>
+          <!-- textarea -->
+          <template v-if="item.type === 'textarea'">
+            <el-input
+              v-model.trim="formModel[item.prop]"
+              :autosize="{ minRows: 2, maxRows: 4 }"
+              :placeholder="item.placeholder"
+              type="textarea"
+              size="small"
+              :disabled="item.disabled"
+              :clearable="item.isClearable"
+            />
+          </template>
           <!-- Select -->
-          <template v-if="item.type === 'select'">
+          <template v-else-if="item.type === 'select'">
             <el-select
               v-model="formModel[item.prop]"
               :placeholder="item.placeholder"
@@ -42,7 +74,7 @@
               ></el-option>
             </el-select>
           </template>
-          <template v-if="item.type === 'radioGroup'">
+          <template v-else-if="item.type === 'radioGroup'">
             <el-radio-group v-model="formModel[item.prop]" 
               :placeholder="item.placeholder"
               size="small"
@@ -51,8 +83,19 @@
               <el-radio v-for="i in item.options" :key="i.value" :label="i.value">{{i.label}}</el-radio>
             </el-radio-group>
           </template>
-          <!-- datetimerange  ?? 至 ?? -->
-          <template v-if="item.type === 'dateTime'">
+          <!-- date -->
+          <template v-else-if="item.type === 'date'">
+            <el-date-picker
+              v-model="formModel[item.prop]"
+              type="date"
+              size="small"
+              :disabled="item.disabled"
+              :format="item.format"
+              :value-format="item.format || 'YYYY-MM-DD'"
+            >
+            </el-date-picker>
+          </template>
+          <template v-else-if="item.type === 'dateTime'">
             <el-date-picker
               v-model="formModel[item.prop]"
               type="datetimerange"
@@ -67,8 +110,8 @@
             </el-date-picker>
           </template>
           <!-- 自定義插槽 -->
-          <template v-if="item.type === 'slot'">
-            <slot :name="item.slotName"></slot>
+          <template v-else-if="item.type === 'slot'">
+            <slot :name="item.slotName" :data="item"></slot>
           </template>
         </el-form-item>
       </el-col>
@@ -83,6 +126,8 @@
             v-for="i in formHandle.btns"
             :key="i.key"
             :type="i.type"
+            :icon="i.icon"
+            :disabled="i.disabled"
             :size="i.size ?? 'small'"
             @click="i.handle && i.handle(formRef)"
             >{{ i.label }}</el-button
@@ -95,16 +140,10 @@
 <script>
 import {
   defineComponent,
-  inject,
-  nextTick,
-  onBeforeMount,
-  onBeforeUnmount,
-  onUnmounted,
-  onUpdated,
   reactive,
   ref,
-  watch,
 } from 'vue'
+import { searchDict } from '@/api/sys/dict'
 
 export default defineComponent({
   name: 'VForm',
@@ -125,6 +164,10 @@ export default defineComponent({
       type: Object,
       default: () => {},
     },
+    isDisabled: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props) {
     const formData = reactive(props.formData)
@@ -135,18 +178,59 @@ export default defineComponent({
       formData.rules && Object.getOwnPropertyNames(formData.rules).length !== 0
         ? formData.rules
         : props.formRules
+    const isDisabled = ref(props.isDisabled)
+    const loading = ref(false)
+    const resetFormat = (data) => {
+      let arr = []
+      data.forEach(v=>{
+        let obj = {}
+        obj.label = v.description
+        obj.value = String(v.value)
+        arr.push(obj)
+      })
+      return arr
+    }
+    const options = reactive({})
+    const querySearchAsync = (basictype) => {
+      if(basictype){
+        loading.value = true
+        searchDict({basictype}).then(res=>{
+          if(res.resCode == '000000' && res.data){
+            options[basictype] = resetFormat(res.data)
+            loading.value = false
+          }else{
+            options[basictype] = []
+            loading.value = false
+          }
+        })
+      }else{
+        options[basictype] = []
+      }
+    }
+    const allQuerySearchAsync = (data) => {
+      data.forEach(v => {
+        if(v.type == 'selectSearch' && v.code){
+          querySearchAsync(v.code)
+        }
+      })
+    }
+    allQuerySearchAsync(formData.formItems)
     return {
       formData,
       formRef,
       formModel,
       formHandle,
       formRules,
+      isDisabled,
+      querySearchAsync,
+      loading,
+      options,
     }
   },
 })
 </script>
 <style scoped>
-.form {
-  margin-bottom: 10px;
+/deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: 100% !important;
 }
 </style>

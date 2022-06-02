@@ -14,7 +14,7 @@
         <el-button
           size="small"
           @click="handleEdit(data.data)"
-          icon="el-icon-lx-search"
+          icon="el-icon-lx-edit"
           circle
           type="success"
         />

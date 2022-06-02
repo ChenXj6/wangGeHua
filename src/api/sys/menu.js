@@ -1,30 +1,22 @@
 import service from '@/utils/request';
 
 // 添加角色
-export const saveRole = query => {
+export const saveMenu = query => {
   return service.post(
-    `/api/sys/role/save`, query
-  )
-};
-
-//
-// 添加角色
-export const editRole = query => {
-  return service.post(
-    `/api/sys/role/update`, query
+    `/api/sys/menu/save`, query
   )
 };
 
 // 删除角色
-export const deleteRole = query => {
+export const deleteMenu = query => {
   return service.post(
-    `/api/sys/role/delete`, query
+    `/api/sys/menu/delete`, query
   )
 };
 
 // 获取角色列表
-export const getRoleList = query => {
+export const getMenuTree = query => {
   return service.post(
-    `/api/sys/role/findPage`, query
+    `/api/sys/menu/findMenuTree`, query
   )
 };

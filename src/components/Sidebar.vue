@@ -46,6 +46,28 @@ export default {
                 title: "系统首页",
             },
             {
+                icon: "el-icon-lx-calendar",
+                index: "4",
+                title: "社区网格",
+                subs: [
+                    {
+                        icon: "el-icon-lx-sort",
+                        index: "/info",
+                        title: "基本信息",
+                    },
+                    {
+                        icon: "el-icon-lx-tagfill",
+                        index: "/borderInfo",
+                        title: "边界信息",
+                    },
+                    {
+                        icon: "el-icon-lx-friend",
+                        index: "/staffInfo",
+                        title: "人员力量信息",
+                    },
+                ],
+            },
+            {
                 icon: "el-icon-lx-sort",
                 index: "3",
                 title: "实有信息",
@@ -113,6 +135,16 @@ export default {
                         icon: "el-icon-lx-cascades",
                         index: "/menu",
                         title: "菜单管理",
+                    },
+                    {
+                        icon: "el-icon-lx-settings",
+                        index: "/organ",
+                        title: "机构管理",
+                    },
+                    {
+                        icon: "el-icon-lx-read",
+                        index: "/dict",
+                        title: "字典管理",
                     },
                 ],
             },

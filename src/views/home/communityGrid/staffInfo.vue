@@ -16,12 +16,6 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
-      <template v-slot:houseType="{data}">
-        <span>{{ houseType(Number(data.houseType)) }}</span>
-      </template>
-      <template v-slot:buildingNo="{data}">
-        <span>{{ buildingNo(Number(data.buildingNo)) }}</span>
-      </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"
@@ -62,75 +56,45 @@ import {
   onMounted,
   watch,
 } from '@vue/runtime-core'
+
+import { renderTable } from './common/StaffInfo'
+import { deepClone, defaultObject } from '@/utils/util'
+import { deletePeopleInfo } from '@/api/communityGrid/staffInfo'
+
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
-import { renderTable } from './common/House'
-import { deepClone, defaultObject } from '@/utils/util'
-import { deleteHouse } from '@/api/ActualInfo/house'
 export default defineComponent({
   name: 'ActualBuild',
-  components:[PopupTreeInput],
+  components:{PopupTreeInput},
   setup() {
     const router = useRouter()
     const { proxy } = getCurrentInstance()
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
-    const searchForm = reactive({
-      officeCode:'',
-      officeName:'',
-    }) // 表单数据
+    const searchForm = reactive({}) // 表单数据
+    let searchParams = ref({}) // 表单数据备份
+    const multipleSelection = ref([]) // 选中数据
+    // 是否有選中數據
+    const isHaveSelect = computed(
+      () => multipleSelection.value && multipleSelection.value.length > 0
+    )
     let popupTreeData = ref([])
     const popupTreeProps = {
       label: "officeName",
       children: "children"
     } 
-    let searchParams = ref({}) // 表单数据备份
-    const multipleSelection = ref([]) // 选中数据
-    const houseType = computed(()=>{
-      return (val)=>{
-        switch(val){
-          case 0:
-              return '居民楼';
-          case 1:
-              return '平房';
-          case 2:
-              return '商品房';
-          case 3:
-              return '房改房';            
-          case 4:
-              return '小产权';
-          case 5:
-              return '单位用房';
-          case 6:
-              return '商品门头房';
-          case 7:
-              return '住改商';
-          case 8:
-              return '商业体';
-          case 9:
-              return '经济体';
+    const handleTreeSelectChange = ({officeCode,officeName}) => {
+      searchForm.officeCode = officeCode
+      searchForm.officeName = officeName
+    }
+    const getOList = () => {
+      getOrganList({}).then(res=>{
+        if(res.resCode == '000000'){
+          popupTreeData.value = res.data
         }
-      }
-    })
-    const buildingNo = computed(()=>{
-      return (val)=>{
-        switch(val){
-          case 0:
-              return '西区-1号楼';
-          case 1:
-              return '西区-2号楼';
-          case 2:
-              return '西区-3号楼';
-          case 3:
-              return '西区-4号楼';
-        }
-      }
-    })
-    // 是否有選中數據
-    const isHaveSelect = computed(
-      () => multipleSelection.value && multipleSelection.value.length > 0
-    )
-
+      })
+    }
+    getOList()
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm)
@@ -141,19 +105,19 @@ export default defineComponent({
       formEL.resetFields()
       // searchForm.value = {}
       searchParams.value = {}
-      defaultObject(searchForm)
+      defaultObject(searchForm.value)
       handleQuery()
     }
     const handleAdd = () => {
       handleOperation(3,{})
     }
     const handleDel = (id) => {
-      deleteHouse({id}).then(res=>{
+      deletePeopleInfo({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
-          proxy.$message.success('删除房屋数据成功')
+          proxy.$message.success('删除数据成功')
         }else{
-          proxy.$message.danger('删除房屋数据失败')
+          proxy.$message.danger('删除数据失败')
         }
       })
     }
@@ -167,7 +131,6 @@ export default defineComponent({
     const formHandle = {
       btns: [
         {type:'primary',label:'查询',key:'search',handle:handleQuery},
-        {type:'primary',label:'重置',key:'reset',handle:handleReset},
         {type:'primary',label:'添加',key:'reset',handle:handleAdd},
       ]
     }
@@ -176,22 +139,10 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editactual',
-        params: { data : encodeURIComponent(data), operation: type, type:'house' },
+        name: 'editStaffInfo',
+        params: { data : encodeURIComponent(data), operation: type},
       })
     }
-    const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.officeCode = officeCode
-      searchForm.officeName = officeName
-    }
-    const getOList = () => {
-      getOrganList({}).then(res=>{
-        if(res.resCode == '000000'){
-          popupTreeData.value = res.data
-        }
-      })
-    }
-    getOList()
     onMounted(() => {
       handleQuery()
     })
@@ -205,8 +156,6 @@ export default defineComponent({
       handleQuery,
       handleReset,
       handleOperation,
-      buildingNo,
-      houseType,
       handleDel,
       handleTreeSelectChange,
       popupTreeProps,

@@ -16,7 +16,7 @@
       </li>
     </ul>
     <div class="tags-close-box">
-      <el-dropdown @command="handleTags">
+      <el-dropdown @command="handleTags" trigger="click">
         <el-button size="mini" type="primary">
           标签选项
           <i class="el-icon-arrow-down el-icon--right"></i>

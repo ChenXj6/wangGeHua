@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-    <el-form
+    <!-- <el-form
       ref="formRef"
       :model="formData"
       :disabled="route.query.operation == 1"
@@ -18,9 +18,9 @@
     >
       <el-row type="flex" :gutter="20" justify="center">
         <el-col :span="8">
-          <el-form-item label="事件名称" prop="entryId">
+          <el-form-item label="事件名称" prop="eventName">
             <el-input
-              v-model="formData.entryId"
+              v-model="formData.eventName"
               placeholder="请输入"
               size="small"
               clearable
@@ -30,7 +30,7 @@
         <el-col :span="8">
           <el-form-item label="事件发生时间">
             <el-input
-              v-model="formData.entryId"
+              v-model="formData.happenTime"
               placeholder="请输入"
               size="small"
               clearable
@@ -76,7 +76,7 @@
         <el-col :span="8">
           <el-form-item label="事件发生地点">
             <el-input
-              v-model="formData.entryId"
+              v-model="formData.eventLong"
               placeholder="请输入"
               size="small"
               clearable
@@ -85,12 +85,24 @@
         </el-col>
         <el-col :span="8">
           <el-form-item label="事件经/纬度">
-            <el-input
-              v-model="formData.entryId"
+            <el-row :gutter="10">
+              <el-col :span="12">
+                <el-input
+              v-model="formData.eventLat"
               placeholder="请输入"
               size="small"
               clearable
             />
+              </el-col>
+              <el-col :span="12">
+                <el-input
+              v-model="formData.eventLong"
+              placeholder="请输入"
+              size="small"
+              clearable
+            />
+              </el-col>
+            </el-row>
           </el-form-item>
         </el-col>
         <el-col :span="8">
@@ -98,7 +110,7 @@
             <el-row :gutter="10">
               <el-col :span="12">
                 <el-select
-                  v-model="formData.region"
+                  v-model="formData.mainPeopleFirstType"
                   size="small"
                   placeholder="please select your zone"
                 >
@@ -108,7 +120,7 @@
               </el-col>
               <el-col :span="12">
                 <el-select
-                  v-model="formData.region"
+                  v-model="formData.mainPeopleSecondType"
                   size="small"
                   placeholder="please select your zone"
                 >
@@ -122,7 +134,7 @@
         <el-col :span="8">
           <el-form-item label="事件规模">
             <el-select
-              v-model="formData.region"
+              v-model="formData.eventScope"
               size="small"
               placeholder="请选择事件规模"
             >
@@ -134,7 +146,7 @@
         <el-col :span="8">
           <el-form-item label="涉及人数">
             <el-input
-              v-model="formData.entryId"
+              v-model="formData.aboutPeopleNum"
               placeholder="请输入"
               size="small"
               clearable
@@ -144,7 +156,7 @@
         <el-col :span="8">
           <el-form-item label="主要当事人名称">
             <el-input
-              v-model="formData.entryId"
+              v-model="formData.mainPeopleName"
               placeholder="请输入"
               size="small"
               clearable
@@ -154,7 +166,7 @@
         <el-col :span="8">
           <el-form-item label="主要当事人证件号码">
             <el-input
-              v-model="formData.entryId"
+              v-model="formData.mainPeopleCertificateNum"
               placeholder="请输入"
               size="small"
               clearable
@@ -164,7 +176,7 @@
         <el-col :span="8">
           <el-form-item label="主要当事人地址">
             <el-input
-              v-model="formData.entryId"
+              v-model="formData.mainPeopleAddress"
               placeholder="请输入"
               size="small"
               clearable
@@ -172,17 +184,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="8"></el-col>
-        <el-col :span="24">
-          <el-form-item label="事情简述" prop="entryId">
-            <el-input
-              type="textarea"
-              :autosize="{ minRows: 2, maxRows: 4 }"
-              placeholder="请输入内容"
-              v-model="formData.entryId"
-            >
-            </el-input>
-          </el-form-item>
-        </el-col>
         <el-col :span="24" style="min-height: 200px">
           <el-form-item label="图片上传">
             <el-upload
@@ -203,13 +204,47 @@
               type="textarea"
               :autosize="{ minRows: 2, maxRows: 4 }"
               placeholder="请输入内容"
-              v-model="textarea2"
+              v-model="formData.eventContent"
             >
             </el-input>
           </el-form-item>
         </el-col>
       </el-row>
-    </el-form>
+    </el-form> -->
+    <VForm :isDisabled="route.query.operation == 1" :form-data="editFormConfig" :form-model="formData" :form-handle="route.query.operation != 1 ? formHandle : {}">
+      <template v-slot:longAndLat="">
+        <el-row :gutter="10">
+              <el-col :span="12">
+                <el-input
+              v-model="formData.eventLat"
+              placeholder="请输入"
+              size="small"
+              clearable
+            />
+              </el-col>
+              <el-col :span="12">
+                <el-input
+              v-model="formData.eventLong"
+              placeholder="请输入"
+              size="small"
+              clearable
+            />
+              </el-col>
+            </el-row>
+      </template>
+      <template v-slot:upload="">
+        <el-upload
+              class="upload-demo"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :file-list="fileList"
+              list-type="picture-card"
+            >
+              <i class="el-icon-lx-add"></i>
+            </el-upload>
+      </template>
+    </VForm>
     <div v-if="route.query.operation == 1">
       <div class="crumbs">
         <el-breadcrumb separator="/">
@@ -237,16 +272,8 @@
         <el-table-column prop="name" label="处置状态"> </el-table-column>
       </el-table>
     </div>
-    <el-row>
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
-        <el-button
-          v-if="route.query.operation != 1"
-          type="primary"
-          size="small"
-          icon="el-icon-lx-roundcheck"
-          @click="handleSubmit"
-          >确认</el-button
-        >
         <el-button
           type="primary"
           @click="handleBack"
@@ -266,19 +293,21 @@
   </div>
 </template>
 <script>
-import { getCurrentInstance, onMounted, reactive, ref } from '@vue/runtime-core'
+import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref } from '@vue/runtime-core'
 import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
+import { listAssign,defaultObject } from '@/utils/util'
+import {renderTable} from './common/edit'
+import { editRecord } from '@/api/ResidentsReport/index'
 export default {
   mixins: [mixin],
   setup() {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
     const {
-      proxy: { $message },
+      proxy,
     } = getCurrentInstance()
-    const formRef = ref(null)
-
+    const { editFormConfig } = renderTable.call(proxy)
     const fileList = ref([
       {
         name: 'food.jpeg',
@@ -287,9 +316,21 @@ export default {
     ])
     const dialogImageUrl = ref('')
     const dialogVisible = ref(false)
-
-    let id = null
-    const formData = reactive({})
+    let formData = reactive({
+      eventName:'',
+      eventContent:'',
+      happenTime:'',
+      eventLong:'',
+      eventLat:'',
+      eventLong:'',
+      mainPeopleFirstType:'',
+      mainPeopleSecondType:'',
+      eventScope:'',
+      aboutPeopleNum:'',
+      mainPeopleName:'',
+      mainPeopleCertificateNum:'',
+      mainPeopleAddress:'',
+    })
     const rules = {
       entryId: [{ required: true, message: '请输入表单名称', trigger: 'blur' }],
     }
@@ -320,25 +361,21 @@ export default {
         address: '上海市普陀区金沙江路 1518 弄',
       },
     ]
-
-    const getDetail = (id) => {
-      console.log(
-        `isNew为${id},点击按钮为 ${
-          route.query.operation == 1 ? '查看' : '编辑'
-        }`
-      )
-    }
     // upload
     const handlePreview = (uploadFile) => {
       dialogImageUrl.value = uploadFile.url
       dialogVisible.value = true
     }
     // 
-    const handleSubmit = async () => {
-      await formRef.value.validate((vaild) => {
+    const handleSubmit = async (formRef) => {
+      await formRef.validate((vaild) => {
         if (vaild) {
-          $message.success('编辑成功')
-          delCurrentTag(route)
+          editRecord(formData).then(res=>{
+            if(res.resCode == '000000'){
+              proxy.$message.success('编辑成功')
+              delCurrentTag(route)
+            }
+          })
         } else {
           return
         }
@@ -347,21 +384,32 @@ export default {
     const handleBack = () => {
       delCurrentTag(route)
     }
+    const formHandle = {
+      span:22,
+      textAlign: 'right',
+      btns: [
+        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+      ]
+    }
+    // formData = JSON.parse(decodeURIComponent(route.query.data))
+    route.query.operation != 3 && listAssign(formData,JSON.parse(decodeURIComponent(route.query.data)))
+    console.log(formData,'...')
     onMounted(() => {
+      
       // getDetail(route.query.id)
     })
     return {
       formData,
-      formRef,
-      rules,
       tableData,
       route,
       handleBack,
-      handleSubmit,
       fileList,
       dialogVisible,
       dialogImageUrl,
       handlePreview,
+      editFormConfig,
+      formHandle,
     }
   },
 }

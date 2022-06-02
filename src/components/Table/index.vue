@@ -13,19 +13,12 @@
     :default-sort="tableConfig.defaultSort"
     :cell-style="cellStyle"
     :row-style="rowStyle"
-    row-key="id"
+    :row-key="tableConfig.rowKey ?? 'id'"
     @selection-change="handleSelectionChange"
     @row-click="handleRowClick"
   >
   <!-- @sort-change="handleSortChange" -->
-    <!-- 多选列 -->
-    <el-table-column
-      v-if="tableConfig.mutiSelect"
-      type="selection"
-      width="55"
-      align="center"
-    />
-    <!-- 序号列 -->
+  <!-- 序号列 -->
     <el-table-column
       v-if="tableConfig.index"
       label=""
@@ -35,12 +28,26 @@
       fixed="left"
       :index="indexMethod"
     />
+    <!-- 多选列 -->
+    <el-table-column
+      v-if="tableConfig.mutiSelect"
+      type="selection"
+      width="55"
+      align="center"
+    />    
     <!-- 数据列 -->
     <template
       v-for="(column, columnIndex) in tableConfig.columns"
       :key="columnIndex"
     >
       <!-- v-if="column.visible === undefined ? true : column.visible" -->
+      <!-- <el-table-column
+        header-align="center"
+        align="center"
+        prop="prop"
+        label="label" 
+        type="expand">
+      </el-table-column> -->
       <el-table-column
         :prop="column.prop"
         :label="column.label"
@@ -147,8 +154,8 @@ export default defineComponent({
         let params = deepClone(obj)
         if (tableConfig.pagination) {
           const pageObj = {}
-          pageObj[tableConfig.pageField || 'num'] = isNaN(currentPage.value) ? 1 : currentPage.value
-          pageObj[tableConfig.pageSizeField || 'size'] = currentPageSize.value
+          pageObj[tableConfig.pageField || 'pageNum'] = isNaN(currentPage.value) ? 1 : currentPage.value
+          pageObj[tableConfig.pageSizeField || 'pageSize'] = currentPageSize.value
           params = Object.assign(params, pageObj)
         }
         // resolve(callback(items))

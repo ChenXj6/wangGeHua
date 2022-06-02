@@ -14,8 +14,8 @@
       <span class="tagClass"
                 ><el-button
                   size="mini"
-                  :type="data.children ? 'info' : 'success'"
-                  >{{ data.children ? '目录' : '菜单' }}</el-button
+                  :type="data.type == 1 ? 'success' : ''"
+                  >{{ data.type != 1 ? '目录' : '菜单' }}</el-button
                 ></span
               >
     </template>
@@ -43,58 +43,113 @@
       :close-on-click-modal="false"
       :title="operation ? '新增' : '编辑'"
       v-model="dialogVisible"
-      width="40%"
+      width="35%"
     >
-      <VForm
-        ref="form"
-        :key="timer"
-        :form-data="addFormConfig"
-        :form-model="dataForm"
-        :form-handle="AddFormHandle"
-      />
+    <el-form ref="form" :model="dataForm" :rules="rules" label-width="80px">
+      <el-form-item label="菜单类型">
+        <el-radio-group v-model="dataForm.type" size="mini">
+          <el-radio v-for="item in typeList" :label="item.value" :key="item.label">{{item.label}}</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item :label="`${typeList[dataForm.type].label}名称`" prop="name">
+        <el-input v-model="dataForm.name" size="mini" :placeholder="`${typeList[dataForm.type].label}名称`" clearable></el-input>
+      </el-form-item>
+      <el-form-item label="上级菜单">
+        <popup-tree-input
+            :data="popupTreeData" :propa="popupTreeProps"
+            :nodeKey="''+dataForm.parentId" @update:dataForm="handleTreeSelectChange">
+            <template v-slot>
+              <el-input v-model="dataForm.parentName" size="mini" :readonly="true" placeholder="点击选择内容" style="cursor:pointer;"></el-input>
+            </template>
+        </popup-tree-input>
+      </el-form-item>
+      <el-form-item v-if="dataForm.type != 0" label="授权标识">
+        <el-input v-model="dataForm.perms" size="mini" clearable></el-input>
+      </el-form-item>
+      <el-form-item v-if="dataForm.type == 1" label="菜单路由">
+        <el-input v-model="dataForm.url" size="mini" placeholder="菜单路由" clearable></el-input>
+      </el-form-item>
+      <el-form-item v-if="dataForm.type != 2" label="排序编号">
+        <el-input v-model="dataForm.orderNum" type="number" size="mini"></el-input>
+      </el-form-item>
+      <el-form-item v-if="dataForm.type != 2" label="菜单图标">
+        <el-input v-model="dataForm.icon" size="mini" placeholder="菜单图标 (如 el-icon-lx-weibo；el-icon-lx-emojifill)" clearable></el-input>
+      </el-form-item>
+    </el-form>
+    <div style="margin-top:4px;text-align:right">
+      <el-button type="default" size="mini" @click="dialogVisible = false" >取消</el-button>
+      <el-button type="primary" size="mini" @click="handleSave" >提交</el-button>
+    </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import { getCurrentInstance, reactive, ref, onMounted } from '@vue/runtime-core'
+import { getCurrentInstance, reactive, ref, onMounted, onBeforeMount } from '@vue/runtime-core'
 import { deepClone, formatterDate, listAssign, defaultObject } from '@/utils/util'
 
 import { renderTable } from './common/Menu'
+import { saveMenu,deleteMenu } from '@/api/sys/menu'
+import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 export default {
   name:'Menu',
+  components:{PopupTreeInput},
   setup() {
     const { proxy } = getCurrentInstance()
     const { tableConfig, formConfig, addFormConfig } = renderTable.call(proxy)
     const table = ref(null)
     const form = ref(null)
-    const timer = ref(new Date().getTime())
     let searchParams = ref({}) // 表单数据备份
     const searchForm = reactive({
       name:''
     })
+    const typeList = [
+      { label:'目录',value:'0'},
+      { label:'菜单',value:'1'},
+      { label:'按钮',value:'2'},
+    ]
     const dataForm = reactive({
-      title:'',
+      id:'',
+      name:'',
       type: '',
       icon: '',
+      parentId:'',
       parentName:'',
+      orderNum:1,
+      url:'',
     })
+    const rules = reactive({
+      name: [
+        { required: true, message: '请输入角色名', trigger: 'blur' },
+      ],
+    })
+    let popupTreeData = ref([])
+    const popupTreeProps = {
+      label: "name",
+      children: "children"
+    }
+    const handleTreeSelectChange = ({id,name}) => {
+      dataForm.parentId = id
+      dataForm.parentName = name
+    }
     const dialogVisible = ref(false)
     const operation = ref(false) // true:新增, false:编辑
     // 表單操作按鈕配置
     const handleEdit = async (data) => {
+      data.type = String(data.type)
+      !(data.parentId) && (data.parentName = '顶级菜单')
       listAssign(dataForm, data)
       operation.value = false
       dialogVisible.value = true
     }
     const handleAdd = async () => {
       defaultObject(dataForm)
-      dataForm.type = '2'
+      !(dataForm.parentId) && (dataForm.parentName = '顶级菜单')
+      dataForm.type = '1'
       operation.value = true
       dialogVisible.value = true
     }
-    const handleDelete = (data) => {
-      listAssign(dataForm, data)
-      deleteRole(dataForm).then(res=>{
+    const handleDelete = ({id}) => {
+      deleteMenu({id}).then(res=>{
         res.code === 200 && (handleQuery(),proxy.$message.success('用户删除成功。'))
       })
     }
@@ -106,8 +161,8 @@ export default {
     }
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
-        // const data = res.content || []
         tableConfig.data = res
+        popupTreeData.value = res
       })
     }
     // 表单按钮组
@@ -118,50 +173,43 @@ export default {
         { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
       ],
     }
-    const handleSave = (formRef) => {
-      formRef.validate((valid) => {
+    const handleSave = () => {
+      form.value.validate((valid) => {
         if (valid) {
-          if (operation.value) {
-            
-          } else {
-            
-          }
+          saveMenu(dataForm).then(res=>{
+            if(res.code == '200'){
+              handleQuery()
+              proxy.$message.success(`${operation.value ? '新增' : '编辑'}成功`)
+              dialogVisible.value = false
+            }
+          })
         } else {
           return
         }
       })
-    }
-    const AddFormHandle = {
-      span: 23,
-      textAlign: 'right',
-      btns: [
-        {
-          type: 'default',
-          label: '取消',
-          key: 'search',
-          handle: () => (dialogVisible.value = false),
-        },
-        { type: 'primary', label: '提交', key: 'add', handle: handleSave },
-      ],
     }
     onMounted(() => {
       handleQuery()
     })
     return {
       form,
-      timer,
       table,
       formConfig,
       tableConfig,
+      formHandle,
       addFormConfig,
       searchForm,
       dataForm,
-      formHandle,
-      AddFormHandle,
       handleEdit,
       handleDelete,
       dialogVisible,
       operation,
+      typeList,
+      handleSave,
+      popupTreeData,
+      rules,
+      popupTreeProps,
+      handleTreeSelectChange,
     }
   },
 }
