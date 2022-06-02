@@ -91,18 +91,8 @@ export default {
             },
             {
                 icon: "el-icon-lx-cascades",
-                index: "/table",
-                title: "基础表格",
-            },
-            {
-                icon: "el-icon-lx-cascades",
                 index: "/icon",
                 title: "图标",
-            },
-            {
-                icon: "el-icon-lx-cascades",
-                index: "/editor",
-                title: "富文本",
             },
             {
                 icon: "el-icon-lx-calendar",
@@ -113,6 +103,28 @@ export default {
                         icon: "el-icon-lx-service",
                         index: "/residentsreport",
                         title: "居民上报事件",
+                    },
+                ],
+            },
+            {
+                icon: "el-icon-lx-homefill",
+                index: "5",
+                title: "智慧物业",
+                subs: [
+                  {
+                        icon: "el-icon-lx-shopfill",
+                        index: "/pubilcfacilities",
+                        title: "公共设施",
+                    },
+                    {
+                        icon: "el-icon-lx-deletefill",
+                        index: "/rubbishclass",
+                        title: "垃圾分类",
+                    },
+                    {
+                        icon: "el-icon-lx-unlock",
+                        index: "/carpacrk",
+                        title: "停车场",
                     },
                 ],
             },

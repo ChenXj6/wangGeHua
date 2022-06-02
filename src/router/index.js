@@ -243,6 +243,41 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/communityGrid/EditStaffInfo.vue")
       },
+      {
+        path: "/carpacrk",
+        name: "carpacrk",
+        meta: {
+          title: '停车场'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/CarPacrk.vue")
+      },
+      {
+        path: "/pubilcfacilities",
+        name: "pubilcfacilities",
+        meta: {
+          title: '公共设施'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/PubilcFacilities.vue")
+      },
+      {
+        path: "/rubbishclass",
+        name: "rubbishclass",
+        meta: {
+          title: '垃圾分类'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/RubbishClass.vue")
+      },
+      {
+        path: "/editsmart",
+        name: "editsmart",
+        meta: {
+          title: '智慧物业',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'car' ? '停车场' : (route.params.type == 'rubbish' ? '垃圾分类' : '公共设施')}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Edit.vue")
+      },
     ]
   },
   {

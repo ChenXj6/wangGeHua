@@ -1,0 +1,188 @@
+import { streetName, communityName, gridName,buildNature,buildType,isTrue,useMode,format,buildingNo,sex,marriageStatus,education,personnelAttributes,special,relationship,keyServicePersonType,keyManagePersonType } from '@/config/common'
+
+// 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
+export function renderTable() {
+  const CarFormConfig = {
+    gutter:10,
+    formItems: [
+      {
+        type: 'Input',
+        label: '名称',
+        prop: 'name',
+        value: '',
+        placeholder: '请填写停车场名称',
+        isClearable: true,
+        span: 22,
+      },
+      {
+        type: 'slot',
+        label: '归属网格',
+        prop: '',
+        span: 11,
+        slotName:'organ',
+      },
+      {
+        type: 'selectSearch',
+        label: '类型',
+        prop: 'hiddenDanger',
+        value: '',
+        code:'1021',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '车位数',
+        prop: 'builtupArea',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'textarea',
+        label: '备注',
+        prop: 'remarks',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 22,
+      },
+    ],
+  }
+  const PubilcFormConfig = {
+    gutter:10,
+    formItems: [
+      {
+        type: 'Input',
+        label: '名称',
+        prop: 'name',
+        value: '',
+        placeholder: '请填写名称',
+        isClearable: true,
+        span: 22,
+      },
+      {
+        type: 'slot',
+        label: '归属网格',
+        prop: '',
+        span: 11,
+        slotName:'organ',
+      },
+      {
+        type: 'slot',
+        label: '经纬度',
+        prop: '',
+        span: 11,
+        slotName:'lonAndLat',
+      },
+      {
+        type: 'selectSearch',
+        label: '类型',
+        prop: 'hiddenDanger',
+        value: '',
+        code:'1022',
+        placeholder:'请选择设施类型',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '数量',
+        prop: 'builtupArea',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'textarea',
+        label: '简介',
+        prop: 'remarks',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 22,
+      },
+      {
+        type: 'Input',
+        label: '备注',
+        prop: 'remarks',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 22,
+      },
+    ]
+  }
+  const rubbishFormConfig = {
+    gutter:10,
+    formItems: [
+      {
+        type: 'Input',
+        label: '名称',
+        prop: 'name',
+        value: '',
+        placeholder: '请填写名称',
+        isClearable: true,
+        span: 22,
+      },
+      {
+        type: 'slot',
+        label: '归属网格',
+        prop: '',
+        span: 11,
+        slotName:'organ',
+      },
+      {
+        type: 'slot',
+        label: '经纬度',
+        prop: '',
+        span: 11,
+        slotName:'lonAndLat',
+      },
+      {
+        type: 'selectSearch',
+        label: '类型',
+        prop: 'hiddenDanger',
+        value: '',
+        code:'1023',
+        placeholder:'请选择垃圾类型',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '每日垃圾重量',
+        prop: 'builtupArea',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '每日垃圾箱数',
+        prop: 'builtupArea',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'textarea',
+        label: '备注',
+        prop: 'remarks',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 22,
+      },
+    ],
+  }
+  return {
+    CarFormConfig,
+    PubilcFormConfig,
+    rubbishFormConfig,
+  }
+}
