@@ -13,13 +13,14 @@ export function renderTable() {
     isSortable: false, // 是否开启拖拽
     columns: [
       {
-        prop: 'streetName',
+        prop: '',
         label: '名称',
         minWidth: '120',
+        slot:'name',
       },
-      { prop: 'communityName', label: '归属网格', minWidth: '120' },
-      { prop: 'gridName', label: '类型', minWidth: '120' },
-      { prop: 'villageName', label: '车位数', tooltip: true, minWidth: '120' },
+      { prop: 'treeNames', label: '归属网格', minWidth: '150' },
+      { prop: '', slot:'pointType', label: '类型', minWidth: '120' },
+      { prop: '', slot:'latAndLong', label: '经纬度', minWidth: '150' },
       { prop: '', label: '操作', slot: 'operation', minWidth: '120' },
     ],
   }
@@ -46,7 +47,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '类型',
-        prop: 'houseType',
+        prop: 'pointType',
         value: '',
         placeholder: '请选择类型',
         code:'1023',

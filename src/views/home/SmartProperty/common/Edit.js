@@ -24,7 +24,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '类型',
-        prop: 'hiddenDanger',
+        prop: 'lotType',
         value: '',
         code:'1021',
         isClearable: true,
@@ -33,7 +33,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '车位数',
-        prop: 'builtupArea',
+        prop: 'spaceNum',
         value: '',
         placeholder: '',
         isClearable: true,
@@ -56,7 +56,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '名称',
-        prop: 'name',
+        prop: 'deviceName',
         value: '',
         placeholder: '请填写名称',
         isClearable: true,
@@ -79,7 +79,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '类型',
-        prop: 'hiddenDanger',
+        prop: 'deviceType',
         value: '',
         code:'1022',
         placeholder:'请选择设施类型',
@@ -89,7 +89,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '数量',
-        prop: 'builtupArea',
+        prop: 'amount',
         value: '',
         placeholder: '',
         isClearable: true,
@@ -98,7 +98,7 @@ export function renderTable() {
       {
         type: 'textarea',
         label: '简介',
-        prop: 'remarks',
+        prop: 'synopsis',
         value: '',
         placeholder: '',
         isClearable: true,
@@ -121,7 +121,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '名称',
-        prop: 'name',
+        prop: 'pointName',
         value: '',
         placeholder: '请填写名称',
         isClearable: true,
@@ -144,7 +144,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '类型',
-        prop: 'hiddenDanger',
+        prop: 'pointType',
         value: '',
         code:'1023',
         placeholder:'请选择垃圾类型',
@@ -154,7 +154,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '每日垃圾重量',
-        prop: 'builtupArea',
+        prop: 'weightRefuse',
         value: '',
         placeholder: '',
         isClearable: true,
@@ -163,7 +163,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '每日垃圾箱数',
-        prop: 'builtupArea',
+        prop: 'binsNum',
         value: '',
         placeholder: '',
         isClearable: true,

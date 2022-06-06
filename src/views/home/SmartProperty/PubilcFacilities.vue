@@ -16,6 +16,12 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
+    <template v-slot:name="{data}">
+        <el-link size="mini" type="primary" @click.prevent="handleOperation(2, data)">{{ data.deviceName }}</el-link>
+      </template>
+      <template v-slot:deviceType="{data}">
+        <span>{{ data.deviceType == 1 ? '车位' : (data.deviceType == 2 ? '摄像头' : (data.deviceType == 3 ? '道闸' : (data.deviceType == 4 ? '垃圾桶' : '充电桩'))) }}</span>
+      </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"
@@ -59,11 +65,11 @@ import {
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
-import { renderTable } from './common/CarPark'
+import { renderTable } from './common/PubilcFacilities'
 import { deepClone, defaultObject } from '@/utils/util'
 import { deletePubilc } from '@/api/SmartProperty/pubilc'
 export default defineComponent({
-  name: 'CarPark',
+  name: 'PubilcFacilities',
   components:[PopupTreeInput],
   setup() {
     const router = useRouter()

@@ -16,6 +16,15 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
+    <template v-slot:name="{data}">
+        <el-link size="mini" type="primary" @click.prevent="handleOperation(2, data)">{{ data.pointName }}</el-link>
+      </template>
+      <template v-slot:pointType="{data}">
+        <span>{{ data.pointType == 1 ? '可回收物' : (data.pointType == 2 ? '有害垃圾' : (data.pointType == 3 ? '厨余垃圾' : '其他垃圾')) }}</span>
+      </template>
+      <template v-slot:latAndLong="{data}">
+        <span>{{ data.latitude }},{{ data.longitude }}</span>
+      </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"
@@ -59,11 +68,11 @@ import {
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
-import { renderTable } from './common/CarPark'
+import { renderTable } from './common/RubbishClass'
 import { deepClone, defaultObject } from '@/utils/util'
 import { deleteRubbish } from '@/api/SmartProperty/rubbish'
 export default defineComponent({
-  name: 'CarPark',
+  name: 'RubbishClass',
   components:[PopupTreeInput],
   setup() {
     const router = useRouter()
@@ -110,9 +119,9 @@ export default defineComponent({
       deleteRubbish({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
-          proxy.$message.success('删除楼栋成功')
+          proxy.$message.success('删除成功')
         }else{
-          proxy.$message.danger('删除楼栋失败')
+          proxy.$message.danger('删除失败')
         }
       })
     }

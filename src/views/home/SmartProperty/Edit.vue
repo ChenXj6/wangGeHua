@@ -65,11 +65,12 @@
 import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref } from '@vue/runtime-core'
 import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
+import { listAssign } from '@/utils/util'
 
 import { renderTable } from './common/Edit'
-import { saveBuild,editBuild } from '@/api/ActualInfo/build'
-import { saveHouse,editHouse } from '@/api/ActualInfo/house'
-import { savePeople,editPeople } from '@/api/ActualInfo/people'
+import { saveCarPark,editCarPark } from '@/api/SmartProperty/carPark'
+import { savePubilc,editPubilc } from '@/api/SmartProperty/pubilc'
+import { saveRubbish,editRubbish } from '@/api/SmartProperty/rubbish'
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
@@ -93,8 +94,8 @@ export default {
       children: "children"
     } 
     const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.officeCode = officeCode
-      searchForm.officeName = officeName
+      dataForm.officeCode = officeCode
+      dataForm.officeName = officeName
     }
     const getOList = () => {
       getOrganList({}).then(res=>{
@@ -109,16 +110,16 @@ export default {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
         if (route.params.operation == 2) {
-          if(route.params.type == 'build'){
-            editBuild(dataForm).then(res=>{
+          if(route.params.type == 'car'){
+            editCarPark(dataForm).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
               reject(res.resCode)
             }
           })
-          } else if (route.params.type == 'house') {
-            editHouse(dataForm).then(res=>{
+          } else if (route.params.type == 'pubilc') {
+            editPubilc(dataForm).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -126,7 +127,7 @@ export default {
             }
           })
           } else {
-            editPeople(dataForm).then(res=>{
+            editRubbish(dataForm).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -135,16 +136,16 @@ export default {
           })
           }
         } else {
-          if(route.params.type == 'build'){
-            saveBuild(dataForm).then(res=>{
+          if(route.params.type == 'car'){
+            saveCarPark(dataForm).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
               reject(res.resCode)
             }
           })
-          } else if (route.params.type == 'house') {
-            saveHouse(dataForm).then(res=>{
+          } else if (route.params.type == 'pubilc') {
+            savePubilc(dataForm).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -152,7 +153,7 @@ export default {
             }
           })
           } else {
-            savePeople(dataForm).then(res=>{
+            saveRubbish(dataForm).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -188,7 +189,7 @@ export default {
         {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
       ]
     }
-    // 表格相關操作
+    // 表格相關操作5
     const handleQueryTable = () => {
       table1.value.getTableData({}, (res) => {
         // const data = res.data || []
@@ -198,7 +199,7 @@ export default {
     onBeforeMount(()=>{
       timer.value = new Date().getTime()
     })
-    route.params.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.params.data)))
+    route.params.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.params.data)),delete dataForm.treeNames)
     
     onMounted(() => {
       route.params.operation === 3 &&( dataForm = {})

@@ -16,6 +16,12 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
+      <template v-slot:name="{data}">
+        <el-link size="mini" type="primary" @click.prevent="handleOperation(2, data)">{{ data.name }}</el-link>
+      </template>
+      <template v-slot:lotType="{data}">
+        <span>{{ data.lotType == 1? '公共停车场' : '商场停车场' }}</span>
+      </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"
@@ -110,9 +116,9 @@ export default defineComponent({
       deleteCarPark({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
-          proxy.$message.success('删除楼栋成功')
+          proxy.$message.success('删除成功')
         }else{
-          proxy.$message.danger('删除楼栋失败')
+          proxy.$message.danger('删除失败')
         }
       })
     }
