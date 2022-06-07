@@ -44,7 +44,7 @@ import {
   watch,
 } from '@vue/runtime-core'
 
-import { renderTable } from './common/taxesTableHeader'
+import { renderTable } from './common/eventColl'
 import { deepClone, formatterDate } from '@/utils/util'
 
 export default defineComponent({

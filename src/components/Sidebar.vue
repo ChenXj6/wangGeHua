@@ -100,9 +100,14 @@ export default {
                 title: "事件处置",
                 subs: [
                     {
-                        icon: "el-icon-lx-service",
+                        icon: "el-icon-lx-attentionfill",
                         index: "/residentsreport",
-                        title: "居民上报事件",
+                        title: "事件信息采集",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/eventhandle",
+                        title: "事件信息处置",
                     },
                 ],
             },

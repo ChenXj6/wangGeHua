@@ -85,9 +85,17 @@ const routes = [
         path: "/residentsReport",
         name: "residentsReport",
         meta: {
-          title: '居民上报事件'
+          title: '事件信息采集'
         },
-        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ResidentsReport/index.vue")
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ResidentsReport/EventColl.vue")
+      },
+      {
+        path: "/eventhandle",
+        name: "eventhandle",
+        meta: {
+          title: '事件信息处置'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ResidentsReport/EventHandle.vue")
       },
       {
         path: "/editResidentsReport",
