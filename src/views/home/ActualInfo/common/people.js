@@ -7,7 +7,7 @@ export function renderTable() {
     name: 'table',
     data: [],
     pagination: true, // 开启分页器
-    mutiSelect: true, // 开启选择
+    mutiSelect: false, // 开启选择
     method: getPeopleList, // 請求api
     index: true, // 是否启用序号列
     total: 0,
@@ -19,20 +19,20 @@ export function renderTable() {
         minWidth: '120',
       },
       { prop: 'communityName', label: '社区名称', minWidth: '120' },
-      { prop: 'gridName', label: '网格名称', minWidth: '120' },
-      // { prop: 'villageName', label: '小区名称', tooltip: true, minWidth: '120' },
-      // { prop: '', label: '楼栋',slot:'buildingNo'},
-      // { prop: 'unitNo', label: '单元'},
-      // { prop: 'houseNo', label: '房间号'},
+      { prop: 'gridName', label: '网格名称', minWidth: '150' },
+      { prop: 'villageName', label: '小区名称', tooltip: true, minWidth: '120' },
+      { prop: 'buildingNumber', label: '楼栋',},
+      { prop: 'unitNumber', label: '单元'},
+      { prop: 'houseNumber', label: '房间号'},
       { prop: 'name', label: '姓名'},
       { prop: 'idcard', label: '身份证号',tooltip:true},
       { prop: '', label: '性别',slot:'gender'},
       { prop: '', label: '人员属性',slot:'personnelAttributes'},
       { prop: '', label: '是否接种疫苗',slot:'flagYmXg',minWidth:'100'},
       { prop: 'remarks', label: '简介',tooltip:true},
-      { prop: 'houseNo', label: '核实状态',tooltip:true},
-      { prop: 'houseNo', label: '状态',tooltip:true},
-      { prop: '', label: '操作', slot: 'operation', minWidth: '140' },
+      // { prop: 'houseNo', label: '核实状态',tooltip:true},
+      // { prop: 'houseNo', label: '状态',tooltip:true},
+      { prop: '', label: '操作', fixed:'right', slot: 'operation', minWidth: '140' },
     ],
   }
   const formConfig = {

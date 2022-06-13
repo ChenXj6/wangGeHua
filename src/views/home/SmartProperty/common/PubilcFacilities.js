@@ -52,7 +52,7 @@ export function renderTable() {
         prop: 'deviceType',
         value: '',
         placeholder: '请选择类型',
-        code:'1022',
+        code:'1023',
         isClearable: true,
         span: 6,
       },

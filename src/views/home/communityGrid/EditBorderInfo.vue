@@ -35,14 +35,14 @@
                 size="mini"
                 style="width: 100%">
                 <el-table-column
-                  prop="prop"
+                  prop="borderScope"
                   label="边界范围">
                   <template #default="scope">
                     <el-input v-model="scope.row.borderScope" size="mini" placeholder="请输入边界信息"></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="prop"
+                  prop="borderColor"
                   label="边界颜色">
                   <template #default="scope">
                     <el-row>
@@ -52,7 +52,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="prop"
+                  prop="fillColor"
                   label="填充颜色">
                   <template #default="scope">
                     <el-row>
@@ -62,7 +62,7 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  prop="prop"
+                  prop="longitude"
                   label="中心点">
                   <template #default="scope">
                     <el-input v-model="scope.row.longitude" size="mini" placeholder="请输入中心点"></el-input>
@@ -118,7 +118,22 @@ export default {
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
     const { InfoFormConfig } = renderTable.call(proxy)
+    // const rules = {
+    //   borderScope:[
+    //     { required: true, message: '请输入边界信息', trigger: 'blur'},
+    //   ],
+    //   borderColor:[
+    //     { required: true, message: '请选择边界颜色', trigger: 'blur'},
+    //   ],
+    //   fillColor:[
+    //     { required: true, message: '请选择填充颜色', trigger: 'blur'},
+    //   ],
+    //   longitude:[
+    //     { required: true, message: '请输入中心点', trigger: 'blur'},
+    //   ],
+    // }
     let dataForm = reactive({
+      id:'',
       gridBasicid:'',
       countyCode:'',
       countyName:'',
@@ -138,10 +153,14 @@ export default {
     let timer = ref(new Date().getTime())
     // 提交
     const handleSave = () => {
-      console.log(dataForm)
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
         if (route.params.operation == 2) {
+            dataForm.borderScope = dataForm.info[0].borderScope
+            dataForm.borderColor = dataForm.info[0].borderColor
+            dataForm.fillColor = dataForm.info[0].fillColor
+            dataForm.longitude = dataForm.info[0].longitude
+            delete dataForm.info
             editBorderInfo(dataForm).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
@@ -215,7 +234,6 @@ export default {
       })
     }
     route.params.operation != 3 && (formatReset(JSON.parse(decodeURIComponent(route.params.data)),dataForm))
-    console.log(dataForm)
     onMounted(() => {
       route.params.operation === 3 &&( defaultObject(dataForm))
     })
@@ -228,6 +246,7 @@ export default {
       formHandle,
       addList,
       removeBtn,
+      // rules,
     }
   },
 }

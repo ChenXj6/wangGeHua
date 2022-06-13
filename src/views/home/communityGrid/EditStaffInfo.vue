@@ -204,6 +204,7 @@ export default {
     const { proxy } = getCurrentInstance()
     const { InfoFormConfig } = renderTable.call(proxy)
     let dataForm = reactive({
+      id:'',
       remarks:'',
       officeCode:'',
       officeName:'',
@@ -298,6 +299,15 @@ export default {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
         if (route.params.operation == 2) {
+          dataForm.type = dataForm.info[0].type
+          dataForm.name = dataForm.info[0].name
+          dataForm.idcard = dataForm.info[0].idcard
+          dataForm.phone = dataForm.info[0].phone
+          dataForm.position = dataForm.info[0].position
+          dataForm.gender = dataForm.info[0].gender
+          dataForm.category = dataForm.info[0].category
+          dataForm.politicsstatus = dataForm.info[0].politicsstatus
+          delete dataForm.info
             editPeopleInfo(dataForm).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)

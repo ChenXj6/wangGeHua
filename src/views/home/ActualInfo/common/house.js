@@ -7,7 +7,7 @@ export function renderTable() {
     name: 'table',
     data: [],
     pagination: true, // 开启分页器
-    mutiSelect: true, // 开启选择
+    mutiSelect: false, // 开启选择
     method: getHouseList, // 請求api
     index: true, // 是否启用序号列
     total: 0,
@@ -19,16 +19,16 @@ export function renderTable() {
         minWidth: '120',
       },
       { prop: 'communityName', label: '社区名称', minWidth: '120' },
-      { prop: 'gridName', label: '网格名称', minWidth: '120' },
+      { prop: 'gridName', label: '网格名称', minWidth: '150' },
       { prop: 'villageName', label: '小区名称', tooltip: true, minWidth: '120' },
-      { prop: '', label: '楼号',slot:'buildingNo'},
-      { prop: 'unitNo', label: '单元号'},
+      { prop: 'buildingNumber', label: '楼号'},
+      { prop: 'unitNumber', label: '单元号'},
       { prop: 'floorId', label: '楼层'},
-      { prop: 'houseNo', label: '房间号'},
+      { prop: 'houseNumber', label: '房间号'},
       { prop: '', label: '房屋类型', minWidth: '120',slot:'houseType' },
       { prop: 'ownerName', label: '房主姓名', minWidth: '120' },
       { prop: 'ownerPhone', label: '房主电话', minWidth: '120' },
-      { prop: '', label: '操作', slot: 'operation', minWidth: '130' },
+      { prop: '', label: '操作', slot: 'operation', minWidth: '140' },
     ],
   }
   const formConfig = {

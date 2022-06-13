@@ -109,9 +109,6 @@ export default defineComponent({
       defaultObject(searchForm.value)
       handleQuery()
     }
-    const handleAdd = () => {
-      handleOperation(3,{})
-    }
     const handleDel = (id) => {
       deleteBorderInfo({id}).then(res=>{
         if(res.resCode == '000000'){
@@ -132,7 +129,6 @@ export default defineComponent({
     const formHandle = {
       btns: [
         {type:'primary',label:'查询',key:'search',handle:handleQuery},
-        // {type:'primary',label:'添加',key:'reset',handle:handleAdd},
       ]
     }
     //

@@ -10,12 +10,212 @@
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
     <VForm v-if="route.params.type === 'build'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="buildFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+      <!-- <template v-slot:tree="">
+        <el-row :gutter="10" :span="22">
+        <el-col :span="8">
+          <el-select v-model="dataForm.streetCode" size="mini" placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+            <el-option
+              v-for="item in streetNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <el-select v-model="dataForm.communityCode" size="mini" placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+            <el-option
+              v-for="item in communityNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <el-select v-model="dataForm.gridCode" size="mini" placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true)}">
+            <el-option
+              v-for="item in gridNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        </el-row>
+      </template> -->
+      <template v-slot:tree="">
+          <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+            <el-option
+              v-for="item in streetNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+        <template v-slot:communityCode="">
+          <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+            <el-option
+              v-for="item in communityNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+        <template v-slot:gridCode="">
+          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true)}">
+            <el-option
+              v-for="item in gridNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
       <template v-slot:lonAndLat="">
         <el-input v-model="dataForm.longitude" placeholder="请输入经纬度" size="small"></el-input>
       </template>
     </VForm>
-    <VForm v-else-if="route.params.type === 'house'" :isDisabled="route.params.operation == 1" :form-data="houseFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}"/>
-    <VForm v-else :form-data="peopleFormConfig" :isDisabled="route.params.operation == 1" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}"/>
+    <VForm v-else-if="route.params.type === 'house'" :isDisabled="route.params.operation == 1" :form-data="houseFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+      <!-- <template v-slot:tree="">
+        <el-row :gutter="10" :span="22">
+        <el-col :span="8">
+          <el-select v-model="dataForm.streetCode" size="mini" placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+            <el-option
+              v-for="item in streetNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <el-select v-model="dataForm.communityCode" size="mini" placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+            <el-option
+              v-for="item in communityNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        <el-col :span="8">
+          <el-select v-model="dataForm.gridCode" size="mini" placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
+            <el-option
+              v-for="item in gridNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-col>
+        </el-row>
+      </template>
+      <template v-slot:buildingNumber="">
+        <el-select v-model="dataForm.buildingId" size="mini" placeholder="请选择楼栋" @change="(val)=>{handleGetBuild(2,val,true)}">
+          <el-option
+            v-for="item in buildingOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template> -->
+      <template v-slot:tree="">
+          <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+            <el-option
+              v-for="item in streetNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+        <template v-slot:communityCode="">
+          <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+            <el-option
+              v-for="item in communityNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+        <template v-slot:gridCode="">
+          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
+            <el-option
+              v-for="item in gridNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+      <template v-slot:buildingId="">
+        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋" @change="(val)=>{handleGetBuild(2,val,true),handleGetHouse(1,val,true)}">
+          <el-option
+            v-for="item in buildingOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+    </VForm>
+    <VForm v-else :form-data="peopleFormConfig" :isDisabled="route.params.operation == 1" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+      <template v-slot:tree="">
+          <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+            <el-option
+              v-for="item in streetNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+        <template v-slot:communityCode="">
+          <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+            <el-option
+              v-for="item in communityNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+        <template v-slot:gridCode="">
+          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
+            <el-option
+              v-for="item in gridNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
+      <template v-slot:buildingId="">
+        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋" @change="(val)=>{handleGetBuild(2,val,true),handleGetHouse(1,val,true)}">
+          <el-option
+            v-for="item in buildingOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:house="">
+        <el-select v-model="dataForm.house" size="mini" clearable placeholder="请选择房屋" @change="(val) => {handleGetHouse(2,val,true)}">
+          <el-option
+            v-for="item in houseOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+    </VForm>
     <div v-if="route.params.operation == 1 && route.params.type !== 'people'">
       <div style="margin-bottom: 20px"></div>
       <el-tabs v-model="activeName" class="demo-tabs" type="border-card">
@@ -23,7 +223,8 @@
           <V-table ref="table1" :table-config="houseTableConfig"/>
         </el-tab-pane>
         <el-tab-pane v-if="route.params.type !== 'people'" label="实有人口" name="second">
-          <V-table ref="table2" :table-config="peopleTableConfig"/>
+          <V-table ref="table2" v-if="route.params.type == 'build'" :table-config="peopleTableConfig"/>
+          <V-table ref="table3" v-if="route.params.type == 'house'" :table-config="peopleByHouseTableConfig"/>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -53,10 +254,9 @@ import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
 
 import { renderTable } from './common/edit'
-import { saveBuild,editBuild } from '@/api/ActualInfo/build'
+import { saveBuild,editBuild,getSubClass,getBuildClass,getHouseClass } from '@/api/ActualInfo/build'
 import { saveHouse,editHouse } from '@/api/ActualInfo/house'
 import { savePeople,editPeople } from '@/api/ActualInfo/people'
-import { listAssign, defaultObject } from '@/utils/util'
 export default {
   name:'EditActual',
   mixins: [mixin],
@@ -64,24 +264,153 @@ export default {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
-    const { houseTableConfig,peopleTableConfig,buildFormConfig,houseFormConfig,peopleFormConfig } = renderTable.call(proxy)
+    const { houseTableConfig,peopleTableConfig,peopleByHouseTableConfig,buildFormConfig,houseFormConfig,peopleFormConfig } = renderTable.call(proxy)
     const activeName = ref('first')
     const table1 = ref(null)
     const table2 = ref(null)
-    let dataForm = reactive({})
+    const table3 = ref(null)
+    let dataForm = ref({})
     let timer = ref(new Date().getTime())
-    const handleClick = (val) => {
-      console.log(val)
-      // activeName.value = 'people'
+    const streetNameOptions = ref([
+      { label:'工人新村北村街道',value:'370105004' },
+      { label:'工人新村南村街道',value:'370105005' },
+    ])
+    const communityNameOptions = ref([])
+    const gridNameOptions = ref([])
+    const buildingOptions = ref([])
+    const houseOptions = ref([])
+    // flag： 1 组织结构的数据处理、2 楼栋信息数据格式处理、 3 房屋信息数据格式处理
+    const resetFormat = (data,options,flag = 1) => {
+      if(data.length == 0) return options.value = []
+      let arr = []
+      data.forEach(v=>{
+        let obj = {}
+        if(flag == 1){
+          obj.label = v.officeName
+          obj.value = v.officeCode
+        } else if (flag == 2) {
+          obj.label = `${v.villageName}-${v.buildingNumber}`
+          obj.value = v.id
+        }else if(flag == 3) {
+          obj.label = `${v.unitNumber}-${v.houseNumber}`
+          obj.value = v.id
+        }        
+        arr.push(obj)
+      })
+      options.value = arr
     }
-    
+    // trigMode 用来区分是编辑初始化还是自己手动触发的
+    const handleChange = (type,parentCode,trigMode = false) => {
+      if(type == 1){
+        (!dataForm.value.streetName || trigMode) && (dataForm.value.streetName = streetNameOptions.value.filter((obj)=>obj.value == parentCode)[0].label)
+        subClass(1,parentCode,trigMode)
+      } else if( type == 2) {
+        (!dataForm.value.communityName || trigMode) && (dataForm.value.communityName = communityNameOptions.value.filter((obj)=>obj.value == parentCode)[0].label)
+        subClass(2,parentCode,trigMode)
+      } else {
+        (!dataForm.value.gridName || trigMode) && (dataForm.value.gridName = gridNameOptions.value.filter((obj)=>obj.value == parentCode)[0].label)
+        subClass(3,parentCode,trigMode)
+      }
+    }
+    // 网格下拉框change事件 触发获取楼栋信息
+    const handleGetBuild = (type,parentCode,trigMode = false) => {
+      if(type == 1){
+        buildClss(type,parentCode,trigMode)
+      } else {
+      }      
+    }
+    // 街道获取社区 、 社区获取网格
+    const subClass = (type,parentCode,trigMode) => {
+      getSubClass({parentCode}).then(res=>{
+        if(res.resCode === "000000"){
+          if(type == 1){
+            if(trigMode){
+              dataForm.value.communityName = ''
+              dataForm.value.communityCode = ''
+              dataForm.value.gridName = ''
+              dataForm.value.gridCode = ''
+              communityNameOptions.value = []
+              gridNameOptions.value = []
+              if(route.params.type == 'house'){
+                dataForm.value.buildingId = ''
+                buildingOptions.value = []
+              }else if(route.params.type == 'people') {
+                dataForm.value.buildingId = ''
+                buildingOptions.value = []
+                dataForm.value.house = ''
+                houseOptions.value = []
+              }
+            }            
+            resetFormat(res.data,communityNameOptions)
+          } else if(type == 2) {
+            if(trigMode){
+              dataForm.value.gridName = ''
+              dataForm.value.gridCode = ''
+              gridNameOptions.value = [] 
+              if(route.params.type == 'house'){
+                dataForm.value.buildingId = ''
+                buildingOptions.value = []
+              } else if(route.params.type == 'people') {
+                dataForm.value.buildingId = ''
+                buildingOptions.value = []
+                dataForm.value.house = ''
+                houseOptions.value = []
+              }
+            }            
+            resetFormat(res.data,gridNameOptions)
+          } else if(type == 3) {
+            if (trigMode){
+              if(route.params.type == 'house'){
+                dataForm.value.buildingId = ''
+                buildingOptions.value = []
+              }else if(route.params.type == 'people') {
+                dataForm.value.buildingId = ''
+                buildingOptions.value = []
+                dataForm.value.house = ''
+                houseOptions.value = []
+              }
+            }
+          }
+        }
+      })
+    }
+    // 网格获取楼栋
+    const buildClss = (type,gridCode,trigMode) => {
+      getBuildClass({gridCode}).then(res=>{
+        if(res.resCode == '000000'){
+          if(trigMode && type == 1){
+            dataForm.value.buildingId = ''
+            buildingOptions.value = []
+          }
+          resetFormat(res.data,buildingOptions,2)
+        }
+      })
+    }
+    const houseClass = (type,buildingId,trigMode) => {
+      getHouseClass({buildingId}).then(res=>{
+        if(res.resCode == '000000'){
+          if(trigMode && type == 1){
+            dataForm.value.house = ''
+            houseOptions.value = []
+          }
+          resetFormat(res.data,houseOptions,3)
+        }
+      })
+    }
+    // 楼栋获取房屋
+    const handleGetHouse = (type,buildingId, trigMode = false) => {
+      if(type == 1){
+        houseClass(type,buildingId,trigMode)
+      } else {
+      }
+    }
     // 提交
     const handleSave = () => {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
         if (route.params.operation == 2) {
           if(route.params.type == 'build'){
-            editBuild(dataForm).then(res=>{
+            editBuild(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -89,7 +418,10 @@ export default {
             }
           })
           } else if (route.params.type == 'house') {
-            editHouse(dataForm).then(res=>{
+            delete dataForm.value.buildingNumber
+            delete dataForm.value.villageName
+            delete dataForm.value.unitNumber
+            editHouse(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -97,7 +429,11 @@ export default {
             }
           })
           } else {
-            editPeople(dataForm).then(res=>{
+            delete dataForm.value.buildingNumber
+            delete dataForm.value.villageName
+            delete dataForm.value.unitNumber
+            delete dataForm.value.houseNumber
+            editPeople(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -106,8 +442,10 @@ export default {
           })
           }
         } else {
+          dataForm.value.countyCode = '370105'
+          dataForm.value.countyName = '天桥区'
           if(route.params.type == 'build'){
-            saveBuild(dataForm).then(res=>{
+            saveBuild(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -115,7 +453,7 @@ export default {
             }
           })
           } else if (route.params.type == 'house') {
-            saveHouse(dataForm).then(res=>{
+            saveHouse(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -123,7 +461,7 @@ export default {
             }
           })
           } else {
-            savePeople(dataForm).then(res=>{
+            savePeople(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -159,38 +497,87 @@ export default {
         {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
       ]
     }
+
+    // 查看操作下的表格
     // 表格相關操作
-    const handleQueryTable = () => {
-      table1.value.getTableData({}, (res) => {
-        // const data = res.data || []
-        tableConfig.data = tableData
-      })
+    const handleQueryTable = (type) => {
+      if(type == 1){
+        table1.value.getTableData({id:dataForm.value.id}, (res) => {
+          const data = res || []
+          houseTableConfig.data = data
+        })
+      } else if(type == 2) {
+        table2.value.getTableData({id:dataForm.value.id}, (res) => {
+          const data = res || []
+          peopleTableConfig.data = data
+        })
+      } else{
+        table3.value.getTableData({id:dataForm.value.id}, (res) => {
+          const data = res || []
+          peopleByHouseTableConfig.data = data
+        })
+      }
+      
     }
     onBeforeMount(()=>{
       timer.value = new Date().getTime()
     })
-    route.params.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.params.data)))
+    if(route.params.operation != 3){
+      dataForm.value = JSON.parse(decodeURIComponent(route.params.data))
+      if(route.params.type == 'people'){
+        handleChange(1,dataForm.value.streetCode)
+        handleChange(2,dataForm.value.communityCode)
+        handleChange(3)
+        handleGetBuild(1,dataForm.value.gridCode)
+        handleGetHouse(1,dataForm.value.buildingId)
+      } else if (route.params.type == 'house') {
+        handleChange(1,dataForm.value.streetCode)
+        handleChange(2,dataForm.value.communityCode)
+        handleChange(3)
+        handleGetBuild(1,dataForm.value.gridCode)
+      } else {
+        handleChange(1,dataForm.value.streetCode)
+        handleChange(2,dataForm.value.communityCode)
+        handleChange(3)
+      }
+    }
     route.params.type == 'house' && (activeName.value = 'second')
     onMounted(() => {
-      route.params.operation === 3 &&( dataForm = {})
-      // handleQueryTable()
-      // getDetail(route.params.id)
+      route.params.operation === 3 &&( dataForm.value = {})
+      if(route.params.operation == 1 && route.params.type == 'build'){
+        handleQueryTable(1)
+        handleQueryTable(2)
+      } else if(route.params.operation == 1 && route.params.type == 'house'){
+        handleQueryTable(3)
+      }
     })
     return {
       dataForm,
       table1,
       table2,
+      table3,
       route,
       handleBack,
       handleSubmit,
       houseTableConfig,
       peopleTableConfig,
+      peopleByHouseTableConfig,
       buildFormConfig,
       houseFormConfig,
       peopleFormConfig,
       activeName,
-      handleClick,
       formHandle,
+      //
+      streetNameOptions,
+      communityNameOptions,
+      gridNameOptions,
+      handleChange,
+      //
+      handleGetBuild,
+      buildingOptions,
+      //
+      handleGetHouse,
+      houseOptions,
     }
   },
 }

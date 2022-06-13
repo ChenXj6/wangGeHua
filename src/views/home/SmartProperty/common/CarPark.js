@@ -50,7 +50,7 @@ export function renderTable() {
         prop: 'lotType',
         value: '',
         placeholder: '请选择停车场类型',
-        code:'1021',
+        code:'1022',
         isClearable: true,
         span: 6,
       },

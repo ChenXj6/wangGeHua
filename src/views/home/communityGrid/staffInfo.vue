@@ -16,6 +16,9 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
+    <template v-slot:slotType="{data}">
+      <span>{{ data.type == 1 ? '网格书记' : (data.type == 2 ? '网格长' : (data.type == 3 ? '网格员' : '帮包服务队')) }}</span>
+    </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"

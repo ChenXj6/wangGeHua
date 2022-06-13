@@ -17,6 +17,12 @@
       @select-change="(val) => (multipleSelection = val)"
     >
       <template v-slot:operation="{data}">
+        <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="查看"
+        placement="top-start"
+      >
         <el-button
           size="small"
           @click="handleOperation(1, data)"
@@ -24,6 +30,13 @@
           circle
           type="success"
         />
+        </el-tooltip>
+        <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="编辑"
+        placement="top-start"
+      >
         <el-button
           size="small"
           icon="el-icon-lx-edit"
@@ -31,6 +44,35 @@
           circle
           type="priamry"
         />
+        </el-tooltip>
+        <!-- <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="添加边界信息"
+        placement="top-start"
+      >
+        <el-button
+          size="small"
+          icon="el-icon-lx-tagfill"
+          @click="addInfo(4,data)"
+          circle
+          type="priamry"
+        />
+        </el-tooltip>
+        <el-tooltip
+        class="box-item"
+        effect="dark"
+        content="添加人员力量"
+        placement="top-start"
+      >
+        <el-button
+          size="small"
+          icon="el-icon-lx-friend"
+          @click="addInfo(5,data)"
+          circle
+          type="priamry"
+        />
+        </el-tooltip> -->
         <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
@@ -143,6 +185,21 @@ export default defineComponent({
         params: { data : encodeURIComponent(data), operation: type},
       })
     }
+    const addInfo = (type,rowData) => {
+      let data = JSON.stringify(rowData)
+      // type： 4 边界信息、5 人员力量
+      if(type == 4) {
+        router.push({
+          name: 'editBorderInfo',
+          params: { data : encodeURIComponent(data), operation: 3},
+        })
+      } else {
+        router.push({
+          name: 'editStaffInfo',
+          params: { data : encodeURIComponent(data), operation: 3},
+        })
+      }
+    }
     onMounted(() => {
       handleQuery()
     })
@@ -160,6 +217,7 @@ export default defineComponent({
       handleTreeSelectChange,
       popupTreeProps,
       popupTreeData,
+      addInfo,
     }
   },
 })

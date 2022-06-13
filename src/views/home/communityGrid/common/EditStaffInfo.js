@@ -10,6 +10,7 @@ export function renderTable() {
         label: '机构名称',
         slotName:'status',
         span: 11,
+        prop:'officeCode',
       },
       {
         type: 'Input',
@@ -50,7 +51,12 @@ export function renderTable() {
         span: 24,
         slotName:'remarks'
       },
-    ]
+    ],
+    rules:{
+      officeCode:[
+        { required: true, message: '请选择机构', trigger: ['blur','change'] },
+      ]
+    }
   }
   return {
     InfoFormConfig

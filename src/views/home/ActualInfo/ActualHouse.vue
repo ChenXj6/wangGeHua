@@ -19,9 +19,6 @@
       <template v-slot:houseType="{data}">
         <span>{{ houseType(Number(data.houseType)) }}</span>
       </template>
-      <template v-slot:buildingNo="{data}">
-        <span>{{ buildingNo(Number(data.buildingNo)) }}</span>
-      </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"

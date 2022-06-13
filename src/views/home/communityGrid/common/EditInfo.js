@@ -8,7 +8,7 @@ export function renderTable() {
       {
         type: 'slot',
         label: '机构名称',
-        prop: 'status',
+        prop: 'officeName',
         slotName:'status',
         span: 11,
       },
@@ -23,7 +23,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '街道名称',
-        prop: 'streeName',
+        prop: 'streetName',
         value: '',
         disabled:true,
         span: 11,
@@ -114,7 +114,12 @@ export function renderTable() {
         span: 22,
         slotName:'remarks'
       },
-    ]
+    ],
+    rules:{
+      officeName:[
+        { required: true, message: '请选择机构', trigger: ['blur','change'] },
+      ]
+    }
   }
   return {
     InfoFormConfig

@@ -23,7 +23,7 @@ export function renderTable() {
       { prop: 'communityName', label: '户数',toolTip:true, minWidth: '120' },
       { prop: 'communityName', label: '常住人口',toolTip:true, minWidth: '120' },
       { prop: 'communityName', label: '党员总数',toolTip:true, minWidth: '120' },
-      { prop: '', label: '操作', slot: 'operation', minWidth: '100' },
+      { prop: '', label: '操作', slot: 'operation', minWidth: '160' },
     ],
   }
   const formConfig = {

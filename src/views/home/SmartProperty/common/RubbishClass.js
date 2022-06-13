@@ -50,7 +50,7 @@ export function renderTable() {
         prop: 'pointType',
         value: '',
         placeholder: '请选择类型',
-        code:'1023',
+        code:'1024',
         isClearable: true,
         span: 6,
       },

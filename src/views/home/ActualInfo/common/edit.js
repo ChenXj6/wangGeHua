@@ -1,4 +1,4 @@
-import { streetName, communityName, gridName,buildNature,buildType,isTrue,useMode,format,buildingNo,sex,marriageStatus,education,personnelAttributes,special,relationship,keyServicePersonType,keyManagePersonType } from '@/config/common'
+import { getHouseList,getPeopleList,getPeopleByHouseList } from '@/api/ActualInfo/build'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
@@ -7,19 +7,19 @@ export function renderTable() {
     data: [],
     pagination: false, // 开启分页器
     mutiSelect: false, // 开启选择
-    method: '', // 請求api
+    method: getHouseList, // 請求api
     index: false, // 是否启用序号列 
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
       {
-        prop: 'date',
+        prop: 'unitNumber',
         label: '单元号',
         minWidth: '120',
       },
-      { prop: 'date', label: '楼层', minWidth: '120' },
-      { prop: 'name', label: '房间号', minWidth: '120' },
-      { prop: 'address', label: '房主姓名', minWidth: '120' },
+      { prop: 'houseNumber', label: '房间号', minWidth: '120' },
+      { prop: 'userName', label: '使用者姓名', minWidth: '120' },
+      { prop: 'userPhone', label: '使用者联系方式', minWidth: '120' },
     ],
   }
   const peopleTableConfig = {
@@ -27,59 +27,60 @@ export function renderTable() {
     data: [],
     pagination: false, // 开启分页器
     mutiSelect: false, // 开启选择
-    method: '', // 請求api
+    method: getPeopleList, // 請求api
     index: false, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
       {
-        prop: 'date',
+        prop: 'name',
         label: '姓名',
       },
-      { prop: 'date', label: '身份证号', minWidth: '120' },
-      { prop: 'name', label: '性别',},
-      { prop: 'address', label: '民族', },
+      { prop: 'idcard', label: '身份证号', minWidth: '120' },
+      // { prop: 'residenceNow', label: '具体住址',minWidth:'200'},
+    ],
+  }
+  const peopleByHouseTableConfig = {
+    name: 'table3',
+    data: [],
+    pagination: false, // 开启分页器
+    mutiSelect: false, // 开启选择
+    method: getPeopleByHouseList, // 請求api
+    index: false, // 是否启用序号列
+    total: 0,
+    isSortable: false, // 是否开启拖拽
+    columns: [
+      {
+        prop: 'name',
+        label: '姓名',
+      },
+      { prop: 'idcard', label: '身份证号', minWidth: '120' },
+      // { prop: 'residenceNow', label: '具体住址',},
     ],
   }
   const buildFormConfig = {
     gutter:10,
     formItems: [
       {
-        type: 'many',
+        type: 'slot',
         label: '组织结构',
-        span: 22,
-        children:{
-          gutter: 20,
-          formItems:[
-            {
-              type: 'select',
-              prop: 'streetName',
-              value: '',
-              placeholder: '街道名称',
-              options:streetName,
-              isClearable: true,
-              span: 8,
-            },
-            {
-              type: 'select',
-              prop: 'communityName',
-              value: '',
-              options:communityName,
-              placeholder: '社区名称',
-              isClearable: true,
-              span: 8,
-            },
-            {
-              type: 'select',
-              prop: 'gridName',
-              value: '',
-              options:gridName,
-              placeholder: '网格名称',
-              isClearable: true,
-              span: 8,
-            },
-          ]
-        }
+        span: 8,
+        slotName:'tree',
+        prop:'streetCode'
+      },
+      {
+        type: 'slot',
+        label: '',
+        span: 8,
+        slotName:'communityCode',
+        prop:'communityCode'
+      },
+      {
+        type: 'slot',
+        label: '',
+        span: 6,
+        slotName:'gridCode',
+        prop:'gridCode'
       },
       {
         type: 'Input',
@@ -93,7 +94,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '楼号',
-        prop: 'buildingNo',
+        prop: 'buildingNumber',
         value: '',
         placeholder: '请输入楼号',
         isClearable: true,
@@ -243,61 +244,83 @@ export function renderTable() {
         span: 22,
       },
     ],
+    rules:{
+      streetCode: [
+        { required: true, message: '请选择街道', trigger: ['blur','change'] },
+      ],
+      communityCode: [
+        { required: true, message: '请选择社区', trigger: ['blur','change'] },
+      ],
+      gridCode: [
+        { required: true, message: '请选择网格', trigger: ['blur','change'] },
+      ],
+      villageName: [
+        { required: true, message: '请输入小区名称', trigger: ['blur','change'] },
+      ],
+      buildingNumber: [
+        { required: true, message: '请输入楼号', trigger: ['blur','change'] },
+      ],
+      houseType: [
+        { required: true, message: '请选择楼栋类型', trigger: 'blur' },
+      ],
+      floorNumber: [
+        { required: true, message: '请输入地上楼层数', trigger: 'blur' },
+      ],
+      unitNumber: [
+        { required: true, message: '请输入地上单元数', trigger: ['blur','change'] },
+      ],
+      houseNumber: [
+        { required: true, message: '请输入地上总户数', trigger: ['blur','change'] },
+      ],
+      undergroundNumber: [
+        { required: true, message: '请输入地下楼层数', trigger: 'blur' },
+      ],
+      undergroundHouse: [
+        { required: true, message: '请输入地下房间数', trigger: 'blur' },
+      ],
+      lonAndLat: [
+        { required: true, message: '请输入楼栋经/纬度', trigger: 'blur' },
+      ],
+      hiddenDanger: [
+        { required: true, message: '请选择是否存在隐患', trigger: 'blur' },
+      ],
+    }
   }
   const houseFormConfig = {
     gutter:10,
     formItems: [
       {
-        type: 'many',
+        type: 'slot',
         label: '组织结构',
-        span: 22,
-        children:{
-          gutter: 20,
-          formItems:[
-            {
-              type: 'select',
-              prop: 'streetName',
-              value: '',
-              placeholder: '街道名称',
-              options:streetName,
-              isClearable: true,
-              span: 8,
-            },
-            {
-              type: 'select',
-              prop: 'communityName',
-              value: '',
-              options:communityName,
-              placeholder: '社区名称',
-              isClearable: true,
-              span: 8,
-            },
-            {
-              type: 'select',
-              prop: 'gridName',
-              value: '',
-              options:gridName,
-              placeholder: '网格名称',
-              isClearable: true,
-              span: 8,
-            },
-          ]
-        }
+        span: 8,
+        slotName:'tree',
+        prop:'streetCode'
       },
       {
-        type: 'select',
-        label: '楼号',
-        prop: 'buildingNo',
-        value: '',
-        options:buildingNo,
-        placeholder: '请输入楼号',
-        isClearable: true,
+        type: 'slot',
+        label: '',
+        span: 8,
+        slotName:'communityCode',
+        prop:'communityCode'
+      },
+      {
+        type: 'slot',
+        label: '',
+        span: 6,
+        slotName:'gridCode',
+        prop:'gridCode'
+      },
+      {
+        type: 'slot',
+        label: '楼栋',
+        slotName:'buildingId',
         span: 11,
+        prop:'buildingId'
       },
       {
         type: 'Input',
         label: '单元号',
-        prop: 'buildNo',
+        prop: 'unitNumber',
         value: '',
         placeholder: '请输入单元号',
         isClearable: true,
@@ -315,7 +338,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '房间号',
-        prop: 'houseNo',
+        prop: 'houseNumber',
         value: '',
         placeholder: '请输入房间号',
         isClearable: true,
@@ -417,73 +440,71 @@ export function renderTable() {
       {
         type: 'textarea',
         label: '简介',
-        prop: 'userPhone',
+        prop: 'remarks',
         value: '',
         placeholder: '',
         isClearable: true,
         span: 22,
       },
-    ]
+    ],
+    rules:{
+      streetCode: [
+        { required: true, message: '请选择街道', trigger: ['blur','change'] },
+      ],
+      communityCode: [
+        { required: true, message: '请选择社区', trigger: ['blur','change'] },
+      ],
+      gridCode: [
+        { required: true, message: '请选择网格', trigger: ['blur','change'] },
+      ],
+      buildingId: [
+        { required: true, message: '请选择楼号', trigger: ['blur','change'] },
+      ],
+      floorId: [
+        { required: true, message: '请输入楼层', trigger: ['blur','change'] },
+      ],
+      houseNumber: [
+        { required: true, message: '请输入房间号', trigger: 'blur' },
+      ],
+    }
   }
   const peopleFormConfig = {
     gutter:10,
     formItems: [
       {
-        type: 'many',
+        type: 'slot',
         label: '组织结构',
-        span: 22,
-        children:{
-          gutter: 20,
-          formItems:[
-            {
-              type: 'select',
-              prop: 'streetName',
-              value: '',
-              placeholder: '街道名称',
-              options:streetName,
-              isClearable: true,
-              span: 8,
-            },
-            {
-              type: 'select',
-              prop: 'communityName',
-              value: '',
-              options:communityName,
-              placeholder: '社区名称',
-              isClearable: true,
-              span: 8,
-            },
-            {
-              type: 'select',
-              prop: 'gridName',
-              value: '',
-              options:gridName,
-              placeholder: '网格名称',
-              isClearable: true,
-              span: 8,
-            },
-          ]
-        }
+        span: 8,
+        slotName:'tree',
+        prop:'streetCode'
       },
       {
-        type: 'select',
+        type: 'slot',
+        label: '',
+        span: 8,
+        slotName:'communityCode',
+        prop:'communityCode'
+      },
+      {
+        type: 'slot',
+        label: '',
+        span: 6,
+        slotName:'gridCode',
+        prop:'gridCode'
+      },
+      {
+        type: 'slot',
         label: '楼栋',
-        prop: 'buildingNo',
-        value: '',
-        options:buildingNo,
-        placeholder: '请输入楼栋号',
-        isClearable: true,
+        slotName:'buildingId',
         span: 11,
+        prop:'buildingId'
       },
       {
-        type: 'select',
+        type: 'slot',
         label: '房屋',
-        prop: 'houseNo',
-        value: '',
-        options:[],
-        placeholder: '房屋',
-        isClearable: true,
+        slotName: 'house',
         span: 11,
+        prop:'house'
       },
       {
         type: 'Input',
@@ -523,12 +544,11 @@ export function renderTable() {
         span: 11,
       },
       {
-        type: 'select',
+        type: 'selectSearch',
         label: '民族',
         prop: 'nation',
-        value: '',
+        code:'1021',
         placeholder:'请选择民族',
-        options:[{label:'汉',value:'0'}],
         isClearable: true,
         span: 11,
       },
@@ -669,10 +689,43 @@ export function renderTable() {
         span: 22,
       },
     ],
+    rules:{
+      streetCode: [
+        { required: true, message: '请选择街道', trigger: ['blur','change'] },
+      ],
+      communityCode: [
+        { required: true, message: '请选择社区', trigger: ['blur','change'] },
+      ],
+      gridCode: [
+        { required: true, message: '请选择网格', trigger: ['blur','change'] },
+      ],
+      buildingId: [
+        { required: true, message: '请选择楼栋', trigger: ['blur','change'] },
+      ],
+      house: [
+        { required: true, message: '请选择房屋', trigger: ['blur','change'] },
+      ],
+      name: [
+        { required: true, message: '请输入姓名', trigger: 'blur' },
+      ],
+      idCard: [
+        { required: true, message: '请输入身份证号码', trigger: 'blur' },
+      ],
+      gender: [
+        { required: true, message: '请选择性别', trigger: ['blur','change'] },
+      ],
+      nation: [
+        { required: true, message: '请选择民族', trigger: ['blur','change'] },
+      ],
+      contactPhone: [
+        { required: true, message: '请输入联系方式', trigger: 'blur' },
+      ],
+    }
   }
   return {
     houseTableConfig,
     peopleTableConfig,
+    peopleByHouseTableConfig,
     buildFormConfig,
     houseFormConfig,
     peopleFormConfig,

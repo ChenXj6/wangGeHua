@@ -62,7 +62,7 @@ export default {
       officeCode:'',
       officeName:'',
       areaName:'',
-      streeName:'',
+      streetName:'',
       communityName:'',
       name:'',
     })
@@ -75,22 +75,21 @@ export default {
         }
         if(res.resCode == '000000' && !isNull(res.data)){
           res.data.forEach(v => {
-            if(v.officeType == 2){
+            if(v.officeType == '2'){
               dataForm.areaName = v.officeName
               dataForm.qbm = v.officeCode
-            } else if (v.officeType == 3){
-              dataForm.streeName = v.officeName
+            } else if (v.officeType == '3'){
+              dataForm.streetName = v.officeName
               dataForm.jdbm = v.officeCode
-            } else if (v.officeType == 4){
+            } else if (v.officeType == '4'){
               dataForm.communityName = v.officeName
               dataForm.sqbm = v.officeCode
-            } else if (v.officeType == 5){
+            } else if (v.officeType == '5'){
               dataForm.name = v.officeName
               dataForm.wgbm = v.officeCode
             }
           })
         }
-        console.log(dataForm,'....')
       })
     }
     let popupTreeData = ref([])
@@ -169,9 +168,10 @@ export default {
       instance = new WangEditor(editor.value);
       instance.config.zIndex = 1;
       instance.create();
+      route.params.operation == 1 && (getSOList(dataForm?.officeCode),instance.txt.html(dataForm.synopsis),instance.disable())
+      route.params.operation == 2 && (getSOList(dataForm?.officeCode),instance.txt.html(dataForm.synopsis),instance.enable())
       route.params.operation === 3 &&( dataForm = {})
-      route.params.operation == 1 && (instance.txt.html(dataForm.synopsis),instance.disable(),getSOList(dataForm?.officeCode))
-      route.params.operation == 2 && (instance.txt.html(dataForm.synopsis),instance.enable(),getSOList(dataForm?.officeCode))
+      //
     })
     onBeforeUnmount(() => {
         instance.destroy();
