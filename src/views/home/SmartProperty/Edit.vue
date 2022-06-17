@@ -31,7 +31,10 @@
         </popup-tree-input>
       </template>
       <template v-slot:lonAndLat="">
-        <el-input v-model="dataForm.longitude" placeholder="请输入经纬度" size="small"></el-input>
+        <el-row :gutter="10">
+          <el-col :span="12"><el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input></el-col>
+          <el-col :span="12"><el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input></el-col>
+        </el-row>
       </template>
     </VForm>
     <VForm v-else :form-data="rubbishFormConfig" :isDisabled="route.params.operation == 1" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
@@ -45,7 +48,10 @@
         </popup-tree-input>
       </template>
       <template v-slot:lonAndLat="">
-        <el-input v-model="dataForm.longitude" placeholder="请输入经纬度" size="small"></el-input>
+        <el-row :gutter="10">
+          <el-col :span="12"><el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input></el-col>
+          <el-col :span="12"><el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input></el-col>
+        </el-row>
       </template>
     </VForm>
     <el-row v-if="route.params.operation == 1">
@@ -59,6 +65,12 @@
         >
       </div>
     </el-row>
+    <!-- 地图弹窗 -->
+    <el-dialog
+        width="37.5%"
+        v-model="mapDialogVisible">
+      <VMap @getLatAndLng="getLatAndLng" :lng="dataForm.longitude" :lat="dataForm.latitude" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -196,6 +208,18 @@ export default {
         tableConfig.data = tableData
       })
     }
+
+    // 获取经纬度
+    const mapDialogVisible = ref(false)
+    const handleClick = () => {
+      mapDialogVisible.value = true
+    }
+    const getLatAndLng = ({lat,lng}) => {
+      // console.log(`获取到的经纬度为：${lng}-${lat}`)
+      dataForm.longitude = lng
+      dataForm.latitude = lat
+      mapDialogVisible.value = false
+    }
     onBeforeMount(()=>{
       timer.value = new Date().getTime()
     })
@@ -217,6 +241,10 @@ export default {
       handleTreeSelectChange,
       popupTreeProps,
       popupTreeData,
+      // 获取经纬度
+      mapDialogVisible,
+      handleClick,
+      getLatAndLng,
     }
   },
 }

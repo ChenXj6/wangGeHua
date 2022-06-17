@@ -11,7 +11,7 @@ export default {
     const store = useStore()
     const router = useRouter()
     const route = useRoute()
-    store.dispatch('socketInit')
+    // store.dispatch('socketInit')
     // 全局检测是否有来自webSocket的消息通知   
     // isHaveEmergency：是否有紧急事件
     watch(

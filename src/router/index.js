@@ -103,7 +103,7 @@ const routes = [
         meta: {
           title: '上报事件',
           getTitle: function(route) {
-            return `${route.query.operation == 1 ? '查看' : '编辑'}上报事件`
+            return `${route.query.operation == 1 ? '查看' : (route.query.operation == 2 ? '编辑' : '添加')}上报事件`
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/ResidentsReport/edit.vue")

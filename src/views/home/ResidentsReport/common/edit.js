@@ -24,46 +24,30 @@ export function renderTable() {
         span: 8,
       },
       {
-        type: 'many',
+        type: 'slot',
         label: '组织结构',
-        span: 8,
-        children:{
-          gutter: 10,
-          formItems:[
-            {
-              type: 'select',
-              prop: 'streetName',
-              value: '',
-              placeholder: '街道名称',
-              options:streetName,
-              isClearable: true,
-              span: 8,
-            },
-            {
-              type: 'select',
-              prop: 'communityName',
-              value: '',
-              options:communityName,
-              placeholder: '社区名称',
-              isClearable: true,
-              span: 8,
-            },
-            {
-              type: 'select',
-              prop: 'gridName',
-              value: '',
-              options:gridName,
-              placeholder: '网格名称',
-              isClearable: true,
-              span: 8,
-            },
-          ]
-        }
+        span: 4,
+        slotName:'tree',
+        prop:'streetCode'
+      },
+      {
+        type: 'slot',
+        label: '',
+        span: 2,
+        slotName:'communityCode',
+        prop:'communityCode'
+      },
+      {
+        type: 'slot',
+        label: '',
+        span: 2,
+        slotName:'gridCode',
+        prop:'gridCode'
       },
       {
         type: 'Input',
         label: '事件发生地点',
-        prop: 'eventLong',
+        prop: 'eventPlace',
         value: '',
         placeholder: '请输入事件发生地',
         isClearable: true,
@@ -77,32 +61,14 @@ export function renderTable() {
         slotName:'longAndLat'
       },
       {
-        type: 'many',
+        type: 'selectSearch',
         label: '事件类型',
         span: 8,
-        children:{
-          gutter: 10,
-          formItems:[
-            {
-              type: 'select',
-              prop: 'mainPeopleFirstType',
-              value: '',
-              placeholder: '',
-              options:eventFirstType,
-              isClearable: true,
-              span: 12,
-            },
-            {
-              type: 'select',
-              prop: 'mainPeopleSecondType',
-              value: '',
-              options:eventSecondType,
-              placeholder: '',
-              isClearable: true,
-              span: 12,
-            },
-          ]
-        }
+        prop: 'eventFirstType',
+        value: '',
+        placeholder:'请选择事件类型',
+        code:'1025',
+        span:8,
       },
       {
         type: 'selectSearch',

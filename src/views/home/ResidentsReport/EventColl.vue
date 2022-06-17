@@ -55,7 +55,7 @@ export default defineComponent({
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
     const searchForm = reactive({
-      date: []
+      // date: []
     }) // 表单数据
     let searchParams = ref({}) // 表单数据备份
     const multipleSelection = ref([]) // 选中数据
@@ -96,11 +96,15 @@ export default defineComponent({
         tableConfig.data = data
       })
     }
+    const handleAdd = () => {
+      handleOperation(3,{})
+    }
     // 表單操作按鈕配置
     const formHandle = {
       btns: [
         {type:'primary',label:'查询',key:'search',handle:handleQuery},
         {type:'primary',label:'重置',key:'reset',handle:handleReset},
+        {type:'primary',label:'新增',key:'reset',handle:handleAdd},
       ]
     }
     //

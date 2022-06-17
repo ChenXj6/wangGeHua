@@ -9,6 +9,7 @@ import './assets/css/icon.css'
 
 import VTable from '@/components/Table/index.vue'
 import VForm from '@/components/Form/index.vue'
+import VMap from '@/components/Map/index.vue'
 import { DonMessage } from '@/utils/util'
 // import websocket from '@/utils/webSocket'
 import speak from '@/utils/speak'
@@ -36,4 +37,5 @@ app
   .use(router)
   .component('VTable',VTable)
   .component('VForm',VForm)
+  .component('VMap',VMap)
   .mount('#app')

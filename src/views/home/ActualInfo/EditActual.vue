@@ -10,40 +10,6 @@
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
     <VForm v-if="route.params.type === 'build'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="buildFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
-      <!-- <template v-slot:tree="">
-        <el-row :gutter="10" :span="22">
-        <el-col :span="8">
-          <el-select v-model="dataForm.streetCode" size="mini" placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
-            <el-option
-              v-for="item in streetNameOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="8">
-          <el-select v-model="dataForm.communityCode" size="mini" placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
-            <el-option
-              v-for="item in communityNameOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="8">
-          <el-select v-model="dataForm.gridCode" size="mini" placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true)}">
-            <el-option
-              v-for="item in gridNameOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        </el-row>
-      </template> -->
       <template v-slot:tree="">
           <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
@@ -75,54 +41,13 @@
           </el-select>
         </template>
       <template v-slot:lonAndLat="">
-        <el-input v-model="dataForm.longitude" placeholder="请输入经纬度" size="small"></el-input>
+        <el-row :gutter="10">
+          <el-col :span="12"><el-input v-model="dataForm.buildingLongitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input></el-col>
+          <el-col :span="12"><el-input v-model="dataForm.buildingLatitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input></el-col>
+        </el-row>
       </template>
     </VForm>
     <VForm v-else-if="route.params.type === 'house'" :isDisabled="route.params.operation == 1" :form-data="houseFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
-      <!-- <template v-slot:tree="">
-        <el-row :gutter="10" :span="22">
-        <el-col :span="8">
-          <el-select v-model="dataForm.streetCode" size="mini" placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
-            <el-option
-              v-for="item in streetNameOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="8">
-          <el-select v-model="dataForm.communityCode" size="mini" placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
-            <el-option
-              v-for="item in communityNameOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        <el-col :span="8">
-          <el-select v-model="dataForm.gridCode" size="mini" placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
-            <el-option
-              v-for="item in gridNameOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-col>
-        </el-row>
-      </template>
-      <template v-slot:buildingNumber="">
-        <el-select v-model="dataForm.buildingId" size="mini" placeholder="请选择楼栋" @change="(val)=>{handleGetBuild(2,val,true)}">
-          <el-option
-            v-for="item in buildingOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value">
-          </el-option>
-        </el-select>
-      </template> -->
       <template v-slot:tree="">
           <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
@@ -239,12 +164,19 @@
         >
       </div>
     </el-row>
+    <!-- // 图片预览弹窗 -->
     <el-dialog v-model="dialogVisible">
       <img
         :src="dialogImageUrl"
         alt="Preview Image"
         style="display: block; width: 50%; margin: 0 auto"
       />
+    </el-dialog>
+    <!-- 地图弹窗 -->
+    <el-dialog
+        width="37.5%"
+        v-model="mapDialogVisible">
+      <VMap @getLatAndLng="getLatAndLng" />
     </el-dialog>
   </div>
 </template>
@@ -266,6 +198,7 @@ export default {
     const { proxy } = getCurrentInstance()
     const { houseTableConfig,peopleTableConfig,peopleByHouseTableConfig,buildFormConfig,houseFormConfig,peopleFormConfig } = renderTable.call(proxy)
     const activeName = ref('first')
+    const mapDialogVisible = ref(false)
     const table1 = ref(null)
     const table2 = ref(null)
     const table3 = ref(null)
@@ -519,6 +452,18 @@ export default {
       }
       
     }
+
+    // 获取经纬度
+    const handleClick = () => {
+      mapDialogVisible.value = true
+    }
+    const getLatAndLng = ({lat,lng}) => {
+      // console.log(`获取到的经纬度为：${lng}-${lat}`)
+      dataForm.value.buildingLongitude = lng
+      dataForm.value.buildingLatitude = lat
+      mapDialogVisible.value = false
+    }
+    //
     onBeforeMount(()=>{
       timer.value = new Date().getTime()
     })
@@ -578,6 +523,10 @@ export default {
       //
       handleGetHouse,
       houseOptions,
+      // 获取经纬度
+      mapDialogVisible,
+      handleClick,
+      getLatAndLng,
     }
   },
 }

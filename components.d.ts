@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ElAutocomplete: typeof import('element-plus/es/el-autocomplete')['default']
     ElBreadcrumb: typeof import('element-plus/es/el-breadcrumb')['default']
     ElBreadcrumbItem: typeof import('element-plus/es/el-breadcrumb-item')['default']
     ElButton: typeof import('element-plus/es/el-button')['default']
@@ -48,6 +49,7 @@ declare module 'vue' {
     Form: typeof import('./src/components/Form/index.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     HeaderSidebar: typeof import('./src/components/Header-sidebar.vue')['default']
+    Map: typeof import('./src/components/Map/index.vue')['default']
     Organ: typeof import('./src/components/Organ/index.vue')['default']
     PopupTreeInput: typeof import('./src/components/PopupTreeInput/index.vue')['default']
     Sidebar: typeof import('./src/components/Sidebar.vue')['default']

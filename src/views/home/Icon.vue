@@ -1,5 +1,16 @@
 <template>
     <div>
+      <el-dialog
+        width="37.5%"
+        v-model="dialogVisible">
+        <VMap @getLatAndLng="getLatAndLng" />
+      </el-dialog>
+      
+      <el-button type="primary"  @click="handleClick">显示地图</el-button>
+
+
+
+      <hr style="margin:50px 0">
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
@@ -41,8 +52,10 @@
 
 <script>
 import { computed, ref } from "vue";
+// import VMap from '@/components/Map/index.vue'
 export default {
     name: "icon",
+    // components:{VMap},
     setup() {
         const iconList = [
             "attentionforbid",
@@ -178,10 +191,22 @@ export default {
             });
         });
 
+        const dialogVisible = ref(false)
+        const handleClick = () => {
+          dialogVisible.value = true
+        }
+        const getLatAndLng = ({lat,lng}) => {
+          console.log(`获取到的经纬度为：${lng}-${lat}`)
+          dialogVisible.value = false
+        }
+
         return {
             iconList,
             keyword,
             list,
+            dialogVisible,
+            handleClick,
+            getLatAndLng,
         };
     },
 };
