@@ -52,6 +52,9 @@ export default defineComponent({
       map.addEventListener('click', (e) => {
         emit('getLatAndLng',e.point)
       })
+      if(!!lng && !!lat && !!_map.value){
+        getLocation(lng,lat)
+      }
     })
     const querySearchAsync = (str,cb) => {
       var local = new BMap.LocalSearch(_map.value,{
@@ -73,6 +76,16 @@ export default defineComponent({
       form.value.address = item.address + item.title; //记录详细地址，含建筑物名
       _map.value.centerAndZoom(item.point,18) // 重新设置中心点
       _map.value.addOverlay(new BMapGL.Marker(item.point)) // 设置点
+    }
+    const getLocation = (lng,lat) => {
+      // console.log(lng,lat)
+      var marker = new BMapGL.Marker(new BMapGL.Point(lng, lat))
+      _map.value.addOverlay(marker)
+      const geoc = new BMapGL.Geocoder()
+      geoc.getLocation({lng,lat},function(res){
+        var addComp = res?.addressComponents;
+        addComp && (form.value.address = `${addComp?.province}${addComp?.city}${addComp?.district}${addComp?.street}${addComp?.streetNumber}`)
+      })
     }
     return {
       querySearchAsync,

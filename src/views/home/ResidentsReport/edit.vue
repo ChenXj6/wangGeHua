@@ -231,7 +231,6 @@ export default {
       happenTime:'',
       eventLong:'',
       eventLat:'',
-      eventLong:'',
       mainPeopleFirstType:'',
       mainPeopleSecondType:'',
       eventScope:'',
