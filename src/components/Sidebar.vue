@@ -89,11 +89,11 @@ export default {
                     },
                 ],
             },
-            {
-                icon: "el-icon-lx-cascades",
-                index: "/icon",
-                title: "图标",
-            },
+            // {
+            //     icon: "el-icon-lx-cascades",
+            //     index: "/icon",
+            //     title: "图标",
+            // },
             {
                 icon: "el-icon-lx-calendar",
                 index: "1",

@@ -113,7 +113,7 @@ export default {
       }
     });
     const pageChange = () => {
-      router.push(`/${pageStatus.value ? "dashboard" : "main"}`);
+      router.push(`/${pageStatus.value ? "dashboard" : ""}`);
     };
     onMounted(() => {
       if (pageStatus.value) {
@@ -128,7 +128,8 @@ export default {
     // 用户名下拉菜单选择事件
     const handleCommand = (command) => {
       if (command == "loginout") {
-        sessionStorage.removeItem("user");
+        store.dispatch('delHealthDegree')
+        store.dispatch('closeSocket')
         router.push("/login");
       } else if (command == "user") {
         router.push("/user");

@@ -1,5 +1,4 @@
-import { streetName, communityName, gridName,eventScope,eventFirstType,eventSecondType} from '@/config/common'
-
+import { getUserList } from '@/api/sys/user'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const editFormConfig = {
@@ -56,9 +55,16 @@ export function renderTable() {
       {
         type: 'slot',
         label: '事件经纬度',
-        prop: '',
-        span: 8,
-        slotName:'longAndLat'
+        prop: 'eventLong',
+        span: 4,
+        slotName:'eventLong'
+      },
+      {
+        type: 'slot',
+        label: '',
+        prop: 'eventLat',
+        span: 6,
+        slotName:'eventLat'
       },
       {
         type: 'selectSearch',
@@ -129,9 +135,50 @@ export function renderTable() {
         prop: 'eventContent',
         span: 24,
       },
-    ]
+    ],
+    rules:{
+      eventName: [{ required: true, message: '请输入事件名称', trigger: 'blur' }],
+      happenTime: [{ required: true, message: '请输入发生时间', trigger: 'blur' }],
+      streetCode: [{ required: true, message: '请选择街道', trigger: ['change','blur'] }],
+      communityCode: [{ required: true, message: '请选择社区', trigger: ['change','blur'] }],
+      gridCode: [{ required: true, message: '请选择网格', trigger: ['change','blur'] }],
+      eventPlace: [{ required: true, message: '请输入事件发生地', trigger: 'blur' }],
+      eventFirstType:[{ required: true, message: '请选择事件类型', trigger: ['change','blur'] }],
+      eventScope:[{ required: true, message: '请选择事件规模', trigger: ['change','blur'] }],
+      eventContent:[{ required: true, message: '请输入事件简述', trigger: 'blur' }],
+    }
+  }
+  const userTableConfig = {
+    name: 'table',
+    data: [],
+    pagination: true, // 开启分页器
+    paginationAlign: 'right', // 分页器靠左、靠右、中间
+    mutiSelect: true, // 开启选择
+    method: getUserList, // 請求api
+    index: false, // 是否启用序号列
+    total: 0,
+    paginationAlign:'left',
+    isSortable: false, // 是否开启拖拽
+    columns: [
+      {
+        prop: 'id',
+        label: 'ID',
+        minWidth: '100',
+      },
+      { prop: 'operatorId', label: '账号', minWidth: '100' },
+      { prop: 'operatorName', label: '姓名' },
+      { prop: 'roleId', label: '角色', tooltip: true },
+      {
+        prop: 'createTime',
+        label: '创建时间',
+        minWidth: '120',
+        formatter: 'YYYY-MM-DD HH:mm:ss',
+      },
+      { prop: '', label: '操作', slot: 'operation' },
+    ],
   }
   return {
-    editFormConfig
+    editFormConfig,
+    userTableConfig
   }
 }

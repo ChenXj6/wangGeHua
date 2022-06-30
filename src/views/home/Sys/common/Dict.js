@@ -1,5 +1,4 @@
 import { getUserList } from '@/api/sys/user'
-import { isTrue } from '@/config/common'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
@@ -78,7 +77,7 @@ export function renderTable() {
         label: '是否禁用',
         prop: 'delflag',
         value: 0,
-        options:isTrue,
+        options:[{value:0,label:'启用'},{value:1,label:'删除'},{value:2,label:'停用'}],
         placeholder: '',
         isClearable: true,
         span: 24,

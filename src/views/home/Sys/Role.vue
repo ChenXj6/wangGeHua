@@ -32,7 +32,7 @@
       </template>
     </V-table>
     <!-- 角色菜单授权 -->
-    <el-row>
+    <!-- <el-row>
       <el-col :span="24" class="menu-header">
         <span><B>角色菜单授权</B></span>
       </el-col>
@@ -77,7 +77,7 @@
           <el-button type="success" size="mini">提交</el-button>
         </div>
       </el-col>
-    </el-row>
+    </el-row> -->
 
     <el-dialog
       :close-on-click-modal="false"

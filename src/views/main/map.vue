@@ -1,5 +1,6 @@
 <template>
-  <div
+<div style="position: relative;">
+<div
     class="vMap"
     :style="{ height: !fullHeight ? '100vh' : fullHeight + 'px' }"
     id="dituContent"
@@ -8,7 +9,8 @@
     <div class="sidebar-item">
       <el-dropdown placement="left-start" trigger="click">
         <el-button type="goon" size="mini" round style="width: 88px">
-          党组织<i class="el-icon-arrow-down el-icon--right"></i>
+          党组织
+          <i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
@@ -45,32 +47,94 @@
             <el-dropdown-item>111111111</el-dropdown-item>
             <el-dropdown-item>22222222222</el-dropdown-item>
             <el-dropdown-item>32312312323</el-dropdown-item>
-            <el-dropdown-item>第三方水电费水电费水电费</el-dropdown-item>
+            <el-dropdown-item>111</el-dropdown-item>
             <el-dropdown-item @click="showMyMapMark">显示标签</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
     </div>
   </div>
-  <el-dialog
-    title="提示"
-    :visible="true"
-    width="30%"
-    :before-close="handleClose"
-  >
-    <span>这是一段信息</span>
+  <!-- store.state.mapDialog.visible -->
+  <div v-if="dialogVisible" class="headerDialogBox">
+    <div class="headerDialog">
+      <div v-for="(item,ind) in mapDialogData.children" :key="item.id">
+        <img :src="item.img" alt="">
+        <span>{{ item.title }}</span>
+      </div>
+    </div>
+    <i class="el-icon-lx-roundclose headerDialogIcon" style="color:#fff;font-size:30px" @click="handleCloseDialog"></i>
+  </div>
+  <!-- 楼栋弹窗 -->
+  <!-- :title="buildList[0].streetName + buildList[0]." -->
+  <el-dialog    
+    title="楼栋信息"
+    v-model="houseDialogVisible"
+    width="60%"
+    draggable
+    style="z-index:9999"
+    :before-close="dialogBeforeClose">
+    <div>
+      <el-row :gutter="10">
+        <el-col :span="5" class="buildInfoBox">
+          <h4>楼栋信息：</h4>
+          <hr>
+          <p><span>楼长：</span> 张志远</p>
+          <p><span>联系电话：</span> 18759873462</p>
+          <p><span>楼层数：</span> 15</p>
+          <p><span>人口：</span> 200</p>
+        </el-col>
+        <el-col :span="19" class="buildListBox">
+          <h4>楼栋单元：</h4>
+          <hr>
+          <div class="buildListItemBox">
+            <div class="buildListItem" v-for="item in buildList" :key="item.id" @click="getHouse(item.id)">
+              <img src="@/assets/img/build.webp" alt="" srcset="">
+              <span>{{item.unitNumber}}</span>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="5" class="buildFloor">
+          <h4>楼层信息：</h4>
+          <hr>
+          <div>
+            <div class="floor">1</div>
+            <div class="floor">2</div>
+            <div class="floor">3</div>
+            <div class="floor">4</div>
+            <div class="floor">1</div>
+            <div class="floor">2</div>
+            <div class="floor">3</div>
+            <div class="floor">4</div>
+            <div class="floor">1</div>
+            <div class="floor">2</div>
+            <div class="floor">3</div>
+            <div class="floor">4</div>
+          </div>
+        </el-col>
+        <el-col :span="19" class="houseBox">
+          
+        </el-col>
+      </el-row>
+    </div>
   </el-dialog>
+  <!-- 事件弹窗 -->
+  <!-- <div class="eventBox"></div> -->
+</div>
+
+
 </template>
 <script>
 import {
   getCurrentInstance,
-  onBeforeUnmount,
   onMounted,
   ref,
   watch,
 } from '@vue/runtime-core'
 import { onBeforeRouteLeave, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
+import { getHouseList,getPeopleByHouseList } from '@/api/ActualInfo/build.js'
 export default {
   setup() {
     let vMap = ref(null)
@@ -78,9 +142,16 @@ export default {
     let timer = null
     const store = useStore()
     const route = useRoute()
+    const dialogVisible = ref(false)
+    const mapDialogData = ref(null)
     const {
       proxy: { $speak },
     } = getCurrentInstance()
+
+    const houseDialogVisible = ref(false)  //楼栋弹窗
+    const buildList = ref([]) // 楼栋弹窗列表
+    const houseList = ref([])
+    // 事件弹窗
     const VMapRender = function () {
       vMap = new VMap()
       vMap.createMap('dituContent')
@@ -104,7 +175,7 @@ export default {
       config.setStop(false)
       //设置路名是否显示(默认不显示)
       config.setRoad(false)
-      config.setPopUrl('http://domain/test.html')
+      config.setPopUrl('');
       //加载地图
       vMap.loadMap(config)
     }
@@ -112,28 +183,77 @@ export default {
       reLoadMap()
       VMapRender()
     })
-    //显示自定义地图标签
-    function showMyMapMark() {
-      var html =
-        '<div style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>标签内容</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-      //vMap.showMapMark(18821,10596,html);
-      vMap.showMapMark(18624, 8178, html)
+    // 点击导航栏 弹窗
+    watch(()=>store.state.mapDialog, () => {
+      dialogVisible.value = store.state.mapDialog.visabled
+      mapDialogData.value = store.state.mapDialog.data
+    },
+    {deep:true}
+    )
+    const handleCloseDialog = () => [
+      store.dispatch('closeDialog')
+    ]
+    const randomAddress = () => {
+      let sum = Math.round(Math.random()*3)
+      let arr = [
+        {lng:'18624',lat:'8178'},
+        {lng:'14440',lat:'5260'},
+        {lng:'21352',lat:'5074'},
+        {lng:'16570',lat:'5160'},
+      ]
+      return arr[sum]
+    }
+    randomAddress()
+    // 获取楼栋信息
+    const getBuild = (id) => {
+      getHouseList({id}).then(res=>{
+        if(res.resCode == '000000'){
+          buildList.value =  res.data.reverse()
+        }
+      })
+    }
+    const getHouse = (buildingId) => {
+      getPeopleByHouseList({buildingId}).then(res=>{
+        if(res.resCode == '000000'){
+          houseList.value = res.data
+        }
+      })
+    }
+    const eventDialogStyle = () => {
+      setTimeout(()=>{
+          let arr = JSON.parse(sessionStorage.getItem('eventName'))
+          let {lng,lat} = randomAddress()
+          let obj = arr[0]
+          speak(obj)
+          vMap.showMapPopWin(
+            lng,
+            lat,
+            `${obj.eventName}`,
+            '/src/assets/index.html',
+            400,
+            300
+          )
+        },1000)
     }
     onMounted(() => {
-      // 是否有紧急事件通知 具体数值
-      if (route.params.isHaveEmergency) {
-        setTimeout(() => {
+      setTimeout(()=>{
+          let arr = JSON.parse(sessionStorage.getItem('eventName'))
+          let obj = arr[0]
+          speak(obj)
           vMap.showMapPopWin(
             21352,
             5074,
-            '紧急事件',
+            `${obj.eventName}`,
             '/src/assets/index.html',
-            500,
-            350
+            400,
+            300
           )
-        }, 5000)
-      }
+        },1000)
 
+      // 是否有紧急事件通知 具体数值
+      if(!!route.params.isClick){
+        eventDialogStyle()       
+      }
       window.onresize = () => {
         clearTimeout(timer)
         timer = setTimeout(() => {
@@ -142,14 +262,22 @@ export default {
       }
       VMapRender()
       vMap.onMapClick((x0, y0, id, title, identitycode) => {
-        console.log(x0, y0, identitycode)
-        vMap.showMapPopWin(x0, y0, title, 'https://www.baidu.com', 500, 370)
+        houseDialogVisible.value = true
+        getBuild(10)
       })
     })
-    const speak = (a) => {
-      $speak('我收到消息了')
+    watch(()=>store.state.eventList,(newValue)=>{
+        eventDialogStyle()
+      },
+      {deep:true}
+    )
+    const speak = (obj) => {
+      $speak(`事件名称：${obj?.eventName},发生地点:${obj?.cityName}${obj?.communityName}${obj?.gridName}${obj.eventPlace ?? ''}`)
     }
-    window.a123 = speak
+    
+    window.handleManageBtn = () => {
+      console.log('aaaa')
+    }
     // 恢复地图未加载默认状态
     const reLoadMap = () => {
       if (typeof jv != 'undefined') {
@@ -164,7 +292,13 @@ export default {
     })
     return {
       fullHeight,
-      showMyMapMark,
+      mapDialogData,
+      dialogVisible,
+      handleCloseDialog,
+      houseDialogVisible,
+      buildList,
+      houseList,
+      getHouse,
     }
   },
 }
@@ -195,4 +329,142 @@ export default {
   background-color: #242f42;
   border-color: #242f42;
 }
+.headerDialogBox{
+  position: absolute;
+  width: 700px;
+  min-height: 300px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-60%);
+  background:rgba(36, 47, 66,0.7);
+  z-index: 9999;
+  padding: 50px;
+  border-radius: 10px;
+}
+.headerDialogIcon{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.headerDialog{
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  border: 1px solid #bad23C;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+.headerDialog>div{
+  width: 150px;
+  height: 120px;
+  background: #242f42;
+  margin: 10px;
+  box-sizing: border-box;
+  color: #fff;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+}
+.headerDialog>div:hover{
+  opacity: .8;
+  border: 1px dashed #fff;
+  /* background: block; */
+}
+.headerDialog>div>img{
+  width: 80%;
+  height: 60%;
+}
+h4{
+  height: 20px;
+}
+.buildInfoBox{
+  height: 122px;
+  color: #333;
+}
+.buildInfoBox>p>span{
+  display: inline-block;
+  width: 70px;
+  color: #999;
+}
+.buildListBox{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.buildListBox>h4{
+  width: 100%;
+  height: 20px;
+}
+.buildListItemBox{
+  display: flex;
+  justify-content: start;
+  overflow: scroll;
+
+}
+.buildListItem{
+  height:100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 0 10px;
+}
+.buildListItem>img{
+  width: 50px;
+  /* height: 200px; */
+}
+.buildFloor{
+  min-height: 300px;
+}
+.buildFloor>div{
+  margin: 0 auto;
+  width: 100%;
+  overflow-y: scroll;
+  max-height: 300px;
+}
+.floor{
+  width: 60%;
+  margin-left: 20%;
+  height: 40px;
+  background: #bad23C;
+  border-radius: 5px;
+  transform: rotateX(45deg);
+  transform: rotate(10deg);
+  transform: skewX(160deg);
+  transform: translateY(-100);
+}
+.floor:hover{
+  transform: scale(1.1);
+  background: darkgoldenrod;
+}
+::-webkit-scrollbar {
+	/*隐藏滚轮*/
+	display: none;
+}
+/*  */
+/* .eventBox{
+  width: 400px;
+  height: 400px;
+  background: #242f42;
+  opacity: .8;
+  z-index: 2999;
+  position: absolute;
+  top: 40%;
+  left: 51%;
+  border-radius: 10px;
+}
+.eventBox:before {
+  content: "";
+  position: absolute;
+  right: 100%; 
+  top: 80px;
+  border-top: 13px solid transparent;
+  border-right: 30px solid #242f42;
+  border-bottom: 13px solid transparent;
+} */
 </style>

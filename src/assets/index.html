@@ -2,83 +2,31 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>纯css3动画实现轨道旋转效果</title>
+<title></title>
 <style type="text/css">
-  body{
-      background-color: #000000;
-  }
-  .ball-box{
-      width: 300px;
-      height: 300px;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      margin: -150px 0 0 -150px;
-      perspective-origin: 50% 50%;
-      perspective: 3000px;
-  }
-  @keyframes rotate3d {
-      0%{
-          transform: rotateZ(-30deg) rotateY(0deg) rotateX(0deg);
-      }
-      100%{
-          transform: rotateZ(-30deg) rotateY(360deg) rotateX(360deg);
-      }
-  }
-  .ball{
-      height: 100%;
-      transform-style: preserve-3d;
-      animation: rotate3d 30s linear infinite;
-  }
-  .ball:after{
-      display: block;
-      content: '';
-      width: 1px;
-      height: 500px;
-      background-color: #ff0;
-      position: absolute;
-      top: -100px;
-      left: 150px;
-  }
-  .ball > div{
-      border: 1px #ffffff solid;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-  }
-  .ball .line1{
-      transform: rotateY(0deg);
-  }
-  .ball .line2{
-      transform: rotateY(36deg);
-  }
-  .ball .line3{
-      transform: rotateY(72deg);
-  }
-  .ball .line4{
-      transform: rotateY(108deg);
-  }
-  .ball .line1{
-      transform: rotateY(144deg);
+  .eventBox{
+    width: 100%;
+    height: 100%;
   }
 </style>
 </head>
 <body>
-  <div class="ball-box">
-    <div class="ball">
-        <div class="line1"></div>
-        <div class="line2"></div>
-        <div class="line3"></div>
-        <div class="line4"></div>
-        <div class="line5"></div>
-    </div>
-</div>
+  <div class="eventBox">
+  </div>
 </body>
 <script>
-  let a = document.querySelector('.ball');
-  a.addEventListener('click',()=>{
-    console.log(window.top.a123('你看是我吗？'))
-  })
+let event = document.getElementsByClassName('eventBox')[0]
+let obj = JSON.parse(sessionStorage.getItem('eventName'))[0]
+let div = window.document.createElement('div')
+div.style.cssText = 'min-height:280px;position: relative;'
+div.innerHTML = `<img style="width:200px;height:100px;display:block;margin:0 auto;" src='http://192.168.1.146:8081/2022/06/29/1656486768686.jpg'></img></p><p>事件名称：${obj?.eventName}</p><p>发生地点：${obj?.cityName}-${obj?.communityName}-${obj?.gridName}${obj.eventPlace ? '-' :''}${obj.eventPlace ?? ''}</p>
+  <button style="position: absolute;bottom:10px;margin:0 10px 0" class="handleManBtn">处置事件</button>
+`
+event.appendChild(div)
+
+let handleManBtn = document.getElementsByClassName('handleManBtn')[0]
+handleManBtn.addEventListener('click',function(){
+  window.top.handleManageBtn()
+})
 </script>
 </html>

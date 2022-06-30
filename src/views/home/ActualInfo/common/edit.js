@@ -235,6 +235,13 @@ export function renderTable() {
         span: 11,
       },
       {
+        type: 'slot',
+        label: '图片上传',
+        prop: '',
+        span: 24,
+        slotName:'upload'
+      },
+      {
         type: 'textarea',
         label: '简介',
         prop: 'remarks',
@@ -436,6 +443,13 @@ export function renderTable() {
         placeholder: '请输入使用者联系电话',
         isClearable: true,
         span: 11,
+      },
+      {
+        type: 'slot',
+        label: '图片上传',
+        prop: '',
+        span: 24,
+        slotName:'upload'
       },
       {
         type: 'textarea',
@@ -679,6 +693,13 @@ export function renderTable() {
         code:'1006',
         isClearable: true,
         span: 11,
+      },
+      {
+        type: 'slot',
+        label: '图片上传',
+        prop: '',
+        span: 24,
+        slotName:'upload'
       },
       {
         type: 'textarea',

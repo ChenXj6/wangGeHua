@@ -5,6 +5,7 @@
       <router-view />
     </div>
     <notice />
+
   </div>
 </template>
 <script>
@@ -46,6 +47,7 @@ export default {
     return {
       tagsList,
       collapse,
+      store,
     }
   },
 }

@@ -1,5 +1,4 @@
 import { getBuildList } from '@/api/ActualInfo/build'
-import { buildType } from '@/config/common'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {

@@ -1,3 +1,5 @@
+import { Store } from "vuex"
+
 class VueSocket {
   /**
    * VueSocket构造器
@@ -120,9 +122,8 @@ class VueSocket {
   subscribe() {
     this.ws.onmessage = (res) => {
       let data = res.data
-      data = data.replace(" [<a href='http://coolaf.com/tool/chattest'>http://coolaf.com</a>]",'')
-      if (data && String(data) !== "ping") {
-        data = JSON.parse(JSON.parse(data).data)
+      if (data && String(data) !== JSON.stringify({"from":`${sessionStorage.getItem("operatorId")}`,"text":"ping"})) {
+        data = JSON.parse(data)
         // 根据任务类型，分发数据
         try {
           this.distributeData && this.distributeData(data, this.commit)
@@ -164,13 +165,12 @@ class VueSocket {
    * 心跳侦测
    */
   heartbeatDetect(type) {
-    // console.log('[Heartbeat of]  ' + type)
     this.heartbeatTimer && clearInterval(this.heartbeatTimer)
     this.heartbeatTimer = setInterval(() => {
       const state = this.getSocketState()
       if (state === WebSocket.OPEN || state === WebSocket.CONNECTING) {
         // 发送心跳
-        this.ws.send('ping')
+        this.ws.send(JSON.stringify({"to":`${sessionStorage.getItem("operatorId")}`,"text":"ping"}))
       } else {
         this.init()
       }

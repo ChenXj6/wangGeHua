@@ -17,7 +17,7 @@ import {
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
-    base: './',
+    base: env.MODE === 'production' ? './' : '/',
     plugins: [
       vue(),
       viteCompression({ //gzip静态资源压缩
@@ -53,7 +53,7 @@ export default defineConfig(({ command, mode }) => {
     css: {
       preprocessorOptions:{
         scss: {
-          additionalData: ''
+          additionalData: ""
         }
       }
     },

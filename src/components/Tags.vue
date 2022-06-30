@@ -10,9 +10,9 @@
         <router-link :to="item.path" class="tags-li-title">{{
           item.title
         }}</router-link>
-        <span class="tags-li-icon" @click="closeTags(index)">
+        <!-- <span class="tags-li-icon" @click="closeTags(index)">
           <i class="el-icon-close"></i>
-        </span>
+        </span> -->
       </li>
     </ul>
     <div class="tags-close-box">
@@ -46,6 +46,7 @@ export default {
 
     const store = useStore()
     const tagsList = computed(() => store.state.tagsList)
+    // console.log(tagsList.value,'tagsList')
     const showTags = computed(() => tagsList.value.length > 0)
 
     // 关闭单个标签

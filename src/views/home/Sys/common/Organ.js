@@ -1,5 +1,4 @@
 import { getOrganList } from '@/api/sys/organ'
-import { organType } from '@/config/common'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const tableConfig = {

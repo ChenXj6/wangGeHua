@@ -183,6 +183,7 @@ export default {
             "searchlist",
             "search",
             "edit",
+            "close",
         ];
         const keyword = ref("");
         const list = computed(() => {

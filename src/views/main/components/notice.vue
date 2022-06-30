@@ -9,12 +9,13 @@
         ></i>
       </div>
     </div>
-    <template v-if="isHaveNotice">
+    <!-- {{ noticeList }}111 -->
+    <template v-if="isHaveNotice">      
       <!-- <vue3-seamless-scroll :data="noticeList" class="warp"> -->
         <ul ref="noticeListBox" class="notice-item-box">
           <li v-for="item in noticeList" :key="item.id" class="notice-item">
-            <span class="notice-item-content">{{ item.message }}，</span>
-            <el-link type="warning">请查看</el-link>
+            <span class="notice-item-content">{{ item.eventName }}，</span>
+            <el-link type="warning" @click.prevent="handleViewDetail(item)">请查看</el-link>
           </li>
         </ul>
       <!-- </vue3-seamless-scroll> -->
@@ -23,7 +24,7 @@
   </div>
 </template>
 <script>
-import { computed, ref } from '@vue/runtime-core'
+import { computed, onMounted, ref,watch } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 export default {
@@ -34,17 +35,7 @@ export default {
     const noticeListBox = ref(null)
     // 消息通知
     const isHaveNotice = computed(() => !!noticeList.value.length)
-    const noticeList = ref([
-      { message: '新添加一名戒毒人员', id: 1 },
-      { message: '新增加一名社区矫正人员', id: 2 },
-      { message: '新增加一名刑满释放人员', id: 3 },
-      { message: '您有一条新的备忘录', id: 4 },
-      { message: '新增加一名社区矫正人员', id: 2 },
-      { message: '新增加一名刑满释放人员', id: 3 },
-      { message: '新添加一名戒毒人员', id: 1 },
-      { message: '新增加一名社区矫正人员', id: 2 },
-      { message: '新增加一名刑满释放人员', id: 3 },
-    ])
+    const noticeList = ref([])
     const stowAndUnfold = () => {
       if (isUnfold.value) {
         noticeListBox.value.style.height = 0
@@ -53,12 +44,33 @@ export default {
       }
       isUnfold.value = !isUnfold.value
     }
+    watch(
+      () => store.state.eventList,
+      (newValue) => {
+        noticeList.value = newValue
+        // console.log(noticeList.value,'notice1')
+      },
+      {deep:true}
+    )
+    const handleViewDetail = (data,type = 1) => {
+      data = JSON.stringify(data)
+      router.push({
+        path: '/editResidentsReport',
+        query: { data: encodeURIComponent(data), operation: type },
+      })
+    }
+    // onMounted(()=>{
+      noticeList.value = JSON.parse(sessionStorage.getItem('eventName')) || []
+      // console.log(noticeList.value,'notice2')
+    // })
+    // noticeList.value = JSON.parse(localStorage.getItem('eventName')) || []
     return {
       isHaveNotice,
       noticeList,
       stowAndUnfold,
       isUnfold,
       noticeListBox,
+      handleViewDetail,
     }
   },
 }
@@ -96,7 +108,7 @@ export default {
   }
   .notice-item-box {
     width: 100%;
-    height: 250px;
+    max-height: 250px;
     overflow: scroll;
     transition: height 0.3s ease;
     .notice-item {

@@ -144,6 +144,7 @@ import {
   ref,
 } from 'vue'
 import { searchDict } from '@/api/sys/dict'
+import { resetFormat } from '@/utils/util'
 
 export default defineComponent({
   name: 'VForm',
@@ -180,16 +181,6 @@ export default defineComponent({
         : props.formRules
     const isDisabled = ref(props.isDisabled)
     const loading = ref(false)
-    const resetFormat = (data) => {
-      let arr = []
-      data.forEach(v=>{
-        let obj = {}
-        obj.label = v.description
-        obj.value = String(v.value)
-        arr.push(obj)
-      })
-      return arr
-    }
     const options = reactive({})
     const querySearchAsync = (basictype) => {
       if(basictype){

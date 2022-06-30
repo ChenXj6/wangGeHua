@@ -38,7 +38,7 @@
               </el-table-column>
               <el-table-column prop="delflag" label="是否禁用" align="center">
                 <template #default="scope">
-                  <span>{{ scope.row.delflag == 0 ? '可用' : '禁用' }}</span>
+                  <span>{{ scope.row.delflag == 0 ? '可用' : (scope.row.delflag == 1 ? '删除' : '禁用') }}</span>
                 </template>
               </el-table-column>
               <el-table-column label="操作" width="150" align="center">
@@ -95,7 +95,7 @@ export default {
       basictypename:'',
       value:'',
       description:'',
-      delflag:1,
+      delflag:0,
     })
     let tabList = reactive([])
     const searchCode = ref('')

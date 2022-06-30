@@ -24,6 +24,13 @@ export const deleteDetail = query => {
   )
 };
 
+// 查询处置记录
+export const queryByEventId = query => {
+  return service.post(
+    `/real/realInfo/record/queryByEventId`, query
+  )
+};
+
 // 处置
 export const getRecordList = query => {
   return service.post(
@@ -37,14 +44,22 @@ export const editRecord = query => {
   )
 };
 
-export const addRecord = query => {
-  return service.post(
-    `/real/realInfo/record/save`, query
-  )
-};
-
 export const deleteRecord = query => {
   return service.post(
     `/real/realInfo/record/delete`, query
+  )
+};
+
+// 事件流转
+export const eventProcessing = query => {
+  return service.post(
+    `/real/realInfo/record/eventProcessing`, query
+  )
+};
+
+// 挂起解挂
+export const eventLock = query => {
+  return service.post(
+    `/real/realInfo/record/mount`, query
   )
 };

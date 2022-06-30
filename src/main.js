@@ -2,9 +2,10 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
 import * as echarts from 'echarts'
-import installElementPlus from './plugins/element'
-import './assets/css/icon.css'
+import installElementPlus from '@/plugins/element'
+import '@/assets/css/icon.css'
 
 
 import VTable from '@/components/Table/index.vue'

@@ -187,7 +187,6 @@ import mixin from '@/mixins/tagView.js'
 
 import { renderTable } from './common/EditStaffInfo'
 import { savePeopleInfo,editPeopleInfo } from '@/api/communityGrid/staffInfo'
-import { powerType,sex,powerKind } from '@/config/common'
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList,getSmallOrganList } from '@/api/sys/organ'
@@ -399,9 +398,6 @@ export default {
       formHandle,
       addList,
       removeBtn,
-      powerType,
-      sex,
-      powerKind,
       // 组织结构选择
       handleTreeSelectChange,
       popupTreeProps,

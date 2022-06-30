@@ -2,13 +2,16 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "@/views/home/index.vue";
 import Main from "@/views/main/index.vue";
 
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 const routes = [
+  // {
+  //   path: '/',
+  //   redirect: '/main'
+  // },
   {
-    path: '/',
-    redirect: '/main'
-  },
-  {
-    path: "/main",
+    path: "/",
     name: "Main",
     component: Main,
     meta: {
@@ -49,14 +52,7 @@ const routes = [
           title: '首页'
         },
         component: () => import( /* webpackChunkName: "dashboard" */ "@/views/home/Dashboard.vue")
-      }, {
-        path: "/table",
-        name: "basetable",
-        meta: {
-          title: '表格'
-        },
-        component: () => import( /* webpackChunkName: "table" */ "@/views/home/BaseTable.vue")
-      }, 
+      },
       {
         path: "/icon",
         name: "icon",
@@ -294,7 +290,7 @@ const routes = [
     meta: {
       title: '登录'
     },
-    component: () => import( /* webpackChunkName: "login" */ "@/views/Login/index.vue")
+    component: () => import( /* webpackChunkName: "login" */ "@/views/Login/login.vue")
   }
 ];
 
@@ -312,6 +308,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     // 如果是访问登录界面，如果用户会话信息存在，代表已登录过，跳转到主页
     if (user) {
+      NProgress.start()
       next({path: '/'})
     } else {
       next()
@@ -325,10 +322,15 @@ router.beforeEach((to, from, next) => {
         sessionStorage.removeItem("Authorization");
         next({path: '/login'});
       } else {
+        NProgress.start()
         next()
       }
     }
   }
 });
+
+router.afterEach(transition => {
+  NProgress.done()
+})
 
 export default router;

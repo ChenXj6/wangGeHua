@@ -46,6 +46,21 @@ export const defaultObject = (obj) => {
   })
 }
 
+
+// code获取字典处理函数
+export const resetFormat = (data) => {
+  let arr = []
+  data.forEach(v=>{
+    let obj = {}
+    obj.label = v.description
+    obj.value = String(v.value)
+    arr.push(obj)
+  })
+  return arr
+}
+
+
+
 /**
  * @param {Function} func
  * @param {number} wait
@@ -126,7 +141,7 @@ export function deepClone(parent) {
   return _clone(parent)
 }
 
-const isType = (obj, type) => {
+export const isType = (obj, type) => {
   if (typeof obj !== 'object') return false
   // 判断数据类型的经典方法：
   const typeString = Object.prototype.toString.call(obj)
@@ -553,7 +568,7 @@ export const getPaths = (arr, baseUrl) => {
  *  single默认值true，因为项目需求，默认只弹出一个，可以根据实际需要设置
  */
 export class DonMessage {
-  success(options, single = true) {
+  success(options, single = fal) {
     this[showMessage]('success', options, single)
   }
   warning(options, single = true) {
