@@ -15,6 +15,9 @@
       <template v-slot:gender="{data}">
         <span>{{ sex(Number(data.gender)) }}</span>
       </template>
+      <template v-slot:unitNumber="{data}">
+        <span>{{unitNumberOptions.filter(v=>v.value == data.unitNumber)[0]?.label}}</span>
+      </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"
@@ -57,8 +60,9 @@ import {
 } from '@vue/runtime-core'
 
 import { renderTable } from './common/People'
-import { deepClone, defaultObject } from '@/utils/util'
+import { deepClone, defaultObject,resetFormat } from '@/utils/util'
 import { deletePeople } from '@/api/ActualInfo/people'
+import { searchDict } from '@/api/sys/dict'
 export default defineComponent({
   name: 'ActualBuild',
   setup() {
@@ -172,6 +176,18 @@ export default defineComponent({
         params: { data : encodeURIComponent(data), operation: type, type:'people' },
       })
     }
+    // 
+    const unitNumberOptions = ref([])
+    const getOptionsByCode = (basictype,data) => {
+      searchDict({basictype}).then(res=>{
+        if(res.resCode == '000000' && res.data){
+          data.value = resetFormat(res.data)
+        }else{
+          data.value = []
+        }
+      })
+    }
+    getOptionsByCode(1052,unitNumberOptions)
     onMounted(() => {
       handleQuery()
     })
@@ -189,6 +205,7 @@ export default defineComponent({
       flagYmXg,
       handleDel,
       sex,
+      unitNumberOptions,
     }
   },
 })

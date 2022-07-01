@@ -325,11 +325,12 @@ export function renderTable() {
         prop:'buildingId'
       },
       {
-        type: 'Input',
+        type: 'selectSearch',
         label: '单元号',
         prop: 'unitNumber',
         value: '',
-        placeholder: '请输入单元号',
+        code:'1052',
+        placeholder: '请选择单元号',
         isClearable: true,
         span: 11,
       },
@@ -473,6 +474,9 @@ export function renderTable() {
       ],
       buildingId: [
         { required: true, message: '请选择楼号', trigger: ['blur','change'] },
+      ],
+      unitNumber: [
+        { required: true, message: '请选择单元', trigger: ['blur','change'] },
       ],
       floorId: [
         { required: true, message: '请输入楼层', trigger: ['blur','change'] },

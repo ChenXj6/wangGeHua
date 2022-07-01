@@ -1,6 +1,6 @@
 <template>
 <el-autocomplete
-  style="100%;width:600px;margin-bottom:10px"
+  style="100%;width:100%;margin-bottom:10px"
   popper-class="autoAddressClass"
   v-model="form.address"
   :fetch-suggestions="querySearchAsync"
@@ -17,7 +17,7 @@
     </span>
   </template>
 </el-autocomplete>
-<div id="container" style="width:600px;height:300px"></div>
+<div id="container" style="width:100%;height:300px"></div>
 </template>
 
 <script>

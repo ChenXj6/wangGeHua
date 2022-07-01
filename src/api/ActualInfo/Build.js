@@ -71,3 +71,11 @@ export const getPeopleByHouseList = query => {
   )
 };
 
+// 根据楼栋查单元
+export const getUnitByBuild = query => {
+  return service.post(
+    `/real/realInfo/build/queryUnit`, query
+  )
+};
+
+

@@ -16,6 +16,9 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
+      <template v-slot:unitNumber="{data}">
+        <span>{{unitNumberOptions.filter(v=>v.value == data.unitNumber)[0]?.label}}</span>
+      </template>
       <template v-slot:houseType="{data}">
         <span>{{ houseType(Number(data.houseType)) }}</span>
       </template>
@@ -62,8 +65,9 @@ import {
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/House'
-import { deepClone, defaultObject } from '@/utils/util'
+import { deepClone, defaultObject,resetFormat } from '@/utils/util'
 import { deleteHouse } from '@/api/ActualInfo/house'
+import { searchDict } from '@/api/sys/dict'
 export default defineComponent({
   name: 'ActualBuild',
   components:[PopupTreeInput],
@@ -188,6 +192,18 @@ export default defineComponent({
         }
       })
     }
+    // 
+    const unitNumberOptions = ref([])
+    const getOptionsByCode = (basictype,data) => {
+      searchDict({basictype}).then(res=>{
+        if(res.resCode == '000000' && res.data){
+          data.value = resetFormat(res.data)
+        }else{
+          data.value = []
+        }
+      })
+    }
+    getOptionsByCode(1052,unitNumberOptions)
     getOList()
     onMounted(() => {
       handleQuery()
@@ -208,6 +224,7 @@ export default defineComponent({
       handleTreeSelectChange,
       popupTreeProps,
       popupTreeData,
+      unitNumberOptions,
     }
   },
 })

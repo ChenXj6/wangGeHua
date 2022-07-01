@@ -21,7 +21,7 @@ export function renderTable() {
       { prop: 'gridName', label: '网格名称', minWidth: '150' },
       { prop: 'villageName', label: '小区名称', tooltip: true, minWidth: '120' },
       { prop: 'buildingNumber', label: '楼栋',},
-      { prop: 'unitNumber', label: '单元'},
+      { prop: '', slot:'unitNumber', label: '单元'},
       { prop: 'houseNumber', label: '房间号'},
       { prop: 'name', label: '姓名'},
       { prop: 'idcard', label: '身份证号',tooltip:true},

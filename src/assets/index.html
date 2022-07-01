@@ -18,15 +18,15 @@
 let event = document.getElementsByClassName('eventBox')[0]
 let obj = JSON.parse(sessionStorage.getItem('eventName'))[0]
 let div = window.document.createElement('div')
-div.style.cssText = 'min-height:280px;position: relative;'
-div.innerHTML = `<img style="width:200px;height:100px;display:block;margin:0 auto;" src='http://192.168.1.146:8081/2022/06/29/1656486768686.jpg'></img></p><p>事件名称：${obj?.eventName}</p><p>发生地点：${obj?.cityName}-${obj?.communityName}-${obj?.gridName}${obj.eventPlace ? '-' :''}${obj.eventPlace ?? ''}</p>
+div.style.cssText = 'min-height:280px;position: relative;font-size:14px'
+div.innerHTML = `<img style="width:200px;height:100px;display:block;margin:0 auto;" src='http://192.168.1.146:8081/2022/06/29/1656486768686.jpg'></img><p>事件名称：${obj?.eventName}</p><div style="display:flex;"><p style="width:80px">发生地点：</p><p>${obj?.cityName}-${obj?.communityName}-${obj?.gridName}${obj.eventPlace ? '-' :''}${obj.eventPlace ?? ''}</p></div>
   <button style="position: absolute;bottom:10px;margin:0 10px 0" class="handleManBtn">处置事件</button>
 `
 event.appendChild(div)
 
 let handleManBtn = document.getElementsByClassName('handleManBtn')[0]
 handleManBtn.addEventListener('click',function(){
-  window.top.handleManageBtn()
+  window.top.handleManageBtn(obj)
 })
 </script>
 </html>

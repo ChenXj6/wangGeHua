@@ -35,7 +35,7 @@ export default {
     const noticeListBox = ref(null)
     // 消息通知
     const isHaveNotice = computed(() => !!noticeList.value.length)
-    const noticeList = ref([])
+    const noticeList = computed(() => store.state.eventList)
     const stowAndUnfold = () => {
       if (isUnfold.value) {
         noticeListBox.value.style.height = 0
@@ -44,14 +44,7 @@ export default {
       }
       isUnfold.value = !isUnfold.value
     }
-    watch(
-      () => store.state.eventList,
-      (newValue) => {
-        noticeList.value = newValue
-        // console.log(noticeList.value,'notice1')
-      },
-      {deep:true}
-    )
+    
     const handleViewDetail = (data,type = 1) => {
       data = JSON.stringify(data)
       router.push({
@@ -60,7 +53,7 @@ export default {
       })
     }
     // onMounted(()=>{
-      noticeList.value = JSON.parse(sessionStorage.getItem('eventName')) || []
+      
       // console.log(noticeList.value,'notice2')
     // })
     // noticeList.value = JSON.parse(localStorage.getItem('eventName')) || []

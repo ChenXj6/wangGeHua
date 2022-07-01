@@ -63,7 +63,7 @@ export function renderTable() {
         type: 'slot',
         label: '',
         prop: 'eventLat',
-        span: 6,
+        span: 4,
         slotName:'eventLat'
       },
       {
@@ -143,6 +143,8 @@ export function renderTable() {
       communityCode: [{ required: true, message: '请选择社区', trigger: ['change','blur'] }],
       gridCode: [{ required: true, message: '请选择网格', trigger: ['change','blur'] }],
       eventPlace: [{ required: true, message: '请输入事件发生地', trigger: 'blur' }],
+      eventLong: [{ required: true, message: '请点击获取经纬度', trigger: ['change','blur'] }],
+      eventLat: [{ required: true, message: '请点击获取经纬度', trigger: ['change','blur'] }],
       eventFirstType:[{ required: true, message: '请选择事件类型', trigger: ['change','blur'] }],
       eventScope:[{ required: true, message: '请选择事件规模', trigger: ['change','blur'] }],
       eventContent:[{ required: true, message: '请输入事件简述', trigger: 'blur' }],

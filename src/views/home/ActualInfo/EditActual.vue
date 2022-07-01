@@ -259,16 +259,18 @@ export default {
       fileFormData.append('fileName',file.name)
       uploadApi(fileFormData).then(res=>{
         if(res.resCode == '000000'){
-          // fileList
-          let str = dataForm.value.certificates + ',' + res.message
-          let nameStr = dataForm.value.certificatesName + ',' + file.name
-          if(String(dataForm.value.certificates).length <= 0 && String(dataForm.value.certificatesName).length <= 0){
-            dataForm.value.certificates = str.slice(1)
-            dataForm.value.certificatesName = nameStr.slice(1)
+          // fileList   
+          // console.log((dataForm.value.certificates == null && dataForm.value.certificatesName == null) || (String(dataForm.value.certificates).length <= 0 && String(dataForm.value.certificatesName).length <= 0))      
+          if((dataForm.value.certificates == null && dataForm.value.certificatesName == null) || (String(dataForm.value.certificates).length <= 0 && String(dataForm.value.certificatesName).length <= 0)){
+            dataForm.value.certificates = res.message
+            dataForm.value.certificatesName = file.name
           } else {
+            let str = dataForm.value.certificates + ',' + res.message
+            let nameStr = dataForm.value.certificatesName + ',' + file.name
             dataForm.value.certificates = str
             dataForm.value.certificatesName = nameStr
           }
+          // console.log(dataForm.value.certificates,'///')
           proxy.$message.success('图片上传成功')
         } else {
           proxy.$message.success('图片上传失败')

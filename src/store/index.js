@@ -10,6 +10,7 @@ export default createStore({
     collapse: false,
     ws: null,
     eventList:[],
+    isAddEventList:false,
     mapDialog:{
       visabled:false,
       data:[]
@@ -61,9 +62,26 @@ export default createStore({
     updateHealthDegree(state,data) {
       if(!isType(data,'Array') || data.length == 0) return
       let arr = JSON.parse(sessionStorage.getItem('eventName')) || []
-      
-      state.eventList =[...data,...arr]
+      state.eventList = [...data,...arr]
       sessionStorage.setItem('eventName',JSON.stringify(state.eventList))
+      state.isAddEventList = true
+    },
+    // 事件处理完，删除指定事件
+    delEvent(state,data){
+      let arr = JSON.parse(sessionStorage.getItem('eventName')) || []
+      if(state.eventList.length > 0 && arr.length > 0){
+        state.eventList.forEach((v,i)=>{
+          if(v.id == data.id){
+            state.eventList.splice(i,1)
+          }
+        })
+        arr.forEach((v,i)=>{
+          if(v.id == data.id){
+            arr.splice(i,1)
+          }
+        })
+      }
+      sessionStorage.setItem('eventName',JSON.stringify(arr))
     },
     delHealthDegree(state) {
       sessionStorage.removeItem("user");
@@ -107,6 +125,9 @@ export default createStore({
     delHealthDegree({commit}) {
       commit('delHealthDegree')
     },
+    delEvent({ commit },data) {
+      commit('delEvent',data)
+    }
   },
   modules: {},
 })

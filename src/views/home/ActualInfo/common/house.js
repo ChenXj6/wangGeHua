@@ -21,7 +21,7 @@ export function renderTable() {
       { prop: 'gridName', label: '网格名称', minWidth: '150' },
       { prop: 'villageName', label: '小区名称', tooltip: true, minWidth: '120' },
       { prop: 'buildingNumber', label: '楼号'},
-      { prop: 'unitNumber', label: '单元号'},
+      { prop: '', slot:'unitNumber', label: '单元号'},
       { prop: 'floorId', label: '楼层'},
       { prop: 'houseNumber', label: '房间号'},
       { prop: '', label: '房屋类型', minWidth: '120',slot:'houseType' },
@@ -55,7 +55,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '楼号',
-        prop: 'buildingNo',
+        prop: 'buildingNumber',
         placeholder: '请输入楼号',
         isClearable: true,
         span: 4,
@@ -63,7 +63,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '单元号',
-        prop: 'unitNo',
+        prop: 'unitNumber',
         placeholder: '请输入单元号',
         isClearable: true,
         span: 4,
@@ -71,7 +71,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '房间号',
-        prop: 'houseNo',
+        prop: 'houseNumber',
         placeholder: '请输入房间号',
         isClearable: true,
         span: 4,

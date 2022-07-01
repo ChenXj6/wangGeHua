@@ -43,7 +43,7 @@
         <template v-slot:eventLong="">
           <el-input
                   v-model="formData.eventLong"
-                  placeholder="请输入"
+                  placeholder="请点击获取经纬度"
                   size="small"
                   clearable                  
                   @click="handleClick"
@@ -52,7 +52,7 @@
       <template v-slot:eventLat="">
                 <el-input
                   v-model="formData.eventLat"
-                  placeholder="请输入"
+                  placeholder="请点击获取经纬度"
                   size="small"
                   clearable
                   @click="handleClick"
@@ -65,6 +65,7 @@
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               :auto-upload="false"
+              :file-list="fileList"
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
@@ -172,7 +173,8 @@
     </el-dialog>
     <!-- 地图弹窗 -->
     <el-dialog
-        width="37.5%"
+        title="地图"
+        width="37%"
         v-model="mapDialogVisible">
       <VMap @getLatAndLng="getLatAndLng" :lng="formData.eventLong" :lat="formData.eventLat" />
     </el-dialog>
@@ -223,8 +225,6 @@ export default {
       proxy,
     } = getCurrentInstance()
     const { editFormConfig,userTableConfig } = renderTable.call(proxy)
-    const uploadUrl = ref(`/api/realInfo/file/upload`)
-    const fileList = ref([])
     let formData = ref({
       id:'',
       certificates:'',
@@ -251,24 +251,9 @@ export default {
       mainPeopleAddress:'',
       eventFirstType:'',
       createBy:JSON.parse(sessionStorage.getItem('user')).operatorId,
+      filePath:'',
+      fileName:'',
     })
-    const changeFile = (file,fileList) => {
-      console.log(file,fileList,'upload')
-      let fileFormData = new FormData();
-      let currentFile = fileList[0].raw
-      fileFormData.append('file',currentFile)
-      fileFormData.append('fileName',file.name)
-      uploadApi(fileFormData).then(res=>{
-        if(res.resCode == '000000'){
-          let str =  res.message + ','
-          formData.value.certificates = str.substr(0,str.length-1)
-          proxy.$message.success('图片上传成功')
-        }
-      })
-    }
-    const handleRemove = (val) => {
-
-    }
     const streetNameOptions = ref([
       { label:'工人新村北村街道',value:'370105004' },
       { label:'工人新村南村街道',value:'370105005' },
@@ -338,8 +323,6 @@ export default {
         }
       })
     }
-    const dialogImageUrl = ref('')
-    const dialogVisible = ref(false)
 
     const dataForm = ref({}) // 处置表单
     const recordFormRef = ref(null) // 处置表单ref
@@ -361,10 +344,82 @@ export default {
         }
       })
     }
-    // upload
-    const handlePreview = (uploadFile) => {
-      dialogImageUrl.value = uploadFile.url
+    // 图片相关配置
+    const fileList = ref([])
+    const dialogVisible = ref(false)
+    const dialogImageUrl = ref('')
+    // 上传图片
+    const changeFile = (file) => {
+      let fileFormData = new FormData();
+      let currentFile = file.raw
+      fileFormData.append('file',currentFile)
+      fileFormData.append('fileName',file.name)
+      uploadApi(fileFormData).then(res=>{
+        if(res.resCode == '000000'){
+          // fileList   
+          // console.log((dataForm.value.certificates == null && dataForm.value.certificatesName == null) || (String(dataForm.value.certificates).length <= 0 && String(dataForm.value.certificatesName).length <= 0))      
+          if((formData.value.filePath == null && formData.value.fileName == null) || (String(formData.value.filePath).length <= 0 && String(formData.value.fileName).length <= 0)){
+            formData.value.filePath = res.message
+            formData.value.fileName = file.name
+          } else {
+            let str = formData.value.filePath + ',' + res.message
+            let nameStr = formData.value.fileName + ',' + file.name
+            formData.value.filePath = str
+            formData.value.fileName = nameStr
+          }
+          // console.log(dataForm.value.certificates,'///')
+          proxy.$message.success('图片上传成功')
+        } else {
+          proxy.$message.success('图片上传失败')
+        }
+      })
+    }
+    // 删除图片
+    const handleRemove = (val) => {
+      if(fileList.value.length == 1){
+        fileList.value = []
+        formData.value.filePath = ''
+        formData.value.fileName = ''
+      }else{
+        let certificatesArr = formData.value.filePath.split(',')
+        let certificatesNameArr = formData.value.fileName.split(',')
+        certificatesArr.forEach((v,ind) => {
+          if(`${import.meta.env.VITE_IMG_BASE_API }${v}` == val.url && certificatesNameArr[ind] == val.name){
+            certificatesArr.splice(ind,1)
+            certificatesNameArr.splice(ind,1)
+            formData.value.filePath = certificatesArr.join(',')
+            formData.value.fileName = certificatesNameArr.join(',')
+          }
+        })
+      }
+    }
+    // 图片回显
+    const resetFileList = () => {
+      if(formData.value.filePath == null ||  formData.value.filePath.length == 0 ) return
+      let result = formData.value.filePath.indexOf(',')
+      // console.log(result,'////')
+      if(result != '-1'){
+        let certificatesArr = formData.value.filePath.split(',')
+        let certificatesNameArr = formData.value.fileName.split(',')
+        certificatesArr.forEach((v,i) => {
+          let obj = {
+            name:certificatesNameArr[i],
+            url:`${import.meta.env.VITE_IMG_BASE_API }${v}`
+          }
+          fileList.value.push(obj)
+        })
+      }else{
+        let obj = {
+          name:formData.value.fileName,
+          url:`${import.meta.env.VITE_IMG_BASE_API }${formData.value.filePath}`
+        }
+        fileList.value.push(obj)
+      }
+    }
+    // 图片预览
+    const handlePreview = ({url}) => {
       dialogVisible.value = true
+      dialogImageUrl.value = url
     }
     // 
     const handleSubmit = async (formRef) => {
@@ -500,6 +555,7 @@ export default {
       getOptionsByCode(1026,dataSourceOptions);
       getOptionsByCode(1029,eventSourceOptions);
     })
+    resetFileList()
     onMounted(() => {
       if(route.query.operation != 3){
         handleChange(1,formData.value.streetCode)
@@ -542,9 +598,13 @@ export default {
       rules,
       recordFormRef,
       // 
-      uploadUrl,
+      // 上传图片
+      fileList,
       changeFile,
       handleRemove,
+      dialogVisible,
+      dialogImageUrl,
+      handlePreview,
     }
   },
 }

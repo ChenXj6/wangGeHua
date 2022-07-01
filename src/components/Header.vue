@@ -130,6 +130,8 @@ export default {
       if (command == "loginout") {
         store.dispatch('delHealthDegree')
         store.dispatch('closeSocket')
+        store.state.eventList = []
+        sessionStorage.removeItem('eventName')
         router.push("/login");
       } else if (command == "user") {
         router.push("/user");
