@@ -5,6 +5,8 @@
 declare module 'vue' {
   export interface GlobalComponents {
     ElAutocomplete: typeof import('element-plus/es/el-autocomplete')['default']
+    ElBreadcrumb: typeof import('element-plus/es/el-breadcrumb')['default']
+    ElBreadcrumbItem: typeof import('element-plus/es/el-breadcrumb-item')['default']
     ElButton: typeof import('element-plus/es/el-button')['default']
     ElCard: typeof import('element-plus/es/el-card')['default']
     ElCheckbox: typeof import('element-plus/es/el-checkbox')['default']
@@ -32,6 +34,8 @@ declare module 'vue' {
     ElSubmenu: typeof import('element-plus/es/el-submenu')['default']
     ElTable: typeof import('element-plus/es/el-table')['default']
     ElTableColumn: typeof import('element-plus/es/el-table-column')['default']
+    ElTabPane: typeof import('element-plus/es/el-tab-pane')['default']
+    ElTabs: typeof import('element-plus/es/el-tabs')['default']
     ElTooltip: typeof import('element-plus/es/el-tooltip')['default']
     ElTree: typeof import('element-plus/es/el-tree')['default']
     Form: typeof import('./src/components/Form/index.vue')['default']

@@ -195,6 +195,11 @@ export default {
                         index: "/manage",
                         title: "物业公司",
                     },
+                    {
+                        icon: "el-icon-lx-recharge",
+                        index: "/propertyManager",
+                        title: "物业管家",
+                    },
                 ],
             },
             {

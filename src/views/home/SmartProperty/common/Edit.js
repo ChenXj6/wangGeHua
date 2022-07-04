@@ -442,6 +442,93 @@ export function renderTable() {
       officeCode: [{ required: true, message: '请选择归属网格', trigger: ['blur', 'change'] }],
     }
   }
+  const PropertyManagerFormConfig = {
+    gutter: 10,
+    formItems: [
+      {
+        type: 'slot',
+        label: '归属网格',
+        prop: 'officeCode',
+        span: 11,
+        slotName: 'organ',
+      },
+      {
+        type: 'Input',
+        label: '姓名',
+        prop: 'cleanerName',
+        value: '',
+        placeholder: '请输入姓名',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'selectSearch',
+        label: '类型',
+        prop: 'cleanerType',
+        value: '',
+        code:'1053',
+        placeholder: '请选择类型',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'selectSearch',
+        label: '性别',
+        prop: 'sex',
+        value: '',
+        code:'1009',
+        placeholder: '请选择性别',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '电话',
+        prop: 'tel',
+        value: '',
+        placeholder: '请输电话',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '证件号码',
+        prop: 'idCard',
+        value: '',
+        placeholder: '请输入证件号码',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'date',
+        label: '出生日期',
+        prop: 'birthDate',
+        value: '',
+        format: 'YYYY-MM-DD HH:mm:ss',
+        isClearable: true,
+        span: 8,
+      },
+      {
+        type: 'textarea',
+        label: '备注',
+        prop: 'remarks',
+        value: '',
+        placeholder: '输入备注',
+        isClearable: true,
+        span: 22,
+      },
+    ],
+    rules: {
+      officeCode: [{ required: true, message: '请选择归属网格', trigger: ['blur', 'change'] }],
+      cleanerName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
+      tel: [{ required: true, message: '请输入电话', trigger: ['blur', 'change'] }],
+      idCard: [{ required: true, message: '请输入证件号码', trigger: ['blur', 'change'] }],
+      cleanerType: [{ required: true, message: '请选择类型', trigger: ['blur', 'change'] }],
+      sex: [{ required: true, message: '请选择性别', trigger: ['blur', 'change'] }],
+
+
+    }
+  }
 
   return {
     CarFormConfig,
@@ -451,5 +538,6 @@ export function renderTable() {
     ParkLotFormConfig,
     ChargeFormConfig,
     ManageFormConfig,
+    PropertyManagerFormConfig
   }
 }

@@ -96,17 +96,15 @@ export function renderTable() {
       {
         type: 'slot',
         label: '房屋',
-        prop: 'houseNumber',
-        // value: '',
-        slotName:'buildingId',
-        placeholder: '请选择房屋名称',
+        prop: 'houseId',
+        slotName:'house',
         isClearable: true,
         span: 11,
       },
       {
         type: 'Input',
         label: '身份证号',
-        prop: 'idaCard',
+        prop: 'idcard',
         value: '',
         placeholder: '请输入身份证号',
         isClearable: true,
@@ -349,9 +347,8 @@ export function renderTable() {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
       gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
-
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
-      idaCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
+      idcard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
       houseNumber: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
     }

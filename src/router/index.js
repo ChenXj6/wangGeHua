@@ -304,12 +304,20 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Manage.vue")
       },
       {
+        path: "/propertyManager",
+        name: "propertyManager",
+        meta: {
+          title: '物业管家'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/PropertyManager.vue")
+      },
+      {
         path: "/editsmart",
         name: "editsmart",
         meta: {
           title: '智慧物业',
           getTitle: function(route) {
-            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'car' ? '停车场' : route.params.type == 'Vehicle' ? '车辆' : (route.params.type == 'Manage' ? '物业' : route.params.type == 'Charge' ? '收费' : route.params.type == 'ParkLot' ? '车位' : route.params.type == 'car' ? '停车场' : route.params.type == 'rubbish' ? '垃圾分类' : '公共设施')}`
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'Cleaner' ? '物业管家' : route.params.type == 'car' ? '停车场' : route.params.type == 'Vehicle' ? '车辆' : (route.params.type == 'Manage' ? '物业' : route.params.type == 'Charge' ? '收费' : route.params.type == 'ParkLot' ? '车位' : route.params.type == 'car' ? '停车场' : route.params.type == 'rubbish' ? '垃圾分类' : '公共设施')}`
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Edit.vue")

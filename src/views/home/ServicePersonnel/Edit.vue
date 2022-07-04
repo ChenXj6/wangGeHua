@@ -43,7 +43,7 @@
         </el-select>
       </template>
       <template v-slot:house>
-        <el-select v-model="dataForm.house" size="mini" clearable placeholder="请选择房屋"
+        <el-select v-model="dataForm.houseId" size="mini" clearable placeholder="请选择房屋"
           @change="(val) => { handleGetHouse(2, val, true) }">
           <el-option v-for="item in houseOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -55,11 +55,11 @@
         <el-button type="primary" @click="handleBack" size="small" icon="el-icon-lx-back">返回</el-button>
       </div>
     </el-row>
-    <el-row v-if="route.params.operation == 2">
+    <!-- <el-row v-if="route.params.operation == 2">
       <div class="btn-box">
         <el-button type="primary" @click="examine" size="small" icon="el-icon-lx-back">审核</el-button>
       </div>
-    </el-row>
+    </el-row> -->
     <!-- 地图弹窗 -->
     <el-dialog width="37.5%" v-model="mapDialogVisible">
       <VMap @getLatAndLng="getLatAndLng" :lng="dataForm.longitude" :lat="dataForm.latitude" />
@@ -85,9 +85,8 @@ export default {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
-    const { houseTableConfig, peopleTableConfig, peopleByHouseTableConfig, buildFormConfig, houseFormConfig, peopleFormConfig } = renderTable.call(proxy)
+    const { StaffFormConfig,houseTableConfig, peopleTableConfig, peopleByHouseTableConfig, buildFormConfig, houseFormConfig, peopleFormConfig } = renderTable.call(proxy)
     let dataForm = ref({})
-    const { StaffFormConfig } = renderTable.call(proxy)
     const table1 = ref(null)
     const table2 = ref(null)
     const table3 = ref(null)
@@ -105,7 +104,6 @@ export default {
       label: "officeName",
       children: "children"
     }
-
     const handleTreeSelectChange = ({ officeCode, officeName }) => {
       dataForm.officeCode = officeCode
       dataForm.officeName = officeName
@@ -162,12 +160,10 @@ export default {
               dataForm.value.gridCode = ''
               communityNameOptions.value = []
               gridNameOptions.value = []
-                if (route.params.type == 'ServicePersonnel') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
                 houseOptions.value = []
-              }
             }
             resetFormat(res.data, communityNameOptions)
           } else if (type == 2) {
@@ -175,22 +171,18 @@ export default {
               dataForm.value.gridName = ''
               dataForm.value.gridCode = ''
               gridNameOptions.value = []
-             if(route.params.type == 'ServicePersonnel') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
                 houseOptions.value = []
-              }
             }
             resetFormat(res.data, gridNameOptions)
           } else if (type == 3) {
             if (trigMode) {
-                if (route.params.type == 'ServicePersonnel') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
                 houseOptions.value = []
-              }
             }
           }
         }
@@ -216,13 +208,14 @@ export default {
             houseOptions.value = []
           }
           resetFormat(res.data, houseOptions, 3)
+          console.log(houseOptions.value,'....')
         }
       })
     }
     // 楼栋获取房屋
-    const handleGetHouse = (type, buildingId, trigMode = false) => {
+    const handleGetHouse = (type,buildingId, trigMode = false) => {
       if (type == 1) {
-        houseClass(type, buildingId, trigMode)
+        houseClass(type,buildingId,trigMode)
       } else {
       }
     }
@@ -233,14 +226,17 @@ export default {
         }
       })
     }
-    getOList()
     // 提交
     const handleSave = () => {
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
         if (route.params.operation == 2) {
+           delete dataForm.value.buildingNumber
+           delete dataForm.value.villageName
+           delete dataForm.value.unitNumber
+           delete dataForm.value.houseNumber
           if (route.params.type == 'ServicePersonnel') {
-            editStaff(dataForm).then(res => {
+            editStaff(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -252,7 +248,7 @@ export default {
           dataForm.value.countyCode = '370105'
           dataForm.value.countyName = '天桥区'
           if (route.params.type == 'ServicePersonnel') {
-            saveStaff(dataForm).then(res => {
+            saveStaff(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -279,9 +275,6 @@ export default {
     }
     const handleBack = () => {
       delCurrentTag(route)
-    }
-    const examine = () => {
-      dataForm.value
     }
     const formHandle = {
       span: 22,
@@ -316,17 +309,17 @@ export default {
     }
     const getLatAndLng = ({ lat, lng }) => {
       // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      dataForm.longitude = lng
-      dataForm.latitude = lat
+      dataForm.value.longitude = lng
+      dataForm.value.latitude = lat
       mapDialogVisible.value = false
     }
     onBeforeMount(() => {
       timer.value = new Date().getTime()
     })
-    route.params.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.params.data)), delete dataForm.treeNames)
+    route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)), delete dataForm.treeNames)
 
     onMounted(() => {
-      route.params.operation === 3 && (dataForm = {})
+      route.params.operation === 3 && (dataForm.value = {})
       // handleQueryTable()
     })
     return {
@@ -351,6 +344,7 @@ export default {
       handleChange,
       handleGetBuild,
       buildingOptions,
+       houseOptions,
       popupTreeData,
       handleChange,
       // 获取经纬度

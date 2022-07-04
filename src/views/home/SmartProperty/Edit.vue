@@ -23,6 +23,18 @@
         </popup-tree-input>
       </template>
     </VForm>
+    <VForm v-if="route.params.type == 'Cleaner'" :key="timer" :isDisabled="route.params.operation == 1"
+      :form-data="PropertyManagerFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+      <template v-slot:organ>
+        <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
+          @update:dataForm="handleTreeSelectChange">
+          <template v-slot>
+            <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构"
+              style="cursor:pointer;"></el-input>
+          </template>
+        </popup-tree-input>
+      </template>
+    </VForm>
     <VForm v-if="route.params.type == 'Charge'" :key="timer" :isDisabled="route.params.operation == 1"
       :form-data="ChargeFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
@@ -143,6 +155,7 @@ import { saveVehicle, editVehicle } from '@/api/SmartProperty/vehicle'
 import { saveParkLot, editParkLot } from '@/api/SmartProperty/parkLot'
 import { saveManage, editManage } from '@/api/SmartProperty/Manage'
 import { saveCharge, editCharge } from '@/api/SmartProperty/Charge'
+import { saveCleaner, editCleaner } from '@/api/SmartProperty/propertyManager'
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
@@ -154,7 +167,7 @@ export default {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
-    const { CarFormConfig, PubilcFormConfig, rubbishFormConfig, VehicleFormConfig, ParkLotFormConfig,ChargeFormConfig,ManageFormConfig } = renderTable.call(proxy)
+    const { PropertyManagerFormConfig,CarFormConfig, PubilcFormConfig, rubbishFormConfig, VehicleFormConfig, ParkLotFormConfig,ChargeFormConfig,ManageFormConfig } = renderTable.call(proxy)
     let dataForm = reactive({
       officeCode: '',
       officeName: '',
@@ -190,7 +203,15 @@ export default {
                 reject(res.resCode)
               }
             })
-          } else if (route.params.type == 'pubilc') {
+          } if (route.params.type == 'Cleaner') {
+            editCleaner(dataForm).then(res => {
+              if (res.resCode === '000000') {
+                resolve(res.message)
+              } else {
+                reject(res.resCode)
+              }
+            })
+          }if (route.params.type == 'pubilc') {
             editPubilc(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -206,8 +227,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          }
-          if (route.params.type == 'ParkLot') {
+          } if (route.params.type == 'ParkLot') {
             editParkLot(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -215,8 +235,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          } 
-          if (route.params.type == 'Manage') {
+          } if (route.params.type == 'Manage') {
             editManage(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -232,7 +251,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          } else {
+          } if (route.params.type == 'rubbish'){
             editRubbish(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -250,7 +269,15 @@ export default {
                 reject(res.resCode)
               }
             })
-          } if (route.params.type == 'pubilc') {
+          }if (route.params.type == 'Cleaner') {
+            saveCleaner(dataForm).then(res => {
+              if (res.resCode === '000000') {
+                resolve(res.message)
+              } else {
+                reject(res.resCode)
+              }
+            })
+          }  if (route.params.type == 'pubilc') {
             savePubilc(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -366,6 +393,7 @@ export default {
       VehicleFormConfig,
       ParkLotFormConfig,
       ManageFormConfig,
+      PropertyManagerFormConfig,
       ChargeFormConfig,
       formHandle,
       handleTreeSelectChange,

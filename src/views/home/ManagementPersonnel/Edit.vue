@@ -211,11 +211,6 @@
         <el-button type="primary" @click="handleBack"  textAlign="right" size="small" icon="el-icon-lx-back">返回</el-button>
       </div>
     </el-row>
-    <!-- <el-row v-if="route.params.operation == 2">
-      <div class="btn-box">
-        <el-button type="primary" @click="Examine" size="small" icon="el-icon-lx-back">审核</el-button>
-      </div>
-    </el-row> -->
     <!-- 地图弹窗 -->
     <el-dialog width="37.5%" v-model="mapDialogVisible">
       <VMap @getLatAndLng="getLatAndLng" :lng="dataForm.longitude" :lat="dataForm.latitude" />
@@ -235,7 +230,6 @@ import { savePetition, editPetition } from '@/api/ManagementPersonnel/petitionSt
 import { saveRectify, editRectify } from '@/api/ManagementPersonnel/rectifyStaff'
 import { saveRelease, editRelease } from '@/api/ManagementPersonnel/releasePer'
 import { getSubClass, getBuildClass, getHouseClass } from '@/api/ActualInfo/build'
-import { updateStatus } from '@/api/ManagementPersonnel/drugPer'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 
@@ -267,7 +261,6 @@ export default {
       label: "officeName",
       children: "children"
     }
-
     const handleTreeSelectChange = ({ officeCode, officeName }) => {
       dataForm.officeCode = officeCode
       dataForm.officeName = officeName
@@ -389,11 +382,13 @@ export default {
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
         if (route.params.operation == 2) {
-          // dataForm.value.villageName == null
+          console.log(dataForm.value)
+           delete dataForm.value.buildingNumber
+           delete dataForm.value.villageName
+           delete dataForm.value.unitNumber
+           delete dataForm.value.houseNumber
           if (route.params.type == 'Drug') {
-            delete dataForm.value.buildingNumber
-            delete dataForm.value.villageName
-            editDrug(dataForm).then(res => {
+            editDrug(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -402,7 +397,7 @@ export default {
             })
           }
           if (route.params.type == 'Release') {
-            editRelease(dataForm).then(res => {
+            editRelease(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -411,7 +406,7 @@ export default {
             })
           }
           if (route.params.type == 'Rrectify') {
-            editRectify(dataForm).then(res => {
+            editRectify(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -420,7 +415,7 @@ export default {
             })
           }
           if (route.params.type == 'Petition') {
-            editPetition(dataForm).then(res => {
+            editPetition(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -429,7 +424,7 @@ export default {
             })
           }
           if (route.params.type == 'Mentaldisorders') {
-            editMental(dataForm).then(res => {
+            editMental(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -440,7 +435,7 @@ export default {
         } else {
           dataForm.value.countyCode = '370105'
           dataForm.value.countyName = '天桥区'
-          // dataForm.value.isState = '0'
+          // dataForm.value.isState = '0' 核实状态
           if (route.params.type == 'Drug') {
             saveDrug(dataForm.value).then(res => {
               if (res.resCode === '000000') {
@@ -492,11 +487,13 @@ export default {
     const handleSubmit = (formRef) => {
       formRef.validate((vaild) => {
         if (vaild) {
+          console.log(dataForm.value,'//')
           handleSave().then(res => {
+            console.log(111)
             proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err => {
-            console.log(proxy)
+            console.log(err)
             proxy.$message.warning(`操作失败，请稍后再试！`)
           })
         } else {
@@ -507,12 +504,6 @@ export default {
     const handleBack = () => {
       delCurrentTag(route)
     }
-    const Examine = () => {
-      updateStatus.then(request => {
-        dataForm.value.isState = request.data
-      })
-    }
-    
     const formHandle = {
       span: 22,
       textAlign: 'right',
@@ -536,28 +527,29 @@ export default {
     }
     if (route.params.operation != 3) {
       dataForm.value = JSON.parse(decodeURIComponent(route.params.data))
-      if (route.params.type == 'Drug') {
+      
         handleChange(1, dataForm.value.streetCode)
         handleChange(2, dataForm.value.communityCode)
         handleChange(3)
         handleGetBuild(1, dataForm.value.gridCode)
         handleGetHouse(1, dataForm.value.buildingId)
-      }
+     
     }
     const getLatAndLng = ({ lat, lng }) => {
       // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      dataForm.longitude = lng
-      dataForm.latitude = lat
+      dataForm.value.longitude = lng
+      dataForm.value.latitude = lat
       mapDialogVisible.value = false
     }
     onBeforeMount(() => {
       timer.value = new Date().getTime()
     })
-    route.params.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.params.data)), delete dataForm.treeNames)
+    route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)), delete dataForm.treeNames)
 
     onMounted(() => {
-      route.params.operation === 3 && (dataForm = {})
+      route.params.operation === 3 && (dataForm.value = {})
       // handleQueryTable()
+      console.log(dataForm.value)
     })
     return {
       dataForm,
@@ -591,7 +583,7 @@ export default {
       mapDialogVisible,
       handleClick,
       getLatAndLng,
-      Examine
+      
     }
   },
 }

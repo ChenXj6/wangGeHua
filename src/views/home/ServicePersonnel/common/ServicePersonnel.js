@@ -26,7 +26,7 @@ export function renderTable() {
       { prop: 'staffName', label: '姓名', minWidth: '150' },
       { prop: '', slot:'staffType', label: '类型', minWidth: '120' },
       { prop: 'residenceNow', label: '所在地', minWidth: '150' },
-      { prop: '', slot:'isState', label: '核实状态', minWidth: '120' },
+      // { prop: '', slot:'isState', label: '核实状态', minWidth: '120' },
       { prop: '', label: '操作', slot: 'operation', minWidth: '120' },
     ],
   }

@@ -465,7 +465,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '身份证号',
-        prop: 'idaCard',
+        prop: 'idCard',
         value: '',
         placeholder: '请输入身份证号',
         isClearable: true,
@@ -848,7 +848,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '身份证号',
-        prop: 'idaCard',
+        prop: 'idCard',
         value: '',
         placeholder: '请输入身份证号',
         isClearable: true,
@@ -1379,7 +1379,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '身份证号',
-        prop: 'idaCard',
+        prop: 'idCard',
         value: '',
         placeholder: '请输入身份证号',
         isClearable: true,
@@ -1803,7 +1803,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '身份证号',
-        prop: 'idaCard',
+        prop: 'idCard',
         value: '',
         placeholder: '请输入身份证号',
         isClearable: true,
