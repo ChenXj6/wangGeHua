@@ -72,6 +72,7 @@
           type="priamry"
           @click="handleOperation(4, data.data)"
         />
+<<<<<<< HEAD
         <el-popconfirm v-if="data.data.approvalStatus == 1 || data.data.approvalStatus == 2 || data.data.approvalStatus == 4" :title="`是否${data.data.approvalStatus == 4 || data.data.approvalStatus == 5 ? '解挂' : '临时挂起'}该条数据`" @confirm="handleLock(data.data)">
           <template #reference>
             <el-button
@@ -83,6 +84,15 @@
           </template>
           <!-- unlock -->
         </el-popconfirm>
+=======
+        
+        <el-button
+          size="small"
+          icon="el-icon-lx-lock"
+          circle
+          type="priamry"
+        />
+>>>>>>> dev-wss
       </template>
     </V-table>
   </div>
@@ -103,8 +113,11 @@ import { renderTable } from './common/eventHandle'
 import { deepClone, formatterDate,resetFormat } from '@/utils/util'
 
 import { searchDict } from '@/api/sys/dict'
+<<<<<<< HEAD
 import { queryByEventId,eventLock } from '@/api/ResidentsReport/index'
 import { useStore } from 'vuex'
+=======
+>>>>>>> dev-wss
 
 export default defineComponent({
   name: 'residentsReport',
@@ -186,6 +199,7 @@ export default defineComponent({
         query: { data: encodeURIComponent(data), operation: type },
       })
     }
+<<<<<<< HEAD
     const dataForm = ref({})
     const handleLock = async (data) => {
       dataForm.value.eventId = data.id
@@ -212,6 +226,8 @@ export default defineComponent({
         })
       }
     }
+=======
+>>>>>>> dev-wss
     // 获取事件规模1019、事项类型1025、事件处理状态1001
     const eventScopeOptions = ref([])
     const eventFirstTypeOptions = ref([])
@@ -231,7 +247,11 @@ export default defineComponent({
       tableConfig.rowClassFunc = tableRowClassName //  表格样式
       getOptionsByCode(1019,eventScopeOptions);
       getOptionsByCode(1025,eventFirstTypeOptions);
+<<<<<<< HEAD
       getOptionsByCode(1027,approvalStatusOptions);
+=======
+      getOptionsByCode(1001,approvalStatusOptions);
+>>>>>>> dev-wss
       getOptionsByCode(1003,dataSourceOptions);
     })
     onMounted(() => {
@@ -252,7 +272,10 @@ export default defineComponent({
       eventFirstTypeOptions,
       approvalStatusOptions,
       dataSourceOptions,
+<<<<<<< HEAD
       handleLock,
+=======
+>>>>>>> dev-wss
     }
   },
 })

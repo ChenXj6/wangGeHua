@@ -10,7 +10,7 @@
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
     <VForm :isDisabled="route.query.operation == 1 || route.query.operation == 4" :form-data="editFormConfig" :form-model="formData" :form-handle="route.query.operation != 1 && route.query.operation != 4 ? formHandle : {}">
-        <template v-slot:tree="">
+        <template v-slot:tree>
           <el-select v-model="formData.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
               v-for="item in streetNameOptions"
@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </template>
-        <template v-slot:communityCode="">
+        <template v-slot:communityCode>
           <el-select v-model="formData.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
             <el-option
               v-for="item in communityNameOptions"
@@ -30,7 +30,7 @@
             </el-option>
           </el-select>
         </template>
-        <template v-slot:gridCode="">
+        <template v-slot:gridCode>
           <el-select v-model="formData.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
@@ -58,7 +58,7 @@
                   @click="handleClick"
                 />
       </template>
-      <template v-slot:upload="">
+      <template v-slot:upload>
         <el-upload
               class="upload-demo"
               action=""
