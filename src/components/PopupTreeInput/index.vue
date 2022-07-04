@@ -85,7 +85,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/deep/.popWidth{
+deep.popWidth{
   min-width: 250px !important;
 }
 </style>

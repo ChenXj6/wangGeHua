@@ -17,6 +17,7 @@ declare module 'vue' {
     ElDropdown: typeof import('element-plus/es/el-dropdown')['default']
     ElDropdownItem: typeof import('element-plus/es/el-dropdown-item')['default']
     ElDropdownMenu: typeof import('element-plus/es/el-dropdown-menu')['default']
+    ElFmItem: typeof import('element-plus/es/el-fm-item')['default']
     ElForm: typeof import('element-plus/es/el-form')['default']
     ElFormItem: typeof import('element-plus/es/el-form-item')['default']
     ElInput: typeof import('element-plus/es/el-input')['default']

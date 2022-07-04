@@ -95,7 +95,7 @@ export default {
             // },
             {
                 icon: "el-icon-lx-calendar",
-                index: "7",
+                index: "9",
                 title: "统计分析",
                 subs: [
                     {
@@ -163,8 +163,52 @@ export default {
                 ],
             },
             {
-                icon: "el-icon-lx-hot",
+                icon: "el-icon-lx-service",
                 index: "6",
+                title: "重点服务人员",
+                subs: [
+                    {
+                        icon: "el-icon-lx-attentionfill",
+                        index: "/servicepersonnel",
+                        title: "重点服务人员",
+                    },
+                ],
+            },
+            {
+                icon: "el-icon-lx-weibo",
+                index: "7",
+                title: "重点管理人员",
+                subs: [
+                    {
+                        icon: "el-icon-lx-attentionfill",
+                        index: "/drugper",
+                        title: "戒毒人员",
+                    },
+                    {
+                        icon: "el-icon-lx-rank",
+                        index: "/ReleasePer",
+                        title: "刑满释放人员",
+                    },
+                    {
+                        icon: "el-icon-lx-warn",
+                        index: "/RrectifyStaff",
+                        title: "社会矫正人员",
+                    },
+                    {
+                        icon: "el-icon-lx-crown",
+                        index: "/MentaldisordersPer",
+                        title: "精神障碍人员",
+                    },
+                    {
+                        icon: "el-icon-lx-goods",
+                        index: "/PetitionStaff",
+                        title: "上访人员",
+                    },
+                ],
+            },
+            {
+                icon: "el-icon-lx-hot",
+                index: "8",
                 title: "宣传管理",
                 subs: [
                     {
@@ -203,6 +247,26 @@ export default {
                         icon: "el-icon-lx-unlock",
                         index: "/carpacrk",
                         title: "停车场",
+                    },
+                    {
+                        icon: "el-icon-lx-edit",
+                        index: "/vehiclelist",
+                        title: "车辆列表",
+                    },
+                    {
+                        icon: "el-icon-lx-calendar",
+                        index: "/ParkLot",
+                        title: "车位信息",
+                    },
+                    {
+                        icon: "el-icon-lx-rechargefill",
+                        index: "/charge",
+                        title: "收费列表",
+                    },
+                    {
+                        icon: "el-icon-lx-recharge",
+                        index: "/manage",
+                        title: "物业公司",
                     },
                 ],
             },

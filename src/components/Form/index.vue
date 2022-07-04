@@ -221,7 +221,7 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-/deep/.el-date-editor.el-input, .el-date-editor.el-input__inner{
+deep.el-date-editor.el-input, .el-date-editor.el-input__inner{
   width: 100% !important;
 }
 </style>
