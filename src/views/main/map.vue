@@ -461,12 +461,12 @@ export default {
           houseList.value = res.data.list
           peopleList.value = []
         }
-        console.log(res,'getHouseApi')
+        // console.log(res,'getHouseApi')
       })
     }
     const getPeopleApi = () => {
       getPeopleList(searchForm.value).then(res=>{
-        console.log(res,'getPeopleApi')
+        // console.log(res,'getPeopleApi')
         if(res.resCode == '000000'){
           isHavePeople.value = false
           peopleList.value = res.data.list

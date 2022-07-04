@@ -25,15 +25,7 @@ const routes = [
           title: '地图'
         },
         component: () => import( /* webpackChunkName: "map" */ "@/views/main/map.vue")
-      }, 
-      // {
-      //   path: "/a",
-      //   name: "A",
-      //   meta: {
-      //     title: '安防平台'
-      //   },
-      //   component: () => import( /* webpackChunkName: "map" */ "@/views/main/a.vue")
-      // }, 
+      },
     ],
     redirect:'/map'
   },
@@ -281,6 +273,113 @@ const routes = [
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Edit.vue")
+      },
+      {
+        path: "/draft",
+        name: "draft",
+        meta: {
+          title: '文稿列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Propaganda/Draft.vue")
+      },
+      {
+        path: "/editDraft",
+        name: "editDraft",
+        meta: {
+          title: '文稿列表',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.operation == 1 ? '文稿' :'多媒体'}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Propaganda/EditDraft.vue")
+      },
+      {
+        path: "/draftReview",
+        name: "draftReview",
+        meta: {
+          title: '文稿审核'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Propaganda/DraftReview.vue")
+      },
+      {
+        path: "/media",
+        name: "media",
+        meta: {
+          title: '多媒体列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Propaganda/MediaList.vue")
+      },
+      {
+        path: "/gridPeopleType",
+        name: "gridPeopleType",
+        meta: {
+          title: '网格人员类型统计'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/GridPeopleType.vue")
+      },
+      {
+        path: "/eventHadle",
+        name: "eventHadle",
+        meta: {
+          title: '事件类型处置统计'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/EventHandle.vue")
+      },
+      {
+        path: "/eventHadleRate",
+        name: "eventHadleRate",
+        meta: {
+          title: '事件类型处置率排名'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/EventHandleRate.vue")
+      },
+      {
+        path: "/eventHadleOver",
+        name: "eventHadleOver",
+        meta: {
+          title: '事件类型处置完成率排名'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/EventHandleOver.vue")
+      },
+      {
+        path: "/daysEvent",
+        name: "daysEvent",
+        meta: {
+          title: '事件日处理统计'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/DaysEvent.vue")
+      },
+      {
+        path: "/dataPool",
+        name: "dataPool",
+        meta: {
+          title: '数据汇总'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/DataPool.vue")
+      },
+      {
+        path: "/satisfiedRate",
+        name: "satisfiedRate",
+        meta: {
+          title: '满意率统计'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/SatisfiedRate.vue")
+      },
+      {
+        path: "/12345Handle",
+        name: "12345Handle",
+        meta: {
+          title: '12345热线办理比例分析图'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/12345Handle.vue")
+      },
+      {
+        path: "/12345Weekly",
+        name: "12345Weekly",
+        meta: {
+          title: '12345市民服务热线工单受理周报表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/12345Weekly.vue")
       },
     ]
   },

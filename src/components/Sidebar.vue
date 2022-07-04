@@ -13,12 +13,11 @@
                           
                             <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index">
                                 <i :class="subItem.icon"></i>
-                                <template #title>{{ subItem.title }}111</template>
+                                <template #title>{{ subItem.title }}</template>
                                 <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.index">
                                     {{ threeItem.title }}</el-menu-item>
                             </el-submenu>
-                            <el-menu-item v-else :index="subItem.index" :key="subItem.index"><i :class="subItem.icon"></i>{{ subItem.title }}
-                            </el-menu-item>
+                            <el-menu-item v-else :index="subItem.index" :key="subItem.index"><i :class="subItem.icon"></i><span class="menuItem" :title="subItem.title">{{ subItem.title }}</span></el-menu-item>
                         </template>
                     </el-submenu>
                 </template>
@@ -96,6 +95,58 @@ export default {
             // },
             {
                 icon: "el-icon-lx-calendar",
+                index: "7",
+                title: "统计分析",
+                subs: [
+                    {
+                        icon: "el-icon-lx-attentionfill",
+                        index: "/gridPeopleType",
+                        title: "网格人员类型统计",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/eventHadle",
+                        title: "事件类型处置统计",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/eventHadleRate",
+                        title: "事件类型处置率排名",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/eventHadleOver",
+                        title: "事件类型处置完成率排名",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/daysEvent",
+                        title: "事件日处理统计",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/dataPool",
+                        title: "数据汇总",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/satisfiedRate",
+                        title: "满意率统计",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/12345Handle",
+                        title: "12345热线办理比例分析图",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/12345Weekly",
+                        title: "12345市民服务热线工单受理周报表",
+                    },
+                ],
+            },
+            {
+                icon: "el-icon-lx-calendar",
                 index: "1",
                 title: "事件处置",
                 subs: [
@@ -108,6 +159,28 @@ export default {
                         icon: "el-icon-lx-forward",
                         index: "/eventhandle",
                         title: "事件信息处置",
+                    },
+                ],
+            },
+            {
+                icon: "el-icon-lx-hot",
+                index: "6",
+                title: "宣传管理",
+                subs: [
+                    {
+                        icon: "el-icon-lx-calendar",
+                        index: "/draft",
+                        title: "文稿列表",
+                    },
+                    {
+                        icon: "el-icon-lx-read",
+                        index: "/draftReview",
+                        title: "文稿审核",
+                    },
+                    {
+                        icon: "el-icon-lx-record",
+                        index: "/media",
+                        title: "多媒体列表",
                     },
                 ],
             },
@@ -199,9 +272,16 @@ export default {
     width: 0;
 }
 .sidebar-el-menu:not(.el-menu--collapse) {
-    width: 200px;
+    width: 230px;
 }
 .sidebar > ul {
     height: 100%;
+}
+.menuItem{
+  display: inline-block;
+  width: 120px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
 }
 </style>
