@@ -3,7 +3,7 @@ import service from '@/utils/request';
 // 添加
 export const saveCarPark = query => {
   return service.post(
-    `/real/smart/parking/insert`, query
+    `/real/realInfo/smart/parking/insert`, query
   )
 };
 
@@ -11,20 +11,20 @@ export const saveCarPark = query => {
 // 编辑
 export const editCarPark = query => {
   return service.post(
-    `/real/smart/parking/update`, query
+    `/real/realInfo/smart/parking/update`, query
   )
 };
 
 // 删除
 export const deleteCarPark = query => {
   return service.post(
-    `/real/smart/parking/delete`, query
+    `/real/realInfo/smart/parking/delete`, query
   )
 };
 
 // 获取列表
 export const getCarParkList = query => {
   return service.post(
-    `/real/smart/parking/select`, query
+    `/real/realInfo/smart/parking/select`, query
   )
 };

@@ -11,7 +11,7 @@ export function renderTable() {
     method: getDetailList, // 請求api
     index: false, // 是否启用序号列
     total: 0,
-    isSortable: true, // 是否开启拖拽
+    isSortable: false, // 是否开启拖拽
     columns: [
       // {
       //   prop: 'date',
@@ -27,10 +27,10 @@ export function renderTable() {
         minWidth: '120',
         formatter: 'YYYY-MM-DD HH:mm:ss',
       },
-      { prop: 'eventScope', label: '事项规模', minWidth: '120' },
-      { prop: 'eventFirstType', label: '事项类型', tooltip: true },
-      { prop: 'approvalStatus', label: '事项处理状态', minWidth: '120' },
-      { prop: 'dataSource', label: '数据来源', minWidth: '120' },
+      { prop: '',slot:'eventScope', label: '事项规模', minWidth: '120' },
+      { prop: '',slot:'eventFirstType', label: '事项类型', tooltip: true },
+      { prop: '',slot:'approvalStatus', label: '事项处理状态', minWidth: '120' },
+      { prop: '',slot:'dataSource', label: '数据来源', minWidth: '120' },
       { prop: 'eventUserName', label: '姓名', minWidth: '120' },
       { prop: 'eventUserPhone', label: '联系电话', minWidth: '120' },
       { prop: '', label: '操作', slot: 'operation', minWidth: '100' },
@@ -65,22 +65,17 @@ export function renderTable() {
         span: 6,
       },
       {
-        type: 'selectSearch',
-        label: '事件状态',
-        prop: 'status',
-        value: '',
-        placeholder: '请选择事件状态',
-        code:'1001',
-        isClearable: true,
-        span: 6,
+        type:'slot',
+        label:'事件状态',
+        slotName:'status',
+        placeholder: '请选择事件类型',
+        span:6,
       },
       {
-        type: 'selectSearch',
-        label: '事件类型',
-        prop: 'eventFirstType',
-        value: '',
-        placeholder:'请选择事件类型',
-        code:'1025',
+        type:'slot',
+        label:'事件类型',
+        slotName:'eventFirstType',
+        placeholder: '请选择事件来源',
         span:6,
       },
       {
@@ -93,14 +88,11 @@ export function renderTable() {
         span: 6,
       },
       {
-        type: 'selectSearch',
-        label: '事件来源',
-        prop: 'source',
-        value: '',
+        type:'slot',
+        label:'事件来源',
+        slotName:'source',
         placeholder: '请选择事件来源',
-        code:'1003',
-        isClearable: true,
-        span: 6,
+        span:6,
       },
     ],
   }

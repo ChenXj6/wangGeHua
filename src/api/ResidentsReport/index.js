@@ -24,6 +24,13 @@ export const deleteDetail = query => {
   )
 };
 
+// 查询处置记录
+export const queryByEventId = query => {
+  return service.post(
+    `/real/realInfo/record/queryByEventId`, query
+  )
+};
+
 // 处置
 export const getRecordList = query => {
   return service.post(

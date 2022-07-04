@@ -276,15 +276,117 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/RubbishClass.vue")
       },
       {
+        path: "/vehiclelist",
+        name: "vehiclelist",
+        meta: {
+          title: '车辆列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/VehicleList.vue")
+      },
+      {
+        path: "/parklot",
+        name: "parklot",
+        meta: {
+          title: '车位信息'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/ParkLot.vue")
+      },
+      {
+        path: "/charge",
+        name: "charge",
+        meta: {
+          title: '收费列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Charge.vue")
+      },
+      {
+        path: "/manage",
+        name: "manage",
+        meta: {
+          title: '物业公司'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Manage.vue")
+      },
+      {
         path: "/editsmart",
         name: "editsmart",
         meta: {
           title: '智慧物业',
           getTitle: function(route) {
-            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'car' ? '停车场' : (route.params.type == 'rubbish' ? '垃圾分类' : '公共设施')}`
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'car' ? '停车场' : route.params.type == 'Vehicle' ? '车辆' : (route.params.type == 'Manage' ? '物业' : route.params.type == 'Charge' ? '收费' : route.params.type == 'ParkLot' ? '车位' : route.params.type == 'car' ? '停车场' : route.params.type == 'rubbish' ? '垃圾分类' : '公共设施')}`
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Edit.vue")
+      },
+      {
+        path: "/ServicePersonnel",
+        name: "ServicePersonnel",
+        meta: {
+          title: '重点服务人员'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ServicePersonnel/ServicePersonnel.vue")
+      },
+      {
+        path: "/editServicePersonnel",
+        name: "editServicePersonnel",
+        meta: {
+          title: '重点服务人员',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}重点服务人员`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ServicePersonnel/Edit.vue")
+      },
+      {
+        path: "/DrugPer",
+        name: "DrugPer",
+        meta: {
+          title: '戒毒人员'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ManagementPersonnel/DrugPer.vue")
+      },
+      {
+        path: "/ReleasePer",
+        name: "ReleasePer",
+        meta: {
+          title: '刑满释放人员'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ManagementPersonnel/ReleasePer.vue")
+      },
+      {
+        path: "/RrectifyStaff",
+        name: "RrectifyStaff",
+        meta: {
+          title: '社会矫正人员'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ManagementPersonnel/RrectifyStaff.vue")
+      },
+      {
+        path: "/PetitionStaff",
+        name: "PetitionStaff",
+        meta: {
+          title: '上访人员'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ManagementPersonnel/PetitionStaff.vue")
+      },
+      {
+        path: "/MentaldisordersPer",
+        name: "MentaldisordersPer",
+        meta: {
+          title: '精神障碍人员'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ManagementPersonnel/MentaldisordersPer.vue")
+      },
+      {
+        path: "/eidtManagementPersonnel",
+        name: "eidtManagementPersonnel",
+        meta: {
+          title: '重点管理人员',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'Drug' ? '吸毒人员' : route.params.type == 'Release' ? '刑满释放人员' : route.params.type == 'Rrectify' ? '社会矫正人员' : route.params.type == 'Petition' ? '上访人员' : '精神障碍人员' }`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/ManagementPersonnel/Edit.vue")
       },
     ]
   },

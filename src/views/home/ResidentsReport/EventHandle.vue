@@ -1,6 +1,37 @@
 <template>
   <div>
-    <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle"/>
+    <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle">
+      <template v-slot:status>
+        <el-select v-model="searchForm.status" size="mini" clearable placeholder="请选择事件状态">
+          <el-option
+            v-for="item in approvalStatusOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:eventFirstType>
+        <el-select v-model="searchForm.eventFirstType" size="mini" clearable placeholder="请选择事件类型">
+          <el-option
+            v-for="item in eventFirstTypeOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:source>
+        <el-select v-model="searchForm.source" size="mini" clearable placeholder="请选择事件来源">
+          <el-option
+            v-for="item in dataSourceOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+    </VForm>
     <V-table
       ref="table"
       :table-config="tableConfig"
@@ -12,6 +43,18 @@
           @click.prevent="handleOperation(1, data.data)"
           >{{ data.data.eventName }}</el-link
         >
+      </template>
+      <template v-slot:eventScope="{data}">
+        <span>{{eventScopeOptions.filter(v=>v.value == data.eventScope)[0]?.label}}</span>
+      </template>
+      <template v-slot:eventFirstType="{data}">
+        <span>{{eventFirstTypeOptions.filter(v=>v.value == data.eventFirstType)[0]?.label}}</span>
+      </template>
+      <template v-slot:approvalStatus="{data}">
+        <span>{{approvalStatusOptions.filter(v=>v.value == data.approvalStatus)[0]?.label}}</span>
+      </template>
+      <template v-slot:dataSource="{data}">
+        <span>{{dataSourceOptions.filter(v=>v.value == data.dataSource)[0]?.label}}</span>
       </template>
       <template v-slot:operation="data">
         <el-button
@@ -26,8 +69,9 @@
           icon="el-icon-lx-forwardfill"
           circle
           type="priamry"
+          @click="handleOperation(4, data.data)"
         />
-        <!-- @click="handleOperation(2, data.data)" -->
+        
         <el-button
           size="small"
           icon="el-icon-lx-lock"
@@ -51,7 +95,9 @@ import {
 } from '@vue/runtime-core'
 
 import { renderTable } from './common/eventHandle'
-import { deepClone, formatterDate } from '@/utils/util'
+import { deepClone, formatterDate,resetFormat } from '@/utils/util'
+
+import { searchDict } from '@/api/sys/dict'
 
 export default defineComponent({
   name: 'residentsReport',
@@ -126,9 +172,27 @@ export default defineComponent({
         query: { data: encodeURIComponent(data), operation: type },
       })
     }
+    // 获取事件规模1019、事项类型1025、事件处理状态1001
+    const eventScopeOptions = ref([])
+    const eventFirstTypeOptions = ref([])
+    const approvalStatusOptions = ref([])
+    const dataSourceOptions = ref([])
+    const getOptionsByCode = (basictype,data) => {
+      searchDict({basictype}).then(res=>{
+        if(res.resCode == '000000' && res.data){
+          data.value = resetFormat(res.data)
+        }else{
+          data.value = []
+        }
+      })
+    }
 
     onBeforeMount(() => {
       tableConfig.rowClassFunc = tableRowClassName //  表格样式
+      getOptionsByCode(1019,eventScopeOptions);
+      getOptionsByCode(1025,eventFirstTypeOptions);
+      getOptionsByCode(1001,approvalStatusOptions);
+      getOptionsByCode(1003,dataSourceOptions);
     })
     onMounted(() => {
       handleQuery()
@@ -143,6 +207,11 @@ export default defineComponent({
       handleQuery,
       handleReset,
       handleOperation,
+      //
+      eventScopeOptions,
+      eventFirstTypeOptions,
+      approvalStatusOptions,
+      dataSourceOptions,
     }
   },
 })

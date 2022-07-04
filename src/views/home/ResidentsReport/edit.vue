@@ -9,8 +9,8 @@
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-    <VForm :isDisabled="route.query.operation == 1" :form-data="editFormConfig" :form-model="formData" :form-handle="route.query.operation != 1 ? formHandle : {}">
-        <template v-slot:tree="">
+    <VForm :isDisabled="route.query.operation == 1 || route.query.operation == 4" :form-data="editFormConfig" :form-model="formData" :form-handle="route.query.operation != 1 && route.query.operation != 4 ? formHandle : {}">
+        <template v-slot:tree>
           <el-select v-model="formData.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
               v-for="item in streetNameOptions"
@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </template>
-        <template v-slot:communityCode="">
+        <template v-slot:communityCode>
           <el-select v-model="formData.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
             <el-option
               v-for="item in communityNameOptions"
@@ -30,7 +30,7 @@
             </el-option>
           </el-select>
         </template>
-        <template v-slot:gridCode="">
+        <template v-slot:gridCode>
           <el-select v-model="formData.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
@@ -40,7 +40,7 @@
             </el-option>
           </el-select>
         </template>
-      <template v-slot:longAndLat="">
+      <template v-slot:longAndLat>
         <el-row :gutter="10">
               <el-col :span="12">
                 <el-input
@@ -62,7 +62,7 @@
               </el-col>
             </el-row>
       </template>
-      <template v-slot:upload="">
+      <template v-slot:upload>
         <el-upload
               class="upload-demo"
               action="https://jsonplaceholder.typicode.com/posts/"
@@ -75,7 +75,7 @@
             </el-upload>
       </template>
     </VForm>
-    <div v-if="route.query.operation == 1">
+    <div v-if="route.query.operation == 1 || route.query.operation == 4">
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
@@ -84,26 +84,69 @@
         </el-breadcrumb>
       </div>
       <div style="margin-bottom: 20px"><hr /></div>
-      <el-table
-        :data="tableData"
-        border
-        style="width: 100%"
-        :header-cell-style="{ textAlign: 'center' }"
-      >
-        <el-table-column prop="date" label="发起人"> </el-table-column>
-        <el-table-column prop="date" label="发起意见"> </el-table-column>
-        <el-table-column prop="date" label="发起时间"> </el-table-column>
-        <el-table-column prop="date" label="发起照片"> </el-table-column>
-        <el-table-column prop="date" label="处置人"> </el-table-column>
-        <el-table-column prop="date" label="处理意见" width="280px">
+      <el-table :data="tableData" style="width: 100%" size="mini">
+        <el-table-column prop="createBy" label="发起人" width="120" />
+        <el-table-column prop="launchRemark" label="发起意见" />
+        <el-table-column prop="createDate" label="发起时间" width="150">
+          <template #default="scope">
+            {{ formatterDate(scope.row.createDate) }}
+          </template>
         </el-table-column>
-        <el-table-column prop="date" label="处置时间"> </el-table-column>
-        <el-table-column prop="date" label="处置照片"> </el-table-column>
-        <el-table-column prop="name" label="处置状态"> </el-table-column>
+        <el-table-column prop="" label="发起图片" width="150" />
+        <el-table-column prop="dealBy" label="处置人" width="120" />
+        <el-table-column prop="dealRemark" label="处置意见" />
+        <el-table-column prop="updateDate" label="处置时间" width="150" />
+        <el-table-column prop="" label="处置图片" width="150" />
+        <el-table-column prop="dealStatus" label="处置状态" width="90">
+          <template #default="scope">
+            {{dataSourceOptions.filter(v=>v.value == scope.row.dealStatus)[0]?.label}}
+          </template>
+        </el-table-column>
       </el-table>
     </div>
-    <el-row v-if="route.query.operation == 1">
+        <div v-if="route.query.operation == 4">
+      <div class="crumbs">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <i class="el-icon-lx-cascades"></i> 事件处置
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <div style="margin-bottom: 20px"><hr /></div>
+      <el-form ref="form" :model="dataForm" label-width="150px">
+        <el-form-item label="处置方式">
+          <el-select v-model="dataForm.dealStatus" size="mini" placeholder="请选择处置方式">
+            <el-option
+              v-for="item in dataSourceOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="流转人" v-if="dataForm.dealStatus == 2">
+          <el-input v-model="dataForm.launchBy" size="mini" placeholder="" @click="handleChangeLaunch"></el-input>
+        </el-form-item>
+        <el-form-item label="处理时限" v-if="dataForm.dealStatus == 2">
+          <el-input v-model="dataForm.updateDate" size="mini" placeholder="" @click="handleChangeLaunch"></el-input>
+        </el-form-item>
+        <el-form-item label="处理意见">
+          <el-input v-model="dataForm.dealRemark" size="mini" placeholder=""></el-input>
+        </el-form-item>
+      </el-form>
+      
+      
+    </div>
+    <el-row v-if="route.query.operation == 1 || route.query.operation == 4">
       <div class="btn-box">
+        <el-button
+          v-if="route.query.operation == 4"
+          type="primary"
+          @click="handleRecord"
+          size="small"
+          icon="el-icon-lx-back"
+          >确定</el-button
+        >
         <el-button
           type="primary"
           @click="handleBack"
@@ -126,16 +169,35 @@
         v-model="mapDialogVisible">
       <VMap @getLatAndLng="getLatAndLng" :lng="formData.eventLong" :lat="formData.eventLat" />
     </el-dialog>
+    <el-dialog
+      title="选择流转人"
+      v-model="userDialogVisible"
+      width="60%">
+      <div>
+        <V-table
+          ref="table"
+          :table-config="userTableConfig"
+          @select-change="(val) => (multipleSelection = val)"
+          @rowClick="handleClickUser"
+        >
+        </V-table>
+      </div>
+      <template #footer>
+        <el-button size="mini" type="primary">确定</el-button>
+        <el-button size="mini" type="primary" @click="userDialogVisible = false">返回</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref } from '@vue/runtime-core'
 import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
-import { listAssign,defaultObject } from '@/utils/util'
+import { listAssign,defaultObject,formatterDate,resetFormat as resetFormatStatus } from '@/utils/util'
 import {renderTable} from './common/edit'
-import { editRecord } from '@/api/ResidentsReport/index'
+import { editRecord,editDetail,addDetail,addRecord,queryByEventId } from '@/api/ResidentsReport/index'
 import { getSubClass } from '@/api/ActualInfo/build'
+import { searchDict } from '@/api/sys/dict'
 export default {
   mixins: [mixin],
   setup() {
@@ -144,7 +206,7 @@ export default {
     const {
       proxy,
     } = getCurrentInstance()
-    const { editFormConfig } = renderTable.call(proxy)
+    const { editFormConfig,userTableConfig } = renderTable.call(proxy)
     const fileList = ref([
       {
         name: 'food.jpeg',
@@ -156,6 +218,9 @@ export default {
       { label:'工人新村南村街道',value:'370105005' },
     ])
     const tableData = ref([])
+    const userDialogVisible = ref(false) // 流转人弹窗
+    const multipleSelection = ref([]) // 选中数据集合
+    const table  = ref(null)
     const communityNameOptions = ref([])
     const gridNameOptions = ref([])
     // flag： 1 组织结构的数据处理、2 楼栋信息数据格式处理、 3 房屋信息数据格式处理
@@ -220,6 +285,9 @@ export default {
     const dialogImageUrl = ref('')
     const dialogVisible = ref(false)
     let formData = ref({
+      id:'',
+      cityCode:'370105',
+      cityName:'天桥区',
       streetCode:'',
       streetName:'',
       gridName:'',
@@ -240,6 +308,15 @@ export default {
       mainPeopleAddress:'',
       eventFirstType:'',
     })
+    const dataForm = ref({})
+    const getRecordByEventId = () => {
+      queryByEventId({eventId:formData.value.id}).then(res=>{
+        if(res.resCode == '000000'){
+          tableData.value = res.data
+          // console.log(tableData.value)
+        }
+      })
+    }
     // upload
     const handlePreview = (uploadFile) => {
       dialogImageUrl.value = uploadFile.url
@@ -249,12 +326,39 @@ export default {
     const handleSubmit = async (formRef) => {
       await formRef.validate((vaild) => {
         if (vaild) {
-          editRecord(formData.value).then(res=>{
-            if(res.resCode == '000000'){
-              proxy.$message.success('编辑成功')
-              delCurrentTag(route)
+          if(route.query.type == 'coll'){
+            if(route.query.operation == 2){
+              editDetail(formData.value).then(res=>{
+                if(res.resCode == '000000'){
+                  proxy.$message.success('编辑成功')
+                  delCurrentTag(route)
+                }
+              })
+            } else if (route.query.operation == 3 ){
+              addDetail(formData.value).then(res=>{
+                if(res.resCode == '000000'){
+                  proxy.$message.success('添加成功')
+                  delCurrentTag(route)
+                }
+              })
             }
-          })
+          } else {
+            if(route.query.operation == 2){
+              editRecord(formData.value).then(res=>{
+                if(res.resCode == '000000'){
+                  proxy.$message.success('编辑成功')
+                  delCurrentTag(route)
+                }
+              })
+            } else if (route.query.operation == 3 ){
+              addRecord(formData.value).then(res=>{
+                if(res.resCode == '000000'){
+                  proxy.$message.success('添加成功')
+                  delCurrentTag(route)
+                }
+              })
+            }
+          }          
         } else {
           return
         }
@@ -283,17 +387,51 @@ export default {
       formData.value.eventLat = lat
       mapDialogVisible.value = false
     }
+    // 处理状态
+    const dataSourceOptions = ref([])
+    const getOptionsByCode = (basictype,data) => {
+      searchDict({basictype}).then(res=>{
+        if(res.resCode == '000000' && res.data){
+          data.value = resetFormatStatus(res.data)
+        }else{
+          data.value = []
+        }
+      })
+    }
+
+    // 处置
+    const handleChangeLaunch = () => {      
+      userDialogVisible.value = true
+      setTimeout(()=>handleQueryUserTable(table),0)      
+    }
+    const handleQueryUserTable = (table) => {
+      table.value.getTableData({}, (res) => {
+        const data = res.list || []
+        userTableConfig.data = data
+      })
+    }
+    const handleClickUser = (row) => {
+      console.log(multipleSelection)
+    }
+    const handleRecord = () => {
+
+    }
 
     // formData = JSON.parse(decodeURIComponent(route.query.data))
     route.query.operation != 3 && listAssign(formData.value,JSON.parse(decodeURIComponent(route.query.data)))
-    console.log(formData.value,'...')
+    // console.log(formData.value,'...')
+    onBeforeMount(()=>{
+      if(route.query.operation == 1 || route.query.operation == 4){
+        getRecordByEventId()
+      }
+      getOptionsByCode(1026,dataSourceOptions);
+    })
     onMounted(() => {
       if(route.query.operation != 3){
         handleChange(1,formData.value.streetCode)
         handleChange(2,formData.value.communityCode)
         handleChange(3)
-      }
-      
+      }      
     })
     return {
       formData,
@@ -315,7 +453,17 @@ export default {
       mapDialogVisible,
       handleClick,
       getLatAndLng,
-
+      dataForm,
+      formatterDate,
+      dataSourceOptions,
+      // 处置
+      userDialogVisible,
+      handleChangeLaunch,
+      userTableConfig,
+      handleClickUser,
+      multipleSelection,
+      table,
+      handleRecord,
     }
   },
 }

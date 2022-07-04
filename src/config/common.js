@@ -217,3 +217,20 @@ export const organType = [
   {label:'社区',value:'4'},
   {label:'网格',value:'5'},
 ]
+// export const occupationTypeFristName = [
+//   {label:'党的机关、国家机关、群众团体和社会组织、企事业单位负责人',value:'0'},
+//   {label:'专业技术人员',value:'1'},
+// ]
+// export const occupationTypeSecondName = [
+//   {label:'科学研究人员',value:'0'},
+//   {label:'工程技术人员',value:'1'},
+//   {label:'农业技术人员',value:'2'},
+//   {label:'飞机和船舶技术人员',value:'3'},
+//   {label:'卫生专业技术人员',value:'4'},
+//   {label:'经济和金融专业人员',value:'5'},
+//   {label:'法律、社会和宗教专业人员',value:'6'},
+//   {label:'教学人员',value:'7'},
+//   {label:'文学艺术、体育专业人员',value:'8'},
+//   {label:'新闻初版、文化专业人员',value:'9'},
+//   {label:'其他专业技术人员',value:'10'},
+// ]

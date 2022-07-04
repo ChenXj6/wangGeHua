@@ -46,6 +46,21 @@ export const defaultObject = (obj) => {
   })
 }
 
+
+// code获取字典处理函数
+export const resetFormat = (data) => {
+  let arr = []
+  data.forEach(v=>{
+    let obj = {}
+    obj.label = v.description
+    obj.value = String(v.value)
+    arr.push(obj)
+  })
+  return arr
+}
+
+
+
 /**
  * @param {Function} func
  * @param {number} wait
