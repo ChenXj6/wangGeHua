@@ -162,6 +162,23 @@ export default {
                     },
                 ],
             },
+             {
+                icon: "el-icon-lx-calendar",
+                index: "11",
+                title: "社会治理",
+                subs: [
+                    {
+                        icon: "el-icon-lx-attentionfill",
+                        index: "/hotlineManage",
+                        title: "12345热线管理",
+                    },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/Management",
+                        title: "12345处置",
+                    },
+                ],
+            },
             {
                 icon: "el-icon-lx-addressbook",
                 index: "12",
