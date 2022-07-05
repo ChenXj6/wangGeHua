@@ -631,4 +631,7 @@ export default {
 .messageIndex{
   z-index: 9999 !important;
 }
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: 100% !important;
+}
 </style>

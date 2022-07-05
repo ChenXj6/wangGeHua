@@ -398,7 +398,7 @@ const routes = [
         meta: {
           title: '文稿列表',
           getTitle: function(route) {
-            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.operation == 1 ? '文稿' :'多媒体'}`
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'draft' ? '文稿' :'多媒体'}`
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Propaganda/EditDraft.vue")
@@ -506,6 +506,47 @@ const routes = [
           title: '12345处置'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/Management.vue")
+        path: "/taxList",
+        name: "taxList",
+        meta: {
+          title: '财政税收列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/TaxList.vue")
+      },
+      {
+        path: "/itemList",
+        name: "itemList",
+        meta: {
+          title: '项目列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/ItemList.vue")
+      },
+      {
+        path: "/buildingList",
+        name: "buildingList",
+        meta: {
+          title: '企业楼宇列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/BuildingList.vue")
+      },
+      {
+        path: "/industry",
+        name: "industry",
+        meta: {
+          title: '产业信息采集'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/Industry.vue")
+      },
+      {
+        path: "/editEconomics",
+        name: "editEconomics",
+        meta: {
+          title: '经济运行',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'tax' ? '财政税收' : (route.params.type == 'item' ? '项目' : (route.params.type == 'building' ? '楼宇信息' : '产业信息'))}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/Edit.vue")
       },
     ]
   },
