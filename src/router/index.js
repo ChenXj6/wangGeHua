@@ -491,6 +491,22 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Statistics/12345Weekly.vue")
       },
+      {
+        path: "/hotlineManage",
+        name: "hotlineManage",
+        meta: {
+          title: '12345热线管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/HotlineManage.vue")
+      },
+      {
+        path: "/Management",
+        name: "Management",
+        meta: {
+          title: '12345处置'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/Management.vue")
+      },
     ]
   },
   {
