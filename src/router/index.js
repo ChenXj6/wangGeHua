@@ -506,6 +506,8 @@ const routes = [
           title: '12345处置'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/Management.vue")
+      },
+      {
         path: "/taxList",
         name: "taxList",
         meta: {
