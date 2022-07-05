@@ -534,6 +534,33 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/Edit.vue")
       },
+      {
+        path: "/partyInfo",
+        name: "partyInfo",
+        meta: {
+          title: '党组织信息'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/PartyBuilding/PartyInfo.vue")
+      },
+      {
+        path: "/partyPeople",
+        name: "partyPeople",
+        meta: {
+          title: '党员信息'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/PartyBuilding/PartyPeople.vue")
+      },
+      {
+        path: "/editParty",
+        name: "editParty",
+        meta: {
+          title: '党建引领',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'partyInfo' ? '党组织' : '党员'}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/PartyBuilding/Edit.vue")
+      },
     ]
   },
   {

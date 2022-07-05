@@ -163,6 +163,23 @@ export default {
                 ],
             },
             {
+                icon: "el-icon-lx-addressbook",
+                index: "12",
+                title: "党建引领",
+                subs: [
+                    {
+                        icon: "el-icon-lx-share",
+                        index: "/partyInfo",
+                        title: "党组织信息",
+                    },
+                    {
+                        icon: "el-icon-lx-profile",
+                        index: "/partyPeople",
+                        title: "党员信息",
+                    },
+                ],
+            },
+            {
                 icon: "el-icon-lx-service",
                 index: "6",
                 title: "重点服务人员",
