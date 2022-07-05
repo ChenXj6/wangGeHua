@@ -271,6 +271,33 @@ export default {
                 ],
             },
             {
+                icon: "el-icon-lx-hot",
+                index: "10",
+                title: "经济运行",
+                subs: [
+                    {
+                        icon: "el-icon-lx-calendar",
+                        index: "/taxList",
+                        title: "财政税收列表",
+                    },
+                    {
+                        icon: "el-icon-lx-read",
+                        index: "/itemList",
+                        title: "项目列表",
+                    },
+                    {
+                        icon: "el-icon-lx-record",
+                        index: "/buildingList",
+                        title: "企业楼宇列表",
+                    },
+                    {
+                        icon: "el-icon-lx-read",
+                        index: "/industry",
+                        title: "产业信息采集",
+                    },
+                ],
+            },
+            {
                 icon: "el-icon-lx-settings",
                 index: "2",
                 title: "系统管理",

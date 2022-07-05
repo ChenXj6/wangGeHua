@@ -1,5 +1,5 @@
 <template>
-  <router-view />
+  <router-view :key="$route.fullPath"/>
 </template>
 
 <script>
@@ -13,6 +13,7 @@ export default {
   setup() {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
     if(sessionStorage.getItem('user')){
       store.dispatch('socketInit')
     }
@@ -41,6 +42,9 @@ export default {
         {deep:true}
       )
     })
+    // return{
+    //   route
+    // }
   },
 }
 </script>

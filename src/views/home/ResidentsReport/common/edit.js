@@ -179,35 +179,6 @@ export function renderTable() {
       { prop: '', label: '操作', slot: 'operation' },
     ],
   }
-  const userTableConfig = {
-    name: 'table',
-    data: [],
-    pagination: true, // 开启分页器
-    paginationAlign: 'right', // 分页器靠左、靠右、中间
-    mutiSelect: true, // 开启选择
-    method: getUserList, // 請求api
-    index: false, // 是否启用序号列
-    total: 0,
-    paginationAlign:'left',
-    isSortable: false, // 是否开启拖拽
-    columns: [
-      {
-        prop: 'id',
-        label: 'ID',
-        minWidth: '100',
-      },
-      { prop: 'operatorId', label: '账号', minWidth: '100' },
-      { prop: 'operatorName', label: '姓名' },
-      { prop: 'roleId', label: '角色', tooltip: true },
-      {
-        prop: 'createTime',
-        label: '创建时间',
-        minWidth: '120',
-        formatter: 'YYYY-MM-DD HH:mm:ss',
-      },
-      { prop: '', label: '操作', slot: 'operation' },
-    ],
-  }
   return {
     editFormConfig,
     userTableConfig
