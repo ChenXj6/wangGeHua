@@ -295,14 +295,14 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Manage.vue")
       },
-      {
-        path: "/propertyManager",
-        name: "propertyManager",
-        meta: {
-          title: '物业管家'
-        },
-        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/PropertyManager.vue")
-      },
+      // {
+      //   path: "/propertyManager",
+      //   name: "propertyManager",
+      //   meta: {
+      //     title: '物业管家'
+      //   },
+      //   component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/PropertyManager.vue")
+      // },
       {
         path: "/editsmart",
         name: "editsmart",

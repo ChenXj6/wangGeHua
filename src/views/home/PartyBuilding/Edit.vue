@@ -27,20 +27,8 @@
       </template>
     </VForm>
     <VForm v-else :key="timer" :isDisabled="route.params.operation == 1" :form-data="partyPeopleFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
-      <template v-slot:gridCode="">
-        <popup-tree-input
-          :data="popupTreeData" :propa="popupTreeProps"
-          :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
-          <template v-slot>
-            <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
-          </template>
-        </popup-tree-input>
-      </template>
-      <template v-slot:lonAndLat="">
-        <el-row :gutter="10">
-          <el-col :span="12"><el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input></el-col>
-          <el-col :span="12"><el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input></el-col>
-        </el-row>
+      <template v-slot:partyOrgId="">
+        <el-input v-model="dataForm.infoName" size="mini" :readonly="true" placeholder="点击选择党组织" @click="handleOpenInfo" style="cursor:pointer;"></el-input>
       </template>
     </VForm>
     <el-row v-if="route.params.operation == 1">
@@ -61,6 +49,31 @@
         v-model="mapDialogVisible">
       <VMap @getLatAndLng="getLatAndLng" />
     </el-dialog>
+    <!-- 党组织弹窗 -->
+    <el-dialog
+        width="width"
+        v-model="InfoDialogVisible">
+        <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="infoFormHandle">
+      <template v-slot:status>
+        <popup-tree-input
+            :data="popupTreeData" :propa="popupTreeProps"
+            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            <template v-slot>
+              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+            </template>
+        </popup-tree-input>
+      </template>
+    </VForm>
+    <V-table
+      ref="table"
+      :table-config="tableConfig"
+      @row-click="rowClick"
+    >
+    <template v-slot:orgType="{data}">
+      <span >{{orgTypeOptions.filter(v=>v.value == data.orgType)[0]?.label}}</span>
+    </template>
+    </V-table>
+    </el-dialog>
 </template>
 <script>
 import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref } from '@vue/runtime-core'
@@ -68,7 +81,10 @@ import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
 
 import { renderTable } from './common/Edit'
+import { renderTable as renderInfoTable } from './common/PartyInfo'
+import { deepClone,resetFormat,defaultObject  } from '@/utils/util'
 import { getOrganList } from '@/api/sys/organ'
+import { searchDict } from '@/api/sys/dict'
 import { addParty,updateParty } from '@/api/PartyBuilding/partyInfo'
 import { addPartyPeople,updatePartyPeople } from '@/api/PartyBuilding/partyPeople'
 export default {
@@ -78,6 +94,7 @@ export default {
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
     const { partyFormConfig,partyPeopleFormConfig} = renderTable.call(proxy)
+    const { tableConfig,formConfig } = renderInfoTable.call(proxy)
     const dataForm = ref({
       officeCode:'',
       officeName:'',
@@ -181,11 +198,82 @@ export default {
       dataForm.value.latitude = lat
       mapDialogVisible.value = false
     }
+    // 党组织弹窗
+    const InfoDialogVisible = ref(false)
+    const searchForm = ref({
+      officeCode:'',
+      officeName:'',
+    })
+    const table = ref(null)
+    const searchParams = ref({})
+    const handleOpenInfo = () => {
+      tableConfig.columns.splice(tableConfig.columns.length-1,1)
+      InfoDialogVisible.value = true
+      setTimeout(()=>{
+        handleQuery()
+      },0)
+    }
+    const orgTypeOptions = ref([])
+    const getOptionsByCode = (basictype,data) => {
+      searchDict({basictype}).then(res=>{
+        if(res.resCode == '000000' && res.data){
+          data.value = resetFormat(res.data)
+        }else{
+          data.value = []
+        }
+      })
+    }
+    getOptionsByCode(1057,orgTypeOptions)
+        // 表格相關操作
+    const handleQuery = () => {
+      searchParams.value = deepClone(searchForm.value)
+      table.currentPage = 1
+      handleQueryTable()
+    }
+    const handleReset = (formEL) => {
+      formEL.resetFields()
+      searchParams.value = {}
+      defaultObject(searchForm.value)
+      handleQuery()
+    }
+    // 表單操作按鈕配置
+    const infoFormHandle = {
+      btns: [
+        {type:'primary',label:'查询',key:'search',handle:handleQuery},
+        {type:'primary',label:'重置',key:'reset',handle:handleReset},
+      ]
+    }
+    const handleQueryTable = () => {
+      table.value.getTableData(searchParams.value, (res) => {
+        const data = res.list || []
+        tableConfig.data = data
+      })
+    }
+    const rowClick = ({id,infoName,officeCode,officeName}) => {
+      // console.log(val)
+      dataForm.value.partyOrgId = id
+      dataForm.value.infoName = infoName
+      dataForm.value.officeCode = officeCode
+      dataForm.value.officeName = officeName
+      InfoDialogVisible.value = false
+    }
+
     // 初始化数据
     route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)))
     // console.log(route.params.type)
     if(route.params.operation != 3 && route.params.type == 'partyInfo'){
-      partyFormConfig.formItems[0].disabled = true
+      // partyFormConfig.formItems[0].disabled = true
+      partyFormConfig.formItems.forEach(v=>{
+        if(v.prop == 'number'){
+          v.disabled = true
+        }
+      })
+    }else if (route.params.operation != 3 && route.params.type == 'partyPeople'){
+      partyPeopleFormConfig.formItems.forEach(v=>{
+        if(v.prop == 'number'){
+          v.disabled = true
+        }
+      })
     }
     onMounted(() => {
       route.params.operation === 3 &&( dataForm.value = {})
@@ -204,6 +292,16 @@ export default {
       handleClick,
       mapDialogVisible,
       getLatAndLng,
+      // 党组织弹窗
+      handleOpenInfo,
+      InfoDialogVisible,
+      tableConfig,
+      formConfig,
+      infoFormHandle,
+      table,
+      searchForm,
+      orgTypeOptions,
+      rowClick,
     }
   },
 }

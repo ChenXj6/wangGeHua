@@ -15,7 +15,7 @@ export function renderTable() {
       { prop: '', label: '姓名', slot:'memberName',minWidth: '100', },
       { prop: 'number', label: '编号', minWidth: '120'},
       {
-        prop: 'partyOrgId',
+        prop: 'infoName',
         label: '归属党组织',
         minWidth: '200',
       },
@@ -39,6 +39,14 @@ export function renderTable() {
         prop: 'status',
         value: '',
         slotName:'status',
+        isClearable: true,
+        span: 6,
+      },
+      {
+        type: 'slot',
+        label: '归属党组织',
+        prop: '',
+        slotName:'partyOrgId',
         isClearable: true,
         span: 6,
       },

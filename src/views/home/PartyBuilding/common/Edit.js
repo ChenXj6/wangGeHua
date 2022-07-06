@@ -130,13 +130,13 @@ export function renderTable() {
       {
         type: 'slot',
         label: '归属党组织',
-        slotName:'gridCode',
+        slotName:'partyOrgId',
         span: 11,
       },
       {
         type: 'selectSearch',
         label: '职称',
-        prop: 'memberType',
+        prop: 'title',
         placeholder: '请选择职称类型',
         code:'1063',
         isClearable: true,
@@ -174,7 +174,7 @@ export function renderTable() {
         label: '入党日期',
         prop: 'joinDate',
         value: '',
-        format: 'YYYY-MM-DD HH:mm:ss',
+        format: 'YYYY-MM-DD',
         isClearable: true,
         span: 11,
       },
@@ -234,17 +234,29 @@ export function renderTable() {
       },
     ],
     rules:{
-      revenueName: [
-        { required: true, message: '请输入名称', trigger: ['blur','change'] },
+      number: [
+        { required: true, message: '请输入编号', trigger: ['blur','change'] },
       ],
-      officeName: [
-        { required: true, message: '请选择归属网格', trigger: ['blur','change'] },
+      memberName: [
+        { required: true, message: '请输入姓名', trigger: ['blur','change'] },
       ],
-      orgType: [
-        { required: true, message: '请选择类型', trigger: ['blur','change'] },
+      memberType: [
+        { required: true, message: '请选择党员类型', trigger: ['blur','change'] },
       ],
-      synopsis: [
-        { required: true, message: '请输入简介', trigger: ['blur','change'] },
+      gender: [
+        { required: true, message: '请选择性别', trigger: ['blur','change'] },
+      ],
+      age: [
+        { required: true, message: '请填写年龄', trigger: ['blur','change'] },
+      ],
+      pioneerFlag: [
+        { required: true, message: '请选择是否是党建先锋', trigger: ['blur','change'] },
+      ],
+      pioneerSort: [
+        { required: true, message: '请填写党建先锋排序号', trigger: ['blur','change'] },
+      ],
+      joinDate: [
+        { required: true, message: '请填写入党日期', trigger: ['blur','change'] },
       ],
     }
   }

@@ -2,7 +2,7 @@ import { PartyList } from '@/api/PartyBuilding/partyInfo'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
-  const tableConfig = {
+  const infoTtableConfig = {
     name: 'table',
     data: [],
     pagination: true, // 开启分页器
@@ -12,7 +12,7 @@ export function renderTable() {
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
-      { prop: '', label: '名称', slot:'infoName',minWidth: '100', },
+      { prop: 'infoName', label: '名称', minWidth: '200', },
       { prop: 'number', label: '编号', minWidth: '120'},
       {
         prop: 'treeNames',
@@ -25,7 +25,7 @@ export function renderTable() {
       { prop: '', label: '操作', slot: 'operation', minWidth: '130' },
     ],
   }
-  const formConfig = {
+  const infoFormConfig = {
     formItems: [
       {
         type: 'slot',
@@ -58,7 +58,7 @@ export function renderTable() {
     ],
   }
   return {
-    tableConfig,
-    formConfig,
+    infoTtableConfig,
+    infoFormConfig,
   }
 }

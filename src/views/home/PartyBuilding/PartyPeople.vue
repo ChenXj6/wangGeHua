@@ -10,6 +10,9 @@
             </template>
         </popup-tree-input>
       </template>
+      <template v-slot:partyOrgId>
+        <el-input v-model="searchForm.infoName" size="mini" :readonly="true" placeholder="点击选择党组织" @click="handleOpenInfo" style="cursor:pointer;"></el-input>
+      </template>
     </VForm>
     <V-table
       ref="table"
@@ -54,6 +57,31 @@
         </el-popconfirm>
       </template>
     </V-table>
+    <!-- 党组织弹窗 -->
+    <el-dialog
+        width="width"
+        v-model="InfoDialogVisible">
+        <VForm :form-data="infoFormConfig" :form-model="searchInfoForm" :form-handle="infoFormHandle">
+      <template v-slot:status>
+        <popup-tree-input
+            :data="popupTreeData" :propa="popupTreeProps"
+            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            <template v-slot>
+              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+            </template>
+        </popup-tree-input>
+      </template>
+    </VForm>
+    <V-table
+      ref="infoTable"
+      :table-config="infoTtableConfig"
+      @row-click="rowClick"
+    >
+    <template v-slot:orgType="{data}">
+      <span >{{orgTypeOptions.filter(v=>v.value == data.orgType)[0]?.label}}</span>
+    </template>
+    </V-table>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -61,6 +89,7 @@ import { getCurrentInstance, onMounted, ref } from '@vue/runtime-core'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/PartyPeople'
+import { renderTable as renderInfoTable } from './common/PartyInfo'
 import { deepClone,resetFormat,defaultObject  } from '@/utils/util'
 import { useRouter } from 'vue-router'
 import { searchDict } from '@/api/sys/dict'
@@ -72,6 +101,7 @@ export default {
     const { proxy } = getCurrentInstance()
     const router = useRouter()
     const { tableConfig,formConfig } = renderTable.call(proxy)
+    const { infoTtableConfig , infoFormConfig } = renderInfoTable.call(proxy)
     const searchForm = ref({
       officeCode:'',
       officeName:'',
@@ -147,6 +177,7 @@ export default {
     const memberTypeOptions = ref([])
     const titleOptions = ref([])
     const pioneerFlagOptions = ref([])
+    const orgTypeOptions = ref([])
     const getOptionsByCode = (basictype,data) => {
       searchDict({basictype}).then(res=>{
         if(res.resCode == '000000' && res.data){
@@ -159,6 +190,53 @@ export default {
     getOptionsByCode(1062,memberTypeOptions)
     getOptionsByCode(1063,titleOptions)
     getOptionsByCode(1006,pioneerFlagOptions)
+    getOptionsByCode(1057,orgTypeOptions)
+    // 党组织弹窗
+    const InfoDialogVisible = ref(false)
+    const searchInfoForm = ref({
+      officeCode:'',
+      officeName:'',
+    })
+    const infoTable = ref(null)
+    const searchInfoParams = ref({})
+    const handleOpenInfo = () => {
+      infoTtableConfig.columns.splice(infoTtableConfig.columns.length-1,1)
+      InfoDialogVisible.value = true
+      setTimeout(()=>{
+        handleQueryInfo()
+      },0)
+    }
+        // 表格相關操作
+    const handleQueryInfo = () => {
+      searchInfoParams.value = deepClone(searchInfoForm.value)
+      infoTable.currentPage = 1
+      handleQueryInfoTable()
+    }
+    const handleResetInfo = (formEL) => {
+      formEL.resetFields()
+      searchInfoParams.value = {}
+      defaultObject(searchInfoForm.value)
+      handleQueryInfo()
+    }
+    // 表單操作按鈕配置
+    const infoFormHandle = {
+      btns: [
+        {type:'primary',label:'查询',key:'search',handle:handleQueryInfo},
+        {type:'primary',label:'重置',key:'reset',handle:handleResetInfo},
+      ]
+    }
+    const handleQueryInfoTable = () => {
+      infoTable.value.getTableData(searchInfoParams.value, (res) => {
+        const data = res.list || []
+        infoTtableConfig.data = data
+      })
+    }
+    const rowClick = ({id,infoName}) => {
+      // console.log(val)
+      searchForm.value.partyOrgId = id
+      searchForm.value.infoName = infoName
+      InfoDialogVisible.value = false
+    }
     onMounted(()=>{
       handleQuery()
     })
@@ -177,6 +255,16 @@ export default {
       memberTypeOptions,
       titleOptions,
       pioneerFlagOptions,
+      // 
+      rowClick,
+      infoFormHandle,
+      handleOpenInfo,
+      infoTable,
+      infoFormConfig,
+      infoTtableConfig,
+      InfoDialogVisible,
+      searchInfoForm,
+      orgTypeOptions,
     }
   },
 }

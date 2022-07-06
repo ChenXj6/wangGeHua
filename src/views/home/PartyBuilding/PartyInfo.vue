@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle">
+    <VForm :form-data="infoFormConfig" :form-model="searchForm" :form-handle="formHandle">
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
@@ -13,11 +13,11 @@
     </VForm>
     <V-table
       ref="table"
-      :table-config="tableConfig"
+      :table-config="infoTtableConfig"
     >
-    <template v-slot:infoName="{data}">
-      <el-link type="success" @click.prevent="handleOperation(2, data)">{{ data.infoName }}</el-link>
-    </template>
+    <!-- <template v-slot:infoName="{data}">
+      <el-link type="success" @click.prevent="handleOperation(2, data)">{{ data }}</el-link>
+    </template> -->
     <template v-slot:orgType="{data}">
       <span >{{orgTypeOptions.filter(v=>v.value == data.orgType)[0]?.label}}</span>
     </template>
@@ -65,7 +65,7 @@ export default {
   setup() {
     const { proxy } = getCurrentInstance()
     const router = useRouter()
-    const { tableConfig,formConfig } = renderTable.call(proxy)
+    const { infoFormConfig,infoTtableConfig } = renderTable.call(proxy)
     const searchForm = ref({
       officeCode:'',
       officeName:'',
@@ -110,7 +110,7 @@ export default {
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
-        tableConfig.data = data
+        infoTtableConfig.data = data
       })
     }
     // 组织结构
@@ -155,8 +155,8 @@ export default {
       handleQuery()
     })
     return{
-      tableConfig,
-      formConfig,
+      infoTtableConfig,
+      infoFormConfig,
       searchForm,
       table,
       formHandle,
