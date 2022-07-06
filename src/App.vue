@@ -1,5 +1,6 @@
 <template>
-  <router-view :key="$route.fullPath"/>
+  <!-- <router-view :key="$route.fullPath"/> -->
+  <router-view/>
 </template>
 
 <script>
@@ -20,6 +21,7 @@ export default {
     // 全局检测是否有来自webSocket的消息通知   
     onMounted(()=>{
       store.state.eventList = JSON.parse(sessionStorage.getItem('eventName')) || []
+      store.state.menuList = JSON.parse(sessionStorage.getItem('menulist')) || []
       watch(
         () => store.state.eventList,
         (newValue) => {

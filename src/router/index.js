@@ -577,6 +577,44 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/PartyBuilding/Edit.vue")
       },
+      {
+        path: "/notice",
+        name: "notice",
+        meta: {
+          title: '通知公告'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Notice/index.vue")
+      },
+      {
+        path: "/editNotice",
+        name: "editNotice",
+        meta: {
+          title: '通知公告',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}通知公告`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Notice/Edit.vue")
+      },
+      {
+        path: "/provide",
+        name: "provide",
+        meta: {
+          title: '养老机构列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/LiveEnsure/Provide.vue")
+      },
+      {
+        path: "/editProvide",
+        name: "editProvide",
+        meta: {
+          title: '养老机构',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}养老机构`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/LiveEnsure/EditProvide.vue")
+      },
     ]
   },
   {

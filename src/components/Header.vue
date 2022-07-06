@@ -132,6 +132,7 @@ export default {
         store.dispatch('closeSocket')
         store.state.eventList = []
         sessionStorage.removeItem('eventName')
+        store.dispatch('clearMenu')
         router.push("/login");
       } else if (command == "user") {
         router.push("/user");

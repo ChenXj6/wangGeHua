@@ -3,28 +3,27 @@
         <el-menu class="sidebar-el-menu" :default-active="onRoutes" :collapse="collapse" background-color="#324157"
             text-color="#bfcbd9" active-text-color="#20a0ff" unique-opened router>
             <template v-for="item in items">
-                <template v-if="item.subs">
-                    <el-submenu :index="item.index" :key="item.index">
+                <template v-if="item?.children?.length">
+                    <el-submenu :index="item.url" :key="item.url">
                         <template #title>
                             <i :class="item.icon"></i>
-                            <span>{{ item.title }}</span>
+                            <span>{{ item.name }}</span>
                         </template>
-                        <template v-for="subItem in item.subs">
-                          
-                            <el-submenu v-if="subItem.subs" :index="subItem.index" :key="subItem.index">
+                        <template v-for="subItem in item.children">                          
+                            <el-submenu v-if="subItem?.children?.length" :index="subItem.url" :key="subItem.url">
                                 <i :class="subItem.icon"></i>
-                                <template #title>{{ subItem.title }}</template>
-                                <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.index">
-                                    {{ threeItem.title }}</el-menu-item>
+                                <template #title>{{ subItem.name }}</template>
+                                <el-menu-item v-for="(threeItem, i) in subItem.children" :key="i" :index="threeItem.url">
+                                    {{ threeItem.name }}</el-menu-item>
                             </el-submenu>
-                            <el-menu-item v-else :index="subItem.index" :key="subItem.index"><i :class="subItem.icon"></i><span class="menuItem" :title="subItem.title">{{ subItem.title }}</span></el-menu-item>
+                            <el-menu-item v-else :index="subItem.url" :key="subItem.url"><i :class="subItem.icon"></i><span class="menuItem" :title="subItem.name">{{ subItem.name }}</span></el-menu-item>
                         </template>
                     </el-submenu>
                 </template>
                 <template v-else>
-                    <el-menu-item :index="item.index" :key="item.index">
+                    <el-menu-item :index="item.url" :key="item.url">
                         <i :class="item.icon"></i>
-                        <template #title>{{ item.title }}</template>
+                        <template #title>{{ item.name }}</template>
                     </el-menu-item>
                 </template>
             </template>
@@ -33,348 +32,370 @@
 </template>
 
 <script>
-import { computed, watch } from "vue";
+import { computed, getCurrentInstance, onBeforeMount, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { getMenuTreeByUser } from '@/api/sys/menu.js'
 export default {
     setup() {
         const items = [
             {
                 icon: "el-icon-lx-home",
-                index: "/dashboard",
-                title: "系统首页",
+                url: "/dashboard",
+                name: "系统首页",
             },
             {
-                icon: "el-icon-lx-calendar",
-                index: "4",
-                title: "社区网格",
-                subs: [
+                icon: "el-icon-lx-cascades",
+                url: "4",
+                name: "社区网格",
+                children: [
                     {
                         icon: "el-icon-lx-sort",
-                        index: "/info",
-                        title: "基本信息",
+                        url: "/info",
+                        name: "基本信息",
                     },
                     {
                         icon: "el-icon-lx-tagfill",
-                        index: "/borderInfo",
-                        title: "边界信息",
+                        url: "/borderInfo",
+                        name: "边界信息",
                     },
                     {
                         icon: "el-icon-lx-friend",
-                        index: "/staffInfo",
-                        title: "人员力量信息",
+                        url: "/staffInfo",
+                        name: "人员力量信息",
                     },
                 ],
             },
             {
                 icon: "el-icon-lx-sort",
-                index: "3",
-                title: "实有信息",
-                subs: [
+                url: "3",
+                name: "实有信息",
+                children: [
                     {
                         icon: "el-icon-lx-group",
-                        index: "/actualbuild",
-                        title: "实有楼栋",
+                        url: "/actualbuild",
+                        name: "实有楼栋",
                     },
                     {
                         icon: "el-icon-lx-friend",
-                        index: "/actualhouse",
-                        title: "实有房屋",
+                        url: "/actualhouse",
+                        name: "实有房屋",
                     },
                     {
                         icon: "el-icon-lx-profile",
-                        index: "/actualpeople",
-                        title: "实有人口",
+                        url: "/actualpeople",
+                        name: "实有人口",
                     },
                 ],
             },
             // {
             //     icon: "el-icon-lx-cascades",
-            //     index: "/icon",
-            //     title: "图标",
+            //     url: "/icon",
+            //     name: "图标",
             // },
             {
-                icon: "el-icon-lx-calendar",
-                index: "9",
-                title: "统计分析",
-                subs: [
+                icon: "el-icon-lx-rank",
+                url: "9",
+                name: "统计分析",
+                children: [
                     {
                         icon: "el-icon-lx-attentionfill",
-                        index: "/gridPeopleType",
-                        title: "网格人员类型统计",
+                        url: "/gridPeopleType",
+                        name: "网格人员类型统计",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/eventHadle",
-                        title: "事件类型处置统计",
+                        url: "/eventHadle",
+                        name: "事件类型处置统计",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/eventHadleRate",
-                        title: "事件类型处置率排名",
+                        url: "/eventHadleRate",
+                        name: "事件类型处置率排名",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/eventHadleOver",
-                        title: "事件类型处置完成率排名",
+                        url: "/eventHadleOver",
+                        name: "事件类型处置完成率排名",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/daysEvent",
-                        title: "事件日处理统计",
+                        url: "/daysEvent",
+                        name: "事件日处理统计",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/dataPool",
-                        title: "数据汇总",
+                        url: "/dataPool",
+                        name: "数据汇总",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/satisfiedRate",
-                        title: "满意率统计",
+                        url: "/satisfiedRate",
+                        name: "满意率统计",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/12345Handle",
-                        title: "12345热线办理比例分析图",
+                        url: "/12345Handle",
+                        name: "12345热线办理比例分析图",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/12345Weekly",
-                        title: "12345市民服务热线工单受理周报表",
+                        url: "/12345Weekly",
+                        name: "12345市民服务热线工单受理周报表",
                     },
                 ],
             },
             {
                 icon: "el-icon-lx-calendar",
-                index: "1",
-                title: "事件处置",
-                subs: [
+                url: "1",
+                name: "事件处置",
+                children: [
                     {
                         icon: "el-icon-lx-attentionfill",
-                        index: "/residentsreport",
-                        title: "事件信息采集",
+                        url: "/residentsreport",
+                        name: "事件信息采集",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/eventhandle",
-                        title: "事件信息处置",
+                        url: "/eventhandle",
+                        name: "事件信息处置",
                     },
                 ],
             },
+            {
+                icon: "el-icon-lx-mail",
+                url: "/notice",
+                name: "通知公告",
+            },
              {
-                icon: "el-icon-lx-calendar",
-                index: "11",
-                title: "社会治理",
-                subs: [
+                icon: "el-icon-lx-qrcode",
+                url: "11",
+                name: "社会治理",
+                children: [
                     {
                         icon: "el-icon-lx-attentionfill",
-                        index: "/hotlineManage",
-                        title: "12345热线管理",
+                        url: "/hotlineManage",
+                        name: "12345热线管理",
                     },
                     {
                         icon: "el-icon-lx-forward",
-                        index: "/Management",
-                        title: "12345处置",
+                        url: "/Management",
+                        name: "12345处置",
+                    },
+                ],
+            },
+            {
+                icon: "el-icon-lx-like",
+                url: "13",
+                name: "民生保障",
+                children: [
+                    {
+                        icon: "el-icon-lx-homefill",
+                        url: "/provide",
+                        name: "养老机构列表",
                     },
                 ],
             },
             {
                 icon: "el-icon-lx-addressbook",
-                index: "12",
-                title: "党建引领",
-                subs: [
+                url: "12",
+                name: "党建引领",
+                children: [
                     {
                         icon: "el-icon-lx-share",
-                        index: "/partyInfo",
-                        title: "党组织信息",
+                        url: "/partyInfo",
+                        name: "党组织信息",
                     },
                     {
                         icon: "el-icon-lx-profile",
-                        index: "/partyPeople",
-                        title: "党员信息",
+                        url: "/partyPeople",
+                        name: "党员信息",
                     },
                 ],
             },
             {
                 icon: "el-icon-lx-service",
-                index: "6",
-                title: "重点服务人员",
-                subs: [
+                url: "6",
+                name: "重点服务人员",
+                children: [
                     {
                         icon: "el-icon-lx-attentionfill",
-                        index: "/servicepersonnel",
-                        title: "重点服务人员",
+                        url: "/servicepersonnel",
+                        name: "重点服务人员",
                     },
                 ],
             },
             {
                 icon: "el-icon-lx-weibo",
-                index: "7",
-                title: "重点管理人员",
-                subs: [
+                url: "7",
+                name: "重点管理人员",
+                children: [
                     {
                         icon: "el-icon-lx-attentionfill",
-                        index: "/drugper",
-                        title: "戒毒人员",
+                        url: "/drugper",
+                        name: "戒毒人员",
                     },
                     {
                         icon: "el-icon-lx-rank",
-                        index: "/ReleasePer",
-                        title: "刑满释放人员",
+                        url: "/ReleasePer",
+                        name: "刑满释放人员",
                     },
                     {
                         icon: "el-icon-lx-warn",
-                        index: "/RrectifyStaff",
-                        title: "社会矫正人员",
+                        url: "/RrectifyStaff",
+                        name: "社会矫正人员",
                     },
                     {
                         icon: "el-icon-lx-crown",
-                        index: "/MentaldisordersPer",
-                        title: "精神障碍人员",
+                        url: "/MentaldisordersPer",
+                        name: "精神障碍人员",
                     },
                     {
                         icon: "el-icon-lx-goods",
-                        index: "/PetitionStaff",
-                        title: "上访人员",
+                        url: "/PetitionStaff",
+                        name: "上访人员",
                     },
                 ],
             },
             {
                 icon: "el-icon-lx-hot",
-                index: "8",
-                title: "宣传管理",
-                subs: [
+                url: "8",
+                name: "宣传管理",
+                children: [
                     {
                         icon: "el-icon-lx-calendar",
-                        index: "/draft",
-                        title: "文稿列表",
+                        url: "/draft",
+                        name: "文稿列表",
                     },
                     {
                         icon: "el-icon-lx-read",
-                        index: "/draftReview",
-                        title: "文稿审核",
+                        url: "/draftReview",
+                        name: "文稿审核",
                     },
                     {
                         icon: "el-icon-lx-record",
-                        index: "/media",
-                        title: "多媒体列表",
+                        url: "/media",
+                        name: "多媒体列表",
                     },
                 ],
             },
             {
-                icon: "el-icon-lx-homefill",
-                index: "5",
-                title: "智慧物业",
-                subs: [
+                icon: "el-icon-lx-emoji",
+                url: "5",
+                name: "智慧物业",
+                children: [
                   {
                         icon: "el-icon-lx-shopfill",
-                        index: "/pubilcfacilities",
-                        title: "公共设施",
+                        url: "/pubilcfacilities",
+                        name: "公共设施",
                     },
                     {
                         icon: "el-icon-lx-deletefill",
-                        index: "/rubbishclass",
-                        title: "垃圾分类",
+                        url: "/rubbishclass",
+                        name: "垃圾分类",
                     },
                     {
                         icon: "el-icon-lx-unlock",
-                        index: "/carpacrk",
-                        title: "停车场",
+                        url: "/carpacrk",
+                        name: "停车场",
                     },
                     {
                         icon: "el-icon-lx-edit",
-                        index: "/vehiclelist",
-                        title: "车辆列表",
+                        url: "/vehiclelist",
+                        name: "车辆列表",
                     },
                     {
                         icon: "el-icon-lx-calendar",
-                        index: "/ParkLot",
-                        title: "车位信息",
+                        url: "/ParkLot",
+                        name: "车位信息",
                     },
                     {
                         icon: "el-icon-lx-rechargefill",
-                        index: "/charge",
-                        title: "收费列表",
+                        url: "/charge",
+                        name: "收费列表",
                     },
                     {
                         icon: "el-icon-lx-recharge",
-                        index: "/manage",
-                        title: "物业公司",
+                        url: "/manage",
+                        name: "物业公司",
                     },
                 ],
             },
             {
-                icon: "el-icon-lx-hot",
-                index: "10",
-                title: "经济运行",
-                subs: [
+                icon: "el-icon-lx-redpacket",
+                url: "10",
+                name: "经济运行",
+                children: [
                     {
                         icon: "el-icon-lx-calendar",
-                        index: "/taxList",
-                        title: "财政税收列表",
+                        url: "/taxList",
+                        name: "财政税收列表",
                     },
                     {
                         icon: "el-icon-lx-read",
-                        index: "/itemList",
-                        title: "项目列表",
+                        url: "/itemList",
+                        name: "项目列表",
                     },
                     {
                         icon: "el-icon-lx-record",
-                        index: "/buildingList",
-                        title: "企业楼宇列表",
+                        url: "/buildingList",
+                        name: "企业楼宇列表",
                     },
                     {
                         icon: "el-icon-lx-read",
-                        index: "/industry",
-                        title: "产业信息采集",
+                        url: "/industry",
+                        name: "产业信息采集",
                     },
                 ],
             },
             {
                 icon: "el-icon-lx-settings",
-                index: "2",
-                title: "系统管理",
-                subs: [
+                url: "2",
+                name: "系统管理",
+                children: [
                   {
                         icon: "el-icon-lx-people",
-                        index: "/user",
-                        title: "用户管理",
+                        url: "/user",
+                        name: "用户管理",
                     },
                     {
                         icon: "el-icon-lx-attention",
-                        index: "/role",
-                        title: "角色管理",
+                        url: "/role",
+                        name: "角色管理",
                     },
                     {
                         icon: "el-icon-lx-cascades",
-                        index: "/menu",
-                        title: "菜单管理",
+                        url: "/menu",
+                        name: "菜单管理",
                     },
                     {
                         icon: "el-icon-lx-settings",
-                        index: "/organ",
-                        title: "机构管理",
+                        url: "/organ",
+                        name: "机构管理",
                     },
                     {
                         icon: "el-icon-lx-read",
-                        index: "/dict",
-                        title: "字典管理",
+                        url: "/dict",
+                        name: "字典管理",
                     },
                 ],
             },
             
         ];
-
+        // const items = computed(() => store.state.menuList)
         const route = useRoute();
+        const store = useStore();
+        const router = useRouter()
+        const { proxy } = getCurrentInstance()
+        const collapse = computed(() => store.state.collapse);
 
         const onRoutes = computed(() => {
             return route.path;
         });
-
-        const store = useStore();
-        const collapse = computed(() => store.state.collapse);
-
+        if(!sessionStorage.getItem('user')){
+          proxy.$message.error('请登录之后重试！')
+          router.push('/login')
+        }
         return {
             items,
             onRoutes,

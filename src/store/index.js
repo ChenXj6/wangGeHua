@@ -14,7 +14,8 @@ export default createStore({
     mapDialog:{
       visabled:false,
       data:[]
-    }
+    },
+    menuList:[],
   },
   mutations: {
     delTagsItem(state, data) {
@@ -104,6 +105,14 @@ export default createStore({
       state.mapDialog.visabled = false
       state.mapDialog.data = []
     },
+    resetMenu(state,data){
+      state.menuList = data
+      sessionStorage.setItem('menulist',JSON.stringify(data))
+    },
+    clearMenu(state){
+      state.menuList = []
+      sessionStorage.removeItem('menulist')
+    }
   },
   actions: {
     // 创建实例
@@ -127,6 +136,12 @@ export default createStore({
     },
     delEvent({ commit },data) {
       commit('delEvent',data)
+    },
+    resetMenu({commit},data) {
+      commit('resetMenu',data)
+    },
+    clearMenu({ commit }){
+      commit('clearMenu')
     }
   },
   modules: {},
