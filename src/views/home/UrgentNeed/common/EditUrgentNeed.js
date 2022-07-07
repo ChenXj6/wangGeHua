@@ -1,27 +1,18 @@
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
-  const partyFormConfig = {
+  const teamsFormConfig = {
     gutter:10,
     formItems: [
       {
         type: 'Input',
-        label: '编号',
-        prop: 'number',
+        label: '所属单位',
+        prop: 'orgId',
         value: '',
-        placeholder: '请填写党组织编号',
+        placeholder: '请填写所属单位',
         isClearable: true,
         disabled:false,
-        span: 11,
-      },
-      {
-        type: 'Input',
-        label: '名称',
-        prop: 'infoName',
-        value: '',
-        placeholder: '请填写党组织名称',
-        isClearable: true,
-        span: 11,
+        span: 22,
       },
       {
         type: 'slot',
@@ -31,17 +22,8 @@ export function renderTable() {
         span: 11,
       },
       {
-        type: 'selectSearch',
-        label: '类型',
-        prop: 'orgType',
-        placeholder: '请选择类型',
-        code:'1057',
-        isClearable: true,
-        span: 11,
-      },
-      {
         type: 'slot',
-        label: '事件经纬度',
+        label: '经/纬度',
         prop: 'longitude',
         span: 6,
         slotName:'eventLong'
@@ -54,13 +36,22 @@ export function renderTable() {
         slotName:'eventLat'
       },
       {
-        type: 'textarea',
-        label: '简介',
-        prop: 'synopsis',
+        type: 'Input',
+        label: '姓名',
+        prop: 'teamName',
         value: '',
-        placeholder: '请输入简介',
+        placeholder: '请填写姓名',
         isClearable: true,
-        span: 22,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '电话',
+        prop: 'phone',
+        value: '',
+        placeholder: '请填写电话',
+        isClearable: true,
+        span: 11,
       },
       {
         type: 'textarea',
@@ -73,20 +64,14 @@ export function renderTable() {
       },
     ],
     rules:{
-      number: [
-        { required: true, message: '请输入名称', trigger: ['blur','change'] },
+      orgId: [
+        { required: true, message: '请输入所属单位', trigger: ['blur','change'] },
       ],
       officeName: [
-        { required: true, message: '请选择归属网格', trigger: ['blur','change'] },
+        { required: true, message: '请选择所属机构', trigger: ['blur','change'] },
       ],
-      orgType: [
-        { required: true, message: '请选择类型', trigger: ['blur','change'] },
-      ],
-      synopsis: [
-        { required: true, message: '请输入简介', trigger: ['blur','change'] },
-      ],
-      infoName: [
-        { required: true, message: '请输入党组织名称', trigger: ['blur','change'] },
+      teamName: [
+        { required: true, message: '请输入姓名', trigger: ['blur','change'] },
       ],
       longitude: [
         { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },
@@ -96,7 +81,7 @@ export function renderTable() {
       ],
     }
   }
-  const partyPeopleFormConfig = {
+  const suppliesPeopleFormConfig = {
     gutter:10,
     formItems: [
       {
@@ -279,7 +264,7 @@ export function renderTable() {
     }
   }
   return {
-    partyFormConfig,
-    partyPeopleFormConfig,
+    teamsFormConfig,
+    suppliesPeopleFormConfig,
   }
 }

@@ -18,6 +18,7 @@ export function renderTable() {
         type: 'slot',
         label: '归属网格',
         slotName:'gridCode',
+        prop:'officeName',
         span: 11,
       },
       {
@@ -130,6 +131,7 @@ export function renderTable() {
         type: 'slot',
         label: '归属网格',
         slotName:'gridCode',
+        prop:'officeName',
         span: 11,
       },
       {
@@ -239,13 +241,22 @@ export function renderTable() {
         type: 'slot',
         label: '归属网格',
         slotName:'gridCode',
+        prop:'officeName',
         span: 11,
       },
       {
         type: 'slot',
-        label: '楼栋经/纬度',
-        slotName:'lonAndLat',
-        span: 11,
+        label: '楼栋经纬度',
+        prop: 'longitude',
+        span: 6,
+        slotName:'eventLong'
+      },
+      {
+        type: 'slot',
+        label: '',
+        prop: 'latitude',
+        span: 5,
+        slotName:'eventLat'
       },
       {
         type: 'selectSearch',
@@ -285,6 +296,9 @@ export function renderTable() {
       longitude: [
         { required: true, message: '请选择经纬度', trigger: ['blur','change'] },
       ],
+      latitude: [
+        { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },
+      ],
       cbType: [
         { required: true, message: '请选择类型', trigger: ['blur','change'] },
       ],
@@ -300,6 +314,7 @@ export function renderTable() {
         type: 'slot',
         label: '归属网格',
         slotName:'gridCode',
+        prop:'officeName',
         span: 11,
       },
       {
@@ -333,6 +348,9 @@ export function renderTable() {
     rules:{
       industryType: [
         { required: true, message: '请选择类型', trigger: ['blur','change'] },
+      ],
+      officeName: [
+        { required: true, message: '请选择归属网格', trigger: ['blur','change'] },
       ],
     }
   }

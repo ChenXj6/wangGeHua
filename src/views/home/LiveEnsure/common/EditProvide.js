@@ -27,6 +27,7 @@ export function renderTable() {
         type: 'slot',
         label: '归属网格',
         slotName:'gridCode',
+        prop:'officeName',
         span: 11,
       },
       {
@@ -41,8 +42,16 @@ export function renderTable() {
       {
         type: 'slot',
         label: '经/纬度',
-        slotName:'lonAndLat',
-        span: 11,
+        prop: 'lon',
+        span: 6,
+        slotName:'eventLong'
+      },
+      {
+        type: 'slot',
+        label: '',
+        prop: 'lat',
+        span: 5,
+        slotName:'eventLat'
       },
       {
         type: 'textarea',
@@ -72,6 +81,12 @@ export function renderTable() {
       ],
       officeName: [
         { required: true, message: '请选择归属网格', trigger: ['blur','change'] },
+      ],
+      lon: [
+        { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },
+      ],
+      lat: [
+        { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },
       ],
       orgType: [
         { required: true, message: '请选择类型', trigger: ['blur','change'] },

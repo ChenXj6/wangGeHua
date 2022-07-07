@@ -25,8 +25,8 @@ service.interceptors.request.use(
     //   config.data = qs.stringify(config.data)
     // }
     
-    if (sessionStorage.getItem("Authorization")) {//localStorage.getItem('Authorization')
-      let userToken = sessionStorage.getItem("Authorization");
+    if (sessionStorage.getItem("z")) {
+      let userToken = JSON.parse(sessionStorage.getItem("user")).sessionId;
       config.headers = {
         'Authorization': userToken,
         'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VForm :form-data="infoFormConfig" :form-model="searchForm" :form-handle="formHandle">
+    <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle">
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
@@ -13,10 +13,10 @@
     </VForm>
     <V-table
       ref="table"
-      :table-config="infoTtableConfig"
+      :table-config="tableConfig"
     >
-    <template v-slot:orgType="{data}">
-      <span >{{orgTypeOptions.filter(v=>v.value == data.orgType)[0]?.label}}</span>
+    <template v-slot:orgId="{data}">
+      <el-link type="success" @click.prevent="handleOperation(2, data)">{{ data.orgId }}</el-link>
     </template>
     <template v-slot:operation="{data}">
         <el-button
@@ -44,23 +44,21 @@
 import { getCurrentInstance, onMounted, ref } from '@vue/runtime-core'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
-import { renderTable } from './common/PartyInfo'
+import { renderTable } from './common/UrgentNeedTeams'
 import { deepClone,resetFormat,defaultObject  } from '@/utils/util'
 import { useRouter } from 'vue-router'
 import { searchDict } from '@/api/sys/dict'
-import { delParty } from '@/api/PartyBuilding/partyInfo'
+import { deleteTeam } from '@/api/UrgentNeed/team'
 export default {
   name: 'TaxList',
   components:[PopupTreeInput],
   setup() {
     const { proxy } = getCurrentInstance()
     const router = useRouter()
-    const { infoFormConfig,infoTtableConfig } = renderTable.call(proxy)
+    const { formConfig,tableConfig } = renderTable.call(proxy)
     const searchForm = ref({
       officeCode:'',
       officeName:'',
-      orgType:'',
-      infoName:'',
     })
     const table = ref(null)
     const searchParams = ref({})
@@ -80,7 +78,7 @@ export default {
       handleOperation(3,{})
     }
     const handleDel = (id) => {
-      delParty({id}).then(res=>{
+      deleteTeam({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
           proxy.$message.success('数据删除成功！')
@@ -100,7 +98,7 @@ export default {
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
-        infoTtableConfig.data = data
+        tableConfig.data = data
       })
     }
     // 组织结构
@@ -125,8 +123,8 @@ export default {
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editParty',
-        params: { data : encodeURIComponent(data), operation: type, type:'partyInfo' },
+        name: 'editUrgentNeed',
+        params: { data : encodeURIComponent(data), operation: type, type:'team' },
       })
     }
     //
@@ -145,8 +143,8 @@ export default {
       handleQuery()
     })
     return{
-      infoTtableConfig,
-      infoFormConfig,
+      tableConfig,
+      formConfig,
       searchForm,
       table,
       formHandle,

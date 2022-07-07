@@ -137,6 +137,14 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/Organ.vue")
       },
       {
+        path: "/distribution",
+        name: "distribution",
+        meta: {
+          title: '系统管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/distribution.vue")
+      },
+      {
         path: "/editorgan",
         name: "editorgan",
         meta: {
@@ -614,6 +622,92 @@ const routes = [
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/LiveEnsure/EditProvide.vue")
+      },
+
+
+
+
+      //
+      {
+        path: "/urgentNeedTeams",
+        name: "urgentNeedTeams",
+        meta: {
+          title: '应急队伍列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/UrgentNeedTeams.vue")
+      },
+      {
+        path: "/urgentNeedSupplies",
+        name: "urgentNeedSupplies",
+        meta: {
+          title: '应急物资列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/UrgentNeedSupplies.vue")
+      },
+      {
+        path: "/smokeDevide",
+        name: "smokeDevide",
+        meta: {
+          title: '烟感设备列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/SmokeDevide.vue")
+      },
+      {
+        path: "/hiddenDanger",
+        name: "hiddenDanger",
+        meta: {
+          title: '隐患排查'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/HiddenDanger.vue")
+      },
+      {
+        path: "/hiddenDangerTask",
+        name: "hiddenDangerTask",
+        meta: {
+          title: '隐患排查定时任务'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/HiddenDangerTask.vue")
+      },
+      {
+        path: "/hiddenDangerContent",
+        name: "hiddenDangerContent",
+        meta: {
+          title: '隐患排查内容'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/HiddenDangerContent.vue")
+      },
+      {
+        path: "/editHiddenDanger",
+        name: "editHiddenDanger",
+        meta: {
+          title: '隐患排查',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}隐患排查`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/EditHiddenDanger.vue")
+      },
+      {
+        path: "/editSmoke",
+        name: "editSmoke",
+        meta: {
+          title: '烟感设备',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}烟感设备`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/EditSmoke.vue")
+      },
+      {
+        path: "/editUrgentNeed",
+        name: "editUrgentNeed",
+        meta: {
+          title: '应急',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'team' ? '应急队伍': '应急物资'}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/EditUrgentNeed.vue")
       },
     ]
   },

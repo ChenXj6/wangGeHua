@@ -197,6 +197,43 @@ export default {
                 ],
             },
             {
+                icon: "el-icon-lx-filter",
+                url: "14",
+                name: "应急指挥",
+                children: [
+                    {
+                        icon: "el-icon-lx-group",
+                        url: "/urgentNeedTeams",
+                        name: "应急队伍列表",
+                    },
+                    {
+                        icon: "el-icon-lx-goods",
+                        url: "/urgentNeedSupplies",
+                        name: "应急物资列表",
+                    },
+                    {
+                        icon: "el-icon-lx-wifi",
+                        url: "/smokeDevide",
+                        name: "烟感设备列表",
+                    },
+                    {
+                        icon: "el-icon-lx-info",
+                        url: "/hiddenDanger",
+                        name: "隐患排查",
+                    },
+                    {
+                        icon: "el-icon-lx-time",
+                        url: "/hiddenDangerTask",
+                        name: "隐患排查定时任务",
+                    },
+                    {
+                        icon: "el-icon-lx-warn",
+                        url: "/hiddenDangerContent",
+                        name: "隐患排查内容",
+                    },
+                ],
+            },
+            {
                 icon: "el-icon-lx-addressbook",
                 url: "12",
                 name: "党建引领",

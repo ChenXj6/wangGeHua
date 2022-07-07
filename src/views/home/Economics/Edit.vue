@@ -47,11 +47,23 @@
           </template>
         </popup-tree-input>
       </template>
-      <template v-slot:lonAndLat="">
-        <el-row :gutter="10">
-          <el-col :span="12"><el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input></el-col>
-          <el-col :span="12"><el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input></el-col>
-        </el-row>
+      <template v-slot:eventLong="">
+          <el-input
+                  v-model="dataForm.longitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable                  
+                  @click="handleClick"
+                />
+        </template>
+      <template v-slot:eventLat="">
+                <el-input
+                  v-model="dataForm.latitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable
+                  @click="handleClick"
+                />
       </template>
     </VForm>
     <VForm v-else :key="timer" :isDisabled="route.params.operation == 1" :form-data="industryFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">

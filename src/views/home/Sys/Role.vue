@@ -19,6 +19,7 @@
           circle
           type="primary"
         ></el-button>
+        <el-button size="small" circle type="primary" @click="handleCommand(data.data)"><i class="el-icon-lx-tag"></i></el-button>
         <el-popconfirm title="确定要删除该角色吗？" @confirm="handleDelete(data.data.id)">
           <template #reference>
             <el-button
@@ -31,54 +32,6 @@
         </el-popconfirm>
       </template>
     </V-table>
-    <!-- 角色菜单授权 -->
-    <!-- <el-row>
-      <el-col :span="24" class="menu-header">
-        <span><B>角色菜单授权</B></span>
-      </el-col>
-      <el-col :span="12">
-        <el-tree
-          ref="treeRef"
-          :data="items"
-          show-checkbox
-          :height="208"
-          accordion
-          node-key="id"
-        >
-          <template #default="{ node, data }">
-            <span class="custom-tree-node">
-              <span>{{ data.title }}</span>
-              <span class="tagClass"
-                ><el-button
-                  size="mini"
-                  :type="data.children ? 'info' : 'success'"
-                  >{{ data.children ? '目录' : '菜单' }}</el-button
-                ></span
-              >
-              <span><i :class="data.icon"></i></span>
-              <span>{{ data.index }}</span>
-            </span>
-          </template>
-        </el-tree>
-      </el-col>
-      <el-col :span="24" class="footerClass">
-        <div>
-          <el-checkbox
-            v-model="isCheckAll"
-            label="全选"
-            border
-            @change="checkAll"
-          />
-        </div>
-        <div>
-          <el-button type="primary" size="mini" @click="handleResetTree"
-            >重置</el-button
-          >
-          <el-button type="success" size="mini">提交</el-button>
-        </div>
-      </el-col>
-    </el-row> -->
-
     <el-dialog
       :close-on-click-modal="false"
       :title="operation ? '新增' : '编辑'"
@@ -102,11 +55,13 @@ import { getCurrentInstance, onMounted, reactive, ref } from '@vue/runtime-core'
 import { saveRole, editRole, deleteRole } from '@/api/sys/role'
 import { items } from '@/config/menu'
 import _Row from 'element-plus/lib/el-row'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'Role',
   setup() {
     const { proxy } = getCurrentInstance()
+    const router = useRouter()
     const { tableConfig, formConfig, addFormConfig } = renderTable.call(proxy)
     const table = ref(null)
     const form = ref(null)
@@ -152,7 +107,7 @@ export default {
     }
     // 表格行点击相關操作
     const handleRowClick = (val) => {
-      console.log(val)
+      // console.log(val)
     }
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm)
@@ -211,6 +166,14 @@ export default {
         { type: 'primary', label: '提交', key: 'add', handle: handleSave },
       ],
     }
+    // 
+    const handleCommand = (rowData) => {
+      let data = JSON.stringify(rowData)
+      router.push({
+        path: '/distribution',
+        query: { data: encodeURIComponent(data), operation: 2,type:'role' },
+      })
+    };
     onMounted(() => {
       handleQuery()
     })
@@ -235,6 +198,7 @@ export default {
       AddFormHandle,
       handleEdit,
       handleDelete,
+      handleCommand,
     }
   },
 }
