@@ -508,12 +508,31 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/HotlineManage.vue")
       },
       {
+        path: "/EditHotlineManage",
+        name: "EditHotlineManage",
+        meta: {
+          title: '12345热线管理',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '新增' : '编辑'}12345热线`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/EditHotlineManage.vue")
+      },
+      {
         path: "/Management",
         name: "Management",
         meta: {
           title: '12345处置'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/Management.vue")
+      },
+      {
+        path: "/GridHotlineWorkOrder",
+        name: "GridHotlineWorkOrder",
+        meta: {
+          title: '12345热线工单类别'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/GridHotlineWorkOrder.vue")
       },
       {
         path: "/taxList",

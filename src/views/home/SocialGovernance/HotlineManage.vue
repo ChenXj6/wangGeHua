@@ -59,7 +59,7 @@ export default defineComponent({
     const { proxy } = getCurrentInstance()
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
-    const searchForm = reactive({
+    const searchForm = ref({
       officeName:'',
       officeCode:'',
     })
@@ -71,8 +71,8 @@ export default defineComponent({
     // 表单数据
     let searchParams = ref({}) // 表单数据备份
     const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.officeCode = officeCode
-      searchForm.officeName = officeName
+      searchForm.value.officeCode = officeCode
+      searchForm.value.officeName = officeName
     }
     const multipleSelection = ref([]) // 选中数据
 
@@ -83,14 +83,14 @@ export default defineComponent({
 
     // 表格相關操作
     const handleQuery = () => {
-      searchParams.value = deepClone(searchForm)
+      searchParams.value = deepClone(searchForm.value)
       table.currentPage = 1
       handleQueryTable()
     }
     const handleReset = (formEL) => {
       formEL.resetFields()
       searchParams.value = {}
-      defaultObject(searchForm)
+      defaultObject(searchForm.value)
       handleQuery()
     }
     const handleAdd = () => {
@@ -117,7 +117,7 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editactual',
+        name: 'EditHotlineManage',
         params: { data : encodeURIComponent(data), operation: type, type:'build' },
       })
     }
