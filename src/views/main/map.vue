@@ -6,50 +6,39 @@
       id="dituContent"
     ></div>
     <div class="sidebar">
-      <div class="sidebar-item">
+      <div
+        class="sidebar-item"
+        v-for="item in mapDialogData?.data"
+        :key="item.id"
+      >
         <el-dropdown placement="left-start" trigger="click">
-          <el-button type="goon" size="mini" round style="width: 88px">
-            党组织
+          <el-button
+            type="goon"
+            size="mini"
+            round
+            style="width: 88px"
+            v-if="item?.children?.length"
+          >
+            {{ item?.title }}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item @click="handleClick">党工委</el-dropdown-item>
-              <el-dropdown-item>直属党组织</el-dropdown-item>
-              <el-dropdown-item>党支部</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-      <div class="sidebar-item">
-        <el-dropdown placement="left-start" trigger="click">
-          <el-button type="goon" size="mini" style="width: 88px" round>
-            食物<i class="el-icon-arrow-down el-icon--right"></i>
+          <el-button
+            type="goon"
+            size="mini"
+            round
+            style="width: 88px"
+            @click="handleClick"
+            v-else
+          >
+            {{ item?.title }}
           </el-button>
-          <template #dropdown>
+          <template #dropdown v-if="item?.children?.length">
             <el-dropdown-menu>
-              <el-dropdown-item>sssssssssss黄金糕</el-dropdown-item>
-              <el-dropdown-item>ssssssssss狮子头</el-dropdown-item>
-              <el-dropdown-item>sssssssss螺蛳粉</el-dropdown-item>
-              <el-dropdown-item>aaaaaaaaaaaaa双皮奶</el-dropdown-item>
-              <el-dropdown-item>ccccccccccccc蚵仔煎</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-      <div class="sidebar-item">
-        <el-dropdown placement="left-start" trigger="click">
-          <el-button type="goon" size="mini" style="width: 88px" round>
-            更多菜单<i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>111111111</el-dropdown-item>
-              <el-dropdown-item>22222222222</el-dropdown-item>
-              <el-dropdown-item>32312312323</el-dropdown-item>
-              <el-dropdown-item>111</el-dropdown-item>
-              <el-dropdown-item @click="showMyMapMark"
-                >显示标签</el-dropdown-item
+              <el-dropdown-item
+                v-for="item in item.children"
+                :key="item"
+                @click="handleClick"
+                >{{ item.title }}</el-dropdown-item
               >
             </el-dropdown-menu>
           </template>
@@ -57,16 +46,16 @@
       </div>
     </div>
     <!-- store.state.mapDialog.visible -->
-    <div v-if="dialogVisible" class="headerDialogBox">
+    <div v-if="isOpen" class="headerDialogBox">
       <div class="headerDialog">
-        <div v-for="(item) in mapDialogData.children" :key="item.id">
+        <div v-for="item in mapDialogData.children" :key="item.id">
           <img :src="item.img" alt="" />
           <span>{{ item.title }}</span>
         </div>
       </div>
       <i
         class="el-icon-lx-roundclose headerDialogIcon"
-        style="color: #fff; font-size: 30px"
+        style="color: #fff; font-size: 30px;cursor: pointer;"
         @click="handleCloseDialog"
       ></i>
     </div>
@@ -97,11 +86,16 @@
                 class="buildListItem"
                 v-for="item in unitList"
                 :key="item.unitNumber"
-                :class="item.unitNumber == searchForm.unitNumber ? 'active' : ''"
+                :class="
+                  item.unitNumber == searchForm.unitNumber ? 'active' : ''
+                "
                 @click="getHouseByUnit(item.unitNumber)"
               >
                 <img src="@/assets/img/build.webp" alt="" srcset="" />
-                <span>{{unitNumberOptions.filter(v=>v.value == item.unitNumber)[0]?.label}}</span>
+                <span>{{
+                  unitNumberOptions.filter((v) => v.value == item.unitNumber)[0]
+                    ?.label
+                }}</span>
               </div>
             </div>
           </el-col>
@@ -111,11 +105,23 @@
             <h4>楼层信息：</h4>
             <hr />
             <div>
-              <div class="floor" v-for="item in floorArr(buildForm.floorNumber)" :class="(item.floorId + 1) == searchForm.floorId ? 'active' : ''" :key="item" @click="getHouseByFloor(item.floorId+1)">{{ item.floorId + 1 }}F</div>
+              <div
+                class="floor"
+                v-for="item in floorArr(buildForm.floorNumber)"
+                :class="item.floorId + 1 == searchForm.floorId ? 'active' : ''"
+                :key="item"
+                @click="getHouseByFloor(item.floorId + 1)"
+              >
+                {{ item.floorId + 1 }}F
+              </div>
             </div>
           </el-col>
           <el-col :span="19" class="houseBox">
-            <h4>{{ buildForm.buildingNumber }}-{{ searchForm.unitNumber }}{{ searchForm.unitNumber ? '单元' : '' }}-{{ searchForm.floorId }}{{ searchForm.floorId ? '楼' : '' }}房屋人员信息：</h4>
+            <h4>
+              {{ buildForm.buildingNumber }}-{{ searchForm.unitNumber
+              }}{{ searchForm.unitNumber ? "单元" : "" }}-{{ searchForm.floorId
+              }}{{ searchForm.floorId ? "楼" : "" }}房屋人员信息：
+            </h4>
             <!-- <hr> -->
             <el-row :gutter="10">
               <el-col :span="10">
@@ -127,7 +133,12 @@
                   暂无数据
                 </div>
                 <div v-else class="house">
-                  <div class="houseItem" @click="getPeople(item.houseNumber)" v-for="(item) in houseList" :key="item">
+                  <div
+                    class="houseItem"
+                    @click="getPeople(item.houseNumber)"
+                    v-for="item in houseList"
+                    :key="item"
+                  >
                     <img src="@/assets/img/loading.gif" alt="" />
                     <p>{{ item.houseNumber }}</p>
                   </div>
@@ -142,15 +153,34 @@
                   暂无数据
                 </div>
                 <div v-else class="people house">
-                  <div class="peopleItem" v-for="item in peopleList" :key="item.id">
+                  <div
+                    class="peopleItem"
+                    v-for="item in peopleList"
+                    :key="item.id"
+                  >
                     <img
-                      :src="item.certificates.length ? `${imgUrl}${item.certificates.split(',')[0]}` : ''"
+                      :src="
+                        item.certificates.length
+                          ? `${imgUrl}${item.certificates.split(',')[0]}`
+                          : ''
+                      "
                       alt=""
                     />
-                    <p><span>姓名：</span> <span>{{ item.name }}</span></p>
+                    <p>
+                      <span>姓名：</span> <span>{{ item.name }}</span>
+                    </p>
                     <!-- <p><span>年龄：</span> <span>{{ item.age }}</span></p> -->
-                    <p><span>户籍：</span> <span>{{ item.domicile }}</span></p>
-                    <p><span>户主关系：</span> <span>{{relationshipOptions.filter(v=>v.value == item.relationship)[0]?.label}}</span></p>
+                    <p>
+                      <span>户籍：</span> <span>{{ item.domicile }}</span>
+                    </p>
+                    <p>
+                      <span>户主关系：</span>
+                      <span>{{
+                        relationshipOptions.filter(
+                          (v) => v.value == item.relationship
+                        )[0]?.label
+                      }}</span>
+                    </p>
                   </div>
                 </div>
               </el-col>
@@ -160,388 +190,473 @@
       </div>
     </el-dialog>
     <!-- 事件处置弹窗 -->
-    <el-dialog
-      title=""
-      v-model="eventHandleVisible"
-      width="width">
+    <el-dialog title="" v-model="eventHandleVisible" width="width">
       <div>
-        <el-form ref="recordFormRef" :model="dataForm" :rules="rules" label-width="150px">
-        <el-form-item label="处置方式" prop="dealStatus">
-          <el-select v-model="dataForm.dealStatus" size="mini" placeholder="请选择处置方式">
-            <el-option
-              v-for="item in dataSourceOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="流转人" v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3" prop="launchBy">
-          <el-input v-model="dataForm.launchRemark" size="mini" placeholder="" @click="handleChangeLaunch"></el-input>
-        </el-form-item>
-        <el-form-item label="处理时限" v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3">
-          <el-date-picker
-            v-model="dataForm.updateDate"
-            type="datetime"
-            size="mini"
-            placeholder="请选择时间"
-            style="width:100%"
-          />
-        </el-form-item>
-        <el-form-item label="处理意见" prop="dealRemark">
-          <el-input v-model="dataForm.dealRemark" type="textarea" size="mini" placeholder=""></el-input>
-        </el-form-item>
-      </el-form>
+        <el-form
+          ref="recordFormRef"
+          :model="dataForm"
+          :rules="rules"
+          label-width="150px"
+        >
+          <el-form-item label="处置方式" prop="dealStatus">
+            <el-select
+              v-model="dataForm.dealStatus"
+              size="mini"
+              placeholder="请选择处置方式"
+            >
+              <el-option
+                v-for="item in dataSourceOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="流转人"
+            v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3"
+            prop="launchBy"
+          >
+            <el-input
+              v-model="dataForm.launchRemark"
+              size="mini"
+              placeholder=""
+              @click="handleChangeLaunch"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="处理时限"
+            v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3"
+          >
+            <el-date-picker
+              v-model="dataForm.updateDate"
+              type="datetime"
+              size="mini"
+              placeholder="请选择时间"
+              style="width: 100%"
+            />
+          </el-form-item>
+          <el-form-item label="处理意见" prop="dealRemark">
+            <el-input
+              v-model="dataForm.dealRemark"
+              type="textarea"
+              size="mini"
+              placeholder=""
+            ></el-input>
+          </el-form-item>
+        </el-form>
       </div>
       <template #footer>
-        <el-button size="mini" @click="eventHandleVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="handleRecord(recordFormRef)">确 定</el-button>
+        <el-button size="mini" @click="eventHandleVisible = false"
+          >取 消</el-button
+        >
+        <el-button
+          size="mini"
+          type="primary"
+          @click="handleRecord(recordFormRef)"
+          >确 定</el-button
+        >
       </template>
     </el-dialog>
-        <!-- 流转人弹窗 -->
-    <el-dialog
-      title="选择流转人"
-      v-model="userDialogVisible"
-      width="40%">
+    <!-- 流转人弹窗 -->
+    <el-dialog title="选择流转人" v-model="userDialogVisible" width="40%">
       <div>
         <el-row :gutter="10">
           <el-col :span="18">
             <el-table
               :data="launchList"
-              @selection-change="(val)=>(multipleSelection = val)"
-              style="width: 100%">
+              @selection-change="(val) => (multipleSelection = val)"
+              style="width: 100%"
+            >
               <el-table-column type="selection" width="55" />
-              <el-table-column
-                prop="id"
-                label="ID"
-                width="100">
+              <el-table-column prop="id" label="ID" width="100">
               </el-table-column>
-              <el-table-column
-                prop="operatorId"
-                label="账号"
-                width="140">
+              <el-table-column prop="operatorId" label="账号" width="140">
               </el-table-column>
-              <el-table-column
-                prop="operatorName"
-                label="姓名"
-                width="width">
+              <el-table-column prop="operatorName" label="姓名" width="width">
               </el-table-column>
             </el-table>
           </el-col>
-          <el-col :span="6" style="border:1px solid #ddd">
+          <el-col :span="6" style="border: 1px solid #ddd">
             <div>当前已选择{{ multipleSelection.length }}项：</div>
-            <div class="checkSpan" v-for="(item) in multipleSelection" :key="item.id">{{ item.operatorName }}</div>
+            <div
+              class="checkSpan"
+              v-for="item in multipleSelection"
+              :key="item.id"
+            >
+              {{ item.operatorName }}
+            </div>
           </el-col>
         </el-row>
       </div>
       <template #footer>
-        <el-button size="mini" type="primary" @click="handleSubmitUser">确定</el-button>
-        <el-button size="mini" type="primary" @click="userDialogVisible = false">返回</el-button>
+        <el-button size="mini" type="primary" @click="handleSubmitUser"
+          >确定</el-button
+        >
+        <el-button size="mini" type="primary" @click="userDialogVisible = false"
+          >返回</el-button
+        >
       </template>
     </el-dialog>
   </div>
 </template>
 <script>
-import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref, watch } from '@vue/runtime-core'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-import { getUnitByBuild } from '@/api/ActualInfo/build.js'
-import { searchDict } from '@/api/sys/dict'
-import { getUserList } from '@/api/sys/user'
-import { eventProcessing } from '@/api/ResidentsReport/index'
-import { resetFormat as resetFormatStatus } from '@/utils/util'
-import { getHouseList } from '@/api/ActualInfo/house'
-import { getPeopleList } from '@/api/ActualInfo/people'
+import {
+  getCurrentInstance,
+  onBeforeMount,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "@vue/runtime-core";
+import { onBeforeRouteLeave, useRoute } from "vue-router";
+import { useStore } from "vuex";
+import { getUnitByBuild } from "@/api/ActualInfo/build.js";
+import { searchDict } from "@/api/sys/dict";
+import { getUserList } from "@/api/sys/user";
+import { eventProcessing } from "@/api/ResidentsReport/index";
+import { resetFormat as resetFormatStatus } from "@/utils/util";
+import { getHouseList } from "@/api/ActualInfo/house";
+import { getPeopleList } from "@/api/ActualInfo/people";
 export default {
   setup() {
-    let vMap = ref(null)
-    let fullHeight = ref('')
-    let timer = null
-    const store = useStore()
-    const route = useRoute()
-    const dialogVisible = ref(false)
-    const mapDialogData = ref(null)
-    const { proxy } = getCurrentInstance()
+    let vMap = ref(null);
+    let fullHeight = ref("");
+    let timer = null;
+    const store = useStore();
+    const route = useRoute();
+    const dialogVisible = ref(false);
+    const mapDialogData = ref(null);
+    const { proxy } = getCurrentInstance();
     // 楼栋
-    const imgUrl = ref(import.meta.env.VITE_IMG_BASE_API)
-    const houseDialogVisible = ref(false) //楼栋弹窗
-    const buildForm = ref({}) // 楼栋表单
-    const unitList = ref([]) // 楼栋弹窗单元列表
-    const houseList = ref([])
-    const peopleList = ref([])
-    const isHaveHouse = ref(false)
-    const isHavePeople = ref(false)
+    const imgUrl = ref(import.meta.env.VITE_IMG_BASE_API);
+    const houseDialogVisible = ref(false); //楼栋弹窗
+    const buildForm = ref({}); // 楼栋表单
+    const unitList = ref([]); // 楼栋弹窗单元列表
+    const houseList = ref([]);
+    const peopleList = ref([]);
+    const isHaveHouse = ref(false);
+    const isHavePeople = ref(false);
     // 小区名字  楼号  单元号   房屋号
     const searchForm = ref({
-      villageName:'',
-      buildingNumber:'',
-      unitNumber:'1',
-      floorId:1,
-      houseNumber:'',
-      pageNum:'1',
-      pageSize:'9999',
-    })
+      villageName: "",
+      buildingNumber: "",
+      unitNumber: "1",
+      floorId: 1,
+      houseNumber: "",
+      pageNum: "1",
+      pageSize: "9999",
+    });
     const floorArr = (floorNumber) => {
-      let arr = []
-      for(let i = floorNumber ; i > 0;i--){
-        let obj = {}
-        obj.floorId = i - 1
-        arr.push(obj)
+      let arr = [];
+      for (let i = floorNumber; i > 0; i--) {
+        let obj = {};
+        obj.floorId = i - 1;
+        arr.push(obj);
       }
-      return arr
-    }
+      return arr;
+    };
     // 事件处置弹窗
-    const recordFormRef = ref(null)
-    const eventHandleVisible = ref(false)
-    const userDialogVisible = ref(false)
-    const dataForm = ref({})
-    const formData = ref(null)
-    const dataSourceOptions = ref([])
-    const launchList  = ref([])
-    const multipleSelection = ref([])
+    const recordFormRef = ref(null);
+    const eventHandleVisible = ref(false);
+    const userDialogVisible = ref(false);
+    const dataForm = ref({});
+    const formData = ref(null);
+    const dataSourceOptions = ref([]);
+    const launchList = ref([]);
+    const multipleSelection = ref([]);
     const rules = reactive({
-      dealStatus:[
-        {required: true, message:'请选择处置方式', trigger: 'blur'}
+      dealStatus: [
+        { required: true, message: "请选择处置方式", trigger: "blur" },
       ],
-      launchBy:[
-        {required: true, message:'请选择流转人', trigger: ['change','blur']}
+      launchBy: [
+        {
+          required: true,
+          message: "请选择流转人",
+          trigger: ["change", "blur"],
+        },
       ],
-      dealRemark:[
-        {required: true, message:'请输入处理意见', trigger: 'blur'}
+      dealRemark: [
+        { required: true, message: "请输入处理意见", trigger: "blur" },
       ],
-    })
-    const getOptionsByCode = (basictype,data) => {
-      searchDict({basictype}).then(res=>{
-        if(res.resCode == '000000' && res.data){
-          data.value = resetFormatStatus(res.data)
-        }else{
-          data.value = []
+    });
+    const getOptionsByCode = (basictype, data) => {
+      searchDict({ basictype }).then((res) => {
+        if (res.resCode == "000000" && res.data) {
+          data.value = resetFormatStatus(res.data);
+        } else {
+          data.value = [];
         }
-      })
-    }
+      });
+    };
     // liuzhuan
     const handleChangeLaunch = () => {
-      userDialogVisible.value = true
-      multipleSelection.value = []
-      dataForm.value.launchRemark = ''
-      handleQueryUserTable()
-    }
+      userDialogVisible.value = true;
+      multipleSelection.value = [];
+      dataForm.value.launchRemark = "";
+      handleQueryUserTable();
+    };
     const handleQueryUserTable = () => {
-      getUserList({pageNum: 1,pageSize: 50}).then(res=>{
-        if(res.code == '200'){
-          launchList.value = res.data.list
+      getUserList({ pageNum: 1, pageSize: 50 }).then((res) => {
+        if (res.code == "200") {
+          launchList.value = res.data.list;
         }
-      })
-    }
+      });
+    };
     const handleSubmitUser = () => {
-      if(multipleSelection.value.length <= 0){
-        proxy.$message.warning({message:'请至少选择一位流转人',customClass:'messageIndex'})
-        return
+      if (multipleSelection.value.length <= 0) {
+        proxy.$message.warning({
+          message: "请至少选择一位流转人",
+          customClass: "messageIndex",
+        });
+        return;
       }
-      userDialogVisible.value = false
-      let str = ''
-      let idStr = ''
-      multipleSelection.value.forEach(v=>{
-        str = str + v.operatorName + ','
-        idStr = idStr + v.operatorId + ','
-      })
-      dataForm.value.launchRemark = str.substr(0,str.length-1)
-      dataForm.value.launchBy = idStr.substr(0,idStr.length-1)
-    }
+      userDialogVisible.value = false;
+      let str = "";
+      let idStr = "";
+      multipleSelection.value.forEach((v) => {
+        str = str + v.operatorName + ",";
+        idStr = idStr + v.operatorId + ",";
+      });
+      dataForm.value.launchRemark = str.substr(0, str.length - 1);
+      dataForm.value.launchBy = idStr.substr(0, idStr.length - 1);
+    };
     const handleRecord = async (formRef) => {
-      dataForm.value.id = formData.value.id
-      dataForm.value.eventId = formData.value.id
-      dataForm.value.createBy = JSON.parse(sessionStorage.getItem('user')).operatorId,
-      await formRef.validate((vaild) => {
-        if(vaild){
-          eventProcessing(dataForm.value).then(res=>{
-            if(res.resCode == '000000'){
-              eventHandleVisible.value = false
-              proxy.$message.success('处置成功')
-              store.dispatch('delEvent',dataForm.value)
-            }
-          })
-        }else{
-          return
-        }
-      })
-    }
+      dataForm.value.id = formData.value.id;
+      dataForm.value.eventId = formData.value.id;
+      (dataForm.value.createBy = JSON.parse(
+        sessionStorage.getItem("user")
+      ).operatorId),
+        await formRef.validate((vaild) => {
+          if (vaild) {
+            eventProcessing(dataForm.value).then((res) => {
+              if (res.resCode == "000000") {
+                eventHandleVisible.value = false;
+                proxy.$message.success("处置成功");
+                store.dispatch("delEvent", dataForm.value);
+              }
+            });
+          } else {
+            return;
+          }
+        });
+    };
     window.handleManageBtn = (obj) => {
-      formData.value = obj
-      eventHandleVisible.value = true
-    }
+      formData.value = obj;
+      eventHandleVisible.value = true;
+    };
     // 初始化GIS地图
     const VMapRender = function () {
-      vMap = new VMap()
-      vMap.createMap('dituContent')
+      vMap = new VMap();
+      vMap.createMap("dituContent");
       //设置中心点，目前是像素坐标
-      var point = new Point(18000, 8194)
+      var point = new Point(18000, 8194);
       //创建地图配置文件
-      var config = new Config()
+      var config = new Config();
       //设置中心点和缩放层级
-      config.centerAndZoom(point, 4)
+      config.centerAndZoom(point, 4);
       //设置加载地图类型
       //1：三维地图
       //2：平面地图
-      config.setMapType(1)
+      config.setMapType(1);
       //设置鹰眼是否显示(默认不显示)
-      config.setEyeMap(false)
+      config.setEyeMap(false);
       //设置标签是否显示(默认不显示)
-      config.setLabel(true)
+      config.setLabel(true);
       //设置全景是否显示(默认不显示)
-      config.setPano(false)
+      config.setPano(false);
       //设置停车场是否显示(默认不显示)
-      config.setStop(false)
+      config.setStop(false);
       //设置路名是否显示(默认不显示)
-      config.setRoad(false)
-      config.setPopUrl('')
+      config.setRoad(false);
+      config.setPopUrl("");
       //加载地图
-      vMap.loadMap(config)
-    }
+      vMap.loadMap(config);
+      // drawMyRoute3();
+    };
     watch(fullHeight, () => {
-      reLoadMap()
-      VMapRender()
-    })
+      reLoadMap();
+      VMapRender();
+      setTimeout(()=>drawMyRoute3(),1000)
+    });
     // 点击导航栏 弹窗
     watch(
       () => store.state.mapDialog,
       () => {
-        dialogVisible.value = store.state.mapDialog.visabled
-        mapDialogData.value = store.state.mapDialog.data
+        mapDialogData.value = store.state.mapDialog.data;
       },
       { deep: true }
-    )
-    const handleCloseDialog = () => [store.dispatch('closeDialog')]
+    );
+    const isOpen = ref(false);
+    const handleCloseDialog = () => {
+      isOpen.value = false;
+    };
     const randomAddress = () => {
-      let sum = Math.round(Math.random() * 3)
+      let sum = Math.round(Math.random() * 3);
       let arr = [
-        { lng: '18624', lat: '8178' },
-        { lng: '14440', lat: '5260' },
-        { lng: '21352', lat: '5074' },
-        { lng: '16570', lat: '5160' },
-      ]
-      return arr[sum]
-    }
-    randomAddress()
+        { lng: "18624", lat: "8178" },
+        { lng: "14440", lat: "5260" },
+        { lng: "21352", lat: "5074" },
+        { lng: "16570", lat: "5160" },
+      ];
+      return arr[sum];
+    };
+
+
+ //绘制编号为1000的静态箭头线
+        const drawMyRoute3=()=>{
+          //vMap.drawRoute("17808,18500,17744,18224","7526,7700,9118,9262",'1000','red',4,'arrow','','1');
+          //画第一网格线圈
+          vMap.drawRoute("13848,14556,15480,16884,18296,17064,17752,17632,18528,17992,13848","8818,7966,7218,6419,6738,8836,9012,9100,9308,10324,8818",'1000','blue',4,'','','1');
+          //画第一网格标签
+          var html1 = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#000FFF"><nobr>第一网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+          //vMap.showMapMark(18821,10596,html);
+          vMap.showMapMark(16144,7148,html1);
+          
+          // //画第二网格线圈
+          vMap.drawRoute("19928,18026,18556,17732,17802,17120,18770,19960,19312,20278,20325,21838,19928","11020,10349,9278,9089,8965,8805,6033,6331,7474,7673,7595,7943,11020",'1000','red',4,'','','1');
+          //画第二网格标签
+          var html = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#FF0000"><nobr>第二网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+          //vMap.showMapMark(18821,10596,html);
+          vMap.showMapMark(19024,9636,html);
+          
+          //画第三网格线圈
+          vMap.drawRoute("18314,16928,17234,20266,23288,21840,20316,20254,19370,20000,18738,18314","6711,6400,6200,4935,5730,7932,7565,7641,7449,6313,6000,6711",'1000','yellow',4,'','','1');
+          //画第二网格标签
+          var html = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#3A1027"><nobr>第三网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+          //vMap.showMapMark(18821,10596,html);
+          vMap.showMapMark(18888,5250,html);
+        };
+
+
+    randomAddress();
     // 获取楼栋信息
     const getBuild = (buildingId) => {
       getUnitByBuild({ buildingId }).then((res) => {
-        if (res.resCode == '000000') {          
-          unitList.value = res.data.unit
-          buildForm.value = res.data.build
-          searchForm.value.villageName = res.data.build.villageName
-          searchForm.value.buildingNumber = res.data.build.buildingNumber
-          houseDialogVisible.value = true
-          getHouseApi()
-          getPeopleApi()
+        if (res.resCode == "000000") {
+          unitList.value = res.data.unit;
+          buildForm.value = res.data.build;
+          searchForm.value.villageName = res.data.build.villageName;
+          searchForm.value.buildingNumber = res.data.build.buildingNumber;
+          houseDialogVisible.value = true;
+          getHouseApi();
+          getPeopleApi();
         }
-      })
-    }
+      });
+    };
     const getHouseByUnit = (unitNumber) => {
-      searchForm.value.unitNumber = unitNumber
-      searchForm.value.houseNumber = ''
-      isHaveHouse.value = true
-      getHouseApi()
-    }
+      searchForm.value.unitNumber = unitNumber;
+      searchForm.value.houseNumber = "";
+      isHaveHouse.value = true;
+      getHouseApi();
+    };
     const getHouseByFloor = (floorNumber) => {
-      searchForm.value.floorId = floorNumber
-      searchForm.value.houseNumber = ''
-      isHaveHouse.value = true
-      getHouseApi()
-    }
+      searchForm.value.floorId = floorNumber;
+      searchForm.value.houseNumber = "";
+      isHaveHouse.value = true;
+      getHouseApi();
+    };
     const getPeople = (houseNumber) => {
-      searchForm.value.houseNumber = houseNumber
-      isHavePeople.value = true
-      getPeopleApi()
-    }
+      searchForm.value.houseNumber = houseNumber;
+      isHavePeople.value = true;
+      getPeopleApi();
+    };
     const getHouseApi = () => {
-      getPeopleList(searchForm.value).then(res=>{
-        if(res.resCode == '000000'){
-          isHaveHouse.value = false
-          houseList.value = res.data.list
-          peopleList.value = []
+      getPeopleList(searchForm.value).then((res) => {
+        if (res.resCode == "000000") {
+          isHaveHouse.value = false;
+          houseList.value = res.data.list;
+          peopleList.value = [];
         }
         // console.log(res,'getHouseApi')
-      })
-    }
+      });
+    };
     const getPeopleApi = () => {
-      getPeopleList(searchForm.value).then(res=>{
+      getPeopleList(searchForm.value).then((res) => {
         // console.log(res,'getPeopleApi')
-        if(res.resCode == '000000'){
-          isHavePeople.value = false
-          peopleList.value = res.data.list
+        if (res.resCode == "000000") {
+          isHavePeople.value = false;
+          peopleList.value = res.data.list;
         }
-      })
-    }
+      });
+    };
     const eventDialogStyle = () => {
       setTimeout(() => {
-        let arr = JSON.parse(sessionStorage.getItem('eventName'))
-        let { lng, lat } = randomAddress()
-        let obj = arr[0]
-        speak(obj)
+        let arr = JSON.parse(sessionStorage.getItem("eventName"));
+        let { lng, lat } = randomAddress();
+        let obj = arr[0];
+        speak(obj);
         vMap.showMapPopWin(
           lng,
           lat,
           `${obj.eventName}`,
-          '/src/assets/index.html',
+          "/src/assets/index.html",
           400,
           300
-        )
-      }, 1000)
-    }
+        );
+      }, 1000);
+    };
     onMounted(() => {
       // 是否有紧急事件通知 具体数值
       if (!!route.params.isClick) {
-        store.state.isAddEventList && eventDialogStyle()
-        store.state.isAddEventList = false
+        store.state.isAddEventList && eventDialogStyle();
+        store.state.isAddEventList = false;
       }
       window.onresize = () => {
-        clearTimeout(timer)
+        clearTimeout(timer);
         timer = setTimeout(() => {
-          fullHeight.value = document.documentElement.clientHeight
-        }, 1000)
-      }
-      VMapRender()
-      vMap.onMapClick( (x0, y0, id, title, identitycode) => {
-        
-        getBuild(19)
-      })
-    })
-    watch(() => store.state.eventList,() => {
-        store.state.isAddEventList && eventDialogStyle()
-        store.state.isAddEventList = false
+          fullHeight.value = document.documentElement.clientHeight;
+        }, 1000);
+      };
+      VMapRender();
+      setTimeout(()=>drawMyRoute3(),1000)
+
+      vMap.onMapClick((x0, y0, id, title, identitycode) => {
+        getBuild(19);
+      });
+    });
+    watch(
+      () => store.state.eventList,
+      () => {
+        store.state.isAddEventList && eventDialogStyle();
+        store.state.isAddEventList = false;
       },
       { deep: true }
-    )
+    );
     // 事件播报事件
     const speak = (obj) => {
       proxy.$speak(
         `事件名称：${obj?.eventName},发生地点:${obj?.cityName}${
           obj?.communityName
-        }${obj?.gridName}${obj.eventPlace ?? ''}`
-      )
-    }
+        }${obj?.gridName}${obj.eventPlace ?? ""}`
+      );
+    };
 
-    onBeforeMount(()=>{
-      getOptionsByCode(1026,dataSourceOptions);
-    })
+    const handleClick = () => {
+      isOpen.value = true;
+    };
+
+    onBeforeMount(() => {
+      getOptionsByCode(1026, dataSourceOptions);
+    });
     // 恢复地图未加载默认状态
     const reLoadMap = () => {
-      if (typeof jv != 'undefined') {
-        jv = false
+      if (typeof jv != "undefined") {
+        jv = false;
       }
-      if (typeof fz != 'undefined') {
-        fz = false
+      if (typeof fz != "undefined") {
+        fz = false;
       }
-    }
+    };
     onBeforeRouteLeave(() => {
-      reLoadMap()
-    })
-        // 
-    const unitNumberOptions = ref([])
-    const relationshipOptions = ref([])
-    getOptionsByCode(1052,unitNumberOptions)
-    getOptionsByCode(1014,relationshipOptions)
+      reLoadMap();
+    });
+    //
+    const unitNumberOptions = ref([]);
+    const relationshipOptions = ref([]);
+    getOptionsByCode(1052, unitNumberOptions);
+    getOptionsByCode(1014, relationshipOptions);
     return {
       fullHeight,
       mapDialogData,
@@ -575,9 +690,11 @@ export default {
       rules,
       recordFormRef,
       unitNumberOptions,
-    }
+      handleClick,
+      isOpen,
+    };
   },
-}
+};
 </script>
 <style scoped>
 .sidebar {
@@ -728,7 +845,7 @@ h4 {
   transform: scale(1.1);
   background: darkgoldenrod;
 }
-.active{
+.active {
   transform: scale(1.1);
   background: #242f42;
   color: #fff;
@@ -743,7 +860,7 @@ h4 {
 .houseBox > div {
   height: calc(100% - 25px);
 }
-.noList{
+.noList {
   height: 100%;
   display: flex;
   justify-content: center;
@@ -811,6 +928,7 @@ h4 {
   width: 100%;
   display: flex;
   justify-content: flex-start;
+  
 }
 ::-webkit-scrollbar {
   /*隐藏滚轮*/
@@ -841,7 +959,7 @@ h4 {
   border-bottom: 13px solid transparent;
 } */
 
-.checkSpan{
+.checkSpan {
   display: inline-block;
   padding: 2px 5px 3px;
   background: #e3edf5;
