@@ -20,6 +20,7 @@
           type="primary"
         ></el-button>
         <el-button size="small" circle type="primary" @click="handleCommand(data.data)"><i class="el-icon-lx-tag"></i></el-button>
+        <el-button size="small" circle type="primary" @click="handleData(data.data)"><i class="el-icon-lx-rank"></i></el-button>
         <el-popconfirm title="确定要删除该角色吗？" @confirm="handleDelete(data.data.id)">
           <template #reference>
             <el-button
@@ -174,6 +175,13 @@ export default {
         query: { data: encodeURIComponent(data), operation: 2,type:'role' },
       })
     };
+    const handleData = (rowData) => {
+      let data = JSON.stringify(rowData)
+      router.push({
+        path: '/distribution',
+        query: { data: encodeURIComponent(data), operation: 2,type:'data' },
+      })
+    }
     onMounted(() => {
       handleQuery()
     })
@@ -199,6 +207,7 @@ export default {
       handleEdit,
       handleDelete,
       handleCommand,
+      handleData,
     }
   },
 }
