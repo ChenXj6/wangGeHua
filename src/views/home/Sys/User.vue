@@ -18,6 +18,7 @@
           circle
           type="success"
         />
+        <el-button size="small" circle type="primary" @click="handleCommand(data.data)"><i class="el-icon-lx-people"></i></el-button>
         <el-popconfirm title="确定要删除该用户吗？" @confirm="handleDelete(data.data.operatorId)">
           <template #reference>
             <el-button
@@ -53,11 +54,13 @@ import { getCurrentInstance, onMounted, reactive, ref } from '@vue/runtime-core'
 
 import { saveUser, deleteUser } from '@/api/sys/user.js'
 import { listAssign, defaultObject } from '@/utils/util'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'User',
   setup() {
     const { proxy } = getCurrentInstance()
+    const router = useRouter()
     const { tableConfig, formConfig, addFormConfig } = renderTable.call(proxy)
     const table = ref(null)
     const form = ref(null)
@@ -179,6 +182,14 @@ export default {
         { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
       ],
     }
+    // 
+    const handleCommand = (rowData) => {
+      let data = JSON.stringify(rowData)
+      router.push({
+        path: '/distribution',
+        query: { data: encodeURIComponent(data), operation: 2,type:'user' },
+      })
+    };
     onMounted(() => {
       handleQuery()
     })
@@ -197,6 +208,7 @@ export default {
       handleEdit,
       handleDelete,
       AddFormHandle,
+      handleCommand,
     }
   },
 }

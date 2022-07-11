@@ -1,0 +1,290 @@
+<template>
+  <div>
+    <div class="crumbs">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item>
+          <i class="el-icon-lx-cascades"></i>
+          {{ route.query.type == 'user' ? '用户分配角色' : '基本信息' }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </div>
+    <div style="margin-bottom: 20px"><hr /></div>
+    <VForm v-if="route.query.type == 'user'" :isDisabled="true" :form-data="userFormConfig" :form-model="dataForm" />
+    <VForm v-else :isDisabled="true" :form-data="roleFormConfig" :form-model="dataForm" />
+    <div v-if="route.query.type == 'user'">
+      <div class="crumbs">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <i class="el-icon-lx-cascades"></i> 分配角色
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <div style="margin-bottom: 20px"><hr /></div>
+      <el-table ref="table" :data="tableData" style="width: 100%" size="mini" border @selection-change="handleSelectionChange">
+        <el-table-column type="index" width="50" />
+        <el-table-column type="selection" width="55" />
+        <el-table-column prop="name" label="角色名称"/>
+        <el-table-column prop="remark" label="备注" />
+      </el-table>
+    </div>
+    <div v-else>
+      <div class="crumbs">
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item>
+            <i class="el-icon-lx-cascades"></i> 授权功能菜单
+          </el-breadcrumb-item>
+        </el-breadcrumb>
+      </div>
+      <el-row :gutter="10">
+      <el-col :span="10">
+        <el-tree
+          ref="treeRef"
+          :data="items"
+          show-checkbox
+          :height="208"
+          default-expand-all
+          :default-checked-keys="treeCheckArr"
+          node-key="id"
+          @check-change="handleCheckChange"
+        >
+          <template #default="{ node, data }">
+            <span class="custom-tree-node">
+              <span>{{ data.name }}</span>
+              <span>
+                <span><i :class="data.icon"></i></span>
+                <span class="tagClass"
+                  ><el-button
+                    size="mini"
+                    :type="data.children?.length ? 'primary' : 'success'"
+                    >{{ data.children?.length ? '目录' : '菜单' }}</el-button
+                  ></span
+                >
+                
+                <span>{{ data.url }}</span>
+              </span>
+            </span>
+          </template>
+        </el-tree>
+      </el-col>
+    </el-row>
+    </div>
+    <el-row>
+      <div class="btn-box">
+        <el-button
+          type="primary"
+          @click="handleClick()"
+          size="small"
+          icon="el-icon-lx-roundcheck"
+          >确定</el-button
+        >
+        <el-button
+          type="primary"
+          @click="handleBack()"
+          size="small"
+          icon="el-icon-lx-back"
+          >返回</el-button
+        >
+      </div>
+    </el-row>
+  </div>
+</template>
+<script>
+import { getCurrentInstance, nextTick, onBeforeMount, onMounted, reactive, ref } from '@vue/runtime-core'
+import mixin from '@/mixins/tagView.js'
+import {renderTable} from './common/distribution'
+import { useRoute } from 'vue-router'
+import { getRoleList } from '@/api/sys/role'
+import { getRoleByUser,saveRoleToUser,getMenuByRole,saveMenuByRole } from '@/api/sys/user'
+import { getMenuTree } from '@/api/sys/menu.js'
+export default {
+  mixins: [mixin],
+  setup() {
+    const { proxy } = getCurrentInstance()
+    const route = useRoute()
+    const { userFormConfig,roleFormConfig } = renderTable.call(proxy)
+    const { delCurrentTag } = mixin.setup()
+    const dataForm = ref({})
+    const table = ref(null)
+    const treeRef = ref(null)
+    const tableData = ref([])
+    const multipleSelection = ref([])
+    const treeCheckArr = ref([])
+    const treeSelectArr = ref([])
+    const items = ref([])
+    const getRole = () => {
+      getRoleList({pageNum:1,pageSize:9999}).then(res=>{
+        if(res.code == 200){
+          tableData.value = res.data.list
+          multipleSelection.value.forEach(v=>{
+            tableData.value.forEach((val,index)=>{
+              if(v.roleId == val.id){
+                table.value.toggleRowSelection(tableData.value[index],true)
+              }
+            })            
+          })
+        }
+      })
+    }
+    const getRoleBy = (userId) => {
+      getRoleByUser(userId).then(res=>{
+        if(res.code == '200'){
+          res.data.forEach(v=>{
+            let obj = {}
+            obj.roleId = v.roleId
+            obj.userId = v.userId
+            multipleSelection.value.push(obj)
+          })
+        }
+      })
+    }
+    const getMenuAll = () => {
+      getMenuTree().then(res=>{
+        if(res.code == '200'){
+          items.value = res.data
+          // setCheck()
+        }
+      })
+    }
+    // const setCheck = () => {
+    //   treeCheckArr.value.forEach((v,i)=>{
+    //     treeCheckArr.value[i] = treeCheckArr.value[i].id
+    //   })
+    // }
+    const getMenuBy = (id) => {
+      getMenuByRole({id}).then(res=>{
+        if(res.code == '200'){
+          res.data.forEach((v,i)=>{
+            treeCheckArr.value[i] = v.id
+          })
+        }
+      })
+    }
+    const handleCheckChange = () => {
+      let checkArr = treeRef.value.getCheckedKeys(false)
+      if(checkArr.length == 0) treeSelectArr.value = []
+      let arr = []
+      checkArr.forEach(v=>{
+        let obj = {}
+        obj.roleId = dataForm.value.id
+        obj.menuId = v
+        arr.push(obj)
+      })
+      treeSelectArr.value = arr
+    }
+    const handleSelectionChange = (row) => {
+      if(row.length == 0) {
+        multipleSelection.value = [] 
+        return 
+      }
+      let arr = []
+      row.forEach(v=>{
+        let obj = {}
+        obj.roleId = v.id
+        obj.userId = dataForm.value.id
+        arr.push(obj)
+      })
+      multipleSelection.value = arr
+    }
+    const handleClick = () => {
+      if(route.query.type == 'user'){
+        saveRoleToUser(multipleSelection.value).then(res=>{
+          if(res.code == '200'){
+            proxy.$message.success('用户分配角色成功')
+            // delCurrentTag(route)
+          }
+        })
+      }else {
+        if(treeSelectArr.value.length == 0){
+          proxy.$message.warning('请至少选择一个菜单!')
+          return
+        }
+        saveMenuByRole(treeSelectArr.value).then(res=>{
+          if(res.code == '200'){
+            proxy.$message.success('角色分配菜单权限成功')
+            // delCurrentTag(route)
+          }
+        })
+      }
+      
+    }
+    const handleBack = () => {
+      delCurrentTag(route)
+    }
+    dataForm.value = JSON.parse(decodeURIComponent(route.query.data))
+    if(route.query.type == 'user'){
+      getRoleBy(dataForm.value.id)
+      getRole()
+    } else {
+      getMenuBy(dataForm.value.id)
+      getMenuAll()
+    }
+    onBeforeMount(()=>{
+      
+    })
+    onMounted(() => {   
+    })
+    return {
+      table,
+      route,
+      userFormConfig,
+      roleFormConfig,
+      dataForm,
+      tableData,
+      handleSelectionChange,
+      handleClick,
+      handleBack,
+      items,
+      treeRef,
+      handleCheckChange,
+      treeCheckArr,
+    }
+  },
+}
+</script>
+<style scoped>
+.btn-box{
+  margin: 10px;
+  text-align: right;
+}
+.menu-header {
+  padding-left: 8px;
+  padding-bottom: 5px;
+  text-align: left;
+  font-size: 16px;
+  color: rgb(20, 89, 121);
+}
+
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
+.custom-tree-node > span:nth-child(2) {
+  width: 400px;
+  display: flex;
+  justify-content: flex-start;
+}
+.custom-tree-node > span:nth-child(2) >span {
+  min-width: 100px;
+  
+}
+.tagClass {
+  height: 30px;
+  transform: scale(0.8);
+}
+.footerClass {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+</style>
+<style>
+.el-tree-node__content{
+  height: 30px !important;
+  line-height: 30px;
+}
+</style>

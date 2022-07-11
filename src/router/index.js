@@ -137,6 +137,14 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/Organ.vue")
       },
       {
+        path: "/distribution",
+        name: "distribution",
+        meta: {
+          title: '系统管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/distribution.vue")
+      },
+      {
         path: "/editorgan",
         name: "editorgan",
         meta: {
@@ -295,14 +303,14 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/Manage.vue")
       },
-      {
-        path: "/propertyManager",
-        name: "propertyManager",
-        meta: {
-          title: '物业管家'
-        },
-        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/PropertyManager.vue")
-      },
+      // {
+      //   path: "/propertyManager",
+      //   name: "propertyManager",
+      //   meta: {
+      //     title: '物业管家'
+      //   },
+      //   component: () => import( /* webpackChunkName: "table" */ "@/views/home/SmartProperty/PropertyManager.vue")
+      // },
       {
         path: "/editsmart",
         name: "editsmart",
@@ -398,7 +406,7 @@ const routes = [
         meta: {
           title: '文稿列表',
           getTitle: function(route) {
-            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.operation == 1 ? '文稿' :'多媒体'}`
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'draft' ? '文稿' :'多媒体'}`
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Propaganda/EditDraft.vue")
@@ -525,6 +533,200 @@ const routes = [
           title: '12345热线工单类别'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/GridHotlineWorkOrder.vue")
+      },
+      {
+        path: "/taxList",
+        name: "taxList",
+        meta: {
+          title: '财政税收列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/TaxList.vue")
+      },
+      {
+        path: "/itemList",
+        name: "itemList",
+        meta: {
+          title: '项目列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/ItemList.vue")
+      },
+      {
+        path: "/buildingList",
+        name: "buildingList",
+        meta: {
+          title: '企业楼宇列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/BuildingList.vue")
+      },
+      {
+        path: "/industry",
+        name: "industry",
+        meta: {
+          title: '产业信息采集'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/Industry.vue")
+      },
+      {
+        path: "/editEconomics",
+        name: "editEconomics",
+        meta: {
+          title: '经济运行',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'tax' ? '财政税收' : (route.params.type == 'item' ? '项目' : (route.params.type == 'building' ? '楼宇信息' : '产业信息'))}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/Edit.vue")
+      },
+      {
+        path: "/partyInfo",
+        name: "partyInfo",
+        meta: {
+          title: '党组织信息'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/PartyBuilding/PartyInfo.vue")
+      },
+      {
+        path: "/partyPeople",
+        name: "partyPeople",
+        meta: {
+          title: '党员信息'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/PartyBuilding/PartyPeople.vue")
+      },
+      {
+        path: "/editParty",
+        name: "editParty",
+        meta: {
+          title: '党建引领',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'partyInfo' ? '党组织' : '党员'}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/PartyBuilding/Edit.vue")
+      },
+      {
+        path: "/notice",
+        name: "notice",
+        meta: {
+          title: '通知公告'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Notice/index.vue")
+      },
+      {
+        path: "/editNotice",
+        name: "editNotice",
+        meta: {
+          title: '通知公告',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}通知公告`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Notice/Edit.vue")
+      },
+      {
+        path: "/provide",
+        name: "provide",
+        meta: {
+          title: '养老机构列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/LiveEnsure/Provide.vue")
+      },
+      {
+        path: "/editProvide",
+        name: "editProvide",
+        meta: {
+          title: '养老机构',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}养老机构`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/LiveEnsure/EditProvide.vue")
+      },
+
+
+
+
+      //
+      {
+        path: "/urgentNeedTeams",
+        name: "urgentNeedTeams",
+        meta: {
+          title: '应急队伍列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/UrgentNeedTeams.vue")
+      },
+      {
+        path: "/urgentNeedSupplies",
+        name: "urgentNeedSupplies",
+        meta: {
+          title: '应急物资列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/UrgentNeedSupplies.vue")
+      },
+      {
+        path: "/smokeDevide",
+        name: "smokeDevide",
+        meta: {
+          title: '烟感设备列表'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/SmokeDevide.vue")
+      },
+      {
+        path: "/hiddenDanger",
+        name: "hiddenDanger",
+        meta: {
+          title: '隐患排查'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/HiddenDanger.vue")
+      },
+      {
+        path: "/hiddenDangerTask",
+        name: "hiddenDangerTask",
+        meta: {
+          title: '隐患排查定时任务'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/HiddenDangerTask.vue")
+      },
+      {
+        path: "/hiddenDangerContent",
+        name: "hiddenDangerContent",
+        meta: {
+          title: '隐患排查内容'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/HiddenDangerContent.vue")
+      },
+      {
+        path: "/editHiddenDanger",
+        name: "editHiddenDanger",
+        meta: {
+          title: '隐患排查',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}隐患排查`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/EditHiddenDanger.vue")
+      },
+      {
+        path: "/editSmoke",
+        name: "editSmoke",
+        meta: {
+          title: '烟感设备',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}烟感设备`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/EditSmoke.vue")
+      },
+      {
+        path: "/editUrgentNeed",
+        name: "editUrgentNeed",
+        meta: {
+          title: '应急',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${route.params.type == 'team' ? '应急队伍': '应急物资'}`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/EditUrgentNeed.vue")
       },
     ]
   },

@@ -16,26 +16,13 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
-      <template v-slot:houseType="{data}">
-        <span>{{ houseType(Number(data.houseType)) }}</span>
-      </template>
-      <template v-slot:villageType="{data}">
-        <span>{{ villageType(Number(data.villageType)) }}</span>
-      </template>
       <template v-slot:operation="{data}">
-        <el-button
-          size="small"
-          @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
-          circle
-          type="success"
-        />
         <el-button
           size="small"
           icon="el-icon-lx-edit"
           @click="handleEdit(data)"
           circle
-          type="priamry"
+          type="primary"
         />
       </template>
     </V-table>
@@ -44,18 +31,30 @@
       v-model="dialogVisible"
       width="30%">
       <div>
-        <el-form ref="form" :model="reviewForm" label-width="80px">
-          <el-form-item label="审核状态">
-            <el-input size="mini" v-model="reviewForm.a"></el-input>
+        <el-form ref="form" :model="reviewForm" :rules="rules" label-width="80px">
+          <el-form-item label="审核状态" prop="reviewStatus">
+            <el-select
+              v-model="reviewForm.reviewStatus"
+              placeholder="请选择审核状态"
+              size="small"
+              :loading="loading"
+            >            
+              <el-option
+                v-for="i in options[1074]"
+                :label="i.label"
+                :value="i.value"
+                :key="i.value"
+              ></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="审核意见">
-            <el-input size="mini" v-model="reviewForm.b"></el-input>
+          <el-form-item label="审核意见" prop="opinion">
+            <el-input size="mini" type="textarea" v-model="reviewForm.opinion"></el-input>
           </el-form-item>
         </el-form>
       </div>
       <template #footer>
         <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button size="mini" type="primary" @click="handleConfirm">确 定</el-button>
       </template>
     </el-dialog>
   </div>
@@ -73,8 +72,9 @@ import {
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/DraftReview'
-import { deepClone, defaultObject } from '@/utils/util'
-import { deleteBuild } from '@/api/ActualInfo/build'
+import { deepClone, defaultObject,resetFormat} from '@/utils/util'
+import { searchDict } from '@/api/sys/dict'
+import { updateDraft } from '@/api/Propaganda/review'
 export default defineComponent({
   name: 'Draft',
   components:[PopupTreeInput],
@@ -89,6 +89,7 @@ export default defineComponent({
     })
     // 文稿审核弹窗
     const reviewForm = ref({})
+    const form = ref(null)
     const dialogVisible = ref(false)
     let popupTreeData = ref([])
     const popupTreeProps = {
@@ -101,47 +102,6 @@ export default defineComponent({
       searchForm.officeCode = officeCode
       searchForm.officeName = officeName
     }
-    const multipleSelection = ref([]) // 选中数据
-    const houseType = computed(()=>{
-      return (val)=>{
-        switch(val){
-          case 0:
-              return '居民楼';
-          case 1:
-              return '平房';
-          case 2:
-              return '商品房';
-          case 3:
-              return '房改房';            
-          case 4:
-              return '小产权';
-          case 5:
-              return '单位用房';
-          case 6:
-              return '商品门头房';
-          case 7:
-              return '住改商';
-          case 8:
-              return '商业体';
-          case 9:
-              return '经济体';
-        }
-      }
-    })
-    const villageType = computed(()=>{
-      return (val)=>{
-        switch(val){
-          case 0:
-              return '开放';
-          case 1:
-              return '封闭';
-        }
-      }
-    })
-    // 是否有選中數據
-    const isHaveSelect = computed(
-      () => multipleSelection.value && multipleSelection.value.length > 0
-    )
 
     // 表格相關操作
     const handleQuery = () => {
@@ -192,8 +152,34 @@ export default defineComponent({
     }
     // 审核
     const handleEdit = (data) => {
-      console.log(data)
+      Object.assign(reviewForm.value,data)
       dialogVisible.value = true
+    }
+    const rules = reactive({
+      reviewStatus:[
+        { required: true, message: '请选择审核状态', trigger: ['blur','change'] },
+      ],
+      opinion:[
+        { required: true, message: '请选择审核意见', trigger: ['blur','change'] },
+      ],
+    })
+    const handleConfirm = () =>{
+      form.value.validate((valid)=>{
+        if(valid){
+          delete reviewForm.value.treeNames
+          reviewForm.value.reviewerUser = JSON.parse(sessionStorage.getItem('user')).user.operatorName
+          updateDraft(reviewForm.value).then(res=>{
+            if(res.resCode == '000000'){
+              proxy.$message.success('文稿审核成功')
+              dialogVisible.value = false
+              handleQuery()
+            }
+          })
+        } else {
+          return false
+        }
+      })
+      
     }
     const getOList = () => {
       getOrganList({}).then(res=>{
@@ -203,12 +189,30 @@ export default defineComponent({
       })
     }
     getOList()
+    const loading = ref(false)
+    const options = reactive({})
+    const querySearchAsync = (basictype) => {
+      if(basictype){
+        loading.value = true
+        searchDict({basictype}).then(res=>{
+          if(res.resCode == '000000' && res.data){
+            options[basictype] = resetFormat(res.data)
+            loading.value = false
+          }else{
+            options[basictype] = []
+            loading.value = false
+          }
+        })
+      }else{
+        options[basictype] = []
+      }
+    }
+    querySearchAsync(1074)
     onMounted(() => {
       handleQuery()
     })
     return {
       table,
-      multipleSelection,
       tableConfig,
       formConfig,
       searchForm,
@@ -216,8 +220,6 @@ export default defineComponent({
       handleQuery,
       handleReset,
       handleOperation,
-      villageType,
-      houseType,
       handleDel,
       handleTreeSelectChange,
       popupTreeProps,
@@ -225,6 +227,12 @@ export default defineComponent({
       handleEdit,
       reviewForm,
       dialogVisible,
+      loading,
+      options,
+      querySearchAsync,
+      form,
+      handleConfirm,
+      rules,
     }
   },
 })

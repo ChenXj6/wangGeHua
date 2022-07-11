@@ -1,4 +1,4 @@
-import { getBuildList } from '@/api/ActualInfo/build'
+import { getMedia } from '@/api/Propaganda/media'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
@@ -7,26 +7,26 @@ export function renderTable() {
     data: [],
     pagination: true, // 开启分页器
     mutiSelect: false, // 开启选择
-    method: getBuildList, // 請求api
+    method: getMedia, // 請求api
     index: true, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
       {
-        prop: 'streetName',
-        label: '街道名称',
-        minWidth: '120',
+        prop: 'treeNames',
+        label: '组织机构',
+        minWidth: '300',
       },
-      { prop: 'title', label: '标题', minWidth: '120' },
+      { prop: '', slot:'title', label: '标题', minWidth: '200' },
       { prop: 'releaseTime', label: '发布时间', minWidth: '150' },
-      { prop: 'releaseName', label: '发布人', tooltip: true, minWidth: '120' },
-      { prop: 'level1', label: '一级分类', tooltip: true, minWidth: '120' },
-      { prop: 'level2', label: '二级分类', tooltip: true, minWidth: '120' },
-      { prop: 'level3', label: '三级分类', tooltip: true, minWidth: '120' },
-      { prop: 'releaseName', label: '组', tooltip: true, minWidth: '120' },
-      { prop: 'mType', label: '类型', tooltip: true, minWidth: '120' },
-      { prop: 'viewFlag', label: '是否显示', tooltip: true, minWidth: '120' },
-      { prop: '', label: '操作', slot: 'operation', minWidth: '130' },
+      { prop: 'releaseUser', label: '发布人', tooltip: true, minWidth: '120' },
+      { type: 'code', code:'1005',prop: 'level1', label: '一级分类', tooltip: true, minWidth: '120' },
+      { type: 'code', code:'1005',prop: 'level2', label: '二级分类',tooltip: true, minWidth: '120' },
+      { type: 'code', code:'1005',prop: 'level3', label: '三级分类', tooltip: true, minWidth: '120' },
+      { prop: 'mediaGroups', label: '组', tooltip: true, minWidth: '120' },
+      { type: 'code', code:'1071', prop: 'mtype', label: '类型', tooltip: true, minWidth: '120' },
+      { type: 'code', code:'1006', prop: 'viewFlag', label: '是否显示', tooltip: true, minWidth: '120' },
+      { prop: '', label: '操作', slot: 'operation', minWidth: '150' },
     ],
   }
   const formConfig = {

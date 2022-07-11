@@ -1,5 +1,6 @@
 <template>
-  <router-view />
+  <router-view :key="$route.fullPath"/>
+  <!-- <router-view/> -->
 </template>
 
 <script>
@@ -13,12 +14,14 @@ export default {
   setup() {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
     if(sessionStorage.getItem('user')){
       store.dispatch('socketInit')
     }
     // 全局检测是否有来自webSocket的消息通知   
     onMounted(()=>{
       store.state.eventList = JSON.parse(sessionStorage.getItem('eventName')) || []
+      store.state.menuList = JSON.parse(sessionStorage.getItem('menulist')) || []
       watch(
         () => store.state.eventList,
         (newValue) => {
@@ -41,6 +44,9 @@ export default {
         {deep:true}
       )
     })
+    // return{
+    //   route
+    // }
   },
 }
 </script>

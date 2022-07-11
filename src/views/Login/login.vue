@@ -61,6 +61,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { loginApi } from '@/api/login'
+import { getMenuTreeByUser } from '@/api/sys/menu.js'
 
 export default {
   setup() {
@@ -93,8 +94,10 @@ export default {
       loginApi(userInfo)
         .then((res) => {
           if (res.resCode == '000000') {
+            // console.log(res.data)
             sessionStorage.setItem('user', JSON.stringify(res.data))
-            sessionStorage.setItem('operatorId', res.data.operatorId)
+            sessionStorage.setItem('operatorId', res.data.user.operatorId)
+            getMenuTree(res.data.user.id)
             store.dispatch('socketInit')
             router.push('/')
           } else {
@@ -122,6 +125,13 @@ export default {
       })
     }
     store.commit('clearTags')
+    const getMenuTree = (operatorId) => {
+      getMenuTreeByUser({operatorId}).then(res=>{
+        if(res.code == '200'){
+          store.dispatch('resetMenu',res.data)
+        }
+      })
+    }
     
     return {
       param,
