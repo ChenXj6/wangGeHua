@@ -20,3 +20,10 @@ export const getMenuTree = query => {
     `/api/sys/menu/findMenuTree`, query
   )
 };
+
+// 根据角色获取资源树
+export const getMenuTreeByUser = query => {
+  return service.post(
+    `/api/sys/menu/findMenuByUserId`, query
+  )
+};
