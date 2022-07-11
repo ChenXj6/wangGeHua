@@ -11,6 +11,7 @@ declare module 'vue' {
     ElCard: typeof import('element-plus/es/el-card')['default']
     ElCheckbox: typeof import('element-plus/es/el-checkbox')['default']
     ElCol: typeof import('element-plus/es/el-col')['default']
+    ElColorPicker: typeof import('element-plus/es/el-color-picker')['default']
     ElDatePicker: typeof import('element-plus/es/el-date-picker')['default']
     ElDialog: typeof import('element-plus/es/el-dialog')['default']
     ElDropdown: typeof import('element-plus/es/el-dropdown')['default']

@@ -177,6 +177,11 @@ export default {
                         index: "/Management",
                         title: "12345处置",
                     },
+                    {
+                        icon: "el-icon-lx-forward",
+                        index: "/GridHotlineWorkOrder",
+                        title: "12345热线工单类别",
+                    },
                 ],
             },
             {

@@ -56,7 +56,7 @@ export function renderTable() {
         ]
     }
     const formConfig = {
-        formItems: [
+        formItems: [  
             {
                 type: 'slot',
                 label: '组织结构',
