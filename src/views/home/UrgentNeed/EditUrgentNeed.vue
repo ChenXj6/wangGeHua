@@ -38,9 +38,33 @@
                 />
       </template>
     </VForm>
-    <VForm v-else :key="timer" :isDisabled="route.params.operation == 1" :form-data="partyPeopleFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
-      <template v-slot:partyOrgId="">
-        <el-input v-model="dataForm.infoName" size="mini" :readonly="true" placeholder="点击选择党组织" @click="handleOpenInfo" style="cursor:pointer;"></el-input>
+    <VForm v-else :key="timer" :isDisabled="route.params.operation == 1" :form-data="suppliesPeopleFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+      <template v-slot:gridCode="">
+        <popup-tree-input
+          :data="popupTreeData" :propa="popupTreeProps"
+          :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
+          <template v-slot>
+            <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+          </template>
+        </popup-tree-input>
+      </template>
+      <template v-slot:eventLong="">
+          <el-input
+                  v-model="dataForm.longitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable                  
+                  @click="handleClick"
+                />
+        </template>
+      <template v-slot:eventLat="">
+                <el-input
+                  v-model="dataForm.latitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable
+                  @click="handleClick"
+                />
       </template>
     </VForm>
     <el-row v-if="route.params.operation == 1">
@@ -72,6 +96,7 @@ import { renderTable } from './common/EditUrgentNeed'
 import { deepClone,resetFormat,defaultObject  } from '@/utils/util'
 import { getOrganList } from '@/api/sys/organ'
 import { saveTeam,updateTeam } from '@/api/UrgentNeed/team'
+import { saveSupp,updateSupp } from '@/api/UrgentNeed/supplies'
 export default {
   name:'Edit',
   setup() {
@@ -99,7 +124,7 @@ export default {
             }
             })
           }else{
-            updatePartyPeople(dataForm.value).then(res=>{
+            updateSupp(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -117,7 +142,7 @@ export default {
             }
             })
           }else{
-            addPartyPeople(dataForm.value).then(res=>{
+            saveSupp(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
             } else {

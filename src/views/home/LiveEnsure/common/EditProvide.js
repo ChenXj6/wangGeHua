@@ -27,7 +27,7 @@ export function renderTable() {
         type: 'slot',
         label: '归属网格',
         slotName:'gridCode',
-        prop:'officeName',
+        prop:'gridName',
         span: 11,
       },
       {
@@ -79,7 +79,7 @@ export function renderTable() {
       bh: [
         { required: true, message: '请输入编号', trigger: ['blur','change'] },
       ],
-      officeName: [
+      gridName: [
         { required: true, message: '请选择归属网格', trigger: ['blur','change'] },
       ],
       lon: [

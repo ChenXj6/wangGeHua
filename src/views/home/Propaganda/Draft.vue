@@ -16,12 +16,9 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
-      <template v-slot:houseType="{data}">
-        <span>{{ houseType(Number(data.houseType)) }}</span>
-      </template>
-      <template v-slot:villageType="{data}">
-        <span>{{ villageType(Number(data.villageType)) }}</span>
-      </template>
+    <template v-slot:title="{data}">
+      <el-link type="success" @click.prevent="handleOperation(1, data)">{{ data.title }}</el-link>
+    </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"
@@ -31,13 +28,14 @@
           type="success"
         />
         <el-button
+          v-if="data.reviewStatus != 2"
           size="small"
           icon="el-icon-lx-edit"
           @click="handleOperation(2, data)"
           circle
           type="priamry"
         />
-        <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
+        <!-- <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
               size="small"
@@ -46,7 +44,7 @@
               type="danger"
             />
           </template>
-        </el-popconfirm>
+        </el-popconfirm> -->
       </template>
     </V-table>
   </div>
@@ -65,7 +63,7 @@ import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/Draft'
 import { deepClone, defaultObject } from '@/utils/util'
-import { deleteBuild } from '@/api/ActualInfo/build'
+import { deleteDraft } from '@/api/Propaganda/draft'
 export default defineComponent({
   name: 'Draft',
   components:[PopupTreeInput],
@@ -90,42 +88,7 @@ export default defineComponent({
       searchForm.officeName = officeName
     }
     const multipleSelection = ref([]) // 选中数据
-    const houseType = computed(()=>{
-      return (val)=>{
-        switch(val){
-          case 0:
-              return '居民楼';
-          case 1:
-              return '平房';
-          case 2:
-              return '商品房';
-          case 3:
-              return '房改房';            
-          case 4:
-              return '小产权';
-          case 5:
-              return '单位用房';
-          case 6:
-              return '商品门头房';
-          case 7:
-              return '住改商';
-          case 8:
-              return '商业体';
-          case 9:
-              return '经济体';
-        }
-      }
-    })
-    const villageType = computed(()=>{
-      return (val)=>{
-        switch(val){
-          case 0:
-              return '开放';
-          case 1:
-              return '封闭';
-        }
-      }
-    })
+
     // 是否有選中數據
     const isHaveSelect = computed(
       () => multipleSelection.value && multipleSelection.value.length > 0
@@ -147,7 +110,7 @@ export default defineComponent({
       handleOperation(3,{})
     }
     const handleDel = (id) => {
-      deleteBuild({id}).then(res=>{
+      deleteDraft({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
           proxy.$message.success('删除楼栋成功')
@@ -200,8 +163,6 @@ export default defineComponent({
       handleQuery,
       handleReset,
       handleOperation,
-      villageType,
-      houseType,
       handleDel,
       handleTreeSelectChange,
       popupTreeProps,

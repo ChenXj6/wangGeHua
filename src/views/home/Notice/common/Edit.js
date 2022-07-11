@@ -6,8 +6,9 @@ export function renderTable() {
     formItems: [
       {
         type: 'slot',
-        label: '组织结构',
+        label: '组织机构',
         slotName:'gridCode',
+        prop:'officeName',
         span: 11,
       },
       {
@@ -53,7 +54,7 @@ export function renderTable() {
         label: '日期',
         prop: 'date',
         value: '',
-        format: 'YYYY-MM-DD HH:mm:ss',
+        format: 'YYYY-MM-DD',
         isClearable: true,
         span: 11,
       },
@@ -62,7 +63,7 @@ export function renderTable() {
         label: '上线状态',
         prop: 'cancelFlg',
         placeholder: '请选择',
-        code:'1065',
+        code:'1066',
         isClearable: true,
         span: 11,
       },
@@ -93,6 +94,9 @@ export function renderTable() {
       },
     ],
     rules:{
+      officeName: [
+        { required: true, message: '请选择组织机构', trigger: ['blur','change'] },
+      ],
       summary: [
         { required: true, message: '请输入标题', trigger: ['blur','change'] },
       ],

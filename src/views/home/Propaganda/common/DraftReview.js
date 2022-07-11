@@ -1,4 +1,4 @@
-import { getBuildList } from '@/api/ActualInfo/build'
+import { getDraft } from '@/api/Propaganda/review'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
@@ -7,26 +7,24 @@ export function renderTable() {
     data: [],
     pagination: true, // 开启分页器
     mutiSelect: false, // 开启选择
-    method: getBuildList, // 請求api
+    method: getDraft, // 請求api
     index: true, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
       {
-        prop: 'streetName',
-        label: '街道名称',
-        minWidth: '120',
+        prop: 'treeNames',
+        label: '组织机构',
+        minWidth: '400',
       },
-      { prop: 'title', label: '标题', minWidth: '120' },
+      { prop: 'title', label: '标题',minWidth: '120' },
       { prop: 'releaseTime', label: '发布时间', minWidth: '150' },
-      { prop: 'releaseName', label: '发布人', tooltip: true, minWidth: '120' },
-      { prop: 'level1', label: '文稿一级分类', tooltip: true, minWidth: '120' },
-      { prop: 'level2', label: '文稿二级分类', tooltip: true, minWidth: '120' },
-      { prop: 'level3', label: '文稿三级分类', tooltip: true, minWidth: '120' },
+      { prop: 'releaseUser', label: '发布人', tooltip: true, minWidth: '120' },
+      { type:'code',code:'1005',prop: 'level1', label: '文稿一级分类', tooltip: true, minWidth: '120' },
+      { type:'code',code:'1005',prop: 'level2', label: '文稿二级分类', tooltip: true, minWidth: '120' },
+      { type:'code',code:'1005',prop: 'level3', label: '文稿三级分类', tooltip: true, minWidth: '120' },
       { prop: 'sort', label: '排序号', tooltip: true, minWidth: '120' },
-      { prop: 'isRecommend', label: '是否推荐', tooltip: true, minWidth: '120' },
-      { prop: 'consultNum', label: '查阅数量', tooltip: true, minWidth: '120' },
-      { prop: 'opinion', label: '文稿审核状态', tooltip: true, minWidth: '120' },
+      { type:'code',code:'1006',prop: 'isRecommend', label: '是否推荐', tooltip: true, minWidth: '120' },
       { prop: '', label: '操作', slot: 'operation', minWidth: '130' },
     ],
   }

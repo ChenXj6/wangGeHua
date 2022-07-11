@@ -1,4 +1,4 @@
-import { PartyList } from '@/api/PartyBuilding/partyInfo'
+import { getProvide } from '@/api/LiveEnsure/provide'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
@@ -7,7 +7,7 @@ export function renderTable() {
     data: [],
     pagination: true, // 开启分页器
     mutiSelect: false, // 开启选择
-    method: PartyList, // 請求api
+    method: getProvide, // 請求api
     index: true, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
@@ -15,7 +15,7 @@ export function renderTable() {
       { prop: '', label: '名称', slot:'orgName', minWidth: '200', },
       { prop: 'bh', label: '编号', minWidth: '120'},
       {
-        prop: 'treeNames',
+        prop: 'treeName',
         label: '归属网格',
         minWidth: '200',
       },

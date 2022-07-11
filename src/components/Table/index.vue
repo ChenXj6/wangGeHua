@@ -70,10 +70,16 @@
           <template v-else-if="column.icon">
             <span><i :class="scope.row[column.prop]"></i></span>
           </template>
+          <!-- code查询 -->
+          <template v-else-if="column.code && column.type == 'code'">
+            <!-- {{ options[column.code] }} -->
+            <span >{{options[column.code].filter(v=>v.value == scope.row[column.prop])[0]?.label}}</span>
+          </template>
           <!-- 正常格式 -->
           <template v-else-if="!column.slot">
             <span>{{ scope.row[column.prop] }}</span>
           </template>
+          
           <!-- 自定义插槽 -->
           <slot v-else :name="column.slot" :data="scope.row"></slot>
         </template>
@@ -109,9 +115,10 @@ import {
   watch,
 } from '@vue/runtime-core'
 import Sortable from 'sortablejs'
-import { deepClone } from '@/utils/util'
+import { deepClone,resetFormat } from '@/utils/util'
 
 import { items } from '@/config/menu'
+import { searchDict } from '@/api/sys/dict'
 
 export default defineComponent({
   name: 'VTable',
@@ -234,6 +241,34 @@ export default defineComponent({
         },
       })
     }
+
+
+
+
+    const options = reactive({})
+    const querySearchAsync = (basictype) => {
+      if(basictype){
+        searchDict({basictype}).then(res=>{
+          if(res.resCode == '000000' && res.data){
+            options[basictype] = resetFormat(res.data)
+          }else{
+            options[basictype] = []
+          }
+        })
+        
+      }else{
+        options[basictype] = []
+      }
+      
+    }
+    const allQuerySearchAsync = (data) => {
+      data.forEach(v => {
+        if(v.type == 'code' && v.code){
+          querySearchAsync(v.code)
+        }
+      })
+    }
+    allQuerySearchAsync(tableConfig.columns)
     onMounted(() => {
       if(tableConfig.isSortable) {
         document.body.ondrag = function (e) {
@@ -260,6 +295,7 @@ export default defineComponent({
       indexMethod,
       rowClassFunc,
       isHide,
+      options,
     }
   },
 })

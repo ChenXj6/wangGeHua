@@ -16,11 +16,12 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
-      <template v-slot:houseType="{data}">
-        <span>{{ houseType(Number(data.houseType)) }}</span>
-      </template>
-      <template v-slot:villageType="{data}">
-        <span>{{ villageType(Number(data.villageType)) }}</span>
+    <template v-slot:title="data">
+        <el-link
+          type="success"
+          @click.prevent="handleOperation(1, data.data)"
+          >{{ data.data.title }}</el-link
+        >
       </template>
       <template v-slot:operation="{data}">
         <el-button
@@ -65,7 +66,7 @@ import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/MediaList'
 import { deepClone, defaultObject } from '@/utils/util'
-import { deleteBuild } from '@/api/ActualInfo/build'
+import { deleteMedia } from '@/api/Propaganda/media'
 export default defineComponent({
   name: 'Draft',
   components:[PopupTreeInput],
@@ -89,47 +90,6 @@ export default defineComponent({
       searchForm.officeCode = officeCode
       searchForm.officeName = officeName
     }
-    const multipleSelection = ref([]) // 选中数据
-    const houseType = computed(()=>{
-      return (val)=>{
-        switch(val){
-          case 0:
-              return '居民楼';
-          case 1:
-              return '平房';
-          case 2:
-              return '商品房';
-          case 3:
-              return '房改房';            
-          case 4:
-              return '小产权';
-          case 5:
-              return '单位用房';
-          case 6:
-              return '商品门头房';
-          case 7:
-              return '住改商';
-          case 8:
-              return '商业体';
-          case 9:
-              return '经济体';
-        }
-      }
-    })
-    const villageType = computed(()=>{
-      return (val)=>{
-        switch(val){
-          case 0:
-              return '开放';
-          case 1:
-              return '封闭';
-        }
-      }
-    })
-    // 是否有選中數據
-    const isHaveSelect = computed(
-      () => multipleSelection.value && multipleSelection.value.length > 0
-    )
 
     // 表格相關操作
     const handleQuery = () => {
@@ -147,12 +107,12 @@ export default defineComponent({
       handleOperation(3,{})
     }
     const handleDel = (id) => {
-      deleteBuild({id}).then(res=>{
+      deleteMedia({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
-          proxy.$message.success('删除楼栋成功')
+          proxy.$message.success('删除数据成功')
         }else{
-          proxy.$message.danger('删除楼栋失败')
+          proxy.$message.danger('删除数据失败')
         }
       })
     }
@@ -192,7 +152,6 @@ export default defineComponent({
     })
     return {
       table,
-      multipleSelection,
       tableConfig,
       formConfig,
       searchForm,
@@ -200,8 +159,6 @@ export default defineComponent({
       handleQuery,
       handleReset,
       handleOperation,
-      villageType,
-      houseType,
       handleDel,
       handleTreeSelectChange,
       popupTreeProps,

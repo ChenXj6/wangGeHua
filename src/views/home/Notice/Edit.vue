@@ -56,7 +56,8 @@ import mixin from '@/mixins/tagView.js'
 
 import { renderTable } from './common/Edit'
 import { getOrganList } from '@/api/sys/organ'
-import { addParty,updateParty } from '@/api/PartyBuilding/partyInfo'
+import { saveNotice,updateNotice } from '@/api/Notice/index'
+import { uploadApi } from '@/api/upload.js'
 export default {
   name:'Edit',
   setup() {
@@ -74,7 +75,7 @@ export default {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
         if (route.params.operation == 2) {
-          addParty(dataForm.value).then(res=>{
+          updateNotice(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
             resolve(res.message)
           } else {
@@ -82,7 +83,7 @@ export default {
           }
           })
         } else {
-          addParty(dataForm.value).then(res=>{
+          saveNotice(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
             resolve(res.message)
           } else {
@@ -146,19 +147,19 @@ export default {
         if(res.resCode == '000000'){
           // fileList   
           // console.log((dataForm.value.certificates == null && dataForm.value.certificatesName == null) || (String(dataForm.value.certificates).length <= 0 && String(dataForm.value.certificatesName).length <= 0))      
-          if((dataForm.value.filePath == null && dataForm.value.fileName == null) || (String(dataForm.value.filePath).length <= 0 && String(dataForm.value.fileName).length <= 0)){
-            dataForm.value.filePath = res.message
-            dataForm.value.fileName = file.name
+          if((dataForm.value.certificates == null && dataForm.value.certificatesName == null) || (String(dataForm.value.certificates).length <= 0 && String(dataForm.value.certificatesName).length <= 0)){
+            dataForm.value.certificates = res.message
+            dataForm.value.certificatesName = file.name
           } else {
-            let str = dataForm.value.filePath + ',' + res.message
-            let nameStr = dataForm.value.fileName + ',' + file.name
-            dataForm.value.filePath = str
-            dataForm.value.fileName = nameStr
+            let str = dataForm.value.certificates + ',' + res.message
+            let nameStr = dataForm.value.certificatesName + ',' + file.name
+            dataForm.value.certificates = str
+            dataForm.value.certificatesName = nameStr
           }
           // console.log(dataForm.value.certificates,'///')
-          proxy.$message.success('图片上传成功')
+          proxy.$message.success('文件上传成功')
         } else {
-          proxy.$message.success('图片上传失败')
+          proxy.$message.success('文件上传失败')
         }
       })
     }
@@ -166,28 +167,28 @@ export default {
     const handleRemove = (val) => {
       if(fileList.value.length == 1){
         fileList.value = []
-        dataForm.value.filePath = ''
-        dataForm.value.fileName = ''
+        dataForm.value.certificates = ''
+        dataForm.value.certificatesName = ''
       }else{
-        let certificatesArr = dataForm.value.filePath.split(',')
-        let certificatesNameArr = dataForm.value.fileName.split(',')
+        let certificatesArr = dataForm.value.certificates.split(',')
+        let certificatesNameArr = dataForm.value.certificatesName.split(',')
         certificatesArr.forEach((v,ind) => {
           if(`${import.meta.env.VITE_IMG_BASE_API }${v}` == val.url && certificatesNameArr[ind] == val.name){
             certificatesArr.splice(ind,1)
             certificatesNameArr.splice(ind,1)
-            dataForm.value.filePath = certificatesArr.join(',')
-            dataForm.value.fileName = certificatesNameArr.join(',')
+            dataForm.value.certificates = certificatesArr.join(',')
+            dataForm.value.certificatesName = certificatesNameArr.join(',')
           }
         })
       }
     }
     // 图片回显
     const resetFileList = () => {
-      if(dataForm.value.filePath == null ||  dataForm.value.filePath.length == 0 ) return
-      let result = dataForm.value.filePath.indexOf(',')
+      if(dataForm.value.certificates == null ||  dataForm.value.certificates.length == 0 ) return
+      let result = dataForm.value.certificates.indexOf(',')
       if(result != '-1'){
-        let certificatesArr = dataForm.value.filePath.split(',')
-        let certificatesNameArr = dataForm.value.fileName.split(',')
+        let certificatesArr = dataForm.value.certificates.split(',')
+        let certificatesNameArr = dataForm.value.certificatesName.split(',')
         certificatesArr.forEach((v,i) => {
           let obj = {
             name:certificatesNameArr[i],
@@ -197,8 +198,8 @@ export default {
         })
       }else{
         let obj = {
-          name:dataForm.value.fileName,
-          url:`${import.meta.env.VITE_IMG_BASE_API }${dataForm.value.filePath}`
+          name:dataForm.value.certificatesName,
+          url:`${import.meta.env.VITE_IMG_BASE_API }${dataForm.value.certificates}`
         }
         fileList.value.push(obj)
       }

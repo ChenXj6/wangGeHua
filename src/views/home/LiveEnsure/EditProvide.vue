@@ -13,9 +13,9 @@
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
-          :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
+          :nodeKey="''+dataForm.gridCode" @update:dataForm="handleTreeSelectChange">
           <template v-slot>
-            <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+            <el-input v-model="dataForm.gridName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
           </template>
         </popup-tree-input>
       </template>
@@ -64,7 +64,7 @@ import mixin from '@/mixins/tagView.js'
 
 import { renderTable } from './common/EditProvide'
 import { getOrganList } from '@/api/sys/organ'
-import { addPartyPeople,updatePartyPeople } from '@/api/PartyBuilding/partyPeople'
+import { saveProvide,updateProvide } from '@/api/LiveEnsure/provide'
 export default {
   name:'Edit',
   setup() {
@@ -73,8 +73,8 @@ export default {
     const { proxy } = getCurrentInstance()
     const { ProvideFormConfig } = renderTable.call(proxy)
     const dataForm = ref({
-      officeCode:'',
-      officeName:'',
+      gridCode:'',
+      gridName:'',
     })
     // 提交
     const handleSave = () => {
@@ -82,7 +82,7 @@ export default {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
         if (route.params.operation == 2) {
-          addPartyPeople(dataForm.value).then(res=>{
+          updateProvide(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
             resolve(res.message)
           } else {
@@ -90,7 +90,7 @@ export default {
           }
           })
         } else {
-          addPartyPeople(dataForm.value).then(res=>{
+          saveProvide(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
             resolve(res.message)
           } else {
@@ -132,8 +132,8 @@ export default {
     } 
     const handleTreeSelectChange = ({officeCode,officeName}) => {
       // console.log(officeCode,officeName,'....')
-      dataForm.value.officeCode = officeCode
-      dataForm.value.officeName = officeName
+      dataForm.value.gridCode = officeCode
+      dataForm.value.gridName = officeName
     }
     const getOList = () => {
       getOrganList({}).then(res=>{
@@ -157,6 +157,13 @@ export default {
     
     // 初始化数据
     route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)))
+    if(route.params.operation != 3){
+      ProvideFormConfig.formItems.forEach(v=>{
+        if(v.prop == 'bh'){
+          v.disabled = true
+        }
+      })
+    }
     onMounted(() => {
       route.params.operation === 3 &&( dataForm.value = {})
     })

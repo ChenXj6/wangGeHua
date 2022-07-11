@@ -22,13 +22,6 @@
       <span >{{orgTypeOptions.filter(v=>v.value == data.orgType)[0]?.label}}</span>
     </template>
     <template v-slot:operation="{data}">
-        <!-- <el-button
-          size="small"
-          @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
-          circle
-          type="success"
-        /> -->
         <el-button
           size="small"
           icon="el-icon-lx-edit"
@@ -58,7 +51,7 @@ import { renderTable } from './common/Provide'
 import { deepClone,resetFormat,defaultObject  } from '@/utils/util'
 import { useRouter } from 'vue-router'
 import { searchDict } from '@/api/sys/dict'
-import { delParty } from '@/api/PartyBuilding/partyInfo'
+import { deleteProvide } from '@/api/LiveEnsure/provide'
 export default {
   name: 'TaxList',
   components:[PopupTreeInput],
@@ -69,8 +62,6 @@ export default {
     const searchForm = ref({
       officeCode:'',
       officeName:'',
-      orgType:'',
-      infoName:'',
     })
     const table = ref(null)
     const searchParams = ref({})
@@ -90,7 +81,7 @@ export default {
       handleOperation(3,{})
     }
     const handleDel = (id) => {
-      delParty({id}).then(res=>{
+      deleteProvide({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
           proxy.$message.success('数据删除成功！')
