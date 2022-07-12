@@ -149,11 +149,6 @@ export default {
       operatorId:JSON.parse(sessionStorage.getItem('operatorId')),
       createBy:JSON.parse(sessionStorage.getItem('user')).user.operatorName,
       officeCode:'',
-      communityCode:'',
-      streetCode:'',
-      countyCode:'',
-      cityCode:'',
-      provinceCode:'',
     }) // 数据权限发送
     const getRole = () => {
       getRoleList({pageNum:1,pageSize:9999}).then(res=>{
@@ -202,9 +197,8 @@ export default {
     const getDataBy = (operatorId) => {
       getDataByRole({operatorId}).then(res=>{
         if(res.code == '200'){
-          // console.log(res.data)
-          // treeCheckDataArr.value = res.data.officeCode.split(',')
-          // console.log(treeCheckDataArr.value)
+          treeCheckDataArr.value = res?.data?.officeCode.split(',') || []
+          treeCheckData.value.officeCode = res?.data?.officeCode || ''
         }
       })
     }
@@ -242,24 +236,22 @@ export default {
       })
     }
     const handleCheckDataChange = (row) => {
-      // let checkArr = treeDataRef.value.getCheckedKeys(false)
-      console.log(row,'...')
-      // if(){
-
-      // }
-      // if(treeCheckDataArr.value.length == 0){
-      //   // console.log(row.officeCode,'..1..')
-      //   treeCheckDataArr.value.push(row.officeCode)
-      // } else {
-      //   // console.log(row.officeCode,'..2..')
-      //   let result = treeCheckDataArr.value.indexOf(row.officeCode)
-        
-      //   if(result > -1) {
-      //     treeCheckDataArr.value.splice(result,1)
-      //   }else{
-      //     treeCheckDataArr.value.push(row.officeCode)
-      //   }        
-      // }
+      if(row.treeLevel == '5'){
+        let arr = []
+        if(!!treeCheckData.value.officeCode){
+          arr = treeCheckData.value.officeCode.split(',')
+          let result = arr.indexOf(row.officeCode)
+          if(result > -1) {
+            arr.splice(result,1)
+          }else{
+            arr.push(row.officeCode)
+          }
+        } else {
+          arr.push(row.officeCode)
+        }
+        treeCheckData.value.officeCode = arr.join(',')
+      }
+      
     }
     const handleClick = async () => {
       if(route.query.type == 'user'){
@@ -281,11 +273,10 @@ export default {
           }
         })
       }else{
-        if(treeCheckDataArr.value.length == 0){
+        if(treeCheckData.value.officeCode.length == 0){
           proxy.$message.warning('请至少选择一个数据!')
           return
         }
-        treeCheckData.value.officeCode = treeCheckDataArr.value.join(',')
         saveDataByRole(treeCheckData.value).then(res=>{
           if(res.code == '200'){
             proxy.$message.success('角色分配数据权限成功')
@@ -305,7 +296,7 @@ export default {
       getMenuBy(dataForm.value.id)
       getMenuAll()
     } else {
-      // getDataBy(dataForm.value.operatorId)
+      getDataBy(dataForm.value.operatorId)
       getOList()
     }
     onBeforeMount(()=>{

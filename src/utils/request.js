@@ -8,7 +8,7 @@ import { ElMessage } from 'element-plus';
 
 const service = axios.create({
   baseURL: '',
-  timeout:'',
+  timeout:'10000',
 });
 
 service.interceptors.request.use(
@@ -25,7 +25,7 @@ service.interceptors.request.use(
     //   config.data = qs.stringify(config.data)
     // }
     
-    if (sessionStorage.getItem("z")) {
+    if (sessionStorage.getItem("user")) {
       let userToken = JSON.parse(sessionStorage.getItem("user")).sessionId;
       config.headers = {
         'Authorization': userToken,
@@ -91,6 +91,7 @@ service.interceptors.response.use(
         }, 500)
       }
       if (err.Message.includes('timeout')) {
+        console.log('11')
         // 判断请求异常信息中是否含有超时timeout字符串
         err.Message = '网络超时!'
         return Promise.reject(err)
