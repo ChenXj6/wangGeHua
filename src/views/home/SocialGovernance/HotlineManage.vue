@@ -118,11 +118,11 @@ export default defineComponent({
       let data = JSON.stringify(rowData)
       router.push({
         name: 'EditHotlineManage',
-        params: { data : encodeURIComponent(data), operation: type, type:'build' },
+        params: { data : encodeURIComponent(data), operation: type, type:'hotline' },
       })
     }
 
-      const getOList = () => {
+    const getOList = () => {
       getOrganList({}).then(res=>{
         if(res.resCode == '000000'){
           popupTreeData.value = res.data
@@ -144,9 +144,6 @@ export default defineComponent({
       handleQuery,
       handleReset,
       handleOperation,
-    //   villageType,
-    //   houseType,
-    //   handleDel,
       handleTreeSelectChange,
       popupTreeProps,
       popupTreeData,

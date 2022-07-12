@@ -19,6 +19,7 @@
           type="success"
         />
         <el-button size="small" circle type="primary" @click="handleCommand(data.data)"><i class="el-icon-lx-people"></i></el-button>
+        <el-button size="small" circle type="primary" @click="handleData(data.data)"><i class="el-icon-lx-rank"></i></el-button>
         <el-popconfirm title="确定要删除该用户吗？" @confirm="handleDelete(data.data.operatorId)">
           <template #reference>
             <el-button
@@ -190,6 +191,13 @@ export default {
         query: { data: encodeURIComponent(data), operation: 2,type:'user' },
       })
     };
+    const handleData = (rowData) => {
+      let data = JSON.stringify(rowData)
+      router.push({
+        path: '/distribution',
+        query: { data: encodeURIComponent(data), operation: 2,type:'data' },
+      })
+    }
     onMounted(() => {
       handleQuery()
     })
@@ -209,6 +217,7 @@ export default {
       handleDelete,
       AddFormHandle,
       handleCommand,
+      handleData,
     }
   },
 }

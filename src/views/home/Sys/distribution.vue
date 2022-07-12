@@ -11,7 +11,7 @@
     <div style="margin-bottom: 20px"><hr /></div>
     <VForm v-if="route.query.type == 'user'" :isDisabled="true" :form-data="userFormConfig" :form-model="dataForm" />
     <VForm v-else-if="route.query.type == 'role'" :isDisabled="true" :form-data="roleFormConfig" :form-model="dataForm" />
-    <VForm v-else :isDisabled="true" :form-data="roleFormConfig" :form-model="dataForm" />
+    <VForm v-else :isDisabled="true" :form-data="userFormConfig" :form-model="dataForm" />
     <div v-if="route.query.type == 'user'">
       <div class="crumbs">
         <el-breadcrumb separator="/">
@@ -86,7 +86,7 @@
           :height="208"
           default-expand-all
           :default-checked-keys="treeCheckDataArr"
-          node-key="id"
+          node-key="officeCode"
           @check-change="handleCheckDataChange"
         >
           <template #default="{ node, data }">
@@ -124,7 +124,7 @@ import mixin from '@/mixins/tagView.js'
 import {renderTable} from './common/distribution'
 import { useRoute } from 'vue-router'
 import { getRoleList } from '@/api/sys/role'
-import { getRoleByUser,saveRoleToUser,getMenuByRole,saveMenuByRole } from '@/api/sys/user'
+import { getRoleByUser,saveRoleToUser,getMenuByRole,saveMenuByRole,saveDataByRole,getDataByRole } from '@/api/sys/user'
 import { getMenuTree } from '@/api/sys/menu.js'
 import { getOrganList } from '@/api/sys/organ'
 export default {
@@ -145,7 +145,16 @@ export default {
     const items = ref([]) // 菜单权限
     const data = ref([])  // 数据权限
     const treeCheckDataArr = ref([]) // 数据权限显示数组
-    const treeCheckData = ref([]) // 数据权限发送
+    const treeCheckData = ref({
+      operatorId:JSON.parse(sessionStorage.getItem('operatorId')),
+      createBy:JSON.parse(sessionStorage.getItem('user')).user.operatorName,
+      officeCode:'',
+      communityCode:'',
+      streetCode:'',
+      countyCode:'',
+      cityCode:'',
+      provinceCode:'',
+    }) // 数据权限发送
     const getRole = () => {
       getRoleList({pageNum:1,pageSize:9999}).then(res=>{
         if(res.code == 200){
@@ -190,6 +199,15 @@ export default {
         }
       })
     }
+    const getDataBy = (operatorId) => {
+      getDataByRole({operatorId}).then(res=>{
+        if(res.code == '200'){
+          // console.log(res.data)
+          // treeCheckDataArr.value = res.data.officeCode.split(',')
+          // console.log(treeCheckDataArr.value)
+        }
+      })
+    }
     const handleCheckChange = () => {
       let checkArr = treeRef.value.getCheckedKeys(false)
       if(checkArr.length == 0) treeSelectArr.value = []
@@ -224,31 +242,24 @@ export default {
       })
     }
     const handleCheckDataChange = (row) => {
-      if(treeCheckDataArr.value.length == 0){
-        // console.log(row.officeCode,'..1..')
-        treeCheckDataArr.value.push(row.officeCode)
-      } else {
-        // console.log(row.officeCode,'..2..')
-        let result = treeCheckDataArr.value.indexOf(row.officeCode)
-        
-        if(result > -1) {
-          treeCheckDataArr.value.splice(result,1)
-        }else{
-          treeCheckDataArr.value.push(row.officeCode)
-        }        
-      }
-    }
-    const resetData = () => {
-      return new Promise((resolve,reject) => {
-        let arr = []
-        treeCheckDataArr.value.forEach(v=>{
-          let obj = {}
-          obj.roleId = dataForm.value.id
+      // let checkArr = treeDataRef.value.getCheckedKeys(false)
+      console.log(row,'...')
+      // if(){
 
-          arr.push(obj)
-        })
-        resolve(arr)
-      })
+      // }
+      // if(treeCheckDataArr.value.length == 0){
+      //   // console.log(row.officeCode,'..1..')
+      //   treeCheckDataArr.value.push(row.officeCode)
+      // } else {
+      //   // console.log(row.officeCode,'..2..')
+      //   let result = treeCheckDataArr.value.indexOf(row.officeCode)
+        
+      //   if(result > -1) {
+      //     treeCheckDataArr.value.splice(result,1)
+      //   }else{
+      //     treeCheckDataArr.value.push(row.officeCode)
+      //   }        
+      // }
     }
     const handleClick = async () => {
       if(route.query.type == 'user'){
@@ -274,10 +285,8 @@ export default {
           proxy.$message.warning('请至少选择一个数据!')
           return
         }
-        treeCheckData.value = await resetData()
-        console.log(treeCheckData.value,'数据权限数据')
-        return
-        saveMenuByRole(treeCheckData.value).then(res=>{
+        treeCheckData.value.officeCode = treeCheckDataArr.value.join(',')
+        saveDataByRole(treeCheckData.value).then(res=>{
           if(res.code == '200'){
             proxy.$message.success('角色分配数据权限成功')
           }
@@ -296,6 +305,7 @@ export default {
       getMenuBy(dataForm.value.id)
       getMenuAll()
     } else {
+      // getDataBy(dataForm.value.operatorId)
       getOList()
     }
     onBeforeMount(()=>{

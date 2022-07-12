@@ -13,12 +13,13 @@ export function renderTable() {
         isSortable: false, // 是否开启拖拽
         columns: [
             {
-                prop: 'hotlineWorkOrderName',
+                prop: '',
                 label: '类别名称',
+                slotName:'hotlineWorkOrderName',
                 minWidth: '60',
             },
             { prop: 'createDate', label: '创建时间', minWidth: '120' },
-            { prop: 'treeSort', label: '本级排序号型',  minWidth: '60' },
+            { prop: 'treeSort', label: '本级排序号',  minWidth: '60' },
             { prop: 'remarks', label: '备注',  minWidth: '60' },
             { prop: '', label: '操作', slot: 'operation', minWidth: '100' },
 

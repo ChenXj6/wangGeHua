@@ -508,7 +508,7 @@ export default {
         const drawMyRoute3=()=>{
           //vMap.drawRoute("17808,18500,17744,18224","7526,7700,9118,9262",'1000','red',4,'arrow','','1');
           //画第一网格线圈
-          vMap.drawRoute("13848,14556,15480,16884,18296,17064,17752,17632,18528,17992,13848","8818,7966,7218,6419,6738,8836,9012,9100,9308,10324,8818",'1000','blue',4,'','','1');
+          vMap.drawRoute("13848,14556,15480,16884,18296,17064,17752,17632,18528,17992,13848","8818,7966,7218,6419,6738,8836,9012,9100,9308,10324,8818",'1000','blue',4,'','','');
           //画第一网格标签
           var html1 = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#000FFF"><nobr>第一网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
           //vMap.showMapMark(18821,10596,html);
