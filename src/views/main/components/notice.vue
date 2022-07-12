@@ -4,6 +4,7 @@
       <div class="notice-title">
         <h4>消息中心</h4>
         <i
+          v-if="isHaveNotice"
           :class="`el-icon-arrow-${isUnfold ? 'up' : 'down'}`"
           @click="stowAndUnfold"
         ></i>
@@ -83,6 +84,7 @@ export default {
   overflow: hidden;
   box-sizing: border-box;
   color: #f5f5f5;
+  font-size: 14px;
   .notice-title {
     display: flex;
     justify-content: space-between;
@@ -117,6 +119,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 14px;
   }
 }
 .notice-item-box::-webkit-scrollbar {

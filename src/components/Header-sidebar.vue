@@ -133,12 +133,12 @@ export default {
 </script>
 <style scoped>
 .menu-box {
-  height: 70px;
+  height: 60px;
   width: 600px;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  font-size: 18px;
+  font-size: 16px;
 }
 .menu-item {
   position: relative;

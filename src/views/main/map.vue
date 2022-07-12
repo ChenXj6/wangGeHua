@@ -463,7 +463,7 @@ export default {
       //设置鹰眼是否显示(默认不显示)
       config.setEyeMap(false);
       //设置标签是否显示(默认不显示)
-      config.setLabel(true);
+      config.setLabel(false);
       //设置全景是否显示(默认不显示)
       config.setPano(false);
       //设置停车场是否显示(默认不显示)
