@@ -26,9 +26,9 @@ service.interceptors.request.use(
     // }
     
     if (sessionStorage.getItem("user")) {
-      let userToken = JSON.parse(sessionStorage.getItem("user")).sessionId;
+      let userToken = JSON.parse(sessionStorage.getItem("user")).token;
       config.headers = {
-        'Authorization': userToken,
+        'Authentication': userToken,
         'Content-Type': 'application/json',
         'withCredentials': true,
         'changeOrigin': true,

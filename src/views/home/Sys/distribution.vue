@@ -146,7 +146,7 @@ export default {
     const data = ref([])  // 数据权限
     const treeCheckDataArr = ref([]) // 数据权限显示数组
     const treeCheckData = ref({
-      operatorId:JSON.parse(sessionStorage.getItem('operatorId')),
+      operatorId:JSON.parse(sessionStorage.getItem('user')).user.id,
       createBy:JSON.parse(sessionStorage.getItem('user')).user.operatorName,
       officeCode:'',
     }) // 数据权限发送
@@ -296,7 +296,7 @@ export default {
       getMenuBy(dataForm.value.id)
       getMenuAll()
     } else {
-      getDataBy(dataForm.value.operatorId)
+      getDataBy(dataForm.value.id)
       getOList()
     }
     onBeforeMount(()=>{
