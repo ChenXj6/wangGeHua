@@ -61,12 +61,11 @@
     </div>
     <!-- 楼栋弹窗 -->
     <el-dialog
-      :title="buildForm.villageName + buildForm.buildingNumber"
+      :title="`${buildForm.villageName + buildForm.buildingNumber}`"
       v-model="houseDialogVisible"
       width="60%"
       draggable
       style="z-index: 9999"
-      :before-close="dialogBeforeClose"
     >
       <div>
         <el-row :gutter="10">

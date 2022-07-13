@@ -23,7 +23,8 @@
             {{ nowTime }}
           </div>
           <div>
-            <div id="he-plugin-simple"></div>
+            <!-- <div id="he-plugin-simple"></div> -->
+            <Weather/>
           </div>
         </div>
         <div class="go-back"
@@ -78,9 +79,11 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import HeaderSidebar from "./Header-sidebar.vue";
+import Weather from "./Weather.vue";
 export default {
   components: {
     HeaderSidebar,
+    Weather,
   },
   setup () {
     const router = useRouter();
@@ -174,36 +177,11 @@ export default {
     }
     const nowTimes = () => {
       timeFormate(new Date())
+      clearInterval(timer.value)
       timer.value = setInterval(nowTimes, 1000)
     }
     onMounted(() => {
-      nowTimes()
-      window.WIDGET = {
-	        "CONFIG": {
-          "modules": "01234",
-          "background": "1",
-          "tmpColor": "FFFFFF",
-          "tmpSize": "14",
-          "cityColor": "FFFFFF",
-          "citySize": "14",
-          "aqiColor": "FFFFFF",
-          "aqiSize": "14",
-          "weatherIconSize": "16",
-          "alertIconSize": "18",
-          "padding": "0 0 0 0",
-          "shadow": "0",
-          "language": "auto",
-          "fixed": "false",
-          "vertical": "top",
-          "horizontal": "left",
-          "key": "691a880ce08942eab6d2276ea87784de"
-        }
-	    }
-      var script = document.createElement('script')
-      script.type = 'text/javascript'
-      script.src = 'https://widget.qweather.net/simple/static/js/he-simple-common.js?v=2.0'
-      document.getElementsByTagName('head')[0].appendChild(script)
-      
+      nowTimes()      
     })
     onBeforeUnmount(() => {
       clearInterval(timer.value)

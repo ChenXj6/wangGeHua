@@ -47,6 +47,7 @@ declare module 'vue' {
     Sidebar: typeof import('./src/components/Sidebar.vue')['default']
     Table: typeof import('./src/components/Table/index.vue')['default']
     Tags: typeof import('./src/components/Tags.vue')['default']
+    Weather: typeof import('./src/components/Weather.vue')['default']
   }
 }
 
