@@ -27,7 +27,7 @@
             size="mini"
             round
             style="width: 88px"
-            @click="handleClick"
+            @click="handleClick(item)"
             v-else
           >
             {{ item?.title }}
@@ -37,9 +37,9 @@
               <el-dropdown-item
                 v-for="item in item.children"
                 :key="item"
-                @click="handleClick"
-                >{{ item.title }}</el-dropdown-item
-              >
+                @click="handleClick(item)"
+                >{{ item.title }}
+              </el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -48,6 +48,32 @@
     <!-- store.state.mapDialog.visible -->
     <div v-if="isOpen" class="headerDialogBox">
       <div class="headerDialog">
+        <div>
+          <h1 style="text-align: center">{{show}}</h1>
+          <el-row>
+            <!-- <span style="display:inline-block;width:200px;height:200px"> aaaa </span>
+          <span style="color: #fff" v-for="(item,index) in searchParams.list" :key="index">
+            {{ item.synopsis }}
+          </span> -->
+            <el-carousel :interval="5000" arrow="always" style="width: 1000px">
+              <el-carousel-item
+                :span="18"
+                v-for="(item, index) in searchParams.list"
+                :key="index"
+              >
+                <el-col :span="6" class="vanguard">
+                  <img src="https://img2.baidu.com/it/u=42904497,637130856&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=641"/>
+                </el-col>
+                <p>姓名：{{ item.memberName }}</p>
+                <p>
+                  性别：{{sexOptions.filter((v) => v.value == item.gender)[0]?.label}}
+                </p>
+                <span>简介：{{ item.synopsis }}</span>
+              </el-carousel-item>
+            </el-carousel>
+          </el-row>
+        </div>
+
         <div v-for="item in mapDialogData.children" :key="item.id">
           <img :src="item.img" alt="" />
           <span>{{ item.title }}</span>
@@ -55,7 +81,7 @@
       </div>
       <i
         class="el-icon-lx-roundclose headerDialogIcon"
-        style="color: #fff; font-size: 30px;cursor: pointer;"
+        style="color: #fff; font-size: 30px; cursor: pointer"
         @click="handleCloseDialog"
       ></i>
     </div>
@@ -308,6 +334,7 @@ import {
   onMounted,
   reactive,
   ref,
+  toRefs,
   watch,
 } from "@vue/runtime-core";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
@@ -319,6 +346,8 @@ import { eventProcessing } from "@/api/ResidentsReport/index";
 import { resetFormat as resetFormatStatus } from "@/utils/util";
 import { getHouseList } from "@/api/ActualInfo/house";
 import { getPeopleList } from "@/api/ActualInfo/people";
+import { PartyList } from "@/api/PartyBuilding/partyInfo";
+import { PartyPeopleList } from "@/api/PartyBuilding/partyPeople";
 export default {
   setup() {
     let vMap = ref(null);
@@ -357,6 +386,7 @@ export default {
       }
       return arr;
     };
+
     // 事件处置弹窗
     const recordFormRef = ref(null);
     const eventHandleVisible = ref(false);
@@ -364,6 +394,7 @@ export default {
     const dataForm = ref({});
     const formData = ref(null);
     const dataSourceOptions = ref([]);
+    const sexOptions = ref([]);
     const launchList = ref([]);
     const multipleSelection = ref([]);
     const rules = reactive({
@@ -478,19 +509,29 @@ export default {
     watch(fullHeight, () => {
       reLoadMap();
       VMapRender();
-      setTimeout(()=>drawMyRoute3(),1000)
+      setTimeout(() => drawMyRoute3(), 1000);
     });
     // 点击导航栏 弹窗
     watch(
       () => store.state.mapDialog,
       () => {
         mapDialogData.value = store.state.mapDialog.data;
+        handleAssign()
       },
       { deep: true }
     );
-    const isOpen = ref(false);
+    const dialogVis = reactive({
+      isOpen: false
+    })
+    const handleAssign = () => {
+       
+      if(mapDialogData.value.type && mapDialogData.value.type == 'cockpit'){
+        dialogVis.isOpen = true
+      }
+    }
+    // const isOpen = ref(false);
     const handleCloseDialog = () => {
-      isOpen.value = false;
+      dialogVis.isOpen = false;
     };
     const randomAddress = () => {
       let sum = Math.round(Math.random() * 3);
@@ -503,32 +544,60 @@ export default {
       return arr[sum];
     };
 
+    //绘制编号为1000的静态箭头线
+    const drawMyRoute3 = () => {
+      //vMap.drawRoute("17808,18500,17744,18224","7526,7700,9118,9262",'1000','red',4,'arrow','','1');
+      //画第一网格线圈
+      vMap.drawRoute(
+        "13848,14556,15480,16884,18296,17064,17752,17632,18528,17992,13848",
+        "8818,7966,7218,6419,6738,8836,9012,9100,9308,10324,8818",
+        "1000",
+        "blue",
+        4,
+        "",
+        "",
+        "1"
+      );
+      //画第一网格标签
+      var html1 =
+        '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#000FFF"><nobr>第一网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+      //vMap.showMapMark(18821,10596,html);
+      vMap.showMapMark(16144, 7148, html1);
 
- //绘制编号为1000的静态箭头线
-        const drawMyRoute3=()=>{
-          //vMap.drawRoute("17808,18500,17744,18224","7526,7700,9118,9262",'1000','red',4,'arrow','','1');
-          //画第一网格线圈
-          vMap.drawRoute("13848,14556,15480,16884,18296,17064,17752,17632,18528,17992,13848","8818,7966,7218,6419,6738,8836,9012,9100,9308,10324,8818",'1000','blue',4,'','','1');
-          //画第一网格标签
-          var html1 = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#000FFF"><nobr>第一网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
-          //vMap.showMapMark(18821,10596,html);
-          vMap.showMapMark(16144,7148,html1);
-          
-          // //画第二网格线圈
-          vMap.drawRoute("19928,18026,18556,17732,17802,17120,18770,19960,19312,20278,20325,21838,19928","11020,10349,9278,9089,8965,8805,6033,6331,7474,7673,7595,7943,11020",'1000','red',4,'','','1');
-          //画第二网格标签
-          var html = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#FF0000"><nobr>第二网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
-          //vMap.showMapMark(18821,10596,html);
-          vMap.showMapMark(19024,9636,html);
-          
-          //画第三网格线圈
-          vMap.drawRoute("18314,16928,17234,20266,23288,21840,20316,20254,19370,20000,18738,18314","6711,6400,6200,4935,5730,7932,7565,7641,7449,6313,6000,6711",'1000','yellow',4,'','','1');
-          //画第二网格标签
-          var html = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#3A1027"><nobr>第三网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
-          //vMap.showMapMark(18821,10596,html);
-          vMap.showMapMark(18888,5250,html);
-        };
+      // //画第二网格线圈
+      vMap.drawRoute(
+        "19928,18026,18556,17732,17802,17120,18770,19960,19312,20278,20325,21838,19928",
+        "11020,10349,9278,9089,8965,8805,6033,6331,7474,7673,7595,7943,11020",
+        "1000",
+        "red",
+        4,
+        "",
+        "",
+        "1"
+      );
+      //画第二网格标签
+      var html =
+        '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#FF0000"><nobr>第二网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+      //vMap.showMapMark(18821,10596,html);
+      vMap.showMapMark(19024, 9636, html);
 
+      //画第三网格线圈
+      vMap.drawRoute(
+        "18314,16928,17234,20266,23288,21840,20316,20254,19370,20000,18738,18314",
+        "6711,6400,6200,4935,5730,7932,7565,7641,7449,6313,6000,6711",
+        "1000",
+        "yellow",
+        4,
+        "",
+        "",
+        "1"
+      );
+      //画第二网格标签
+      var html =
+        '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#3A1027"><nobr>第三网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+      //vMap.showMapMark(18821,10596,html);
+      vMap.showMapMark(18888, 5250, html);
+    };
 
     randomAddress();
     // 获取楼栋信息
@@ -545,6 +614,16 @@ export default {
         }
       });
     };
+
+    let searchParams = ref({});
+    const getPartyList = () => {
+      PartyPeopleList({ pageNum: 1, pageSize: 99 }).then((res) => {
+        searchParams.value = res.data;
+        console.log(searchParams.value);
+        console.log("111111111111", res.data);
+      });
+    };
+
     const getHouseByUnit = (unitNumber) => {
       searchForm.value.unitNumber = unitNumber;
       searchForm.value.houseNumber = "";
@@ -610,7 +689,7 @@ export default {
         }, 1000);
       };
       VMapRender();
-      setTimeout(()=>drawMyRoute3(),1000)
+      setTimeout(() => drawMyRoute3(), 1000);
 
       vMap.onMapClick((x0, y0, id, title, identitycode) => {
         getBuild(19);
@@ -633,12 +712,23 @@ export default {
       );
     };
 
-    const handleClick = () => {
-      isOpen.value = true;
+    const show=ref('');
+    const handleClick = (item) => {
+      if(item.type == 'party'){
+         console.log(65545,item.type)
+        var html = '<span style="color: red;">Hello world!</span>';
+        vMap.showMapMark(5764,2047,html);
+        return
+      }
+      getPartyList();
+      dialogVis.isOpen = true;
+      show.value=item.title;
+
     };
 
     onBeforeMount(() => {
       getOptionsByCode(1026, dataSourceOptions);
+      getOptionsByCode(1009, sexOptions);
     });
     // 恢复地图未加载默认状态
     const reLoadMap = () => {
@@ -657,6 +747,7 @@ export default {
     const relationshipOptions = ref([]);
     getOptionsByCode(1052, unitNumberOptions);
     getOptionsByCode(1014, relationshipOptions);
+
     return {
       fullHeight,
       mapDialogData,
@@ -681,6 +772,7 @@ export default {
       eventHandleVisible,
       dataForm,
       dataSourceOptions,
+      sexOptions,
       handleChangeLaunch,
       userDialogVisible,
       handleRecord,
@@ -691,7 +783,9 @@ export default {
       recordFormRef,
       unitNumberOptions,
       handleClick,
-      isOpen,
+      ...toRefs(dialogVis),
+      show,
+      searchParams,
     };
   },
 };
@@ -718,13 +812,14 @@ export default {
   margin-left: 0;
 }
 .el-button--goon {
+  min-width: 120px;
   color: #fff;
   background-color: #242f42;
   border-color: #242f42;
 }
 .headerDialogBox {
   position: absolute;
-  width: 700px;
+  width: 900px;
   min-height: 300px;
   top: 50%;
   left: 50%;
@@ -744,12 +839,15 @@ export default {
   height: 100%;
   min-height: 300px;
   border: 1px solid #bad23c;
-  display: flex;
-  justify-content: start;
-  flex-wrap: wrap;
   box-sizing: border-box;
+  padding: 5px;
+  background: #242f42;
+  color: #fff;
 }
-.headerDialog > div {
+.headerDialogBox > h1 {
+  text-align: center;
+}
+/* .headerDialog > div {
   width: 150px;
   height: 120px;
   background: #242f42;
@@ -766,12 +864,12 @@ export default {
 .headerDialog > div:hover {
   opacity: 0.8;
   border: 1px dashed #fff;
-  /* background: block; */
+  background: block;
 }
 .headerDialog > div > img {
   width: 80%;
   height: 60%;
-}
+} */
 h4 {
   height: 20px;
 }
@@ -781,7 +879,7 @@ h4 {
 }
 .buildInfoBox > p > span {
   display: inline-block;
-  width: 70px;
+  width: 170px;
   color: #999;
 }
 .buildListBox {
@@ -928,7 +1026,6 @@ h4 {
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  
 }
 ::-webkit-scrollbar {
   /*隐藏滚轮*/
@@ -968,5 +1065,40 @@ h4 {
   border-radius: 2px;
   margin-right: 5px;
   margin-bottom: 5px;
+}
+
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 18px;
+  opacity: 0.75;
+  line-height: 300px;
+  margin: 0;
+}
+
+.el-carousel__item:nth-child(2n) {
+  background: rgba(36, 47, 66, 0.7);
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background: rgba(36, 47, 66, 0.7);
+}
+
+.vanguard {
+  height: 100px;
+  width: 100px;
+  margin: 0 10px;
+  /* text-align: left; */
+}
+.vanguard > p {
+  height: 100px;
+  width: 100px;
+  text-indent: 2em;
+}
+.vanguard > img {
+  height: 100px;
+  width: 100px;
+}
+.el-carousel__item{
+  background: none !important;
 }
 </style>
