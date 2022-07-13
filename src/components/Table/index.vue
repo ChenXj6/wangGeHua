@@ -163,6 +163,7 @@ export default defineComponent({
           const pageObj = {}
           pageObj[tableConfig.pageField || 'pageNum'] = isNaN(currentPage.value) ? 1 : currentPage.value
           pageObj[tableConfig.pageSizeField || 'pageSize'] = currentPageSize.value
+          pageObj.operatorId = String(JSON.parse(sessionStorage.getItem('operatorId')))
           params = Object.assign(params, pageObj)
         }
         // resolve(callback(items))

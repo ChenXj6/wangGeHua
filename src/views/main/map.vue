@@ -124,7 +124,8 @@
             <!-- <hr> -->
             <el-row :gutter="10">
               <el-col :span="10">
-                <div v-if="isHaveHouse" class="noHouse">
+                <!-- {{ houseList.length }} -->
+                <div v-if="!isHaveHouse" class="noHouse">
                   <img src="@/assets/img/loading.gif" alt="loading" srcset="" />
                   <p>Loading...</p>
                 </div>
@@ -144,22 +145,22 @@
                 </div>
               </el-col>
               <el-col :span="14" class="borderRight">
-                <div v-if="isHavePeople" class="noPeople">
+                <div v-if="!isHavePeople" class="noPeople">
                   <img src="@/assets/img/loading.gif" alt="loading" srcset="" />
                   <p>Loading...</p>
                 </div>
-                <div v-else-if="houseList.length <= 0" class="noList">
+                <div v-else-if="peopleList.length <= 0" class="noList">
                   暂无数据
                 </div>
                 <div v-else class="people house">
                   <div
                     class="peopleItem"
                     v-for="item in peopleList"
-                    :key="item.id"
+                    :key="item"
                   >
                     <img
                       :src="
-                        item.certificates.length
+                        item?.certificates?.length
                           ? `${imgUrl}${item.certificates.split(',')[0]}`
                           : ''
                       "
@@ -168,7 +169,6 @@
                     <p>
                       <span>姓名：</span> <span>{{ item.name }}</span>
                     </p>
-                    <!-- <p><span>年龄：</span> <span>{{ item.age }}</span></p> -->
                     <p>
                       <span>户籍：</span> <span>{{ item.domicile }}</span>
                     </p>
@@ -335,8 +335,8 @@ export default {
     const unitList = ref([]); // 楼栋弹窗单元列表
     const houseList = ref([]);
     const peopleList = ref([]);
-    const isHaveHouse = ref(false);
-    const isHavePeople = ref(false);
+    const isHaveHouse = ref(true);
+    const isHavePeople = ref(true);
     // 小区名字  楼号  单元号   房屋号
     const searchForm = ref({
       villageName: "",
@@ -501,84 +501,105 @@ export default {
       ];
       return arr[sum];
     };
-
-
- //绘制编号为1000的静态箭头线
-        const drawMyRoute3=()=>{
-          //vMap.drawRoute("17808,18500,17744,18224","7526,7700,9118,9262",'1000','red',4,'arrow','','1');
-          //画第一网格线圈
-          vMap.drawRoute("13848,14556,15480,16884,18296,17064,17752,17632,18528,17992,13848","8818,7966,7218,6419,6738,8836,9012,9100,9308,10324,8818",'1000','blue',4,'','','');
-          //画第一网格标签
-          var html1 = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#000FFF"><nobr>第一网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
-          //vMap.showMapMark(18821,10596,html);
-          vMap.showMapMark(16144,7148,html1);
-          
-          // //画第二网格线圈
-          vMap.drawRoute("19928,18026,18556,17732,17802,17120,18770,19960,19312,20278,20325,21838,19928","11020,10349,9278,9089,8965,8805,6033,6331,7474,7673,7595,7943,11020",'1000','red',4,'','','1');
-          //画第二网格标签
-          var html = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#FF0000"><nobr>第二网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
-          //vMap.showMapMark(18821,10596,html);
-          vMap.showMapMark(19024,9636,html);
-          
-          //画第三网格线圈
-          vMap.drawRoute("18314,16928,17234,20266,23288,21840,20316,20254,19370,20000,18738,18314","6711,6400,6200,4935,5730,7932,7565,7641,7449,6313,6000,6711",'1000','yellow',4,'','','1');
-          //画第二网格标签
-          var html = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#3A1027"><nobr>第三网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
-          //vMap.showMapMark(18821,10596,html);
-          vMap.showMapMark(18888,5250,html);
-        };
+    //绘制编号为1000的静态箭头线
+    const drawMyRoute3=()=>{
+      //vMap.drawRoute("17808,18500,17744,18224","7526,7700,9118,9262",'1000','red',4,'arrow','','1');
+      //画第一网格线圈
+      vMap.drawRoute("13848,14556,15480,16884,18296,17064,17752,17632,18528,17992,13848","8818,7966,7218,6419,6738,8836,9012,9100,9308,10324,8818",'1000','blue',4,'','','');
+      //画第一网格标签
+      var html1 = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#000FFF"><nobr>第一网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+      //vMap.showMapMark(18821,10596,html);
+      vMap.showMapMark(16144,7148,html1);
+      
+      // //画第二网格线圈
+      vMap.drawRoute("19928,18026,18556,17732,17802,17120,18770,19960,19312,20278,20325,21838,19928","11020,10349,9278,9089,8965,8805,6033,6331,7474,7673,7595,7943,11020",'1000','red',4,'','','1');
+      //画第二网格标签
+      var html = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#FF0000"><nobr>第二网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+      //vMap.showMapMark(18821,10596,html);
+      vMap.showMapMark(19024,9636,html);
+      
+      //画第三网格线圈
+      vMap.drawRoute("18314,16928,17234,20266,23288,21840,20316,20254,19370,20000,18738,18314","6711,6400,6200,4935,5730,7932,7565,7641,7449,6313,6000,6711",'1000','yellow',4,'','','1');
+      //画第二网格标签
+      var html = '<div style="display:inline;height:150px; line-height:180px;border:#FFFFFF solid 3px;padding:10px 20px 10px 20px;color:#FFFFFF;text-align:center; background-color:#3A1027"><nobr>第三网格</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>';
+      //vMap.showMapMark(18821,10596,html);
+      vMap.showMapMark(18888,5250,html);
+    };
 
 
     randomAddress();
     // 获取楼栋信息
     const getBuild = (buildingId) => {
-      getUnitByBuild({ buildingId }).then((res) => {
+      getUnitByBuild({ buildingId }).then( async (res) => {
         if (res.resCode == "000000") {
           unitList.value = res.data.unit;
           buildForm.value = res.data.build;
           searchForm.value.villageName = res.data.build.villageName;
           searchForm.value.buildingNumber = res.data.build.buildingNumber;
+          houseList.value = await getHouseApi()
+          isHaveHouse.value = true
+          peopleList.value = await getPeopleApi()
+          isHavePeople.value = true
+          // console.log(houseList.value.length,peopleList.value.length,'????')
           houseDialogVisible.value = true;
-          getHouseApi();
-          getPeopleApi();
         }
       });
     };
     const getHouseByUnit = (unitNumber) => {
       searchForm.value.unitNumber = unitNumber;
       searchForm.value.houseNumber = "";
-      isHaveHouse.value = true;
-      getHouseApi();
+      isHaveHouse.value = false;
+      isHavePeople.value = false
+      peopleList.value = []
+      getHouseApi().then(res=>{
+        isHaveHouse.value = true
+        houseList.value = res
+      });
+      getPeopleApi().then(res=>{
+        isHavePeople.value = true
+        peopleList.value = res
+      });
     };
     const getHouseByFloor = (floorNumber) => {
       searchForm.value.floorId = floorNumber;
       searchForm.value.houseNumber = "";
-      isHaveHouse.value = true;
-      getHouseApi();
+      isHaveHouse.value = false;
+      isHavePeople.value = false
+      peopleList.value = []
+      getHouseApi().then(res=>{
+        isHaveHouse.value = true
+        houseList.value = res
+      });
+      getPeopleApi().then(res=>{
+        isHavePeople.value = true
+        peopleList.value = res
+      });
     };
     const getPeople = (houseNumber) => {
       searchForm.value.houseNumber = houseNumber;
-      isHavePeople.value = true;
-      getPeopleApi();
-    };
-    const getHouseApi = () => {
-      getPeopleList(searchForm.value).then((res) => {
-        if (res.resCode == "000000") {
-          isHaveHouse.value = false;
-          houseList.value = res.data.list;
-          peopleList.value = [];
-        }
-        // console.log(res,'getHouseApi')
+      isHavePeople.value = false;
+      getPeopleApi().then(res=>{
+        peopleList.value = res
+        isHavePeople.value = true
       });
     };
-    const getPeopleApi = () => {
-      getPeopleList(searchForm.value).then((res) => {
-        // console.log(res,'getPeopleApi')
-        if (res.resCode == "000000") {
-          isHavePeople.value = false;
-          peopleList.value = res.data.list;
-        }
-      });
+    const getHouseApi = async () => {
+      return new Promise((resolve,reject) => {
+        getPeopleList(searchForm.value).then((res) => {
+          if (res.resCode == "000000") {
+            resolve(res.data.list)
+          }
+        });
+      })
+    };
+    const getPeopleApi = async () => {
+      return new Promise((resolve,reject)=>{
+        getPeopleList(searchForm.value).then((res) => {
+          if (res.resCode == "000000") {
+            resolve(res.data.list);
+          }
+        });
+      })
     };
     const eventDialogStyle = () => {
       setTimeout(() => {

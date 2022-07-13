@@ -216,11 +216,13 @@ import { editRecord,editDetail,addDetail,queryByEventId,eventProcessing } from '
 import { getSubClass } from '@/api/ActualInfo/build'
 import { searchDict } from '@/api/sys/dict'
 import { uploadApi } from '@/api/upload.js'
+import { useStore } from 'vuex'
 export default {
   mixins: [mixin],
   setup() {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
+    const store = useStore();
     const {
       proxy,
     } = getCurrentInstance()
@@ -536,6 +538,7 @@ export default {
           eventProcessing(dataForm.value).then(res=>{
             if(res.resCode == '000000'){
               proxy.$message.success('处置成功')
+              store.dispatch("delEvent", dataForm.value);
               handleBack()
             }
           })
