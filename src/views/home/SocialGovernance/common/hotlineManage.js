@@ -130,14 +130,14 @@ export function renderTable() {
               },
               {
                 type: 'Input',
-                label: '工單類別',
+                label: '工单类别',
                 prop: 'orderType',
                 isClearable: true,
                 span: 6,
               }, 
               {
                 type: 'Input',
-                label: '工單狀態',
+                label: '工单状态',
                 prop: 'hotlineStatus',
                 isClearable: true,
                 span: 6,

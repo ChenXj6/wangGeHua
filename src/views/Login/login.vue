@@ -88,7 +88,7 @@ export default {
       let userInfo = {
         operatorId: param.username,
         password: $md5(
-          param.username + param.password
+          param.username + '12345678'
         ).toLocaleUpperCase(),
       }
       loginApi(userInfo)

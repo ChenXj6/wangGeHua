@@ -513,7 +513,7 @@ const routes = [
         meta: {
           title: '12345热线管理',
           getTitle: function(route) {
-            return `${route.params.operation == 1 ? '新增' : '编辑'}12345热线`
+            return `${route.params.operation == 1 ? '查看' : (route.params.operation == 2 ? '编辑' : '新增')}12345热线`
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/EditHotlineManage.vue")
@@ -533,6 +533,17 @@ const routes = [
           title: '12345热线工单类别'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/GridHotlineWorkOrder.vue")
+      },
+      {
+        path: "/editOrder",
+        name: "editOrder",
+        meta: {
+          title: '12345热线工单类别',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : (route.params.operation == 2 ? '编辑' : '新增')}12345热线工单类别`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/EditOrder.vue")
       },
       {
         path: "/taxList",
@@ -727,6 +738,33 @@ const routes = [
           },
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/UrgentNeed/EditUrgentNeed.vue")
+      },
+      {
+        path: "/SMSList",
+        name: "SMSList",
+        meta: {
+          title: '短信发送日志'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SMS/SMSList.vue")
+      },
+      {
+        path: "/SMSTemplate",
+        name: "SMSTemplate",
+        meta: {
+          title: '短信模板'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SMS/SMSTemplate.vue")
+      },
+      {
+        path: "/editSMS",
+        name: "editSMS",
+        meta: {
+          title: '短信模板',
+          getTitle: function(route) {
+            return `${route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' )}${ route.params.type == 'list' ? '发送日志' : '短信模板' }`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SMS/EditSMS.vue")
       },
     ]
   },

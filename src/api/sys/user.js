@@ -38,7 +38,7 @@ export const getMenuByRole = query => {
 // 添加角色权限菜单
 export const saveMenuByRole = query => {
   return service.post(
-    `/api//sys/roleMenu/save`, query
+    `/api/sys/roleMenu/save`, query
   )
 };
 
@@ -46,5 +46,19 @@ export const saveMenuByRole = query => {
 export const saveRoleToUser = query => {
   return service.post(
     `/api/sys/userRole/save`, query
+  )
+};
+//sys/sysUserData/save
+// 添加角色数据权限
+export const saveDataByRole = query => {
+  return service.post(
+    `/api/sys/sysUserData/save`, query
+  )
+};
+
+// 获取角色下数据权限
+export const getDataByRole = query => {
+  return service.post(
+    `/api/sys/sysUserData/select`, query
   )
 };

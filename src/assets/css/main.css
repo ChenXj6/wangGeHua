@@ -25,7 +25,7 @@ a {
   position: absolute;
   left: 200px;
   right: 0;
-  top: 70px;
+  top: 60px;
   bottom: 0;
   padding-bottom: 30px;
   -webkit-transition: left 0.3s ease-in-out;
@@ -36,7 +36,7 @@ a {
   position: absolute;
   left: 0;
   right: 0;
-  top: 70px;
+  top: 60px;
   bottom: 0;
   padding-bottom: 30px;
   -webkit-transition: left 0.3s ease-in-out;
@@ -206,4 +206,7 @@ a {
 }
 .el-form-item{
   margin-bottom: 10px !important;
+}
+.el-date-editor.el-input, .el-date-editor.el-input__inner{
+  width: 100% !important;
 }

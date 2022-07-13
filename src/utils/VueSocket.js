@@ -174,7 +174,7 @@ class VueSocket {
       } else {
         this.init()
       }
-    }, 5000)
+    }, 180000)
   }
 
   /**

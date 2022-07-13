@@ -18,7 +18,7 @@ export function renderTable() {
                 value: '',
                 format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
-                span: 8,
+                span: 11,
               },
               {
                 type: 'Input',
@@ -69,7 +69,7 @@ export function renderTable() {
                 value: '',
                 format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
-                span: 8,
+                span: 11,
               },
               {
                 type: 'Input',
@@ -185,7 +185,7 @@ export function renderTable() {
                 value: '',
                 format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
-                span: 8,
+                span: 11,
               },
               {
                 type: 'Input',
@@ -250,7 +250,7 @@ export function renderTable() {
                 value: '',
                 format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
-                span: 8,
+                span: 11,
               },
               {
                 type: 'Input',
@@ -315,7 +315,7 @@ export function renderTable() {
                 value: '',
                 format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
-                span: 8,
+                span: 11,
               },
               {
                 type: 'Input',
@@ -348,7 +348,7 @@ export function renderTable() {
                 value: '',
                 format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
-                span: 8,
+                span: 11,
               },
               {
                 type: 'Input',
@@ -373,7 +373,7 @@ export function renderTable() {
                 value: '',
                 format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
-                span: 8,
+                span: 11,
               },
         ]
     }

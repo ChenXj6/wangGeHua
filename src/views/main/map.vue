@@ -87,12 +87,11 @@
     </div>
     <!-- 楼栋弹窗 -->
     <el-dialog
-      :title="buildForm.villageName + buildForm.buildingNumber"
+      :title="`${buildForm.villageName + buildForm.buildingNumber}`"
       v-model="houseDialogVisible"
       width="60%"
       draggable
       style="z-index: 9999"
-      :before-close="dialogBeforeClose"
     >
       <div>
         <el-row :gutter="10">
@@ -151,7 +150,8 @@
             <!-- <hr> -->
             <el-row :gutter="10">
               <el-col :span="10">
-                <div v-if="isHaveHouse" class="noHouse">
+                <!-- {{ houseList.length }} -->
+                <div v-if="!isHaveHouse" class="noHouse">
                   <img src="@/assets/img/loading.gif" alt="loading" srcset="" />
                   <p>Loading...</p>
                 </div>
@@ -171,22 +171,22 @@
                 </div>
               </el-col>
               <el-col :span="14" class="borderRight">
-                <div v-if="isHavePeople" class="noPeople">
+                <div v-if="!isHavePeople" class="noPeople">
                   <img src="@/assets/img/loading.gif" alt="loading" srcset="" />
                   <p>Loading...</p>
                 </div>
-                <div v-else-if="houseList.length <= 0" class="noList">
+                <div v-else-if="peopleList.length <= 0" class="noList">
                   暂无数据
                 </div>
                 <div v-else class="people house">
                   <div
                     class="peopleItem"
                     v-for="item in peopleList"
-                    :key="item.id"
+                    :key="item"
                   >
                     <img
                       :src="
-                        item.certificates.length
+                        item?.certificates?.length
                           ? `${imgUrl}${item.certificates.split(',')[0]}`
                           : ''
                       "
@@ -195,7 +195,6 @@
                     <p>
                       <span>姓名：</span> <span>{{ item.name }}</span>
                     </p>
-                    <!-- <p><span>年龄：</span> <span>{{ item.age }}</span></p> -->
                     <p>
                       <span>户籍：</span> <span>{{ item.domicile }}</span>
                     </p>
@@ -365,8 +364,8 @@ export default {
     const unitList = ref([]); // 楼栋弹窗单元列表
     const houseList = ref([]);
     const peopleList = ref([]);
-    const isHaveHouse = ref(false);
-    const isHavePeople = ref(false);
+    const isHaveHouse = ref(true);
+    const isHavePeople = ref(true);
     // 小区名字  楼号  单元号   房屋号
     const searchForm = ref({
       villageName: "",
@@ -494,7 +493,7 @@ export default {
       //设置鹰眼是否显示(默认不显示)
       config.setEyeMap(false);
       //设置标签是否显示(默认不显示)
-      config.setLabel(true);
+      config.setLabel(false);
       //设置全景是否显示(默认不显示)
       config.setPano(false);
       //设置停车场是否显示(默认不显示)
@@ -602,15 +601,18 @@ export default {
     randomAddress();
     // 获取楼栋信息
     const getBuild = (buildingId) => {
-      getUnitByBuild({ buildingId }).then((res) => {
+      getUnitByBuild({ buildingId }).then( async (res) => {
         if (res.resCode == "000000") {
           unitList.value = res.data.unit;
           buildForm.value = res.data.build;
           searchForm.value.villageName = res.data.build.villageName;
           searchForm.value.buildingNumber = res.data.build.buildingNumber;
+          houseList.value = await getHouseApi()
+          isHaveHouse.value = true
+          peopleList.value = await getPeopleApi()
+          isHavePeople.value = true
+          // console.log(houseList.value.length,peopleList.value.length,'????')
           houseDialogVisible.value = true;
-          getHouseApi();
-          getPeopleApi();
         }
       });
     };
@@ -627,38 +629,58 @@ export default {
     const getHouseByUnit = (unitNumber) => {
       searchForm.value.unitNumber = unitNumber;
       searchForm.value.houseNumber = "";
-      isHaveHouse.value = true;
-      getHouseApi();
+      isHaveHouse.value = false;
+      isHavePeople.value = false
+      peopleList.value = []
+      getHouseApi().then(res=>{
+        isHaveHouse.value = true
+        houseList.value = res
+      });
+      getPeopleApi().then(res=>{
+        isHavePeople.value = true
+        peopleList.value = res
+      });
     };
     const getHouseByFloor = (floorNumber) => {
       searchForm.value.floorId = floorNumber;
       searchForm.value.houseNumber = "";
-      isHaveHouse.value = true;
-      getHouseApi();
+      isHaveHouse.value = false;
+      isHavePeople.value = false
+      peopleList.value = []
+      getHouseApi().then(res=>{
+        isHaveHouse.value = true
+        houseList.value = res
+      });
+      getPeopleApi().then(res=>{
+        isHavePeople.value = true
+        peopleList.value = res
+      });
     };
     const getPeople = (houseNumber) => {
       searchForm.value.houseNumber = houseNumber;
-      isHavePeople.value = true;
-      getPeopleApi();
-    };
-    const getHouseApi = () => {
-      getPeopleList(searchForm.value).then((res) => {
-        if (res.resCode == "000000") {
-          isHaveHouse.value = false;
-          houseList.value = res.data.list;
-          peopleList.value = [];
-        }
-        // console.log(res,'getHouseApi')
+      isHavePeople.value = false;
+      getPeopleApi().then(res=>{
+        peopleList.value = res
+        isHavePeople.value = true
       });
     };
-    const getPeopleApi = () => {
-      getPeopleList(searchForm.value).then((res) => {
-        // console.log(res,'getPeopleApi')
-        if (res.resCode == "000000") {
-          isHavePeople.value = false;
-          peopleList.value = res.data.list;
-        }
-      });
+    const getHouseApi = async () => {
+      return new Promise((resolve,reject) => {
+        getPeopleList(searchForm.value).then((res) => {
+          if (res.resCode == "000000") {
+            resolve(res.data.list)
+          }
+        });
+      })
+    };
+    const getPeopleApi = async () => {
+      return new Promise((resolve,reject)=>{
+        getPeopleList(searchForm.value).then((res) => {
+          if (res.resCode == "000000") {
+            resolve(res.data.list);
+          }
+        });
+      })
     };
     const eventDialogStyle = () => {
       setTimeout(() => {

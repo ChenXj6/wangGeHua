@@ -9,20 +9,12 @@
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-     <VForm v-if="route.params.type == 'hotline'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="InfoFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
-        <template v-slot:status>
-        <popup-tree-input
-            :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
-            <template v-slot>
-              <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
-            </template>
-        </popup-tree-input>
-      </template>
-       <template v-slot:remarks="">
-        <div class="mgb20" ref='editor'></div>
-      </template>
-    </VForm>
+     <VForm v-if="route.params.type == 'list'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="ListFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}"/>
+     <VForm v-else :key="timer" :isDisabled="route.params.operation == 1" :form-data="TempFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+       <template v-slot:rule>
+         <span style="font-style:italic;">【智慧天桥】紧急报警：位于{treeNames}的{device_name}的设备在{alarmTime}发生{alarmType}类型的报警事件，请立即联系排查。{treeNames}:所属网格，{device_name}：烟感报警器名称，{alarmTime}：发生时间，{alarmType}：报警类型</span>
+       </template>
+     </VForm>     
      <el-row v-if="route.params.operation == 1">
       <div class="btn-box">
         <el-button
@@ -41,39 +33,20 @@ import { getCurrentInstance, onBeforeMount, onBeforeUnmount, onMounted, reactive
 import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
 
-import { renderTable } from './common/edit'
+import { renderTable } from './common/EditSMS'
 import { saveHotlineManage,editHotlineManage } from '@/api/SocialGovernance/HotlineManage'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 
 export default {
-    name:'EditHotlineManage',
+    name:'EditSMS',
     mixins: [mixin],
     components:{PopupTreeInput},
     setup() {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
-    const { InfoFormConfig } = renderTable.call(proxy)
-    let dataForm = reactive({
-      officeCode:'',
-      officeName:'',
-     
-    })
-    let timer = ref(new Date().getTime())
-    const editor = ref(null);
-
-
-     let popupTreeData = ref([])
-    const popupTreeProps = {
-      label: "officeName",
-      children: "children"
-    } 
-
-    const handleTreeSelectChange = ({officeCode,officeName}) => {
-      dataForm.officeCode = officeCode
-      dataForm.officeName = officeName
-      getSOList(officeCode)
-    }
+    const { ListFormConfig,TempFormConfig } = renderTable.call(proxy)
+    let dataForm = reactive({})
     const handleSave = () => {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
@@ -127,19 +100,15 @@ export default {
 
 
   onBeforeUnmount(() => {
-        instance = null;
     })
     return {
       dataForm,
       route,
       handleBack,
       handleSubmit,
-      InfoFormConfig,
+      ListFormConfig,
+      TempFormConfig,
       formHandle,
-      editor,
-      handleTreeSelectChange,
-      popupTreeProps,
-      popupTreeData,
     }
 
     }
