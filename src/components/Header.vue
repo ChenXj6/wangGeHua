@@ -158,7 +158,7 @@ export default {
         store.dispatch('clearMenu')
         router.push("/login");
       } else if (command == "user") {
-        router.push("/user");
+        router.push("/personal");
       }
     };
 

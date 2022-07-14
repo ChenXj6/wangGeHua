@@ -1,10 +1,6 @@
 <template>
   <div class="menu-box">
     <span
-      class="menu-item"
-      >驾驶舱</span
-    >
-    <span
       v-for="item in menuList"
       :key="item.id"
       class="menu-item"
@@ -16,7 +12,6 @@
 
 <script>
 import { ref } from "@vue/reactivity";
-import { computed, provide } from "@vue/runtime-core";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 export default {

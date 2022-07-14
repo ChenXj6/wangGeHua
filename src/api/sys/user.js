@@ -62,3 +62,20 @@ export const getDataByRole = query => {
     `/api/sys/sysUserData/select`, query
   )
 };
+
+
+
+
+// 修改密码
+export const updatePassword = query => {
+  return service.post(
+    `/api/sys/user/updatePassword`, query
+  )
+};
+
+// 修改密码
+export const resetPassword = query => {
+  return service.post(
+    `/api/sys/user/resetPassword`, query
+  )
+};

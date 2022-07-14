@@ -2,44 +2,61 @@
     <div>
         <el-row :gutter="20">
             <el-col :span="12">
-                <el-card shadow="hover">
+                <el-card shadow="hover" style="height:350px">
                     <template #header>
                         <div class="clearfix">
                             <span>基础信息</span>
                         </div>
                     </template>
-                    <div class="info">
-                        <div class="info-image" @click="showDialog">
+                    <el-row class="info">
+                      <el-col :span="12" >
+                          <div class="info-image" @click="showDialog">
                             <img :src="avatarImg" />
                             <span class="info-edit">
                                 <i class="el-icon-lx-camerafill"></i>
                             </span>
                         </div>
-                        <div class="info-name">{{ name }}</div>
-                        <div class="info-desc">不可能！我的代码怎么可能会有bug！</div>
-                    </div>
+                        <div class="info-name">{{ user.operatorName }}</div>
+                      </el-col>
+                      <el-col :span="12" class="info_right">
+                        <div><span>用户名：</span>{{ user.operatorName }}</div>
+                        <div><span>邮箱：</span>{{ user?.email }}</div>
+                        <div><span>手机号：</span>{{ user?.mobile }}</div>
+                        <div><span>创建人：</span>{{ user?.createBy }}</div>
+                        <div><span>个人简介：</span>{{ user?.remarks || '无' }}</div>
+                      </el-col>
+                    </el-row>
                 </el-card>
             </el-col>
             <el-col :span="12">
-                <el-card shadow="hover">
+                <el-card shadow="hover" style="height:350px">
                     <template #header>
                         <div class="clearfix">
-                            <span>账户编辑</span>
+                            <span>修改密码</span>
                         </div>
                     </template>
-                    <el-form label-width="90px">
-                        <el-form-item label="用户名："> {{ name }} </el-form-item>
-                        <el-form-item label="旧密码：">
-                            <el-input type="password" v-model="form.old"></el-input>
+                    <el-form ref="formRef" label-width="90px">
+                        <el-form-item label="用户名："> {{ user.operatorName }} </el-form-item>
+                        <el-form-item label="旧密码：" prop="oldPassword">
+                            <el-input type="password" v-model="form.oldPassword"></el-input>
                         </el-form-item>
-                        <el-form-item label="新密码：">
-                            <el-input type="password" v-model="form.new"></el-input>
+                        <el-form-item label="新密码：" prop="newPasswordOne">
+                            <el-input type="password" v-model="form.newPasswordOne"></el-input>
                         </el-form-item>
-                        <el-form-item label="个人简介：">
-                            <el-input v-model="form.desc"></el-input>
+                        <el-form-item label="新密码：" prop="newPasswordTwo">
+                            <el-input type="password" v-model="form.newPasswordTwo"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" @click="onSubmit">保存</el-button>
+                          <el-popconfirm title="确定要重置密码吗？" @confirm="onReset" style="float:right;display:inline-block;margin-left:10px">
+                            <template #reference>
+                              <el-button
+                                size="mini"
+                                type="primary"
+                              >重置密码</el-button>
+                            </template>
+                          </el-popconfirm>
+                            <el-button size="mini" type="primary" @click="onSubmit" style="float:right;display:inline-block;">保存</el-button>
+                           
                         </el-form-item>
                     </el-form>
                 </el-card>
@@ -62,10 +79,23 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { getCurrentInstance, reactive, ref } from "vue";
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
-import avatar from "../../assets/img/img.jpg";
+import avatar from "@/assets/img/img.jpg";
+import { updatePassword,resetPassword } from '@/api/sys/user'
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
+const validatePass2 = (value,a, callback) => {
+  console.log(value,a,'...')
+  if (value == '') {
+    callback(new Error('请再次输入新密码'))
+  } else if (value !== form.value.newPasswordOne) {
+    callback(new Error("两次密码不一致，请重新输入"))
+  } else {
+    callback()
+  }
+}
 export default {
     name: "user",
     components: {
@@ -73,12 +103,67 @@ export default {
     },
     setup() {
         const name = localStorage.getItem("ms_username");
-        const form = reactive({
-            old: "",
-            new: "",
-            desc: "不可能！我的代码怎么可能会有bug！",
+        const user = JSON.parse(sessionStorage.getItem('user')).user
+        const store = useStore()
+        const router = useRouter()
+        const form = ref({
+            oldPassword: "",
+            newPasswordOne: "",
+            newPasswordTwo: "",
         });
-        const onSubmit = () => {};
+        const formRef = ref(null)
+        const { proxy: { $md5, $message }, } = getCurrentInstance()
+        const rules = reactive({
+          oldPassword:[
+            { required: true, message: '请输入旧密码', trigger: ['change','blur'] },
+          ],
+          newPasswordOne:[
+            { required: true, message: '请输入新密码', trigger: 'blur' },
+          ],
+          newPasswordTwo:[
+            { validator: validatePass2, trigger: 'blur' }
+          ],
+        })
+        const onSubmit = () => {
+          let { oldPassword,newPasswordOne,newPasswordTwo } = form.value
+          if(String(newPasswordOne) != String(newPasswordTwo)){
+            $message.error('两次密码不一致，请重新输入')
+            form.value.newPasswordTwo = ''
+            return
+          }
+          oldPassword = $md5(oldPassword + '12345678').toLocaleUpperCase(),
+          newPasswordOne = $md5(newPasswordOne + '12345678').toLocaleUpperCase(),
+          newPasswordTwo = $md5(newPasswordTwo + '12345678').toLocaleUpperCase(),
+          updatePassword({oldPassword,newPasswordOne,newPasswordTwo}).then(res=>{
+            if(res.code == '200'){
+              $message.success('密码修改成功，请重新登陆！')
+              store.dispatch('delHealthDegree')
+              store.dispatch('closeSocket')
+              store.state.eventList = []
+              sessionStorage.removeItem('eventName')
+              store.dispatch('clearMenu')
+              router.push("/login");
+            }else{
+              $message.error(res.msg)
+            }
+          })
+        };
+        const onReset = () => {
+          const { operatorId } = user
+          resetPassword({operatorId}).then(res=>{
+            if(res.code == '200'){
+              $message.success('密码重置成功，账号即为密码，请重新登陆！')
+              store.dispatch('delHealthDegree')
+              store.dispatch('closeSocket')
+              store.state.eventList = []
+              sessionStorage.removeItem('eventName')
+              store.dispatch('clearMenu')
+              router.push("/login");
+            }else{
+              $message.error(res.msg)
+            }
+          })
+        }
 
         const avatarImg = ref(avatar);
         const imgSrc = ref("");
@@ -127,6 +212,10 @@ export default {
             setImage,
             cropImage,
             saveAvatar,
+            user,
+            formRef,
+            rules,
+            onReset,
         };
     },
 };
@@ -188,5 +277,16 @@ export default {
     top: 0;
     opacity: 0;
     cursor: pointer;
+}
+.info_right{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  justify-content: space-evenly;
+}
+.info_right  span{
+  display: inline-block;
+  min-width: 80px;
 }
 </style>

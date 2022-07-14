@@ -766,6 +766,14 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SMS/EditSMS.vue")
       },
+      {
+        path: "/personal",
+        name: "personal",
+        meta: {
+          title: '个人中心'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/User.vue")
+      },
     ]
   },
   {
