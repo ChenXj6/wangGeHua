@@ -68,8 +68,6 @@
                 <p>
                   性别：{{sexOptions.filter((v) => v.value == item.gender)[0]?.label}}
                 </p>
-                <p>归属党组织：{{item.infoName}}</p>
-                <p>电话：{{item.phone}}</p>
                 <span>简介：{{ item.memberSynopsis }}</span>
               </el-carousel-item>
             </el-carousel>
@@ -903,7 +901,7 @@ h4 {
 }
 .buildInfoBox > p > span {
   display: inline-block;
-  width: 170px;
+  width: 80px;
   color: #999;
 }
 .buildListBox {
@@ -921,6 +919,7 @@ h4 {
   height: 100px;
   justify-content: start;
   overflow: scroll;
+  scrollbar-width: none;
   align-items: center;
 }
 .buildListItem {
@@ -942,12 +941,14 @@ h4 {
 }
 .buildFloor {
   min-height: 300px;
+  
 }
 .buildFloor > div {
   margin: 0 auto;
   width: 100%;
   overflow-y: scroll;
   max-height: 300px;
+  scrollbar-width: none;
 }
 .floor {
   width: 60%;
@@ -1010,6 +1011,7 @@ h4 {
   justify-content: start;
   flex-wrap: wrap;
   overflow-y: scroll;
+  scrollbar-width: none;
 }
 .houseItem {
   width: 70px;

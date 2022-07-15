@@ -8,7 +8,7 @@ import { ElMessage } from 'element-plus';
 
 const service = axios.create({
   baseURL: '',
-  timeout:'10000',
+  timeout:'',
 });
 
 service.interceptors.request.use(
@@ -28,7 +28,7 @@ service.interceptors.request.use(
     if (sessionStorage.getItem("user")) {
       let userToken = JSON.parse(sessionStorage.getItem("user")).token;
       config.headers = {
-        'Authentication': userToken,
+        'Authorization': userToken,
         'Content-Type': 'application/json',
         'withCredentials': true,
         'changeOrigin': true,

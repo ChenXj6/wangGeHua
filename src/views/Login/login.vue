@@ -88,18 +88,23 @@ export default {
       let userInfo = {
         operatorId: param.username,
         password: $md5(
-          param.username + '12345678'
+          param.password + '12345678'
         ).toLocaleUpperCase(),
       }
       loginApi(userInfo)
-        .then((res) => {
+        .then( async (res) => {
           if (res.resCode == '000000') {
-            // console.log(res.data)
             sessionStorage.setItem('user', JSON.stringify(res.data))
             sessionStorage.setItem('operatorId', res.data.user.operatorId)
-            getMenuTree(res.data.user.id)
-            store.dispatch('socketInit')
-            router.push('/')
+            let result = await getMenuTree(res.data.user.id)
+            // console.log(result)
+            if(!!result){
+              store.dispatch('socketInit')
+              router.push('/')
+            }else{
+              sessionStorage.removeItem('user')
+              sessionStorage.removeItem('operatorId')
+            }
           } else {
             $message({
               message: res.data.message,
@@ -126,10 +131,16 @@ export default {
     }
     store.commit('clearTags')
     const getMenuTree = (operatorId) => {
-      getMenuTreeByUser({operatorId}).then(res=>{
-        if(res.code == '200'){
-          store.dispatch('resetMenu',res.data)
-        }
+      return new Promise((resolve,reject)=>{
+          getMenuTreeByUser({operatorId}).then(res=>{
+          if(res.code == '200'){
+            store.dispatch('resetMenu',res.data)
+            
+            resolve('true')
+          }else {
+            resolve('false')
+          }
+        })
       })
     }
     
