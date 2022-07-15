@@ -68,7 +68,9 @@
                 <p>
                   性别：{{sexOptions.filter((v) => v.value == item.gender)[0]?.label}}
                 </p>
-                <span>简介：{{ item.synopsis }}</span>
+                <p>归属党组织：{{item.infoName}}</p>
+                <p>电话：{{item.phone}}</p>
+                <span>简介：{{ item.memberSynopsis }}</span>
               </el-carousel-item>
             </el-carousel>
           </el-row>
