@@ -79,6 +79,7 @@ export default defineComponent({
     const searchForm = reactive({
       officeName:'',
       officeCode:'',
+      userDataId:String(JSON.parse(sessionStorage.getItem('user')).user.id),
     })
     let popupTreeData = ref([])
     const popupTreeProps = {

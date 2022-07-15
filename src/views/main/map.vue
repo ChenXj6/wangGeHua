@@ -55,7 +55,7 @@
           <span style="color: #fff" v-for="(item,index) in searchParams.list" :key="index">
             {{ item.synopsis }}
           </span> -->
-            <el-carousel :interval="5000" arrow="always" style="width: 1000px">
+            <el-carousel :interval="5000" arrow="never" style="width: 1000px;margin-top:30px">
               <el-carousel-item
                 :span="18"
                 v-for="(item, index) in searchParams.list"

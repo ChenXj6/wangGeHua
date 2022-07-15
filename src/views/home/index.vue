@@ -6,7 +6,7 @@
          :class="{ 'content-collapse': collapse }">
       <v-tags></v-tags>
       <div class="content">
-        <router-view v-slot="{ Component }">
+        <router-view v-slot="{ Component }" :key="$route.fullPath">
           <transition name="move"
                       mode="out-in">
             <keep-alive :include="tagsList">

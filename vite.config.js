@@ -17,7 +17,7 @@ import {
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
-    base: env.MODE === 'production' ? './' : '/',
+    base: env.MODE === 'production' ? './' : '',
     plugins: [
       vue(),
       viteCompression({ //gzip静态资源压缩
@@ -47,15 +47,8 @@ export default defineConfig(({ command, mode }) => {
       //配置根路径别名： import('@/pages/login/login.vue')
       alias: {
         "@": path.resolve(__dirname, "src"),
-        'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
+        // 'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
       },
-    },
-    css: {
-      preprocessorOptions:{
-        scss: {
-          additionalData: ""
-        }
-      }
     },
     server: {
       host: '0.0.0.0',  //配置host，0.0.0.0：时可以通过ip地址访问
@@ -83,30 +76,30 @@ export default defineConfig(({ command, mode }) => {
     },
     // 打包配置
     build: {
-      // 清除console和debugger
-      terserOptions: {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-        output: {
-          // 去掉注释内容
-          comments: true,
-        },
-      },
-      rollupOptions: {
-        output: {
-          manualChunks (id) { //静态资源分拆打包
-            if (id.includes('node_modules')) {
-              return id.toString().split('node_modules/')[1].split('/')[0].toString();
-            }
-          },
-          chunkFileNames: 'static/js/[name]-[hash].js',
-          entryFileNames: 'static/js/[name]-[hash].js',
-          assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
-        },
-      },
-      brotliSize: false,
+      // // 清除console和debugger
+      // terserOptions: {
+      //   compress: {
+      //     drop_console: true,
+      //     drop_debugger: true,
+      //   },
+      //   output: {
+      //     // 去掉注释内容
+      //     comments: true,
+      //   },
+      // },
+      // rollupOptions: {
+      //   output: {
+      //     // manualChunks (id) { //静态资源分拆打包
+      //     //   if (id.includes('node_modules')) {
+      //     //     return id.toString().split('node_modules/')[1].split('/')[0].toString();
+      //     //   }
+      //     // },
+      //     chunkFileNames: 'static/js/[name]-[hash].js',
+      //     entryFileNames: 'static/js/[name]-[hash].js',
+      //     assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
+      //   },
+      // },
+      // brotliSize: false,
     }
   }
 })

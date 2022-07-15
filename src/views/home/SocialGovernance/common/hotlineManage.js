@@ -21,6 +21,7 @@ export function renderTable() {
                 prop: 'receivingTime',
                 label: '审核时间',
                 minWidth: '120',
+                formatter: 'YYYY-MM-DD HH:mm:ss',
             },
             {
                 prop: 'problemDescription',
@@ -36,6 +37,7 @@ export function renderTable() {
                 prop: 'concludeTime',
                 label: '办结时限',
                 minWidth: '120',
+                formatter: 'YYYY-MM-DD HH:mm:ss',
             },
             {
                 prop: 'urgency',

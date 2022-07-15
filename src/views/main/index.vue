@@ -2,7 +2,9 @@
   <div class="about">
     <v-header />
     <div class="main-content-box">
+      <keep-alive>
       <router-view />
+      </keep-alive>
     </div>
     <notice />
 

@@ -297,7 +297,7 @@ export default {
 }
 .dateWeather {
   font-size: 12px;
-  width: 185px;
+  width: 200px;
   height: 60px;
   display: flex;
   flex-direction: column;
