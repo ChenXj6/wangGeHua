@@ -15,7 +15,7 @@ export function renderTable() {
             {
                 prop: 'orderNO',
                 label: '工单编号',
-                minWidth: '120',
+                minWidth: '150',
             },
             {
                 prop: 'receivingTime',

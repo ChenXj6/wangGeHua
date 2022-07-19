@@ -108,6 +108,7 @@ import {
   defineComponent,
   getCurrentInstance,
   nextTick,
+  onBeforeMount,
   onBeforeUnmount,
   onMounted,
   reactive,
@@ -164,6 +165,7 @@ export default defineComponent({
           pageObj[tableConfig.pageField || 'pageNum'] = isNaN(currentPage.value) ? 1 : currentPage.value
           pageObj[tableConfig.pageSizeField || 'pageSize'] = currentPageSize.value
           // pageObj.operatorId = String(JSON.parse(sessionStorage.getItem('operatorId')))
+          // console.log(params,';;;')
           params = Object.assign(params, pageObj)
         }
         // resolve(callback(items))
@@ -172,10 +174,12 @@ export default defineComponent({
         tableConfig
           .method(params)
           .then((res) => {
+            // console.log(1111,res.data)
             if (tableConfig.isSpecial) {
               callbackFunc.value = callback
               resolve(callback(res))
             } else {
+              
               const data = res.data
               if (tableConfig.pagination) {
                 currentPage.value = Number(data.pageNum)
@@ -188,7 +192,7 @@ export default defineComponent({
             loading.value = false
           })
           .catch((err) => {
-            reject(err)
+            // reject(err)
             loading.value = false
           })
       })
@@ -269,7 +273,9 @@ export default defineComponent({
         }
       })
     }
-    allQuerySearchAsync(tableConfig.columns)
+    onBeforeMount(()=>{
+      allQuerySearchAsync(tableConfig.columns)
+    })
     onMounted(() => {
       if(tableConfig.isSortable) {
         document.body.ondrag = function (e) {

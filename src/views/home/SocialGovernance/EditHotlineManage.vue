@@ -124,11 +124,6 @@ export default {
         {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
       ]
     }
-
-
-  onBeforeUnmount(() => {
-        instance = null;
-    })
     return {
       dataForm,
       route,

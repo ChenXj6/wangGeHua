@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 import VueSocket from '@/utils/VueSocket'
 import { isType } from '@/utils/util'
 
+
 import { handleData } from '@/utils/handleSocketData' // 分发任务的关键函数
 
 export default createStore({
@@ -12,7 +13,6 @@ export default createStore({
     eventList:[],
     isAddEventList:false,
     mapDialog:{
-      visabled:false,
       data:[]
     },
     menuList:[],
@@ -98,11 +98,9 @@ export default createStore({
     // },
     // 地图上部导航触发事件
     handleClick(state,data){
-      state.mapDialog.visabled = true
       state.mapDialog.data = data
     },
     closeDialog(state){
-      state.mapDialog.visabled = false
       state.mapDialog.data = []
     },
     resetMenu(state,data){
@@ -112,7 +110,7 @@ export default createStore({
     clearMenu(state){
       state.menuList = []
       sessionStorage.removeItem('menulist')
-    }
+    },
   },
   actions: {
     // 创建实例
@@ -142,7 +140,7 @@ export default createStore({
     },
     clearMenu({ commit }){
       commit('clearMenu')
-    }
+    },
   },
   modules: {},
 })

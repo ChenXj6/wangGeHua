@@ -1,10 +1,10 @@
 <template>
   <el-form ref="formRef" class="form" :model="formModel" :rules="formRules" :disabled="isDisabled">
     <el-row :gutter="formData.gutter || 0">
-      <el-col
-        v-for="item in formData.formItems"
-        :key="item.prop"
-        :span="item.span"
+      <el-col v-for="item in formData.formItems"
+        :key="item.prop" :span="item.span">
+      <template
+         v-if="item.isHide != 'hide'"
       >
         <el-form-item
           :label="item.label"
@@ -95,6 +95,17 @@
             >
             </el-date-picker>
           </template>
+          <template v-else-if="item.type === 'datetime'">
+            <el-date-picker
+              v-model="formModel[item.prop]"
+              type="datetime"
+              size="small"
+              :disabled="item.disabled"
+              :format="item.format"
+              :value-format="item.format || 'YYYY-MM-DD'"
+            >
+            </el-date-picker>
+          </template>
           <template v-else-if="item.type === 'dateTime'">
             <el-date-picker
               v-model="formModel[item.prop]"
@@ -114,7 +125,9 @@
             <slot :name="item.slotName" :data="item"></slot>
           </template>
         </el-form-item>
+      </template>
       </el-col>
+      
       <el-col v-if="formHandle" :span="formHandle.span ?? 6">
         <!-- 按鈕組 -->
         <div
@@ -133,7 +146,9 @@
             >{{ i.label }}</el-button
           >
         </div>
+        
       </el-col>
+      
     </el-row>
   </el-form>
 </template>
@@ -175,7 +190,7 @@ export default defineComponent({
     const formRef = ref(null)
     const formModel = reactive(props.formModel)
     const formHandle = props.formHandle
-    const formRules =
+    const formRules = 
       formData.rules && Object.getOwnPropertyNames(formData.rules).length !== 0
         ? formData.rules
         : props.formRules

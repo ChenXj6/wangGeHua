@@ -65,7 +65,7 @@
     <el-dialog
         width="width"
         v-model="InfoDialogVisible">
-        <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="infoFormHandle">
+        <VForm :form-data="infoFormConfig" :form-model="searchForm" :form-handle="infoFormHandle">
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
@@ -78,7 +78,7 @@
     </VForm>
     <V-table
       ref="table"
-      :table-config="tableConfig"
+      :table-config="infoTtableConfig"
       @row-click="rowClick"
     >
     <template v-slot:orgType="{data}">
@@ -106,7 +106,7 @@ export default {
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
     const { partyFormConfig,partyPeopleFormConfig} = renderTable.call(proxy)
-    const { tableConfig,formConfig } = renderInfoTable.call(proxy)
+    const { infoTtableConfig,infoFormConfig } = renderInfoTable.call(proxy)
     const dataForm = ref({
       officeCode:'',
       officeName:'',
@@ -219,7 +219,7 @@ export default {
     const table = ref(null)
     const searchParams = ref({})
     const handleOpenInfo = () => {
-      tableConfig.columns.splice(tableConfig.columns.length-1,1)
+      infoTtableConfig.columns.splice(infoTtableConfig.columns.length-1,1)
       InfoDialogVisible.value = true
       setTimeout(()=>{
         handleQuery()
@@ -258,7 +258,7 @@ export default {
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
-        tableConfig.data = data
+        infoTtableConfig.data = data
       })
     }
     const rowClick = ({id,infoName,officeCode,officeName}) => {
@@ -307,8 +307,8 @@ export default {
       // 党组织弹窗
       handleOpenInfo,
       InfoDialogVisible,
-      tableConfig,
-      formConfig,
+      infoTtableConfig,
+      infoFormConfig,
       infoFormHandle,
       table,
       searchForm,

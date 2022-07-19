@@ -172,7 +172,6 @@ export default {
     const router = useRouter();
     const store = useStore();
     const handleClick = (data) => {
-      console.log(data);
       store.dispatch("handleClick", data);
     };
     return {

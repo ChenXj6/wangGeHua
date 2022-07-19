@@ -6,8 +6,8 @@ export function renderTable() {
         formItems: [
             {
                 type: 'slot',
-              label: '组织机构',
-               prop: 'officeName',
+                label: '组织机构',
+                prop: 'officeName',
                 slotName:'status',
                 span: 11,
               },

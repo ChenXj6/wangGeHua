@@ -140,7 +140,7 @@ export default {
     };
     onMounted(() => {
       if (pageStatus.value) {
-        status.value = "后台";
+        status.value = "控制台";
       } else {
         status.value = "驾驶舱";
       }

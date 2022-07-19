@@ -44,9 +44,6 @@ export default {
         {deep:true}
       )
     })
-    // return{
-    //   route
-    // }
   },
 }
 </script>

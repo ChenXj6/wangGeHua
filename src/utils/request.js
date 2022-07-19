@@ -5,6 +5,7 @@ import { stopRepeatRequest, allowRequest } from './util'
 // 正在进行中的请求列表
 const reqList = []
 import { ElMessage } from 'element-plus';
+import { useStore } from 'vuex';
 
 const service = axios.create({
   baseURL: '',
@@ -29,6 +30,7 @@ service.interceptors.request.use(
       let userToken = JSON.parse(sessionStorage.getItem("user")).token;
       config.headers = {
         'Authorization': userToken,
+        // 'Authorization': 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxOTkwMDAwMDEyNiIsImV4cCI6MTY1Nzg4MTc3MywidXNlciI6InVzZXIiLCJpYXQiOjE2NTc4NjczNzMsImp0aSI6Il5bMC05YS1mXXs4fS1bMC05YS1mXXs0fS1bMC05YS1mXXs0fS1bMC05YS1mXXs0fS1bMC05YS1mXXsxMn0kIn0.RjZpgRnLz-q1STjUhtoa_1Lo5ldZxC4ACSqR0Mr0uYw',
         'Content-Type': 'application/json',
         'withCredentials': true,
         'changeOrigin': true,
@@ -44,7 +46,7 @@ service.interceptors.request.use(
     return config;
   },
   error => {
-    console.log(error);
+    console.log(error)
     return Promise.reject(error);
   }
 );
@@ -65,6 +67,18 @@ service.interceptors.response.use(
     if (Array.isArray(res.data.data)) return res.data
     // res.data = null
     // 请求成功，但是操作不成功时显示后端返回的错误信息
+    if(res.data.code == '401'){
+      ElMessage({
+        message: res.data.message || res.data.mag,
+        type: 'error'
+      })
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem('operatorId')
+      sessionStorage.removeItem('eventName')
+      sessionStorage.removeItem('eventName')
+      sessionStorage.removeItem('menulist')
+      return
+    }
     if (
       res.data.resCode &&
       res.data.resCode !== '000000' &&
@@ -73,8 +87,8 @@ service.interceptors.response.use(
       if ( res.data.code !== 1 ) {
         const msg =
           res.data.message || res.data.ElMessage || '获取数据失败，请稍后重试'
-          ElMessage({
-            message: msg,
+        ElMessage({
+          message: msg,
           type: 'error'
         })
       }
@@ -82,20 +96,21 @@ service.interceptors.response.use(
     return res.data
   },
   err => {
-    console.log(err)
     if (err && err.response) {
+      console.log(err.response,';;;;')
       // 重复请求关闭后重复正常
-      if (err.response.config.isDebounce) {
+      
+      if (!!err.response.config.isDebounce) {
         setTimeout(() => {
           allowRequest(reqList, err.response.config)
         }, 500)
       }
-      if (err.Message.includes('timeout')) {
-        console.log('11')
-        // 判断请求异常信息中是否含有超时timeout字符串
-        err.Message = '网络超时!'
-        return Promise.reject(err)
-      }
+      // console.log(err.Message.includes('timeout'),'11')
+      // if (err.Message.includes('timeout')) {
+      //   // 判断请求异常信息中是否含有超时timeout字符串
+      //   err.Message = '网络超时!'
+      //   return Promise.reject(err)
+      // }
       switch (err.response.status) {
         case 400:
           err.Message = '请求错误(400)'
@@ -133,6 +148,13 @@ service.interceptors.response.use(
         default:
           err.Message = `连接出错(${err.response.status})!`
       }
+      console.log(err.Message,'LLLL')
+      ElMessage({
+        message: err.Message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      return Promise.reject(err)
     } else if (axios.isCancel(err)) {
       ElMessage.closeAll()
       ElMessage({
@@ -143,13 +165,13 @@ service.interceptors.response.use(
       return Promise.reject(err)
     } else {
       err.Message = '连接服务器失败!'
-    }
-    ElMessage({
-      message: err.Message,
-      type: 'error',
-      duration: 5 * 1000
-    })
-    return Promise.reject(err)
+      ElMessage({
+        message: err.Message,
+        type: 'error',
+        duration: 5 * 1000
+      })
+      return Promise.reject(err)
+    }    
   }
 );
 

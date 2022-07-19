@@ -99,6 +99,7 @@ export default {
             let result = await getMenuTree(res.data.user.id)
             // console.log(result)
             if(!!result){
+              store.dispatch('login',true)
               store.dispatch('socketInit')
               router.push('/')
             }else{

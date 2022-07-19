@@ -50,6 +50,7 @@ import { renderTable } from './common/EditOrder'
 import { saveHotlineManage, editHotlineManage } from '@/api/SocialGovernance/HotlineManage'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
+import { listAssign } from '@/utils/util'
 
 export default {
   name: 'EditHotlineManage',
@@ -60,13 +61,7 @@ export default {
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
     const { InfoFormConfig } = renderTable.call(proxy)
-    let dataForm = reactive({
-      officeCode: '',
-      officeName: '',
-
-    })
-
-
+    let dataForm = ref({})
     let popupTreeData = ref([])
     const popupTreeProps = {
       label: "officeName",
@@ -134,8 +129,7 @@ export default {
         { type: 'primary', label: '返回', key: 'back', icon: 'el-icon-lx-back', handle: handleBack },
       ]
     }
-
-
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
     onBeforeMount(() => {
       getOList()
     })

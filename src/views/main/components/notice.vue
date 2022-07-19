@@ -71,10 +71,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .noticeBox {
-  position: relative;
-  top: 5px;
+  position: absolute;
+  bottom: 5px;
   border-radius: 5px;
-  left: 5px;
+  right: 5px;
   width: 250px;
   height: auto;
   background: #242f42;

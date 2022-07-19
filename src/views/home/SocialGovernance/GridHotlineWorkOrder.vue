@@ -1,6 +1,6 @@
 <template>
 <div>
-      <VForm
+    <VForm
       :form-data="formConfig"
       :form-model="searchForm"
       :form-handle="formHandle"
@@ -51,13 +51,20 @@ export default {
     setup() {
       const { proxy } = getCurrentInstance()
       const router = useRouter()
+      const table = ref(null)
       const { tableConfig,formConfig } = renderTable.call(proxy)
       const searchForm = reactive({
         hotlineWorkOrderName:''
       })
-      const handleAdd = () => {
-        handleOperation(3,{})
-      }
+      const handleReset = (formEL) => {
+      formEL.resetFields()
+      searchParams.value = {}
+      defaultObject(searchForm)
+      handleQuery()
+    }
+    const handleAdd = () => {
+      handleOperation(3,{})
+    }
       const formHandle = {
         btns: [
           {type:'primary',label:'查询',key:'search'},
@@ -67,44 +74,38 @@ export default {
       }
       let searchParams = ref({}) // 表单数据备份
 
-    //    const handleQuery = () => {
-    //   searchParams.value = deepClone(searchForm)
-    //   table.currentPage = 1
-    //   handleQueryTable()
-    // }
-    // const handleReset = (formEL) => {
-    //   formEL.resetFields()
-    //   searchParams.value = {}
-    //   defaultObject(searchForm)
-    //   handleQuery()
-    // }
-    // const handleAdd = () => {
-    //   handleOperation(3,{})
-    // }
+    const handleQuery = () => {
+      searchParams.value = deepClone(searchForm)
+      table.currentPage = 1
+      handleQueryTable()
+    }
+    
       // 查看/编辑
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editOrder',
-        params: { data : encodeURIComponent(data), operation: type},
+        path: 'editOrder',
+        query: { data : encodeURIComponent(data), operation: type},
       })
     }
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
-        const data = res.list || []
+        const data = res || []
+        console.log(data,';;;')
         tableConfig.data = data
       })
     }
-    // onMounted(() => {
-    //   handleQuery()
-    // })
+    onMounted(() => {
+      handleQuery()
+    })
 
-        return {
-      
+    return {
+      table,
       formConfig,
       tableConfig,
       searchForm,
       formHandle,
+      handleOperation,
     }
     }
 }

@@ -143,6 +143,7 @@ export default {
               sessionStorage.removeItem('eventName')
               store.dispatch('clearMenu')
               router.push("/login");
+              // store.dispatch('login',false)
             }else{
               $message.error(res.msg)
             }
