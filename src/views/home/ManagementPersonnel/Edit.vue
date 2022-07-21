@@ -4,16 +4,16 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : (route.params.operation == 2 ? '编辑' : '添加') }}
+          {{ route.query.operation == 1 ? '查看' : (route.query.operation == 2 ? '编辑' : '添加') }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px">
       <hr />
     </div>
-    <VForm v-if="route.params.type == 'Drug'" :form-data="DrugFormConfig"
-      :isDisabled="route.params.operation == 1" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'Drug'" :form-data="DrugFormConfig"
+      :isDisabled="route.query.operation == 1" :form-model="dataForm"
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
         <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
@@ -50,9 +50,9 @@
         </el-select>
       </template>
     </VForm>
-    <VForm v-if="route.params.type == 'Release'" :form-data="ReleaseFormConfig"
-      :isDisabled="route.params.operation == 1" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'Release'" :form-data="ReleaseFormConfig"
+      :isDisabled="route.query.operation == 1" :form-model="dataForm"
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
         <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
@@ -89,9 +89,9 @@
         </el-select>
       </template>
     </VForm>
-    <VForm v-if="route.params.type == 'Rrectify'" :form-data="RrectifyFormConfig"
-      :isDisabled="route.params.operation == 1" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'Rrectify'" :form-data="RrectifyFormConfig"
+      :isDisabled="route.query.operation == 1" :form-model="dataForm"
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
         <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
@@ -128,9 +128,9 @@
         </el-select>
       </template>
     </VForm>
-    <VForm v-if="route.params.type == 'Petition'" :form-data="PetitionFormConfig"
-      :isDisabled="route.params.operation == 1" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'Petition'" :form-data="PetitionFormConfig"
+      :isDisabled="route.query.operation == 1" :form-model="dataForm"
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
         <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
@@ -167,9 +167,9 @@
         </el-select>
       </template>
     </VForm>
-    <VForm v-if="route.params.type == 'Mentaldisorders'" :form-data="MentaldisordersFormConfig"
-      :isDisabled="route.params.operation == 1" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'Mentaldisorders'" :form-data="MentaldisordersFormConfig"
+      :isDisabled="route.query.operation == 1" :form-model="dataForm"
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
         <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
@@ -206,12 +206,12 @@
         </el-select>
       </template>
     </VForm>
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button type="primary" @click="handleBack"  textAlign="right" size="small" icon="el-icon-lx-back">返回</el-button>
       </div>
     </el-row>
-    <!-- <el-row v-if="route.params.operation == 2">
+    <!-- <el-row v-if="route.query.operation == 2">
       <div class="btn-box">
         <el-button type="primary" @click="Examine" size="small" icon="el-icon-lx-back">审核</el-button>
       </div>
@@ -388,9 +388,9 @@ export default {
     const handleSave = () => {
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
+        if (route.query.operation == 2) {
           // dataForm.value.villageName == null
-          if (route.params.type == 'Drug') {
+          if (route.query.type == 'Drug') {
             delete dataForm.value.buildingNumber
             delete dataForm.value.villageName
             editDrug(dataForm).then(res => {
@@ -401,7 +401,7 @@ export default {
               }
             })
           }
-          if (route.params.type == 'Release') {
+          if (route.query.type == 'Release') {
             editRelease(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -410,7 +410,7 @@ export default {
               }
             })
           }
-          if (route.params.type == 'Rrectify') {
+          if (route.query.type == 'Rrectify') {
             editRectify(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -419,7 +419,7 @@ export default {
               }
             })
           }
-          if (route.params.type == 'Petition') {
+          if (route.query.type == 'Petition') {
             editPetition(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -428,7 +428,7 @@ export default {
               }
             })
           }
-          if (route.params.type == 'Mentaldisorders') {
+          if (route.query.type == 'Mentaldisorders') {
             editMental(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -441,7 +441,7 @@ export default {
           dataForm.value.countyCode = '370105'
           dataForm.value.countyName = '天桥区'
           // dataForm.value.isState = '0'
-          if (route.params.type == 'Drug') {
+          if (route.query.type == 'Drug') {
             saveDrug(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -450,7 +450,7 @@ export default {
               }
             })
           }
-           if (route.params.type == 'Release') {
+           if (route.query.type == 'Release') {
             saveRelease(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -459,7 +459,7 @@ export default {
               }
             })
           }
-           if (route.params.type == 'Rrectify') {
+           if (route.query.type == 'Rrectify') {
             saveRectify(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -468,7 +468,7 @@ export default {
               }
             })
           }
-           if (route.params.type == 'Petition') {
+           if (route.query.type == 'Petition') {
             savePetition(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -477,7 +477,7 @@ export default {
               }
             })
           }
-           if (route.params.type == 'Mentaldisorders') {
+           if (route.query.type == 'Mentaldisorders') {
             saveMental(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -493,7 +493,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res => {
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err => {
             console.log(proxy)
@@ -534,9 +534,9 @@ export default {
     const handleClick = () => {
       mapDialogVisible.value = true
     }
-    if (route.params.operation != 3) {
-      dataForm.value = JSON.parse(decodeURIComponent(route.params.data))
-      if (route.params.type == 'Drug') {
+    if (route.query.operation != 3) {
+      dataForm.value = JSON.parse(decodeURIComponent(route.query.data))
+      if (route.query.type == 'Drug') {
         handleChange(1, dataForm.value.streetCode)
         handleChange(2, dataForm.value.communityCode)
         handleChange(3)
@@ -553,10 +553,10 @@ export default {
     onBeforeMount(() => {
       timer.value = new Date().getTime()
     })
-    route.params.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.params.data)), delete dataForm.treeNames)
+    route.query.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.treeNames)
 
     onMounted(() => {
-      route.params.operation === 3 && (dataForm = {})
+      route.query.operation === 3 && (dataForm = {})
       // handleQueryTable()
     })
     return {

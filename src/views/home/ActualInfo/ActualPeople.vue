@@ -172,8 +172,8 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editactual',
-        params: { data : encodeURIComponent(data), operation: type, type:'people' },
+        path: 'editactual',
+        query: { data : encodeURIComponent(data), operation: type, type:'people' },
       })
     }
     // 

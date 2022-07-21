@@ -4,15 +4,15 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : (route.params.operation == 2 ? '编辑' : '添加') }}
+          {{ route.query.operation == 1 ? '查看' : (route.query.operation == 2 ? '编辑' : '添加') }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px">
       <hr />
     </div>
-    <VForm v-if="route.params.type == 'car'" :key="timer" :isDisabled="route.params.operation == 1"
-      :form-data="CarFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'car'" :key="timer" :isDisabled="route.query.operation == 1"
+      :form-data="CarFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
         <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
           @update:dataForm="handleTreeSelectChange">
@@ -23,8 +23,8 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <VForm v-if="route.params.type == 'Charge'" :key="timer" :isDisabled="route.params.operation == 1"
-      :form-data="ChargeFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'Charge'" :key="timer" :isDisabled="route.query.operation == 1"
+      :form-data="ChargeFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
         <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
           @update:dataForm="handleTreeSelectChange">
@@ -35,8 +35,8 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <VForm v-if="route.params.type == 'Manage'" :key="timer" :isDisabled="route.params.operation == 1"
-      :form-data="ManageFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'Manage'" :key="timer" :isDisabled="route.query.operation == 1"
+      :form-data="ManageFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
         <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
           @update:dataForm="handleTreeSelectChange">
@@ -47,9 +47,9 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <VForm v-if="route.params.type == 'Vehicle'" :key="timer" :isDisabled="route.params.operation == 1"
+    <VForm v-if="route.query.type == 'Vehicle'" :key="timer" :isDisabled="route.query.operation == 1"
       :form-data="VehicleFormConfig" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
         <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
           @update:dataForm="handleTreeSelectChange">
@@ -60,9 +60,9 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <VForm v-if="route.params.type == 'ParkLot'" :key="timer" :isDisabled="route.params.operation == 1"
+    <VForm v-if="route.query.type == 'ParkLot'" :key="timer" :isDisabled="route.query.operation == 1"
       :form-data="ParkLotFormConfig" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
         <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
           @update:dataForm="handleTreeSelectChange">
@@ -73,31 +73,8 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <VForm v-if="route.params.type === 'pubilc'" :isDisabled="route.params.operation == 1" :form-data="PubilcFormConfig"
-      :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
-      <template v-slot:organ>
-        <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
-          @update:dataForm="handleTreeSelectChange">
-          <template v-slot>
-            <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构"
-              style="cursor:pointer;"></el-input>
-          </template>
-        </popup-tree-input>
-      </template>
-      <template v-slot:lonAndLat>
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input>
-          </el-col>
-          <el-col :span="12">
-            <el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input>
-          </el-col>
-        </el-row>
-      </template>
-    </VForm>
-    <VForm v-if="route.params.type == 'rubbish'" :form-data="rubbishFormConfig"
-      :isDisabled="route.params.operation == 1" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type === 'pubilc'" :isDisabled="route.query.operation == 1" :form-data="PubilcFormConfig"
+      :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
         <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
           @update:dataForm="handleTreeSelectChange">
@@ -118,7 +95,30 @@
         </el-row>
       </template>
     </VForm>
-    <el-row v-if="route.params.operation == 1">
+    <VForm v-if="route.query.type == 'rubbish'" :form-data="rubbishFormConfig"
+      :isDisabled="route.query.operation == 1" :form-model="dataForm"
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
+      <template v-slot:organ>
+        <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + dataForm.officeCode"
+          @update:dataForm="handleTreeSelectChange">
+          <template v-slot>
+            <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构"
+              style="cursor:pointer;"></el-input>
+          </template>
+        </popup-tree-input>
+      </template>
+      <template v-slot:lonAndLat>
+        <el-row :gutter="10">
+          <el-col :span="12">
+            <el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input>
+          </el-col>
+          <el-col :span="12">
+            <el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input>
+          </el-col>
+        </el-row>
+      </template>
+    </VForm>
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button type="primary" @click="handleBack" size="small" icon="el-icon-lx-back">返回</el-button>
       </div>
@@ -181,8 +181,8 @@ export default {
     const handleSave = () => {
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
-          if (route.params.type == 'car') {
+        if (route.query.operation == 2) {
+          if (route.query.type == 'car') {
             editCarPark(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -190,7 +190,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          } else if (route.params.type == 'pubilc') {
+          } else if (route.query.type == 'pubilc') {
             editPubilc(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -198,7 +198,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          } if (route.params.type == 'Vehicle') {
+          } if (route.query.type == 'Vehicle') {
             editVehicle(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -207,7 +207,7 @@ export default {
               }
             })
           }
-          if (route.params.type == 'ParkLot') {
+          if (route.query.type == 'ParkLot') {
             editParkLot(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -216,7 +216,7 @@ export default {
               }
             })
           } 
-          if (route.params.type == 'Manage') {
+          if (route.query.type == 'Manage') {
             editManage(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -224,7 +224,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          }  if (route.params.type == 'Charge') {
+          }  if (route.query.type == 'Charge') {
             editCharge(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -242,7 +242,7 @@ export default {
             })
           }
         } else {
-          if (route.params.type == 'car') {
+          if (route.query.type == 'car') {
             saveCarPark(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -250,7 +250,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          } if (route.params.type == 'pubilc') {
+          } if (route.query.type == 'pubilc') {
             savePubilc(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -258,7 +258,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          } if (route.params.type == 'Vehicle') {
+          } if (route.query.type == 'Vehicle') {
             saveVehicle(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -266,7 +266,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          } if (route.params.type == 'ParkLot') {
+          } if (route.query.type == 'ParkLot') {
             saveParkLot(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -274,7 +274,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          }  if (route.params.type == 'Charge') {
+          }  if (route.query.type == 'Charge') {
             saveCharge(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -282,7 +282,7 @@ export default {
                 reject(res.resCode)
               }
             })
-          } if (route.params.type == 'Manage') {
+          } if (route.query.type == 'Manage') {
             saveManage(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -306,7 +306,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res => {
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err => {
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -349,10 +349,10 @@ export default {
     onBeforeMount(() => {
       timer.value = new Date().getTime()
     })
-    route.params.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.params.data)), delete dataForm.treeNames)
+    route.query.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.treeNames)
 
     onMounted(() => {
-      route.params.operation === 3 && (dataForm = {})
+      route.query.operation === 3 && (dataForm = {})
       // handleQueryTable()
     })
     return {

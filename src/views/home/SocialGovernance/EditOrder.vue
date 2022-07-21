@@ -12,10 +12,10 @@
       <hr />
     </div>
     <VForm :key="timer"
-           :isDisabled="route.params.operation == 1"
+           :isDisabled="route.query.operation == 1"
            :form-data="InfoFormConfig"
            :form-model="dataForm"
-           :form-handle="route.params.operation != 1 ? formHandle : {}">
+           :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:status>
         <popup-tree-input :data="popupTreeData"
                           :propa="popupTreeProps"
@@ -98,7 +98,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res => {
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err => {
             proxy.$message.warning(`操作失败，请稍后再试！`)

@@ -143,7 +143,7 @@ export default defineComponent({
       let data = JSON.stringify(rowData)
       router.push({
         name: 'editStaffInfo',
-        params: { data : encodeURIComponent(data), operation: type},
+        query: { data : encodeURIComponent(data), operation: type},
       })
     }
     onMounted(() => {

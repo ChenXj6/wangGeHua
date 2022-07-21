@@ -4,7 +4,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' ) }}
+          {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -14,7 +14,7 @@
         <span><B>基本信息</B></span>
       </el-col>
     </el-row>
-    <VForm :key="timer" :isDisabled="route.params.operation == 1" :form-data="InfoFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm :key="timer" :isDisabled="route.query.operation == 1" :form-data="InfoFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
@@ -28,10 +28,10 @@
         <el-row>
           <el-col :span="24" class="menu-header">
             <span><B>网格力量</B></span>
-            <span><el-button v-if="route.params.operation == 3" type="primary" size="mini" @click="addList">添加行</el-button></span>
+            <span><el-button v-if="route.query.operation == 3" type="primary" size="mini" @click="addList">添加行</el-button></span>
           </el-col>
           <el-col :span="24">
-            <el-form ref="form" :disabled="route.params.operation == 1" :model="dataForm" label-width="80px">
+            <el-form ref="form" :disabled="route.query.operation == 1" :model="dataForm" label-width="80px">
               <el-table
                 :data="dataForm.info"
                 size="mini"
@@ -167,7 +167,7 @@
       </template>
     </VForm>
     
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -297,7 +297,7 @@ export default {
     const handleSave = () => {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
+        if (route.query.operation == 2) {
           dataForm.type = dataForm.info[0].type
           dataForm.name = dataForm.info[0].name
           dataForm.idcard = dataForm.info[0].idcard
@@ -329,7 +329,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res=>{
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err=>{
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -382,9 +382,9 @@ export default {
         }
       })
     }
-    route.params.operation != 3 && (formatReset(JSON.parse(decodeURIComponent(route.params.data)),dataForm),getSOList(dataForm?.officeCode))
+    route.query.operation != 3 && (formatReset(JSON.parse(decodeURIComponent(route.query.data)),dataForm),getSOList(dataForm?.officeCode))
     onMounted(() => {
-      route.params.operation === 3 &&( dataForm = {})
+      route.query.operation === 3 &&( dataForm = {})
     })
     querySearchAsync('1017')
     querySearchAsync('1018')

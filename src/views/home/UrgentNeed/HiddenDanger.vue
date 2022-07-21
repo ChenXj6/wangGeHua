@@ -123,8 +123,8 @@ export default {
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editHiddenDanger',
-        params: { data : encodeURIComponent(data), operation: type,type:'hidden' },
+        path: '/editHiddenDanger',
+        query: { data : encodeURIComponent(data), operation: type,type:'hidden' },
       })
     }
     //

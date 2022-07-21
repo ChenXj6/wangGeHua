@@ -5,9 +5,9 @@
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
           {{
-            route.params.operation == 1
+            route.query.operation == 1
               ? '查看'
-              : route.params.operation == 2
+              : route.query.operation == 2
               ? '编辑'
               : '添加'
           }}
@@ -18,12 +18,12 @@
       <hr />
     </div>
     <VForm
-      v-if="route.params.type == 'hotline'"
+      v-if="route.query.type == 'hotline'"
       :key="timer"
-      :isDisabled="route.params.operation == 1"
+      :isDisabled="route.query.operation == 1"
       :form-data="InfoFormConfig"
       :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}"
+      :form-handle="route.query.operation != 1 ? formHandle : {}"
     >
       <template v-slot:status>
         <popup-tree-input
@@ -44,7 +44,7 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <div v-if="route.params.operation == 1">
+    <div v-if="route.query.operation == 1">
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
@@ -90,7 +90,7 @@
       </el-table>
     </div>
     <el-row :gutter="10"><div style="margin-top:20px"></div></el-row>
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -156,7 +156,7 @@ export default {
     const handleSave = () => {
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
+        if (route.query.operation == 2) {
           editHotlineManage(dataForm.value).then((res) => {
             if (res.resCode === '000000') {
               resolve(res.message)
@@ -183,7 +183,7 @@ export default {
           handleSave()
             .then((res) => {
               proxy.$message.success(
-                `${route.params.operation == 2 ? '编辑' : '添加'}成功`
+                `${route.query.operation == 2 ? '编辑' : '添加'}成功`
               )
               delCurrentTag(route)
             })
@@ -241,8 +241,8 @@ export default {
     }
     getOptionsByCode(1078,isDangerOptions)
     
-    route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)))
-    route.params.operation == 1 && getRecordByEventId()
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
+    route.query.operation == 1 && getRecordByEventId()
     return {
       dataForm,
       route,

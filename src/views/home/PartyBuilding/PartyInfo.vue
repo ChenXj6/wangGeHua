@@ -125,8 +125,8 @@ export default {
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editParty',
-        params: { data : encodeURIComponent(data), operation: type, type:'partyInfo' },
+        path: '/editParty',
+        query: { data : encodeURIComponent(data), operation: type, type:'partyInfo' },
       })
     }
     //

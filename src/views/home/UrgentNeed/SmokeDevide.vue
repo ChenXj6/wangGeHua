@@ -123,8 +123,8 @@ export default {
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editSmoke',
-        params: { data : encodeURIComponent(data), operation: type },
+        path: '/editSmoke',
+        query: { data : encodeURIComponent(data), operation: type },
       })
     }
     //

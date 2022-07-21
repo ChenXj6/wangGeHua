@@ -4,12 +4,12 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' ) }}
+          {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-    <VForm v-if="route.params.type === 'partyInfo'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="partyFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type === 'partyInfo'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="partyFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -38,12 +38,12 @@
                 />
       </template>
     </VForm>
-    <VForm v-else :key="timer" :isDisabled="route.params.operation == 1" :form-data="partyPeopleFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-else :key="timer" :isDisabled="route.query.operation == 1" :form-data="partyPeopleFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:partyOrgId="">
         <el-input v-model="dataForm.infoName" size="mini" :readonly="true" placeholder="点击选择党组织" @click="handleOpenInfo" style="cursor:pointer;"></el-input>
       </template>
     </VForm>
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -116,9 +116,9 @@ export default {
       delete dataForm.value.treeNames
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
+        if (route.query.operation == 2) {
           delete dataForm.value.treeNames
-          if(route.params.type == 'partyInfo'){
+          if(route.query.type == 'partyInfo'){
              updateParty(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -136,7 +136,7 @@ export default {
             })
           }
         } else {
-          if(route.params.type == 'partyInfo'){
+          if(route.query.type == 'partyInfo'){
              addParty(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -160,7 +160,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res=>{
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err=>{
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -271,16 +271,16 @@ export default {
     }
 
     // 初始化数据
-    route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)))
-    // console.log(route.params.type)
-    if(route.params.operation != 3 && route.params.type == 'partyInfo'){
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
+    // console.log(route.query.type)
+    if(route.query.operation != 3 && route.query.type == 'partyInfo'){
       // partyFormConfig.formItems[0].disabled = true
       partyFormConfig.formItems.forEach(v=>{
         if(v.prop == 'number'){
           v.disabled = true
         }
       })
-    }else if (route.params.operation != 3 && route.params.type == 'partyPeople'){
+    }else if (route.query.operation != 3 && route.query.type == 'partyPeople'){
       partyPeopleFormConfig.formItems.forEach(v=>{
         if(v.prop == 'number'){
           v.disabled = true
@@ -288,7 +288,7 @@ export default {
       })
     }
     onMounted(() => {
-      route.params.operation === 3 &&( dataForm.value = {})
+      route.query.operation === 3 &&( dataForm.value = {})
     })
     return {
       dataForm,

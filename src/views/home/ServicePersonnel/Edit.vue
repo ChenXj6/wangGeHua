@@ -4,16 +4,16 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : (route.params.operation == 2 ? '编辑' : '添加') }}
+          {{ route.query.operation == 1 ? '查看' : (route.query.operation == 2 ? '编辑' : '添加') }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px">
       <hr />
     </div>
-    <VForm v-if="route.params.type == 'ServicePersonnel'" :form-data="StaffFormConfig"
-      :isDisabled="route.params.operation == 1" :form-model="dataForm"
-      :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'ServicePersonnel'" :form-data="StaffFormConfig"
+      :isDisabled="route.query.operation == 1" :form-model="dataForm"
+      :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
         <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
@@ -50,12 +50,12 @@
         </el-select>
       </template>
     </VForm>
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button type="primary" @click="handleBack" size="small" icon="el-icon-lx-back">返回</el-button>
       </div>
     </el-row>
-    <el-row v-if="route.params.operation == 2">
+    <el-row v-if="route.query.operation == 2">
       <div class="btn-box">
         <el-button type="primary" @click="examine" size="small" icon="el-icon-lx-back">审核</el-button>
       </div>
@@ -162,7 +162,7 @@ export default {
               dataForm.value.gridCode = ''
               communityNameOptions.value = []
               gridNameOptions.value = []
-                if (route.params.type == 'ServicePersonnel') {
+                if (route.query.type == 'ServicePersonnel') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
@@ -175,7 +175,7 @@ export default {
               dataForm.value.gridName = ''
               dataForm.value.gridCode = ''
               gridNameOptions.value = []
-             if(route.params.type == 'ServicePersonnel') {
+             if(route.query.type == 'ServicePersonnel') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
@@ -185,7 +185,7 @@ export default {
             resetFormat(res.data, gridNameOptions)
           } else if (type == 3) {
             if (trigMode) {
-                if (route.params.type == 'ServicePersonnel') {
+                if (route.query.type == 'ServicePersonnel') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
@@ -238,8 +238,8 @@ export default {
     const handleSave = () => {
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
-          if (route.params.type == 'ServicePersonnel') {
+        if (route.query.operation == 2) {
+          if (route.query.type == 'ServicePersonnel') {
             editStaff(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -251,7 +251,7 @@ export default {
         } else {
           dataForm.value.countyCode = '370105'
           dataForm.value.countyName = '天桥区'
-          if (route.params.type == 'ServicePersonnel') {
+          if (route.query.type == 'ServicePersonnel') {
             saveStaff(dataForm).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
@@ -267,7 +267,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res => {
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err => {
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -304,9 +304,9 @@ export default {
     const handleClick = () => {
       mapDialogVisible.value = true
     }
-    if (route.params.operation != 3) {
-      dataForm.value = JSON.parse(decodeURIComponent(route.params.data))
-      if (route.params.type == 'ServicePersonnel') {
+    if (route.query.operation != 3) {
+      dataForm.value = JSON.parse(decodeURIComponent(route.query.data))
+      if (route.query.type == 'ServicePersonnel') {
         handleChange(1, dataForm.value.streetCode)
         handleChange(2, dataForm.value.communityCode)
         handleChange(3)
@@ -323,10 +323,10 @@ export default {
     onBeforeMount(() => {
       timer.value = new Date().getTime()
     })
-    route.params.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.params.data)), delete dataForm.treeNames)
+    route.query.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.treeNames)
 
     onMounted(() => {
-      route.params.operation === 3 && (dataForm = {})
+      route.query.operation === 3 && (dataForm = {})
       // handleQueryTable()
     })
     return {

@@ -4,12 +4,12 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' ) }}
+          {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-    <VForm v-if="route.params.type === 'build'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="buildFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type === 'build'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="buildFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree="">
           <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
@@ -61,7 +61,7 @@
             </el-upload>
       </template>
     </VForm>
-    <VForm v-else-if="route.params.type === 'house'" :isDisabled="route.params.operation == 1" :form-data="houseFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-else-if="route.query.type === 'house'" :isDisabled="route.query.operation == 1" :form-data="houseFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree="">
           <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
@@ -117,7 +117,7 @@
             </el-upload>
       </template>
     </VForm>
-    <VForm v-else :form-data="peopleFormConfig" :isDisabled="route.params.operation == 1" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-else :form-data="peopleFormConfig" :isDisabled="route.query.operation == 1" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree="">
           <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
@@ -183,19 +183,19 @@
             </el-upload>
       </template>
     </VForm>
-    <div v-if="route.params.operation == 1 && route.params.type !== 'people'">
+    <div v-if="route.query.operation == 1 && route.query.type !== 'people'">
       <div style="margin-bottom: 20px"></div>
       <el-tabs v-model="activeName" class="demo-tabs" type="border-card">
-        <el-tab-pane v-if="route.params.type === 'build'" label="实有房屋" name="first">
+        <el-tab-pane v-if="route.query.type === 'build'" label="实有房屋" name="first">
           <V-table ref="table1" :table-config="houseTableConfig"/>
         </el-tab-pane>
-        <el-tab-pane v-if="route.params.type !== 'people'" label="实有人口" name="second">
-          <V-table ref="table2" v-if="route.params.type == 'build'" :table-config="peopleTableConfig"/>
-          <V-table ref="table3" v-if="route.params.type == 'house'" :table-config="peopleByHouseTableConfig"/>
+        <el-tab-pane v-if="route.query.type !== 'people'" label="实有人口" name="second">
+          <V-table ref="table2" v-if="route.query.type == 'build'" :table-config="peopleTableConfig"/>
+          <V-table ref="table3" v-if="route.query.type == 'house'" :table-config="peopleByHouseTableConfig"/>
         </el-tab-pane>
       </el-tabs>
     </div>
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -386,10 +386,10 @@ export default {
               dataForm.value.gridCode = ''
               communityNameOptions.value = []
               gridNameOptions.value = []
-              if(route.params.type == 'house'){
+              if(route.query.type == 'house'){
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
-              }else if(route.params.type == 'people') {
+              }else if(route.query.type == 'people') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
@@ -402,10 +402,10 @@ export default {
               dataForm.value.gridName = ''
               dataForm.value.gridCode = ''
               gridNameOptions.value = [] 
-              if(route.params.type == 'house'){
+              if(route.query.type == 'house'){
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
-              } else if(route.params.type == 'people') {
+              } else if(route.query.type == 'people') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
@@ -415,10 +415,10 @@ export default {
             resetFormat(res.data,gridNameOptions)
           } else if(type == 3) {
             if (trigMode){
-              if(route.params.type == 'house'){
+              if(route.query.type == 'house'){
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
-              }else if(route.params.type == 'people') {
+              }else if(route.query.type == 'people') {
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
                 dataForm.value.house = ''
@@ -463,8 +463,8 @@ export default {
     const handleSave = () => {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
-          if(route.params.type == 'build'){
+        if (route.query.operation == 2) {
+          if(route.query.type == 'build'){
             editBuild(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
@@ -472,7 +472,7 @@ export default {
               reject(res.resCode)
             }
           })
-          } else if (route.params.type == 'house') {
+          } else if (route.query.type == 'house') {
             delete dataForm.value.buildingNumber
             delete dataForm.value.villageName
             delete dataForm.value.unitNumber
@@ -499,7 +499,7 @@ export default {
         } else {
           dataForm.value.countyCode = '370105'
           dataForm.value.countyName = '天桥区'
-          if(route.params.type == 'build'){
+          if(route.query.type == 'build'){
             saveBuild(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
@@ -507,7 +507,7 @@ export default {
               reject(res.resCode)
             }
           })
-          } else if (route.params.type == 'house') {
+          } else if (route.query.type == 'house') {
             saveHouse(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
               resolve(res.message)
@@ -531,7 +531,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res=>{
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err=>{
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -589,15 +589,15 @@ export default {
     onBeforeMount(()=>{
       timer.value = new Date().getTime()
     })
-    if(route.params.operation != 3){
-      dataForm.value = JSON.parse(decodeURIComponent(route.params.data))
-      if(route.params.type == 'people'){
+    if(route.query.operation != 3){
+      dataForm.value = JSON.parse(decodeURIComponent(route.query.data))
+      if(route.query.type == 'people'){
         handleChange(1,dataForm.value.streetCode)
         handleChange(2,dataForm.value.communityCode)
         handleChange(3)
         handleGetBuild(1,dataForm.value.gridCode)
         handleGetHouse(1,dataForm.value.buildingId)
-      } else if (route.params.type == 'house') {
+      } else if (route.query.type == 'house') {
         handleChange(1,dataForm.value.streetCode)
         handleChange(2,dataForm.value.communityCode)
         handleChange(3)
@@ -608,17 +608,17 @@ export default {
         handleChange(3)
       }
     }
-    route.params.type == 'house' && (activeName.value = 'second')
+    route.query.type == 'house' && (activeName.value = 'second')
     // console.log(dataForm.value)
     onMounted(() => {
-      route.params.operation === 3 &&( dataForm.value = {})
-      if(route.params.operation == 1 && route.params.type == 'build'){
+      route.query.operation === 3 &&( dataForm.value = {})
+      if(route.query.operation == 1 && route.query.type == 'build'){
         handleQueryTable(1)
         handleQueryTable(2)
-      } else if(route.params.operation == 1 && route.params.type == 'house'){
+      } else if(route.query.operation == 1 && route.query.type == 'house'){
         handleQueryTable(3)
       }
-      if(route.params.operation == 1 || route.params.operation == 2){
+      if(route.query.operation == 1 || route.query.operation == 2){
         resetFileList()
       }
     })

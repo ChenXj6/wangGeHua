@@ -126,8 +126,8 @@ export default {
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editProvide',
-        params: { data : encodeURIComponent(data), operation: type },
+        path: '/editProvide',
+        query: { data : encodeURIComponent(data), operation: type },
       })
     }
     //

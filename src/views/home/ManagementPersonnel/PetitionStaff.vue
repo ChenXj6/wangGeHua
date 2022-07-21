@@ -120,8 +120,8 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'eidtManagementPersonnel',
-        params: { data: encodeURIComponent(data), operation: type, type: 'Petition' },
+        path: '/eidtManagementPersonnel',
+        query: { data: encodeURIComponent(data), operation: type, type: 'Petition' },
       })
     }
     const getOList = () => {

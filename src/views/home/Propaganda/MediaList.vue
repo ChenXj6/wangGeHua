@@ -135,8 +135,8 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editDraft',
-        params: { data : encodeURIComponent(data), operation: type,type:'media'},
+        path: '/editDraft',
+        query: { data : encodeURIComponent(data), operation: type,type:'media'},
       })
     }
     const getOList = () => {

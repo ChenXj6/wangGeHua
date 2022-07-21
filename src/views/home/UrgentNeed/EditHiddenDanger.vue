@@ -4,12 +4,12 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' ) }}
+          {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-    <VForm v-if="route.params.type == 'hidden'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="hiddenFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type == 'hidden'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="hiddenFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -38,7 +38,7 @@
                 />
       </template>
     </VForm>
-    <VForm v-else-if="route.params.type == 'task'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="taskFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-else-if="route.query.type == 'task'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="taskFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -52,7 +52,7 @@
         <el-input v-model="dataForm.investigePer" placeholder="点击获取人员" size="mini" @click="handleChangeLaunch"></el-input>
       </template>
     </VForm>
-    <VForm v-else-if="route.params.type == 'content'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="contentFormConfig" :form-model="dataForm">
+    <VForm v-else-if="route.query.type == 'content'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="contentFormConfig" :form-model="dataForm">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -111,7 +111,7 @@
         
       </el-table>
     </div>
-    <el-row v-if="route.params.operation == 1 && route.params.type != 'content'">
+    <el-row v-if="route.query.operation == 1 && route.query.type != 'content'">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -122,10 +122,10 @@
         >
       </div>
     </el-row>
-    <el-row v-else-if="route.params.type == 'content'">
+    <el-row v-else-if="route.query.type == 'content'">
       <div class="btn-box">
         <el-button
-          v-if="route.params.operation != 1"
+          v-if="route.query.operation != 1"
           type="primary"
           size="small"
           @click="handleClickRecord"
@@ -206,9 +206,9 @@ export default {
       delete dataForm.value.officeCode
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
+        if (route.query.operation == 2) {
           delete dataForm.value.treeNames
-          if(route.params.type == 'hidden'){
+          if(route.query.type == 'hidden'){
             updateHiddenDanger(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -216,7 +216,7 @@ export default {
               reject(res.resCode)
             }
             })
-          }else if(route.params.type == 'task'){
+          }else if(route.query.type == 'task'){
             updateHiddenDangerTask(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -226,7 +226,7 @@ export default {
             })
           }        
         } else {
-          if(route.params.type == 'hidden'){
+          if(route.query.type == 'hidden'){
             saveHiddenDanger(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -234,7 +234,7 @@ export default {
               reject(res.resCode)
             }
             })
-          }else if(route.params.type == 'task'){
+          }else if(route.query.type == 'task'){
             saveHiddenDangerTask(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -250,7 +250,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res=>{
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err=>{
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -437,11 +437,11 @@ export default {
     }
 
     // 初始化数据
-    route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)))
-    route.params.type == 'content' && (getRecordByEventId())
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
+    route.query.type == 'content' && (getRecordByEventId())
     // console.log(dataForm.value)
     onBeforeMount(()=>{
-      if(route.params.type == 'content' && route.params.operation != 1){
+      if(route.query.type == 'content' && route.query.operation != 1){
         let arr = ['upload','remarks','isDanger']
         contentFormConfig.formItems.forEach((v)=>{
           arr.forEach(val=>{
@@ -455,7 +455,7 @@ export default {
         getOptionsByCode(1006,isDangerOptions)
         resetFileList()
       }
-      if(route.params.type == 'content' && route.params.care == ''){
+      if(route.query.type == 'content' && route.query.care == ''){
         contentFormConfig.formItems.forEach((v)=>{
           if(v.prop == 'processeTime'){
             v.isHide && (v.isHide = '')
@@ -463,7 +463,7 @@ export default {
         })
         dataForm.value.processeTime = proxy.$moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
       }
-      if(route.params.type == 'content' && route.params.care == 'rectification'){
+      if(route.query.type == 'content' && route.query.care == 'rectification'){
         contentFormConfig.formItems.forEach((v)=>{
           if(v.prop == 'rectificationTime'){
             v.isHide && (v.isHide = '')
@@ -471,7 +471,7 @@ export default {
         })
         dataForm.value.rectificationTime = proxy.$moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
       }
-      if(route.params.type == 'content' && route.params.care == 'review'){
+      if(route.query.type == 'content' && route.query.care == 'review'){
         contentFormConfig.formItems.forEach((v)=>{
           if(v.prop == 'reviewTime'){
             v.isHide && (v.isHide = '')
@@ -481,7 +481,7 @@ export default {
       }
     })
     onMounted(() => {
-      route.params.operation === 3 &&( dataForm.value = {})
+      route.query.operation === 3 &&( dataForm.value = {})
     })
     return {
       dataForm,

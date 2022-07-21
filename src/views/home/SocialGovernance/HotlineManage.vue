@@ -334,8 +334,8 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editHotlineManage',
-        params: {
+        path: '/editHotlineManage',
+        query: {
           data: encodeURIComponent(data),
           operation: type,
           type: 'hotline',

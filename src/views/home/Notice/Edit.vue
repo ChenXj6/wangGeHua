@@ -4,12 +4,12 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' ) }}
+          {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-    <VForm :key="timer" :isDisabled="route.params.operation == 1" :form-data="noticeFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm :key="timer" :isDisabled="route.query.operation == 1" :form-data="noticeFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -36,7 +36,7 @@
         </div>
       </template>
     </VForm>
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -74,7 +74,7 @@ export default {
       delete dataForm.value.treeNames
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
+        if (route.query.operation == 2) {
           updateNotice(dataForm.value).then(res=>{
             if(res.resCode === '000000'){
             resolve(res.message)
@@ -97,7 +97,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res=>{
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err=>{
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -205,10 +205,10 @@ export default {
       }
     }
     // 初始化数据
-    route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)))
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
     onMounted(() => {
       resetFileList()
-      route.params.operation === 3 &&( dataForm.value = {})
+      route.query.operation === 3 &&( dataForm.value = {})
     })
     return {
       dataForm,

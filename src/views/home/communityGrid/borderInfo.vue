@@ -136,8 +136,8 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editBorderInfo',
-        params: { data : encodeURIComponent(data), operation: type},
+        path: '/editBorderInfo',
+        query: { data : encodeURIComponent(data), operation: type},
       })
     }
     onMounted(() => {

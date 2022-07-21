@@ -86,7 +86,7 @@ export default {
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        path: 'editOrder',
+        path: '/editOrder',
         query: { data : encodeURIComponent(data), operation: type},
       })
     }

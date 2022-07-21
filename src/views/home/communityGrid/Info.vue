@@ -181,8 +181,8 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editInfo',
-        params: { data : encodeURIComponent(data), operation: type},
+        path: '/editInfo',
+        query: { data : encodeURIComponent(data), operation: type},
       })
     }
     const addInfo = (type,rowData) => {
@@ -190,13 +190,13 @@ export default defineComponent({
       // type： 4 边界信息、5 人员力量
       if(type == 4) {
         router.push({
-          name: 'editBorderInfo',
-          params: { data : encodeURIComponent(data), operation: 3},
+          path: '/editBorderInfo',
+          query: { data : encodeURIComponent(data), operation: 3},
         })
       } else {
         router.push({
-          name: 'editStaffInfo',
-          params: { data : encodeURIComponent(data), operation: 3},
+          path: '/editStaffInfo',
+          query: { data : encodeURIComponent(data), operation: 3},
         })
       }
     }

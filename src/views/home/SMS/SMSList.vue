@@ -74,8 +74,8 @@ export default {
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editSMS',
-        params: { data : encodeURIComponent(data), operation: type,type:'list'},
+        path: '/editSMS',
+        query: { data : encodeURIComponent(data), operation: type,type:'list'},
       })
     }
     const formHandle = {

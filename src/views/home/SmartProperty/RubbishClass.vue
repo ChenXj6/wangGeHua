@@ -144,8 +144,8 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editsmart',
-        params: { data : encodeURIComponent(data), operation: type, type:'rubbish' },
+        path: '/editsmart',
+        query: { data : encodeURIComponent(data), operation: type, type:'rubbish' },
       })
     }
     const getOList = () => {

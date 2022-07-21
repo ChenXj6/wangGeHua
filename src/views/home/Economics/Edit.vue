@@ -4,12 +4,12 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' ) }}
+          {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-    <VForm v-if="route.params.type === 'tax'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="taxFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type === 'tax'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="taxFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -20,7 +20,7 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <VForm v-if="route.params.type === 'item'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="itemFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-else-if="route.query.type === 'item'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="itemFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -37,7 +37,7 @@
         </el-row>
       </template>
     </VForm>
-    <VForm v-if="route.params.type === 'building'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="buildingFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-else-if="route.query.type === 'building'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="buildingFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -66,7 +66,7 @@
                 />
       </template>
     </VForm>
-    <VForm v-else :key="timer" :isDisabled="route.params.operation == 1" :form-data="industryFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-else :key="timer" :isDisabled="route.query.operation == 1" :form-data="industryFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -77,7 +77,7 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -123,8 +123,8 @@ export default {
       delete dataForm.value.treeNames
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
-          if(route.params.type == 'tax'){
+        if (route.query.operation == 2) {
+          if(route.query.type == 'tax'){
             updateTax(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -133,7 +133,7 @@ export default {
             }
             })
           }
-          if(route.params.type == 'item'){
+          if(route.query.type == 'item'){
             updateItem(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -142,7 +142,7 @@ export default {
             }
             })
           }
-          if(route.params.type == 'building'){
+          if(route.query.type == 'building'){
             updateBuilding(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -151,7 +151,7 @@ export default {
             }
             })
           }
-          if(route.params.type == 'industry'){
+          if(route.query.type == 'industry'){
             updateIndustry(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -161,7 +161,7 @@ export default {
             })
           }
         } else {
-          if(route.params.type == 'tax'){
+          if(route.query.type == 'tax'){
             addTax(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -170,7 +170,7 @@ export default {
             }
             })
           }
-          if(route.params.type == 'item'){
+          if(route.query.type == 'item'){
             addItem(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -179,7 +179,7 @@ export default {
             }
             })
           }
-          if(route.params.type == 'building'){
+          if(route.query.type == 'building'){
             addBuilding(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -188,7 +188,7 @@ export default {
             }
             })
           }
-          if(route.params.type == 'industry'){
+          if(route.query.type == 'industry'){
             addIndustry(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -204,7 +204,7 @@ export default {
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res=>{
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err=>{
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -255,10 +255,10 @@ export default {
       mapDialogVisible.value = false
     }
     // 初始化数据
-    route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)))
-    console.log(route.params.type)
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
+    console.log(route.query.type)
     onMounted(() => {
-      route.params.operation === 3 &&( dataForm.value = {})
+      route.query.operation === 3 &&( dataForm.value = {})
     })
     return {
       dataForm,

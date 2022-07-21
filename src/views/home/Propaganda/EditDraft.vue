@@ -4,12 +4,12 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' ) }}
+          {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div style="margin-bottom: 20px"><hr /></div>
-    <VForm v-if="route.params.type === 'draft'" :key="timer" :isDisabled="route.params.operation == 1" :form-data="InfoFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-if="route.query.type === 'draft'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="InfoFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
@@ -37,7 +37,7 @@
         <div class="mgb20" ref='editor'></div>
       </template>
     </VForm>
-    <VForm v-else :key="timer" :isDisabled="route.params.operation == 1" :form-data="MediaFormConfig" :form-model="dataForm" :form-handle="route.params.operation != 1 ? formHandle : {}">
+    <VForm v-else :key="timer" :isDisabled="route.query.operation == 1" :form-data="MediaFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
@@ -75,7 +75,7 @@
             </el-upload>
       </template>
     </VForm>
-    <el-row v-if="route.params.operation == 1">
+    <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -145,8 +145,8 @@ export default {
         // true: 编辑；false:添加
         delete dataForm.value.treeNames
         dataForm.value.releaseUser = JSON.parse(sessionStorage.getItem('user')).user.operatorName
-        if (route.params.operation == 2) {
-          if(route.params.type === 'draft'){
+        if (route.query.operation == 2) {
+          if(route.query.type === 'draft'){
             updateDraft(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
                 resolve(res.message)
@@ -166,7 +166,7 @@ export default {
           }
             
         } else {
-          if(route.params.type === 'draft'){
+          if(route.query.type === 'draft'){
             saveDraft(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
                 resolve(res.message)
@@ -188,13 +188,13 @@ export default {
       })
     }
     const handleSubmit = (formRef) => {
-      if(route.params.type == 'draft'){
+      if(route.query.type == 'draft'){
         dataForm.value.content = instance.txt.html()
       }
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res=>{
-            proxy.$message.success(`${route.params.operation == 2 ? '编辑' : '添加'}成功`)
+            proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err=>{
             proxy.$message.warning(`操作失败，请稍后再试！`)
@@ -296,20 +296,20 @@ export default {
     onBeforeMount(()=>{
       timer.value = new Date().getTime()
     })
-    route.params.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.params.data)),resetFileList())
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)),resetFileList())
     onMounted(() => {
-      if(route.params.type === 'draft'){
+      if(route.query.type === 'draft'){
         instance = new WangEditor(editor.value);
         instance.config.zIndex = 1;
         instance.create();
-        route.params.operation == 1 && (instance.txt.html(dataForm.value.content),instance.disable(),resetFileList())
-        route.params.operation == 2 && (instance.txt.html(dataForm.value.content),instance.enable(),resetFileList())
-        route.params.operation === 3 &&( dataForm.value = {})
+        route.query.operation == 1 && (instance.txt.html(dataForm.value.content),instance.disable(),resetFileList())
+        route.query.operation == 2 && (instance.txt.html(dataForm.value.content),instance.enable(),resetFileList())
+        route.query.operation === 3 &&( dataForm.value = {})
       }
       //
     })
     onBeforeUnmount(() => {
-      if(route.params.type === 'draft'){
+      if(route.query.type === 'draft'){
         instance.destroy();
         instance = null;
       }

@@ -177,8 +177,8 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'editactual',
-        params: { data : encodeURIComponent(data), operation: type, type:'house' },
+        path: 'editactual',
+        query: { data : encodeURIComponent(data), operation: type, type:'house' },
       })
     }
     const handleTreeSelectChange = ({officeCode,officeName}) => {
