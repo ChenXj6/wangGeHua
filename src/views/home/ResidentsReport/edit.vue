@@ -252,7 +252,7 @@ export default {
       mainPeopleCertificateNum:'',
       mainPeopleAddress:'',
       eventFirstType:'',
-      createBy:JSON.parse(sessionStorage.getItem('user')).operatorId,
+      createBy:JSON.parse(sessionStorage.getItem('user')).user.operatorId,
       filePath:'',
       fileName:'',
     })
@@ -527,12 +527,12 @@ export default {
         idStr = idStr + v.operatorId + ','
       })
       dataForm.value.launchRemark = str.substr(0,str.length-1)
-      dataForm.value.launchBy = idStr.substr(0,idStr.length-1)
+      dataForm.value.dealBy = idStr.substr(0,idStr.length-1)
     }
     const handleRecord = async (formRef) => {
       dataForm.value.id = formData.value.id
       dataForm.value.eventId = formData.value.id
-      dataForm.value.createBy = JSON.parse(sessionStorage.getItem('user')).operatorId,
+      dataForm.value.createBy = JSON.parse(sessionStorage.getItem('user')).user.operatorId,
       await formRef.validate((vaild) => {
         if(vaild){
           eventProcessing(dataForm.value).then(res=>{

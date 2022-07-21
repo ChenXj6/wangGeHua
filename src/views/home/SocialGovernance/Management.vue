@@ -10,13 +10,34 @@
             </template>
         </popup-tree-input>
       </template>
+       <template v-slot:orderType>
+        <popup-tree-input
+          :data="orderTreeData"
+          :propa="orderTreeProps"
+          :nodeKey="'' + searchForm.orderType"
+          @update:dataForm="handleOrderTreeSelectChange"
+        >
+          <template v-slot>
+            <el-input
+              v-model="searchForm.orderName"
+              size="mini"
+              :readonly="true"
+              placeholder="点击选择工单类别"
+              style="cursor: pointer"
+            ></el-input>
+          </template>
+        </popup-tree-input>
+      </template>
     </VForm>
     <V-table
       ref="table"
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
-    
+       <template v-slot:orderNo="{ data }">
+        <!-- @click.prevent="handleOperation(2, data)" -->
+        <el-link type="success">{{ data.orderNo }}</el-link>
+      </template>
       <template v-slot:operation="{data}">
         <el-button
           size="small"
@@ -51,6 +72,7 @@ import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/management'
 import { deepClone, defaultObject } from '@/utils/util'
+import { getTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
 export default defineComponent({
     name: 'Management',
     components:[PopupTreeInput],
@@ -62,12 +84,19 @@ export default defineComponent({
     const searchForm = reactive({
       officeName:'',
       officeCode:'',
+      orderType:'',
+      orderName:'',
     })
     let popupTreeData = ref([])
+    let orderTreeData = ref([])
     const popupTreeProps = {
       label: "officeName",
       children: "children"
     } 
+    const orderTreeProps = {
+      label: 'hotlineWorkOrderName',
+      children: 'children',
+    }
     // 表单数据
     let searchParams = ref({}) // 表单数据备份
     const handleTreeSelectChange = ({officeCode,officeName}) => {
@@ -122,14 +151,26 @@ export default defineComponent({
       })
     }
 
-      const getOList = () => {
+    const getOList = () => {
       getOrganList({}).then(res=>{
         if(res.resCode == '000000'){
           popupTreeData.value = res.data
         }
       })
     }
+    const getOrderList = () => {
+      getTree({}).then((res) => {
+        if (res.resCode == '000000') {
+          orderTreeData.value = res.data
+        }
+      })
+    }
+    const handleOrderTreeSelectChange = ({hotlineWorkOrderName,id}) => {
+      searchForm.orderType = id
+      searchForm.orderName = hotlineWorkOrderName
+    }
     getOList()
+    getOrderList()
     onMounted(() => {
       handleQuery()
     })
@@ -147,6 +188,9 @@ export default defineComponent({
       handleTreeSelectChange,
       popupTreeProps,
       popupTreeData,
+      orderTreeProps,
+      orderTreeData,
+      handleOrderTreeSelectChange,
     }
 
 

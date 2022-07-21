@@ -181,9 +181,10 @@ export default defineComponent({
             } else {
               
               const data = res.data
+              // console.log(data,';;;')
               if (tableConfig.pagination) {
                 currentPage.value = Number(data.pageNum)
-                total.value = Number(data.total)
+                total.value = data.hasOwnProperty('total') ? Number(data.total) : data.length
               }
               selectedRow.value = []
               callbackFunc.value = callback

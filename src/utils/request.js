@@ -97,7 +97,7 @@ service.interceptors.response.use(
   },
   err => {
     if (err && err.response) {
-      console.log(err.response,';;;;')
+      // console.log(err.response,';;;;')
       // 重复请求关闭后重复正常
       
       if (!!err.response.config.isDebounce) {
@@ -105,12 +105,11 @@ service.interceptors.response.use(
           allowRequest(reqList, err.response.config)
         }, 500)
       }
-      // console.log(err.Message.includes('timeout'),'11')
-      // if (err.Message.includes('timeout')) {
-      //   // 判断请求异常信息中是否含有超时timeout字符串
-      //   err.Message = '网络超时!'
-      //   return Promise.reject(err)
-      // }
+      if (err.code === 'ECONNABORTED' || err.message ===   "Network Error" ||  err.message.includes("timeout")) {
+        // 判断请求异常信息中是否含有超时timeout字符串
+        err.Message = '网络超时!'
+        return Promise.reject(err)
+      }
       switch (err.response.status) {
         case 400:
           err.Message = '请求错误(400)'
@@ -148,7 +147,7 @@ service.interceptors.response.use(
         default:
           err.Message = `连接出错(${err.response.status})!`
       }
-      console.log(err.Message,'LLLL')
+      // console.log(err.Message,'LLLL')
       ElMessage({
         message: err.Message,
         type: 'error',

@@ -1,44 +1,36 @@
 <template>
   <div style="position: relative">
-    <div
-      class="vMap"
-      :style="{ height: !fullHeight ? '100vh' : fullHeight + 'px' }"
-      id="dituContent"
-    ></div>
+    <div class="vMap"
+         :style="{ height: !fullHeight ? '100vh' : fullHeight + 'px' }"
+         id="dituContent"></div>
     <div class="sidebar">
-      <div
-        class="sidebar-item"
-        v-for="item in mapDialogData?.data"
-        :key="item.id"
-      >
-        <el-dropdown placement="left-start" trigger="click">
-          <el-button
-            type="goon"
-            size="mini"
-            round
-            style="width: 88px"
-            v-if="item?.children?.length"
-          >
+      <div class="sidebar-item"
+           v-for="item in mapDialogData?.data"
+           :key="item.id">
+        <el-dropdown placement="left-start"
+                     trigger="hover">
+          <el-button type="goon"
+                     size="mini"
+                     round
+                     style="width: 88px"
+                     v-if="item?.children?.length">
             {{ item?.title }}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
-          <el-button
-            type="goon"
-            size="mini"
-            round
-            style="width: 88px"
-            @click="handleClick(item)"
-            v-else
-          >
+          <el-button type="goon"
+                     size="mini"
+                     round
+                     style="width: 88px"
+                     @click="handleClick(item)"
+                     v-else>
             {{ item?.title }}
           </el-button>
-          <template #dropdown v-if="item?.children?.length">
+          <template #dropdown
+                    v-if="item?.children?.length">
             <el-dropdown-menu>
-              <el-dropdown-item
-                v-for="item in item.children"
-                :key="item"
-                @click="handleClick(item)"
-                >{{ item.title }}
+              <el-dropdown-item v-for="item in item.children"
+                                :key="item"
+                                @click="handleClick(item)">{{ item.title }}
               </el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -46,63 +38,114 @@
       </div>
     </div>
     <!-- store.state.mapDialog.visible -->
-    <div v-if="isOpen" class="headerDialogBox">
+    <div v-if="isOpen"
+         class="headerDialogBox">
       <div class="headerDialog">
         <div>
-          <h1 style="text-align: center">{{show}}</h1>
-          <el-row>
-            <!-- <span style="display:inline-block;width:200px;height:200px"> aaaa </span>
-          <span style="color: #fff" v-for="(item,index) in searchParams.list" :key="index">
-            {{ item.synopsis }}
-          </span> -->
-            <el-carousel :interval="5000" arrow="never" style="width: 1000px;margin-top:30px">
-              <el-carousel-item
-                :span="18"
-                v-for="(item, index) in searchParams.list"
-                :key="index"
-              >
-                <el-col :span="6" class="vanguard">
-                  <img src="https://img2.baidu.com/it/u=42904497,637130856&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=641"/>
-                </el-col>
-                <p>姓名：{{ item.memberName }}</p>
-                <p>
-                  性别：{{sexOptions.filter((v) => v.value == item.gender)[0]?.label}}
-                </p>
-                <p>归属党组织：{{item.infoName}}</p>
-                <p>电话：{{item.phone}}</p>
-                <span>简介：{{ item.memberSynopsis }}</span>
-              </el-carousel-item>
-            </el-carousel>
+          <el-row class="showBox">
+            <template v-if="isOpenType == 'partyVan'">
+              <h1 style="text-align: center">{{show}}</h1>
+              <el-carousel :interval="5000"
+                           arrow="never"
+                           v-if="searchParams.list"
+                           indicator-position="outside"
+                           style="width: 1000px;margin-top:30px">
+                <el-carousel-item :span="18"
+                                  v-for="(item, index) in searchParams.list"
+                                  :key="index">
+                  <el-col :span="6"
+                          class="vanguard">
+                    <img src="https://img0.baidu.com/it/u=640038218,836613496&fm=253&fmt=auto&app=138&f=JPEG?w=460&h=620" />
+                  </el-col>
+                  <p>姓名：{{ item.memberName }}</p>
+                  <p>
+                    性别：{{sexOptions.filter((v) => v.value == item.gender)[0]?.label}}
+                  </p>
+                  <p>归属党组织：{{item.infoName}}</p>
+                  <p>电话：{{item.phone}}</p>
+                  <span>简介：{{ item.memberSynopsis }}</span>
+                </el-carousel-item>
+              </el-carousel>
+            </template>
+            <template v-else-if="isOpenType == 'brand'">
+              <el-carousel :interval="5000"
+                           arrow="never"
+                           v-if="brandList.length"
+                           indicator-position="outside"
+                           style="width: 1000px;">
+                <el-carousel-item :span="24"
+                                  v-for="(item, index) in brandList"
+                                  :key="index">
+                  <h1 style="text-align: center">{{item.title}}</h1>
+                  <div style="overflow:scroll;height:300px;margin-top:20px;">
+                    <div v-html="item.content"
+                         style="margin-bottom:100px"></div>
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
+            </template>
+            <template v-else-if="isOpenType == 'workShow'">
+              <el-carousel :interval="5000"
+                           arrow="never"
+                           v-if="workShowList.length"
+                           indicator-position="outside"
+                           style="width: 1000px;">
+                <el-carousel-item :span="24"
+                                  v-for="(item, index) in workShowList"
+                                  :key="index">
+                  <h1 style="text-align: center">{{show}}</h1>
+                  <div style="height:300px;text-align:center">
+                    <template v-if="item.type == 'img'">
+                      <img :src="item.url"
+                           :alt="item.title"
+                           style="height:100%">
+                    </template>
+                    <template v-else-if="item.type == 'video'">
+                      <video :src="item.url"
+                             style="height:100%"
+                             controls></video>
+                    </template>
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
+            </template>
           </el-row>
         </div>
 
-        <div v-for="item in mapDialogData.children" :key="item.id">
-          <img :src="item.img" alt="" />
+        <div v-for="item in mapDialogData.children"
+             :key="item.id">
+          <img :src="item.img"
+               alt="" />
           <span>{{ item.title }}</span>
         </div>
       </div>
-      <i
-        class="el-icon-lx-roundclose headerDialogIcon"
-        style="color: #fff; font-size: 30px; cursor: pointer"
-        @click="handleCloseDialog('isOpen')"
-      ></i>
+      <i class="el-icon-lx-roundclose headerDialogIcon"
+         style="color: #fff; font-size: 30px; cursor: pointer"
+         @click="handleCloseDialog('isOpen')"></i>
     </div>
     <!-- 驾驶舱弹窗 -->
-    <div v-if="isOpenCockpit" class="coclpit">
+    <div v-if="isOpenCockpit"
+         class="coclpit">
       <div class="headerDialog">
         <div>
           <h1 style="text-align: center">驾驶舱</h1>
         </div>
-        <el-row :gutter="10" class="itemBox1">
-          <el-col :span="3" v-for="item in billboardList" :key="item.id">
+        <el-row :gutter="10"
+                class="itemBox1">
+          <el-col :span="3"
+                  v-for="item in billboardList"
+                  :key="item.id">
             <div class="item">
               <p class="itemTitle">{{ item.title }}</p>
               <p class="itemNum">{{ item.num }}<span class="itemUnit">{{ item.unit }}</span></p>
             </div>
           </el-col>
         </el-row>
-        <el-row :gutter="10" class="itemBox2">
-          <el-col :span="3" v-for="item in personnelDetails" :key="item.id">
+        <el-row :gutter="10"
+                class="itemBox2">
+          <el-col :span="3"
+                  v-for="item in personnelDetails"
+                  :key="item.id">
             <div class="item">
               <p class="itemNum">{{ item.num }}<span class="itemUnit">{{ item.unit }}</span></p>
               <p class="itemTitle">{{ item.title }}</p>
@@ -112,65 +155,70 @@
         <el-row :gutter="10">
           <el-col :span="6">
             <el-card shadow="hover">
-              <div id="main1" style="width: 100%;height:200px;"></div>
+              <div id="main1"
+                   style="width: 100%;height:200px;"></div>
             </el-card>
           </el-col>
           <el-col :span="6">
             <el-card shadow="hover">
-              <div id="main2" style="width: 100%;height:200px;"></div>
+              <div id="main2"
+                   style="width: 100%;height:200px;"></div>
             </el-card>
           </el-col>
           <el-col :span="6">
             <el-card shadow="hover">
-              <div id="main3" style="width: 100%;height:200px;"></div>
+              <div id="main3"
+                   style="width: 100%;height:200px;"></div>
             </el-card>
           </el-col>
           <el-col :span="6">
             <el-card shadow="hover">
-              <div id="main4" style="width: 100%;height:200px;"></div>
+              <div id="main4"
+                   style="width: 100%;height:200px;"></div>
             </el-card>
           </el-col>
         </el-row>
         <el-row :gutter="10">
           <el-col :span="6">
             <el-card shadow="hover">
-              <div id="main5" style="width: 100%;height:200px;"></div>
+              <div id="main5"
+                   style="width: 100%;height:200px;"></div>
             </el-card>
           </el-col>
           <el-col :span="6">
             <el-card shadow="hover">
-              <div id="main6" style="width: 100%;height:200px;"></div>
+              <div id="main6"
+                   style="width: 100%;height:200px;"></div>
             </el-card>
           </el-col>
           <el-col :span="6">
             <el-card shadow="hover">
-              <div id="main7" style="width: 100%;height:200px;"></div>
+              <div id="main7"
+                   style="width: 100%;height:200px;"></div>
             </el-card>
           </el-col>
           <el-col :span="6">
             <el-card shadow="hover">
-              <div id="main8" style="width: 100%;height:200px;"></div>
+              <div id="main8"
+                   style="width: 100%;height:200px;"></div>
             </el-card>
           </el-col>
         </el-row>
       </div>
-      <i
-        class="el-icon-lx-roundclose headerDialogIcon"
-        style="color: #fff; font-size: 30px; cursor: pointer"
-        @click="handleCloseDialog('isOpenCockpit')"
-      ></i>
+      <i class="el-icon-lx-roundclose headerDialogIcon"
+         style="color: #fff; font-size: 30px; cursor: pointer"
+         @click="handleCloseDialog('isOpenCockpit')"></i>
     </div>
     <!-- 楼栋弹窗 -->
-    <el-dialog
-      :title="`${buildForm.villageName + buildForm.buildingNumber}`"
-      v-model="houseDialogVisible"
-      width="60%"
-      draggable
-      style="z-index: 9999"
-    >
+    <el-dialog :title="`${buildForm.villageName + buildForm.buildingNumber}`"
+               v-model="houseDialogVisible"
+               width="60%"
+               draggable
+               style="z-index: 9999">
       <div>
         <el-row :gutter="10">
-          <el-col :span="5" class="buildInfoBox">
+          <el-col :span="5"
+                  class="buildInfoBox">
             <h4>楼栋信息：</h4>
             <hr />
             <p><span>楼长：</span> {{ buildForm.housemaster }}</p>
@@ -178,20 +226,21 @@
             <p><span>楼层数：</span> {{ buildForm.floorNumber }}</p>
             <p><span>总户数：</span> {{ buildForm.houseNumber }}</p>
           </el-col>
-          <el-col :span="19" class="buildListBox">
+          <el-col :span="19"
+                  class="buildListBox">
             <h4>楼栋单元：</h4>
             <hr />
             <div class="buildListItemBox">
-              <div
-                class="buildListItem"
-                v-for="item in unitList"
-                :key="item.unitNumber"
-                :class="
+              <div class="buildListItem"
+                   v-for="item in unitList"
+                   :key="item.unitNumber"
+                   :class="
                   item.unitNumber == searchForm.unitNumber ? 'active' : ''
                 "
-                @click="getHouseByUnit(item.unitNumber)"
-              >
-                <img src="@/assets/img/build.webp" alt="" srcset="" />
+                   @click="getHouseByUnit(item.unitNumber)">
+                <img src="@/assets/img/unit.jpg"
+                     alt=""
+                     srcset="" />
                 <span>{{
                   unitNumberOptions.filter((v) => v.value == item.unitNumber)[0]
                     ?.label
@@ -201,22 +250,22 @@
           </el-col>
         </el-row>
         <el-row :gutter="10">
-          <el-col :span="5" class="buildFloor">
+          <el-col :span="5"
+                  class="buildFloor">
             <h4>楼层信息：</h4>
             <hr />
             <div>
-              <div
-                class="floor"
-                v-for="item in floorArr(buildForm.floorNumber)"
-                :class="item.floorId + 1 == searchForm.floorId ? 'active' : ''"
-                :key="item"
-                @click="getHouseByFloor(item.floorId + 1)"
-              >
+              <div class="floor"
+                   v-for="item in floorArr(buildForm.floorNumber)"
+                   :class="item.floorId + 1 == searchForm.floorId ? 'active' : ''"
+                   :key="item"
+                   @click="getHouseByFloor(item.floorId + 1)">
                 {{ item.floorId + 1 }}F
               </div>
             </div>
           </el-col>
-          <el-col :span="19" class="houseBox">
+          <el-col :span="19"
+                  class="houseBox">
             <h4>
               {{ buildForm.buildingNumber }}-{{ searchForm.unitNumber
               }}{{ searchForm.unitNumber ? "单元" : "" }}-{{ searchForm.floorId
@@ -226,47 +275,53 @@
             <el-row :gutter="10">
               <el-col :span="10">
                 <!-- {{ houseList.length }} -->
-                <div v-if="!isHaveHouse" class="noHouse">
-                  <img src="@/assets/img/loading.gif" alt="loading" srcset="" />
+                <div v-if="!isHaveHouse"
+                     class="noHouse">
+                  <img src="@/assets/img/loading.gif"
+                       alt="loading"
+                       srcset="" />
                   <p>Loading...</p>
                 </div>
-                <div v-else-if="houseList.length <= 0" class="noList">
+                <div v-else-if="houseList.length <= 0"
+                     class="noList">
                   暂无数据
                 </div>
-                <div v-else class="house">
-                  <div
-                    class="houseItem"
-                    @click="getPeople(item.houseNumber)"
-                    v-for="item in houseList"
-                    :key="item"
-                  >
-                    <img src="@/assets/img/loading.gif" alt="" />
+                <div v-else
+                     class="house">
+                  <div class="houseItem"
+                       @click="getPeople(item.houseNumber)"
+                       v-for="item in houseList"
+                       :key="item">
+                    <img src="@/assets/img/house.png"
+                         alt="" />
                     <p>{{ item.houseNumber }}</p>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="14" class="borderRight">
-                <div v-if="!isHavePeople" class="noPeople">
-                  <img src="@/assets/img/loading.gif" alt="loading" srcset="" />
+              <el-col :span="14"
+                      class="borderRight">
+                <div v-if="!isHavePeople"
+                     class="noPeople">
+                  <img src="@/assets/img/loading.gif"
+                       alt="loading"
+                       srcset="" />
                   <p>Loading...</p>
                 </div>
-                <div v-else-if="peopleList.length <= 0" class="noList">
+                <div v-else-if="peopleList.length <= 0"
+                     class="noList">
                   暂无数据
                 </div>
-                <div v-else class="people house">
-                  <div
-                    class="peopleItem"
-                    v-for="item in peopleList"
-                    :key="item"
-                  >
-                    <img
-                      :src="
+                <div v-else
+                     class="people house">
+                  <div class="peopleItem"
+                       v-for="item in peopleList"
+                       :key="item">
+                    <img :src="
                         item?.certificates?.length
                           ? `${imgUrl}${item.certificates.split(',')[0]}`
                           : ''
                       "
-                      alt=""
-                    />
+                         alt="" />
                     <p>
                       <span>姓名：</span> <span>{{ item.name }}</span>
                     </p>
@@ -290,118 +345,108 @@
       </div>
     </el-dialog>
     <!-- 事件处置弹窗 -->
-    <el-dialog title="" v-model="eventHandleVisible" width="width">
+    <el-dialog title=""
+               v-model="eventHandleVisible"
+               width="width">
       <div>
-        <el-form
-          ref="recordFormRef"
-          :model="dataForm"
-          :rules="rules"
-          label-width="150px"
-        >
-          <el-form-item label="处置方式" prop="dealStatus">
-            <el-select
-              v-model="dataForm.dealStatus"
-              size="mini"
-              placeholder="请选择处置方式"
-            >
-              <el-option
-                v-for="item in dataSourceOptions"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
+        <el-form ref="recordFormRef"
+                 :model="dataForm"
+                 :rules="rules"
+                 label-width="150px">
+          <el-form-item label="处置方式"
+                        prop="dealStatus">
+            <el-select v-model="dataForm.dealStatus"
+                       size="mini"
+                       placeholder="请选择处置方式">
+              <el-option v-for="item in dataSourceOptions"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item
-            label="流转人"
-            v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3"
-            prop="launchBy"
-          >
-            <el-input
-              v-model="dataForm.launchRemark"
-              size="mini"
-              placeholder=""
-              @click="handleChangeLaunch"
-            ></el-input>
+          <el-form-item label="流转人"
+                        v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3"
+                        prop="launchBy">
+            <el-input v-model="dataForm.launchRemark"
+                      size="mini"
+                      placeholder=""
+                      @click="handleChangeLaunch"></el-input>
           </el-form-item>
-          <el-form-item
-            label="处理时限"
-            v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3"
-          >
-            <el-date-picker
-              v-model="dataForm.updateDate"
-              type="datetime"
-              size="mini"
-              placeholder="请选择时间"
-              style="width: 100%"
-            />
+          <el-form-item label="处理时限"
+                        v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3">
+            <el-date-picker v-model="dataForm.updateDate"
+                            type="datetime"
+                            size="mini"
+                            placeholder="请选择时间"
+                            style="width: 100%" />
           </el-form-item>
-          <el-form-item label="处理意见" prop="dealRemark">
-            <el-input
-              v-model="dataForm.dealRemark"
-              type="textarea"
-              size="mini"
-              placeholder=""
-            ></el-input>
+          <el-form-item label="处理意见"
+                        prop="dealRemark">
+            <el-input v-model="dataForm.dealRemark"
+                      type="textarea"
+                      size="mini"
+                      placeholder=""></el-input>
           </el-form-item>
         </el-form>
       </div>
       <template #footer>
-        <el-button size="mini" @click="eventHandleVisible = false"
-          >取 消</el-button
-        >
-        <el-button
-          size="mini"
-          type="primary"
-          @click="handleRecord(recordFormRef)"
-          >确 定</el-button
-        >
+        <el-button size="mini"
+                   @click="eventHandleVisible = false">取 消</el-button>
+        <el-button size="mini"
+                   type="primary"
+                   @click="handleRecord(recordFormRef)">确 定</el-button>
       </template>
     </el-dialog>
     <!-- 流转人弹窗 -->
-    <el-dialog title="选择流转人" v-model="userDialogVisible" width="40%">
+    <el-dialog title="选择流转人"
+               v-model="userDialogVisible"
+               width="40%">
       <div>
         <el-row :gutter="10">
           <el-col :span="18">
-            <el-table
-              :data="launchList"
-              @selection-change="(val) => (multipleSelection = val)"
-              style="width: 100%"
-            >
-              <el-table-column type="selection" width="55" />
-              <el-table-column prop="id" label="ID" width="100">
+            <el-table :data="launchList"
+                      @selection-change="(val) => (multipleSelection = val)"
+                      style="width: 100%">
+              <el-table-column type="selection"
+                               width="55" />
+              <el-table-column prop="id"
+                               label="ID"
+                               width="100">
               </el-table-column>
-              <el-table-column prop="operatorId" label="账号" width="140">
+              <el-table-column prop="operatorId"
+                               label="账号"
+                               width="140">
               </el-table-column>
-              <el-table-column prop="operatorName" label="姓名" width="width">
+              <el-table-column prop="operatorName"
+                               label="姓名"
+                               width="width">
               </el-table-column>
             </el-table>
           </el-col>
-          <el-col :span="6" style="border: 1px solid #ddd">
+          <el-col :span="6"
+                  style="border: 1px solid #ddd">
             <div>当前已选择{{ multipleSelection.length }}项：</div>
-            <div
-              class="checkSpan"
-              v-for="item in multipleSelection"
-              :key="item.id"
-            >
+            <div class="checkSpan"
+                 v-for="item in multipleSelection"
+                 :key="item.id">
               {{ item.operatorName }}
             </div>
           </el-col>
         </el-row>
       </div>
       <template #footer>
-        <el-button size="mini" type="primary" @click="handleSubmitUser"
-          >确定</el-button
-        >
-        <el-button size="mini" type="primary" @click="userDialogVisible = false"
-          >返回</el-button
-        >
+        <el-button size="mini"
+                   type="primary"
+                   @click="handleSubmitUser">确定</el-button>
+        <el-button size="mini"
+                   type="primary"
+                   @click="userDialogVisible = false">返回</el-button>
       </template>
     </el-dialog>
   </div>
 </template>
-<script>
+<script lang='jsx'>
 import {
   getCurrentInstance,
   onBeforeMount,
@@ -422,8 +467,14 @@ import { getHouseList } from "@/api/ActualInfo/house";
 import { getPeopleList } from "@/api/ActualInfo/people";
 import { PartyList } from "@/api/PartyBuilding/partyInfo";
 import { PartyPeopleList } from "@/api/PartyBuilding/partyPeople";
+import { getDraft } from '@/api/Propaganda/draft'
+import { ElButton } from 'element-plus'
+
+import Notice from './components/notice.vue'
+import { h } from 'vue'
 export default {
-  setup() {
+  components:{Notice},
+  setup () {
     let vMap = ref(null);
     let fullHeight = ref("");
     let timer = null;
@@ -434,24 +485,24 @@ export default {
     const { proxy } = getCurrentInstance();
     // 驾驶舱看板
     const billboardList = ref([
-      {id:1,title:'街道',num:2,unit:'个'},
-      {id:2,title:'基础网格',num:80,unit:'个'},
-      {id:3,title:'专属网格',num:16,unit:'个'},
-      {id:4,title:'常住户',num:28802,unit:'户'},
-      {id:5,title:'社区',num:11,unit:'个'},
-      {id:6,title:'单位',num:695,unit:'个'},
-      {id:7,title:'楼栋',num:658,unit:'个'},
-      {id:8,title:'重点服务人员',num:3871,unit:'个'},
+      { id: 1, title: '街道', num: 2, unit: '个' },
+      { id: 2, title: '基础网格', num: 80, unit: '个' },
+      { id: 3, title: '专属网格', num: 16, unit: '个' },
+      { id: 4, title: '常住户', num: 28802, unit: '户' },
+      { id: 5, title: '社区', num: 11, unit: '个' },
+      { id: 6, title: '单位', num: 695, unit: '个' },
+      { id: 7, title: '楼栋', num: 658, unit: '个' },
+      { id: 8, title: '重点服务人员', num: 3871, unit: '个' },
     ])
     const personnelDetails = ref([
-      {id:1,title:'网格书记',num:49,unit:'名'},
-      {id:2,title:'网格长',num:29,unit:'名'},
-      {id:3,title:'网格员',num:114,unit:'名'},
-      {id:4,title:'帮包服务队',num:70,unit:'个'},
-      {id:5,title:'事件处置',num:4488,unit:'件'},
-      {id:6,title:'12345工单',num:6091,unit:'件'},
-      {id:7,title:'雪亮工程监控',num:594,unit:'路'},
-      {id:8,title:'重点监控管理人员',num:162,unit:'人'},
+      { id: 1, title: '网格书记', num: 49, unit: '名' },
+      { id: 2, title: '网格长', num: 29, unit: '名' },
+      { id: 3, title: '网格员', num: 114, unit: '名' },
+      { id: 4, title: '帮包服务队', num: 70, unit: '个' },
+      { id: 5, title: '事件处置', num: 4488, unit: '件' },
+      { id: 6, title: '12345工单', num: 6091, unit: '件' },
+      { id: 7, title: '雪亮工程监控', num: 594, unit: '路' },
+      { id: 8, title: '重点监控管理人员', num: 162, unit: '人' },
     ])
     const myChart1 = ref(null)
     const myChart2 = ref(null)
@@ -462,14 +513,14 @@ export default {
     const myChart7 = ref(null)
     const myChart8 = ref(null)
     const drawEcharts = () => {
-      myChart1.value =  proxy.$echart.init(document.getElementById('main1'))
-      myChart2.value =  proxy.$echart.init(document.getElementById('main2'))
-      myChart3.value =  proxy.$echart.init(document.getElementById('main3'))
-      myChart4.value =  proxy.$echart.init(document.getElementById('main4'))
-      myChart5.value =  proxy.$echart.init(document.getElementById('main5'))
-      myChart6.value =  proxy.$echart.init(document.getElementById('main6'))
-      myChart7.value =  proxy.$echart.init(document.getElementById('main7'))
-      myChart8.value =  proxy.$echart.init(document.getElementById('main8'))
+      myChart1.value = proxy.$echart.init(document.getElementById('main1'))
+      myChart2.value = proxy.$echart.init(document.getElementById('main2'))
+      myChart3.value = proxy.$echart.init(document.getElementById('main3'))
+      myChart4.value = proxy.$echart.init(document.getElementById('main4'))
+      myChart5.value = proxy.$echart.init(document.getElementById('main5'))
+      myChart6.value = proxy.$echart.init(document.getElementById('main6'))
+      myChart7.value = proxy.$echart.init(document.getElementById('main7'))
+      myChart8.value = proxy.$echart.init(document.getElementById('main8'))
       // 绘制图表
       myChart1.value.setOption({
         title: {
@@ -525,76 +576,76 @@ export default {
       // 绘制图表
       myChart3.value.setOption({
         tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-          label: {
-            show: true
-          }
-        }
-      },
-      calculable: true,
-      legend: {
-        data: ['总数量', '已完成'],
-        itemGap: 5
-      },
-      grid: {
-        top: '12%',
-        left: '1%',
-        right: '10%',
-        containLabel: true
-      },
-      xAxis: [
-        {
-          type: 'category',
-          data: ['网格书记', '网格长', '网格员', '帮包服务队']
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value',
-          name: '处理数量',
-          axisLabel: {
-            formatter: function (a) {
-              a = +a;
-              return isFinite(a) ? proxy.$echart.format.addCommas(+a / 1000) : '';
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+            label: {
+              show: true
             }
           }
-        }
-      ],
-      dataZoom: [
-        {
-          show: true,
-          start: 94,
-          end: 100
         },
-        {
-          type: 'inside',
-          start: 94,
-          end: 100
+        calculable: true,
+        legend: {
+          data: ['总数量', '已完成'],
+          itemGap: 5
         },
-        {
-          show: true,
-          yAxisIndex: 0,
-          filterMode: 'empty',
-          width: 30,
-          height: '80%',
-          showDataShadow: false,
-          left: '93%'
-        }
-      ],
-      series: [
-        {
-          name: 'Budget 2011',
-          type: 'bar',
-          data: [0,0,0,0,0]
+        grid: {
+          top: '12%',
+          left: '1%',
+          right: '10%',
+          containLabel: true
         },
-        {
-          name: 'Budget 2012',
-          type: 'bar',
-          data: [0,0,0,0,0]
-        }
-      ]
+        xAxis: [
+          {
+            type: 'category',
+            data: ['网格书记', '网格长', '网格员', '帮包服务队']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            name: '处理数量',
+            axisLabel: {
+              formatter: function (a) {
+                a = +a;
+                return isFinite(a) ? proxy.$echart.format.addCommas(+a / 1000) : '';
+              }
+            }
+          }
+        ],
+        dataZoom: [
+          {
+            show: true,
+            start: 94,
+            end: 100
+          },
+          {
+            type: 'inside',
+            start: 94,
+            end: 100
+          },
+          {
+            show: true,
+            yAxisIndex: 0,
+            filterMode: 'empty',
+            width: 30,
+            height: '80%',
+            showDataShadow: false,
+            left: '93%'
+          }
+        ],
+        series: [
+          {
+            name: 'Budget 2011',
+            type: 'bar',
+            data: [0, 0, 0, 0, 0]
+          },
+          {
+            name: 'Budget 2012',
+            type: 'bar',
+            data: [0, 0, 0, 0, 0]
+          }
+        ]
       });
       // 绘制图表
       myChart4.value.setOption({
@@ -604,14 +655,14 @@ export default {
         // },
         tooltip: {},
         xAxis: {
-          data: ['东区社区', '西区社区', '南区社区', '北区社区','泉星社区','绿地社区']
+          data: ['东区社区', '西区社区', '南区社区', '北区社区', '泉星社区', '绿地社区']
         },
         legend: [
           {
-            name:'总数量',
+            name: '总数量',
           },
           {
-            name:'效率',
+            name: '效率',
           },
         ],
         yAxis: [
@@ -628,12 +679,12 @@ export default {
           {
             name: '总数量',
             type: 'bar',
-            data: [49, 26, 114, 70,20,30]
+            data: [49, 26, 114, 70, 20, 30]
           },
           {
             name: '效率',
             type: 'line',
-            data: [10, 20, 40, 65,50,86]
+            data: [10, 20, 40, 65, 50, 86]
           }
         ]
       });
@@ -681,15 +732,15 @@ export default {
         // },
         tooltip: {},
         xAxis: {
-          data: ['东区社区', '西区社区', '南区社区', '北区社区','泉星社区','绿地社区'],
-          min:0,
+          data: ['东区社区', '西区社区', '南区社区', '北区社区', '泉星社区', '绿地社区'],
+          min: 0,
         },
         legend: [
           {
-            name:'总数量',
+            name: '总数量',
           },
           {
-            name:'已完成',
+            name: '已完成',
           },
         ],
         yAxis: [
@@ -702,12 +753,12 @@ export default {
           {
             name: '总数量',
             type: 'bar',
-            data: [2, 18, 8, 3,0,0]
+            data: [2, 18, 8, 3, 0, 0]
           },
           {
             name: '已完成',
             type: 'bar',
-            data: [0, 18, 5, 0,0,0]
+            data: [0, 18, 5, 0, 0, 0]
           }
         ]
       });
@@ -720,7 +771,7 @@ export default {
         tooltip: {},
         xAxis: {
           data: ['工人南村街道'],
-          min:0,
+          min: 0,
         },
         // legend: [
         //   {
@@ -738,25 +789,25 @@ export default {
           {
             type: 'value',
             name: '处置效率',
-            min:0,
-            max:100,
+            min: 0,
+            max: 100,
           }
         ],
         series: [
           {
             name: '总数量',
             type: 'bar',
-            data: [2, 18, 8, 3,0,0]
+            data: [2, 18, 8, 3, 0, 0]
           },
           {
             name: '已完成',
             type: 'bar',
-            data: [0, 18, 5, 0,0,0]
+            data: [0, 18, 5, 0, 0, 0]
           },
           {
             name: '处理效率',
             type: 'line',
-            data: [0, 18, 5, 0,0,0]
+            data: [0, 18, 5, 0, 0, 0]
           }
         ]
       });
@@ -779,10 +830,10 @@ export default {
             type: 'pie',
             radius: '50%',
             label: {
-                normal: {
-                    show: true,
-                    formatter: '{b}: {c}件({d}%)' //自定义显示格式(b:name, c:value, d:百分比)
-                }
+              normal: {
+                show: true,
+                formatter: '{b}: {c}件({d}%)' //自定义显示格式(b:name, c:value, d:百分比)
+              }
             },
             data: [
               { value: 2138, name: '城乡建设' },
@@ -870,7 +921,7 @@ export default {
         }
       });
     };
-    // liuzhuan
+    // 流转
     const handleChangeLaunch = () => {
       userDialogVisible.value = true;
       multipleSelection.value = [];
@@ -900,14 +951,14 @@ export default {
         idStr = idStr + v.operatorId + ",";
       });
       dataForm.value.launchRemark = str.substr(0, str.length - 1);
-      dataForm.value.launchBy = idStr.substr(0, idStr.length - 1);
+      dataForm.value.dealBy = idStr.substr(0, idStr.length - 1);
     };
     const handleRecord = async (formRef) => {
       dataForm.value.id = formData.value.id;
       dataForm.value.eventId = formData.value.id;
       (dataForm.value.createBy = JSON.parse(
         sessionStorage.getItem("user")
-      ).operatorId),
+      ).user.operatorId),
         await formRef.validate((vaild) => {
           if (vaild) {
             eventProcessing(dataForm.value).then((res) => {
@@ -969,30 +1020,33 @@ export default {
       },
       { deep: true }
     );
+    const isOpenType = ref(null)
     const dialogVis = reactive({
       isOpen: false,
       isOpenCockpit: false,
     })
+    // 点击什么标签开启指定弹窗，关闭其他
     const handleClickOpen = (flag) => {
-      Object.keys(dialogVis).forEach(v=>{
-        if(v == flag){
+      Object.keys(dialogVis).forEach(v => {
+        if (v == flag) {
           dialogVis[flag] = true;
-        }else {
+        } else {
           dialogVis[v] = false
         }
       })
     }
     const handleAssign = () => {
-      if(mapDialogData.value.type && mapDialogData.value.type == 'cockpit'){
+      // 一级分类触发不同弹窗方法 >>> 驾驶舱、数字党建等
+      if (mapDialogData.value.type && mapDialogData.value.type == 'cockpit') {
         handleClickOpen('isOpenCockpit')
         // 渲染驾驶舱看板 Echarts
-        setTimeout(()=>drawEcharts(),0)
+        setTimeout(() => drawEcharts(), 0)
       }
     }
     const handleCloseDialog = (flag) => {
       dialogVis[flag] = false;
-      // store.dispatch('closeDialog')
     };
+    // 随机获取x，y值
     const randomAddress = () => {
       let sum = Math.round(Math.random() * 3);
       let arr = [
@@ -1003,7 +1057,7 @@ export default {
       ];
       return arr[sum];
     };
-
+    randomAddress();
     //绘制编号为1000的静态箭头线
     const drawMyRoute3 = () => {
       //vMap.drawRoute("17808,18500,17744,18224","7526,7700,9118,9262",'1000','red',4,'arrow','','1');
@@ -1058,11 +1112,10 @@ export default {
       //vMap.showMapMark(18821,10596,html);
       vMap.showMapMark(18888, 5250, html);
     };
-
-    randomAddress();
+    
     // 获取楼栋信息
     const getBuild = (buildingId) => {
-      getUnitByBuild({ buildingId }).then( async (res) => {
+      getUnitByBuild({ buildingId }).then(async (res) => {
         if (res.resCode == "000000") {
           unitList.value = res.data.unit;
           buildForm.value = res.data.build;
@@ -1077,13 +1130,10 @@ export default {
         }
       });
     };
-
     let searchParams = ref({});
     const getPartyList = () => {
       PartyPeopleList({ pageNum: 1, pageSize: 99 }).then((res) => {
         searchParams.value = res.data;
-        console.log(searchParams.value);
-        console.log("111111111111", res.data);
       });
     };
 
@@ -1093,11 +1143,11 @@ export default {
       isHaveHouse.value = false;
       isHavePeople.value = false
       peopleList.value = []
-      getHouseApi().then(res=>{
+      getHouseApi().then(res => {
         isHaveHouse.value = true
         houseList.value = res
       });
-      getPeopleApi().then(res=>{
+      getPeopleApi().then(res => {
         isHavePeople.value = true
         peopleList.value = res
       });
@@ -1108,11 +1158,11 @@ export default {
       isHaveHouse.value = false;
       isHavePeople.value = false
       peopleList.value = []
-      getHouseApi().then(res=>{
+      getHouseApi().then(res => {
         isHaveHouse.value = true
         houseList.value = res
       });
-      getPeopleApi().then(res=>{
+      getPeopleApi().then(res => {
         isHavePeople.value = true
         peopleList.value = res
       });
@@ -1120,13 +1170,13 @@ export default {
     const getPeople = (houseNumber) => {
       searchForm.value.houseNumber = houseNumber;
       isHavePeople.value = false;
-      getPeopleApi().then(res=>{
+      getPeopleApi().then(res => {
         peopleList.value = res
         isHavePeople.value = true
       });
     };
     const getHouseApi = async () => {
-      return new Promise((resolve,reject) => {
+      return new Promise((resolve, reject) => {
         getPeopleList(searchForm.value).then((res) => {
           if (res.resCode == "000000") {
             resolve(res.data.list)
@@ -1135,7 +1185,7 @@ export default {
       })
     };
     const getPeopleApi = async () => {
-      return new Promise((resolve,reject)=>{
+      return new Promise((resolve, reject) => {
         getPeopleList(searchForm.value).then((res) => {
           if (res.resCode == "000000") {
             resolve(res.data.list);
@@ -1143,6 +1193,8 @@ export default {
         });
       })
     };
+    // websocket 事件触发
+    // 自行触发弹窗函数
     const eventDialogStyle = () => {
       setTimeout(() => {
         let arr = JSON.parse(sessionStorage.getItem("eventName"));
@@ -1175,9 +1227,11 @@ export default {
       setTimeout(() => drawMyRoute3(), 1000);
 
       vMap.onMapClick((x0, y0, id, title, identitycode) => {
-        getBuild(19);
+        console.log(x0,y0,id,title,identitycode)
+        // getBuild(19);
       });
     });
+    
     watch(
       () => store.state.eventList,
       () => {
@@ -1189,25 +1243,74 @@ export default {
     // 事件播报事件
     const speak = (obj) => {
       proxy.$speak(
-        `事件名称：${obj?.eventName},发生地点:${obj?.cityName}${
-          obj?.communityName
+        `事件名称：${obj?.eventName},发生地点:${obj?.cityName}${obj?.communityName
         }${obj?.gridName}${obj.eventPlace ?? ""}`
       );
     };
-
-    const show=ref('');
+    // 数字党建 >>> 品牌打造模块
+    const show = ref('');
+    const brandList = ref([])
+    const getDraftList = () => {
+      getDraft({pageNum:1,pageSize:999}).then(res=>{
+        if(res.resCode == '000000'){
+          let arr = []
+          res.data.list.forEach(v=>{
+            v.content.replace('/\/g','')
+            arr.push(v)
+          })
+          brandList.value = arr
+        }
+      })
+    }
+    // 数字党建 >>> 工作展示模块
+    const workShowList = ref([
+      { id:1,title:'a',type:'img',url:'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418474776831426560.jpg' },
+      { id:2,title:'a',type:'video',url:'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202112/1468426165151420416.mp4' },
+      { id:3,title:'a',type:'img',url:'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418474760540749824.jpg' },
+      { id:4,title:'a',type:'img',url:'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418464766973935616.jpg' },
+    ])
+    // 数字党建弹窗控制模块
     const handleClick = (item) => {
-      if(item.type == 'party'){
-         console.log(65545,item.type)
-        var html = '<span style="color: red;">Hello world!</span>';
-        vMap.showMapMark(5764,2047,html);
+      if (item.type == 'party') {
+        var html = '<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(17408, 7178,html);
+        isOpenType.value = item.type
         return
+      }else if(item.type == 'underParty') {
+        var html = '<div id="party" onClick="hj2(19524,7796,\'南村街道直属党组织\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道直属党组织</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'        
+        vMap.showMapMark(19524, 7796,html);
+        isOpenType.value = item.type
+        return
+      }else if(item.type == 'partyBranch') {
+        var html = '<div id="party" onClick="hj2(18648,9718,\'南村街道党支部\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党支部</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'        
+
+        vMap.showMapMark(18648, 9718,html);
+        isOpenType.value = item.type
+        return
+      }else if(item.type == 'partyVan') {
+        handleClickOpen('')
+        getPartyList();
+        handleClickOpen('isOpen')
+        show.value = item.title;
+        isOpenType.value = item.type
+      }else if (item.type == 'brand'){
+        getDraftList()
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+      } else if(item.type == 'workShow'){
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
       }
-      getPartyList();
-      handleClickOpen('isOpen')
-      show.value=item.title;
+      
 
     };
+    window.aa = () => {
+      console.log('1111')
+    }
 
     onBeforeMount(() => {
       getOptionsByCode(1026, dataSourceOptions);
@@ -1272,6 +1375,10 @@ export default {
       // 看板
       billboardList,
       personnelDetails,
+      // 党建弹窗
+      isOpenType,
+      brandList,
+      workShowList,
     };
   },
 };
@@ -1330,7 +1437,11 @@ export default {
   background: #242f42;
   color: #fff;
 }
-.headerDialog > div{
+.showBox > h1 {
+  width: 100%;
+  text-align: center;
+}
+.headerDialog > div {
   margin: 20px 0;
 }
 .headerDialogBox > h1 {
@@ -1408,7 +1519,6 @@ h4 {
 }
 .buildFloor {
   min-height: 300px;
-  
 }
 .buildFloor > div {
   margin: 0 auto;
@@ -1493,8 +1603,8 @@ h4 {
   cursor: pointer;
 }
 .houseItem > img {
-  width: 60px;
-  height: 60px;
+  width: 30px;
+  /* height: 60px; */
 }
 .peopleItem {
   background: #f5f5f5;
@@ -1591,10 +1701,10 @@ h4 {
   height: 100px;
   width: 100px;
 }
-.el-carousel__item{
- background: none !important;
+.el-carousel__item {
+  background: none !important;
 }
-.coclpit{
+.coclpit {
   width: 100%;
   height: 100vh;
   box-sizing: border-box;
@@ -1604,12 +1714,12 @@ h4 {
   /* transform: translate(-50%, -50%); */
   background: rgba(36, 47, 66, 0.7);
   z-index: 9999;
-  padding:60px 50px 50px;
+  padding: 60px 50px 50px;
   border-radius: 10px;
 }
-.item{
-  width:100%;
-  padding:5px 10px 10px;
+.item {
+  width: 100%;
+  padding: 5px 10px 10px;
   box-sizing: border-box;
   /* height: 60px; */
   border: 1px solid #fff;
@@ -1618,9 +1728,10 @@ h4 {
   color: #fff;
   font-size: 14px;
 }
-.item > p,.item > p{
+.item > p,
+.item > p {
   overflow: hidden;
-  text-overflow:ellipsis;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 .itemNum {
@@ -1629,15 +1740,16 @@ h4 {
   height: 40px;
   line-height: 40px;
 }
-.itemUnit{
+.itemUnit {
   margin-top: 10px;
   font-size: 14px;
   float: right;
 }
-.itemBox1, .itemBox2{
+.itemBox1,
+.itemBox2 {
   height: 80px !important;
 }
-.itemBox2{
+.itemBox2 {
   text-align: center;
 }
 </style>

@@ -3,6 +3,8 @@
 export function renderTable() {
     const InfoFormConfig = {
         gutter:10,
+        labelWidth:'220px',
+        position:'right',
         formItems: [
             {
                 type: 'slot',
@@ -39,7 +41,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'Input',
+                type: 'textarea',
                 label: '问题描述',
                 prop: 'problemDescription',
                 value: '',
@@ -47,7 +49,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'Input',
+                type: 'textarea',
                 label: '转办意见',
                 prop: 'transferOpinions',
                 value: '',
@@ -85,7 +87,7 @@ export function renderTable() {
                 label: '紧急程度',
                 prop: 'urgency',
                 placeholder: '请选择紧急程度',
-                code:'1004',
+                code:'1076',
                 isClearable: true,
                 span: 11,
               },
@@ -93,7 +95,7 @@ export function renderTable() {
                 type: 'selectSearch',
                 label: '是否保密',
                 prop: 'isSecrecy',
-                code:'1004',
+                code:'1077',
                 isClearable: true,
                 span: 11,
               },
@@ -101,7 +103,7 @@ export function renderTable() {
                 type: 'selectSearch',
                 label: '是否回复',
                 prop: 'isReply',
-                code:'1004',
+                code:'1006',
                 isClearable: true,
                 span: 11,
               },
@@ -239,7 +241,7 @@ export function renderTable() {
                 type: 'selectSearch',
                 label: '回复类型',
                 prop: 'replyType',
-                code:'1004',
+                code:'1079',
                 isClearable: true,
                 span: 11,
               },
@@ -261,7 +263,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'Input',
+                type: 'textarea',
                 label: '办理情况或回退（延期）理由：',
                 prop: 'handleBackoff',
                 value: '',
@@ -374,6 +376,14 @@ export function renderTable() {
                 format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
                 span: 11,
+              },
+              {
+                type: 'textarea',
+                label: '备注',
+                prop: 'remarks',
+                value: '',
+                isClearable: true,
+                span: 22,
               },
         ]
     }

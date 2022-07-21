@@ -19,12 +19,12 @@
      <template v-slot:operation="data">
         <el-button
           size="small"
-          @click="handleEdit(data.data)"
+          @click="handleOperation(2,data.data)"
           icon="el-icon-lx-edit"
           circle
           type="primary"
         ></el-button>
-        <el-popconfirm title="确定要删除该角色吗？" @confirm="handleDelete(data.data)">
+        <el-popconfirm title="确定要删除该类别吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
               size="small"
@@ -45,6 +45,7 @@ import { deepClone, formatterDate, listAssign, defaultObject } from '@/utils/uti
 import { renderTable } from './common/gridHotlineWorkOrder'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { useRouter } from 'vue-router'
+import { delTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
 export default {
     name:'GridHotlineWorkOrder',
     components:{PopupTreeInput},
@@ -56,6 +57,11 @@ export default {
       const searchForm = reactive({
         hotlineWorkOrderName:''
       })
+      const handleQuery = () => {
+      searchParams.value = deepClone(searchForm)
+      table.currentPage = 1
+      handleQueryTable()
+    }
       const handleReset = (formEL) => {
       formEL.resetFields()
       searchParams.value = {}
@@ -67,18 +73,14 @@ export default {
     }
       const formHandle = {
         btns: [
-          {type:'primary',label:'查询',key:'search'},
-          {type:'primary',label:'重置',key:'reset'},
+          {type:'primary',label:'查询',key:'search',handle:handleQuery},
+          {type:'primary',label:'重置',key:'reset',handle:handleReset},
           {type:'primary',label:'添加',key:'add',handle:handleAdd},
         ]
       }
       let searchParams = ref({}) // 表单数据备份
 
-    const handleQuery = () => {
-      searchParams.value = deepClone(searchForm)
-      table.currentPage = 1
-      handleQueryTable()
-    }
+    
     
       // 查看/编辑
     const handleOperation = (type, rowData) => {
@@ -91,9 +93,17 @@ export default {
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
         const data = res || []
-        console.log(data,';;;')
         tableConfig.data = data
       })
+    }
+    const handleDelete = ({id}) => {
+      delTree({id}).then(res=>{
+        if(res.resCode == '000000'){
+          proxy.$message.success('类别删除成功')
+          handleQuery()
+        }
+      })
+
     }
     onMounted(() => {
       handleQuery()
@@ -106,6 +116,7 @@ export default {
       searchForm,
       formHandle,
       handleOperation,
+      handleDelete,
     }
     }
 }

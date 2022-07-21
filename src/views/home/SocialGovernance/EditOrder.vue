@@ -4,7 +4,7 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
           <i class="el-icon-lx-cascades"></i>
-          {{ route.params.operation == 1 ? '查看' : ( route.params.operation == 2 ? '编辑' : '添加' ) }}
+          {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -19,10 +19,10 @@
       <template v-slot:status>
         <popup-tree-input :data="popupTreeData"
                           :propa="popupTreeProps"
-                          :nodeKey="''+dataForm.officeCode"
+                          :nodeKey="''+dataForm.parentCode"
                           @update:dataForm="handleTreeSelectChange">
           <template v-slot>
-            <el-input v-model="dataForm.officeName"
+            <el-input v-model="dataForm.parentName"
                       size="mini"
                       :readonly="true"
                       placeholder="点击选择上级类别"
@@ -31,14 +31,6 @@
         </popup-tree-input>
       </template>
     </VForm>
-    <el-row v-if="route.params.operation == 1">
-      <div class="btn-box">
-        <el-button type="primary"
-                   @click="handleBack"
-                   size="small"
-                   icon="el-icon-lx-back">返回</el-button>
-      </div>
-    </el-row>
   </div>
 </template>
 <script>
@@ -47,10 +39,9 @@ import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
 
 import { renderTable } from './common/EditOrder'
-import { saveHotlineManage, editHotlineManage } from '@/api/SocialGovernance/HotlineManage'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
-import { getOrganList } from '@/api/sys/organ'
 import { listAssign } from '@/utils/util'
+import { getTree,saveTree,updateTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
 
 export default {
   name: 'EditHotlineManage',
@@ -64,26 +55,26 @@ export default {
     let dataForm = ref({})
     let popupTreeData = ref([])
     const popupTreeProps = {
-      label: "officeName",
+      label: "hotlineWorkOrderName",
       children: "children"
     }
     const getOList = () => {
-      getOrganList({}).then(res => {
+      getTree({}).then(res => {
         if (res.resCode == '000000') {
           popupTreeData.value = res.data
         }
       })
     }
 
-    const handleTreeSelectChange = ({ officeCode, officeName }) => {
-      dataForm.officeCode = officeCode
-      dataForm.officeName = officeName
+    const handleTreeSelectChange = ({hotlineWorkOrderName,id}) => {
+      dataForm.value.parentCode = id
+      dataForm.value.parentName = hotlineWorkOrderName
     }
     const handleSave = () => {
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
-        if (route.params.operation == 2) {
-          editHotlineManage(dataForm).then(res => {
+        if (route.query.operation == 2) {
+          updateTree(dataForm.value).then(res => {
             if (res.resCode === '000000') {
               resolve(res.message)
             } else {
@@ -91,7 +82,7 @@ export default {
             }
           })
         } else {
-          saveHotlineManage(dataForm).then(res => {
+          saveTree(dataForm.value).then(res => {
             if (res.resCode === '000000') {
               resolve(res.message)
             } else {
@@ -130,6 +121,9 @@ export default {
       ]
     }
     route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
+    if(dataForm.value.parentCode == '0'){
+      dataForm.value.parentName = '顶级类别'
+    }
     onBeforeMount(() => {
       getOList()
     })

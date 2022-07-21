@@ -32,18 +32,21 @@ export default {
             
             children: [
               { title: "党工委",type:'party', },
-              { title: "直属党组织" },
-              { title: "党支部" },
+              { title: "直属党组织",type:'underParty' },
+              { title: "党支部",type:'partyBranch' },
             ],
           },
           {
             title: "党建先锋",
+            type:'partyVan',
           },
           {
             title: "品牌打造",
+            type:'brand',
           },
           {
             title: "工作展示",
+            type:'workShow',
           },
         ],
         // children:[

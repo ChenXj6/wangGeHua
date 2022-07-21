@@ -508,8 +508,8 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/HotlineManage.vue")
       },
       {
-        path: "/EditHotlineManage",
-        name: "EditHotlineManage",
+        path: "/editHotlineManage",
+        name: "editHotlineManage",
         meta: {
           title: '12345热线管理',
           getTitle: function(route) {
@@ -568,6 +568,14 @@ const routes = [
           title: '企业楼宇列表'
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/BuildingList.vue")
+      },
+      {
+        path: "/smallPlaces",
+        name: "smallPlaces",
+        meta: {
+          title: '九小场所'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Economics/SmallPlaces.vue")
       },
       {
         path: "/industry",

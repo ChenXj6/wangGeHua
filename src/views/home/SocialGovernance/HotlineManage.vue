@@ -1,13 +1,44 @@
 <template>
-<div>
-     <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle">
+  <div>
+    <VForm
+      :form-data="formConfig"
+      :form-model="searchForm"
+      :form-handle="formHandle"
+    >
       <template v-slot:status>
         <popup-tree-input
-            :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
-            <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
-            </template>
+          :data="popupTreeData"
+          :propa="popupTreeProps"
+          :nodeKey="'' + searchForm.officeCode"
+          @update:dataForm="handleTreeSelectChange"
+        >
+          <template v-slot>
+            <el-input
+              v-model="searchForm.officeName"
+              size="mini"
+              :readonly="true"
+              placeholder="点击选择机构"
+              style="cursor: pointer"
+            ></el-input>
+          </template>
+        </popup-tree-input>
+      </template>
+      <template v-slot:orderType>
+        <popup-tree-input
+          :data="orderTreeData"
+          :propa="orderTreeProps"
+          :nodeKey="'' + searchForm.orderType"
+          @update:dataForm="handleOrderTreeSelectChange"
+        >
+          <template v-slot>
+            <el-input
+              v-model="searchForm.orderName"
+              size="mini"
+              :readonly="true"
+              placeholder="点击选择工单类别"
+              style="cursor: pointer"
+            ></el-input>
+          </template>
         </popup-tree-input>
       </template>
     </VForm>
@@ -16,8 +47,10 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
-    
-      <template v-slot:operation="{data}">
+      <template v-slot:orderNo="{ data }">
+        <el-link type="success" @click.prevent="handleOperation(2, data)" >{{ data.orderNo }}</el-link>
+      </template>
+      <template v-slot:operation="{ data }">
         <el-button
           size="small"
           @click="handleOperation(1, data)"
@@ -32,9 +65,78 @@
           circle
           type="priamry"
         />
+        <el-button
+          size="small"
+          icon="el-icon-lx-delete"
+          @click="handleDel(data)"
+          circle
+          type="danger"
+        />
       </template>
     </V-table>
-</div>
+  </div>
+  <el-dialog title="派单" v-model="eventHandleVisible" width="width">
+      <div>
+        <el-form
+          ref="recordFormRef"
+          :model="dataForm"
+          :rules="rules"
+          label-width="150px"
+        >
+          <el-form-item label="工单编号" prop="dealStatus">
+            <el-input size="mini" disabled v-model="dataForm.orderNo"></el-input>
+          </el-form-item>
+          <el-form-item
+            label="承办单位"
+            prop="dealBy"
+          >
+            <el-input
+              v-model="dataForm.dealBy"
+              size="mini"
+              placeholder=""
+              @click="handleChangeLaunch"
+            ></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+      <template #footer>
+        <el-button size="mini" @click="eventHandleVisible = false"
+          >取 消</el-button
+        >
+        <el-button
+          size="mini"
+          type="primary"
+          @click="handleRecord(recordFormRef)"
+          >确 定</el-button
+        >
+      </template>
+    </el-dialog>
+       <!-- 流转人弹窗 -->
+    <el-dialog title="选择承办单位" v-model="userDialogVisible" width="40%">
+      <div>
+        <el-row :gutter="10">
+          <el-col :span="24">
+            <el-table
+              :data="launchList"
+              @row-click="handleRowclick"
+              style="width: 100%"
+            >
+              <el-table-column prop="id" label="ID" >
+              </el-table-column>
+              <el-table-column prop="operatorId" label="账号" >
+              </el-table-column>
+              <el-table-column prop="operatorName" label="姓名" width="width">
+              </el-table-column>
+            </el-table>
+          </el-col>
+        </el-row>
+      </div>
+      <template #footer>
+        <el-button size="mini" type="primary" @click="userDialogVisible = false"
+          >返回</el-button
+        >
+      </template>
+    </el-dialog>
 </template>
 <script>
 import { reactive, ref } from '@vue/reactivity'
@@ -47,32 +149,45 @@ import {
   onMounted,
   watch,
 } from '@vue/runtime-core'
-import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
+import PopupTreeInput from '@/components/PopupTreeInput/index.vue'
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/hotlineManage'
 import { deepClone, defaultObject } from '@/utils/util'
+import { getTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
+import { dispatchOrder,delHotline } from '@/api/SocialGovernance/HotlineManage'
+import { getUserList } from "@/api/sys/user";
+
 export default defineComponent({
-    name: 'HotlineManage',
-    components:[PopupTreeInput],
-    setup() {
+  name: 'HotlineManage',
+  components: [PopupTreeInput],
+  setup() {
     const router = useRouter()
     const { proxy } = getCurrentInstance()
-    const { tableConfig,formConfig } = renderTable.call(proxy)
+    const { tableConfig, formConfig } = renderTable.call(proxy)
     const table = ref(null)
     const searchForm = ref({
-      officeName:'',
-      officeCode:'',
+      officeName: '',
+      officeCode: '',
     })
     let popupTreeData = ref([])
+    let orderTreeData = ref([])
     const popupTreeProps = {
-      label: "officeName",
-      children: "children"
-    } 
+      label: 'officeName',
+      children: 'children',
+    }
+    const orderTreeProps = {
+      label: 'hotlineWorkOrderName',
+      children: 'children',
+    }
     // 表单数据
     let searchParams = ref({}) // 表单数据备份
-    const handleTreeSelectChange = ({officeCode,officeName}) => {
+    const handleTreeSelectChange = ({ officeCode, officeName }) => {
       searchForm.value.officeCode = officeCode
       searchForm.value.officeName = officeName
+    }
+    const handleOrderTreeSelectChange = ({hotlineWorkOrderName,id}) => {
+      searchForm.value.orderType = id
+      searchForm.value.orderName = hotlineWorkOrderName
     }
     const multipleSelection = ref([]) // 选中数据
 
@@ -94,42 +209,156 @@ export default defineComponent({
       handleQuery()
     }
     const handleAdd = () => {
-      handleOperation(3,{})
+      handleOperation(3, {})
     }
 
-     const handleQueryTable = () => {
+    const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
         tableConfig.data = data
       })
     }
-
-     // 表單操作按鈕配置
-    const formHandle = {
-      btns: [
-        {type:'primary',label:'查询',key:'search',handle:handleQuery},
-        {type:'primary',label:'重置',key:'reset',handle:handleReset},
-        {type:'primary',label:'添加',key:'reset',handle:handleAdd},
-      ]
+    // 派单
+    const recordFormRef = ref(null);
+    const eventHandleVisible = ref(false);
+    const dataForm = ref({});
+    const launchList = ref([])
+    const userDialogVisible = ref(false)
+    // const multipleSelection = ref([]);
+    const rules = reactive({
+      dealBy: [
+        {
+          required: true,
+          message: "请选择承办单位",
+          trigger: ["change", "blur"],
+        },
+      ],
+    });
+    const handleChangeLaunch = () => {
+      userDialogVisible.value = true;
+      dataForm.value.dealBy = "";
+      handleQueryUserTable();
+    };
+    const handleRowclick = (val) => {
+      dataForm.value.dealBy = val.operatorName;
+      dataForm.value.dealCode = val.operatorId;
+      userDialogVisible.value = false
+    }
+    const handleQueryUserTable = () => {
+      getUserList({ pageNum: 1, pageSize: 50 }).then((res) => {
+        if (res.code == "200") {
+          launchList.value = res.data.list;
+        }
+      });
+    };
+    const handleDispatch = () => {
+      if(!isHaveSelect.value){
+        proxy.$message.warning('请先选择数据')
+        return
+      }
+      
+      multipleSelection.value.forEach(v=>{
+        if(v.hotlineStatus != 1){
+          proxy.$message.warning('只可选择待处理工单')
+          return
+        }
+      })
+      let arr = []
+      let idArr = []
+      multipleSelection.value.forEach(v=>{
+        arr.push(v.orderNo)
+        idArr.push(v.id)
+      })
+      dataForm.value.orderNo = arr.join(',')
+      dataForm.value.id = idArr.join(',')
+      eventHandleVisible.value = true
+      
+    }
+    const handleRecord = async (formRef) => {
+        await formRef.validate((vaild) => {
+          if (vaild) {
+            dispatchOrder(dataForm.value).then(res=>{
+              if(res.resCode == '000000'){
+                proxy.$message.success('派单成功')
+                eventHandleVisible.value = false
+              }
+            })
+          } else {
+            return;
+          }
+        });
+    };
+    // 删除 & 批量删除
+    const handleDel = (val) => {
+      let arr = []
+      arr.push(val)
+      delHotline(arr).then(res=>{
+        if(res.resCode == '000000'){
+          proxy.$message.success('数据删除成功')
+          handleQuery()
+        }else{
+          proxy.$message.error(res.message)
+          return
+        }
+      })
+    }
+    const handleDelte = () => {
+      if(!isHaveSelect.value){
+        proxy.$message.warning('请至少选择一条数据！')
+        return
+      }else{
+        delHotline(multipleSelection.value).then(res=>{
+          if(res.resCode == '000000'){
+            proxy.$message.success('数据删除成功')
+            handleQuery()
+          }else{
+            proxy.$message.error(res.message)
+            return
+          }
+        })
+      }
     }
 
-      // 查看/编辑
+    // 表單操作按鈕配置
+    const formHandle = {
+      btns: [
+        { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
+        { type: 'primary', label: '重置', key: 'reset', handle: handleReset },
+        { type: 'primary', label: '添加', key: 'reset', handle: handleAdd },
+        { type: 'primary', label: '派单', key: 'dispatch', handle: handleDispatch },
+        { type: 'danger', label: '批量删除', key: 'delete', handle: handleDelte },
+      ],
+    }
+
+    // 查看/编辑
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        name: 'EditHotlineManage',
-        params: { data : encodeURIComponent(data), operation: type, type:'hotline' },
+        name: 'editHotlineManage',
+        params: {
+          data: encodeURIComponent(data),
+          operation: type,
+          type: 'hotline',
+        },
       })
     }
-
+    // 树形结构获取值
     const getOList = () => {
-      getOrganList({}).then(res=>{
-        if(res.resCode == '000000'){
+      getOrganList({}).then((res) => {
+        if (res.resCode == '000000') {
           popupTreeData.value = res.data
         }
       })
     }
+    const getOrderList = () => {
+      getTree({}).then((res) => {
+        if (res.resCode == '000000') {
+          orderTreeData.value = res.data
+        }
+      })
+    }
     getOList()
+    getOrderList()
     onMounted(() => {
       handleQuery()
     })
@@ -147,11 +376,24 @@ export default defineComponent({
       handleTreeSelectChange,
       popupTreeProps,
       popupTreeData,
+      orderTreeProps,
+      orderTreeData,
+      handleOrderTreeSelectChange,
+      handleDelte,
+      handleDel,
+      // 派单
+      eventHandleVisible,
+      recordFormRef,
+      dataForm,
+      rules,
+      handleChangeLaunch,
+      launchList,
+      userDialogVisible,
+      handleRowclick,
+      handleRecord,
+      // 
+      
     }
-
-
-
-
-    }
+  },
 })
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="formRef" class="form" :model="formModel" :rules="formRules" :disabled="isDisabled">
+  <el-form ref="formRef" class="form" :model="formModel" :rules="formRules" :disabled="isDisabled" :label-position="formData.position">
     <el-row :gutter="formData.gutter || 0">
       <el-col v-for="item in formData.formItems"
         :key="item.prop" :span="item.span">
@@ -8,7 +8,7 @@
       >
         <el-form-item
           :label="item.label"
-          :label-width="item.label ? '120px' : 0"
+          :label-width="item.label ? (formData.labelWidth ? formData.labelWidth : '120px') : 0"
           :prop="item.prop"
         >
         <!-- 多層 -->

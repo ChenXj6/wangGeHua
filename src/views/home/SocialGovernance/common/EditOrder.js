@@ -35,7 +35,12 @@ export function renderTable() {
           isClearable: true,
           span: 22,
         },
-      ]
+      ],
+      rules:{
+        parentCode:[{ required:true,message:'请选择上级类别',trigger:['change','blur'] }],
+        hotlineWorkOrderName:[{ required:true,message:'请输入类别名称',trigger:['change','blur'] }],
+        treeSort:[{ required:true,message:'请输入本级排序号',trigger:['change','blur'] }],
+      }
   }
 
   return {

@@ -1,4 +1,4 @@
-import { getManagementList } from '@/api/SocialGovernance/management'
+import { getHotlineManageList } from '@/api/SocialGovernance/hotlineManage'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
@@ -7,28 +7,30 @@ export function renderTable() {
         data: [],
         pagination: true, // 开启分页器
         mutiSelect: false, // 开启选择
-        method: getManagementList, // 請求api
+        method: getHotlineManageList, // 請求api
         index: true, // 是否启用序号列
         total: 0,
         isSortable: false, // 是否开启拖拽
         columns: [
             {
-                prop: '',
+                prop: 'officeName',
                 label: '组织机构',
                 minWidth: '120',
             },
             {
-                prop: 'orderNO',
+                prop: 'orderNo',
                 label: '工单编号',
                 minWidth: '120',
+                slot:'orderNo',
             },
             {
                 prop: 'receivingTime',
                 label: '接收时间',
                 minWidth: '120',
+                formatter: 'YYYY-MM-DD HH:mm:ss',
             },
             {
-                prop: '',
+                prop: 'dealBy',
                 label: '承办单位',
                 minWidth: '120',
             },
@@ -42,19 +44,23 @@ export function renderTable() {
                 prop: 'concludeTime',
                 label: '办结时限',
                 minWidth: '120',
+                formatter: 'YYYY-MM-DD HH:mm:ss',
             },
             {
-                prop: '',
+                prop: 'dispatchTime ',
                 label: '派单时间',
                 minWidth: '120',
+                formatter: 'YYYY-MM-DD HH:mm:ss',
             },
             {
-                prop: '',
+                prop: 'replyOrderDate',
                 label: '回复时间',
                 minWidth: '120',
             },
             {
-                prop: '',
+                type:'code',
+                code:'1078',
+                prop: 'dealStatus',
                 label: '处置状态',
                 minWidth: '120',
             },
@@ -112,19 +118,23 @@ export function renderTable() {
                 span: 6,
               },
               {
-                type: 'Input',
+                type: 'slot',
                 label: '工单类别',
                 prop: 'orderType',
+                value: '',
+                slotName:'orderType',
                 isClearable: true,
                 span: 6,
-              }, 
+              },
               {
-                type: 'Input',
+                type: 'selectSearch',
                 label: '处置状态',
-                prop: '',
+                prop: 'dealStatus',
+                placeholder: '请选择处置状态',
+                code:'1069',
                 isClearable: true,
                 span: 6,
-              }, 
+              },
         ] 
     }
     return {
