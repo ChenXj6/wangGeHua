@@ -65,7 +65,7 @@ import {
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
-import { renderTable } from './common/Build'
+import { renderTable } from './common/build'
 import { deepClone, defaultObject } from '@/utils/util'
 import { deleteBuild } from '@/api/ActualInfo/build'
 export default defineComponent({

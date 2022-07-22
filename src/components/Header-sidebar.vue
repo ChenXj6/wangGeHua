@@ -26,10 +26,11 @@ export default {
       {
         id: 2,
         title: "数字党建",
+        type:'digitalPartyBuilding',
         data: [
           {
             title: "党组织",
-            
+            type:'dzz',
             children: [
               { title: "党工委",type:'party', },
               { title: "直属党组织",type:'underParty' },
@@ -49,57 +50,50 @@ export default {
             type:'workShow',
           },
         ],
-        // children:[
-        //   // 党建先锋 在线教育 党风建设 支部文化
-        //   { title:'党建瞭望',img:'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.ixintu.com%2Fdownload%2Fjpg%2F201911%2F5a4ba68b1fba277da96f8267f9b72ff5.jpg%21con&refer=http%3A%2F%2Fimg.ixintu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1658545593&t=c43eafd624cfc7f4fb6b94a6746e2cf2' },
-        //   { title:'党建先锋',img:'https://img2.baidu.com/it/u=42904497,637130856&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=641' },
-        //   { title:'党风建设',img:'https://img1.baidu.com/it/u=185095650,3733147082&fm=253&fmt=auto&app=138&f=PNG?w=667&h=500' },
-        //   { title:'支部文化',img:'https://img1.baidu.com/it/u=2643849219,2259734721&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500' },
-        //   { title:'在线教育',img:'https://img1.baidu.com/it/u=807296333,4294174678&fm=253&fmt=auto?w=750&h=500' },
-        // ]
       },
       {
         id: 3,
         title: "网格政务",
         data: [
           {
-            title: "简介",
+            title: "简介",type:'briefIntroduction'
           },
           {
             title: "双实信息",
-            children: [{ title: "楼栋标签" }, { title: "查询" }],
+            children: [{ title: "楼栋标签",type:'building' }, { title: "定位查询",type:'location'}],
           },
           {
             title: "网格事件",
-            children: [{ title: "当日时间" }, { title: "事件查询" }],
+            children: [{ title: "当日事件",type:'someDayEvent' }, { title: "事件查询",type:'eventQuery' }],
           },
           {
             title: "12345热线",
+            type:"hotline"
           },
           {
             title: "重点管理人员",
             children: [
-              { title: "刑满释放" },
-              { title: "精神障碍" },
-              { title: "社区戒毒" },
-              { title: "社会矫正" },
-              { title: "稳控对象" },
-              { title: "人员查询" },
+              { title: "刑满释放",type:'release' },
+              { title: "精神障碍",type:'neuropathy' },
+              { title: "社区戒毒",type:'drugDetoxification' },
+              { title: "社会矫正",type:'correct' },
+              { title: "稳控对象",type:'control' },
+              // { title: "人员查询",type:'personnelQuery' },
             ],
           },
-          {
-            title: "雪亮工程",
-            children: [{ title: "监控定位" }, { title: "监控查询" }],
-          },
-          {
-            title: "出入口",
-          },
-          {
-            title: "停车场",
-          },
-          {
-            title: "道路",
-          },
+          // {
+          //   title: "雪亮工程",
+          //   children: [{ title: "监控定位" }, { title: "监控查询" }],
+          // },
+          // {
+          //   title: "出入口",
+          // },
+          // {
+          //   title: "停车场",
+          // },
+          // {
+          //   title: "道路",
+          // },
         ],
       },
       {
