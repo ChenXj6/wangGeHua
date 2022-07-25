@@ -113,13 +113,6 @@
             </template>
           </el-row>
         </div>
-
-        <div v-for="item in mapDialogData.children"
-             :key="item.id">
-          <img :src="item.img"
-               alt="" />
-          <span>{{ item.title }}</span>
-        </div>
       </div>
       <i class="el-icon-lx-roundclose headerDialogIcon"
          style="color: #fff; font-size: 30px; cursor: pointer"
@@ -834,5 +827,9 @@ h4 {
   z-index: 9999;
   padding: 60px 50px 50px;
   border-radius: 10px;
+}
+::-webkit-scrollbar {
+  /*隐藏滚轮*/
+  display: none;
 }
 </style>
