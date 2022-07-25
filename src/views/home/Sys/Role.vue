@@ -139,7 +139,7 @@ export default {
                 handleQuery()
                 dialogVisible.value = false
               }else if (res.code == 500){
-                proxy.$message.success(res.msg)
+                proxy.$message.warning(res.msg)
                 dialogVisible.value = false
               }
             })
@@ -150,7 +150,7 @@ export default {
                 handleQuery()
                 dialogVisible.value = false
               }else if (res.code == 500){
-                proxy.$message.success(res.msg)
+                proxy.$message.warning(res.msg)
                 dialogVisible.value = false
               }
             })

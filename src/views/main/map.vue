@@ -869,6 +869,7 @@ export default {
     const isHavePeople = ref(true);
     // 小区名字  楼号  单元号   房屋号
     const searchForm = ref({
+      buildingId:'',
       villageName: "",
       buildingNumber: "",
       unitNumber: "1",
@@ -1119,6 +1120,7 @@ export default {
         if (res.resCode == "000000") {
           unitList.value = res.data.unit;
           buildForm.value = res.data.build;
+          searchForm.value.buildingId = buildingId
           searchForm.value.villageName = res.data.build.villageName;
           searchForm.value.buildingNumber = res.data.build.buildingNumber;
           houseList.value = await getHouseApi()
@@ -1227,8 +1229,8 @@ export default {
       setTimeout(() => drawMyRoute3(), 1000);
 
       vMap.onMapClick((x0, y0, id, title, identitycode) => {
-        console.log(x0,y0,id,title,identitycode)
-        // getBuild(19);
+        // console.log(x0,y0,id,title,identitycode)
+        getBuild(19);
       });
     });
     
