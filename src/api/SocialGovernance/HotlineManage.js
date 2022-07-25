@@ -76,6 +76,6 @@ export const receiptOrder = query => {
 // 审核
 export const examineOrder = query => {
   return service.post(
-    `/real/realInfo/hotline/record/reply`, query
+    `/real/realInfo/hotline/record/verify`, query
   )
 };

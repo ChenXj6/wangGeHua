@@ -48,8 +48,46 @@
         />
         <el-button
           size="small"
-          icon="el-icon-lx-edit"
-          @click="handleOperation(2, data)"
+          title="审核"
+          v-if="data.status == 5"
+          icon="el-icon-lx-forwardfill"
+          @click="handleOperation(4, data)"
+          circle
+          type="priamry"
+        />
+        <el-button
+          size="small"
+          title="接单/退回"
+          v-if="data.status == 1"
+          icon="el-icon-lx-forwardfill"
+          @click="handleOperation(5, data)"
+          circle
+          type="priamry"
+        />
+        <el-button
+          size="small"
+          title="回单"
+          v-if="data.status == 4"
+          icon="el-icon-lx-forwardfill"
+          @click="handleOperation(6, data)"
+          circle
+          type="priamry"
+        />
+        <el-button
+          size="small"
+          title="转派"
+          v-if="data.status == 2 || data.status == 3 || data.status == 7"
+          icon="el-icon-lx-forwardfill"
+          @click="handleOperation(7, data)"
+          circle
+          type="priamry"
+        />
+        <el-button
+          size="small"
+          title="撤回"
+          v-if="data.status == 1"
+          icon="el-icon-lx-forwardfill"
+          @click="handleOperation(8, data)"
           circle
           type="priamry"
         />
@@ -146,8 +184,12 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
       router.push({
-        path: '/editactual',
-        query: { data : encodeURIComponent(data), operation: type, type:'build' },
+        path: '/editHotlineManage',
+        query: {
+          data: encodeURIComponent(data),
+          operation: type,
+          type: 'manage',
+        },
       })
     }
 

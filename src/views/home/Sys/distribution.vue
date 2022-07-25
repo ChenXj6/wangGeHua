@@ -258,7 +258,7 @@ export default {
         saveRoleToUser(multipleSelection.value).then(res=>{
           if(res.code == '200'){
             proxy.$message.success('用户分配角色成功')
-            // delCurrentTag(route)
+            delCurrentTag(route)
           }
         })
       }else if(route.query.type == 'role') {
@@ -269,7 +269,7 @@ export default {
         saveMenuByRole(treeSelectArr.value).then(res=>{
           if(res.code == '200'){
             proxy.$message.success('角色分配菜单权限成功')
-            // delCurrentTag(route)
+            delCurrentTag(route)
           }
         })
       }else{
@@ -280,6 +280,7 @@ export default {
         saveDataByRole(treeCheckData.value).then(res=>{
           if(res.code == '200'){
             proxy.$message.success('角色分配数据权限成功')
+            delCurrentTag(route)
           }
         })
       }
