@@ -23,9 +23,15 @@ export const deletePeople = query => {
   )
 };
 
-// 获取角色列表
+// 
 export const getPeopleList = query => {
   return service.post(
     `/real/realInfo/population/query`, query
+  )
+};
+
+export const getGISPeople = query => {
+  return service.post(
+    `/real/realInfo/population/queryHouse`, query
   )
 };

@@ -51,7 +51,7 @@ export default defineComponent({
     },
     placement: {
       type: String,
-      default: 'right-start'
+      default: 'bottom-start'
     },
     defaultExpandAll: {
       type: Boolean,
