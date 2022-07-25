@@ -48,7 +48,7 @@
     <!-- store.state.mapDialog.visible -->
     <div v-if="isOpen" class="headerDialogBox">
       <div class="headerDialog">
-        <div>
+        <div class="carousel_box">
           <el-row class="showBox">
             <template v-if="isOpenType == 'partyVan'">
               <h1 style="text-align: center">{{ show }}</h1>
@@ -1986,6 +1986,17 @@ export default {
   padding: 50px;
   border-radius: 10px;
 }
+.carousel_box{
+  width:100%;
+  height:100%;
+}
+.carousel_box .showBox{
+  height: calc(100% - 40px);
+  overflow-y: scroll;
+}
+::v-deep .el-carousel__container{
+  height:97%;
+}
 .headerDialogIcon {
   position: absolute;
   top: 10px;
@@ -1993,8 +2004,8 @@ export default {
 }
 .headerDialog {
   width: 100%;
-  height: 100%;
-  min-height: 500px;
+  height: 500px; 
+  /* min-height: 500px; */
   border: 1px solid #bad23c;
   box-sizing: border-box;
   padding: 5px;
