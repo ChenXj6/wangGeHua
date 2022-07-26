@@ -37,7 +37,7 @@ export function renderTable() {
         prop: 'name',
         label: '姓名',
       },
-      { prop: 'idcard', label: '身份证号', minWidth: '120' },
+      { prop: 'idCard', label: '身份证号', minWidth: '120' },
       // { prop: 'residenceNow', label: '具体住址',minWidth:'200'},
     ],
   }
@@ -55,7 +55,7 @@ export function renderTable() {
         prop: 'name',
         label: '姓名',
       },
-      { prop: 'idcard', label: '身份证号', minWidth: '120' },
+      { prop: 'idCard', label: '身份证号', minWidth: '120' },
       // { prop: 'residenceNow', label: '具体住址',},
     ],
   }
@@ -93,20 +93,26 @@ export function renderTable() {
         isClearable: true,
         span: 11,
       },
+      // {
+      //   type: 'slot',
+      //   label: '房屋',
+      //   prop: 'houseId',
+      //   // value: '',
+      //   slotName:'house',
+      //   isClearable: true,
+      //   span: 11,
+      // },
       {
         type: 'slot',
         label: '房屋',
-        prop: 'houseNumber',
-        // value: '',
-        slotName:'buildingId',
-        placeholder: '请选择房屋名称',
-        isClearable: true,
+        slotName: 'house',
         span: 11,
+        prop:'house'
       },
       {
         type: 'Input',
         label: '身份证号',
-        prop: 'idaCard',
+        prop: 'idCard',
         value: '',
         placeholder: '请输入身份证号',
         isClearable: true,
@@ -184,7 +190,7 @@ export function renderTable() {
         label: '政治面貌',
         prop: 'politicalOutlook',
         value: '',
-        code: '1010',
+        code: '1050',
         placeholder: '请选择政治面貌',
         isClearable: true,
         span: 11,
@@ -351,7 +357,7 @@ export function renderTable() {
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
 
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
-      idaCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
+      idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
       houseNumber: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
     }

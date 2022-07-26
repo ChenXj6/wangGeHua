@@ -1,4 +1,4 @@
-import { getDrugList } from '@/api/ManagementPersonnel/drugPer'
+import { getPetitionList } from '@/api/ManagementPersonnel/petitionStaff'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
@@ -7,7 +7,7 @@ export function renderTable() {
     data: [],
     pagination: true, // 开启分页器
     mutiSelect: false, // 开启选择
-    method: getDrugList, // 請求api
+    method: getPetitionList, // 請求api
     index: false, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
