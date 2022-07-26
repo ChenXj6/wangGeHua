@@ -352,14 +352,25 @@ export function renderTable() {
       },
     ],
     rules: {
-      streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
-      buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
-
+      streetCode: [
+        { required: true, message: '请选择街道', trigger: ['blur','change'] },
+      ],
+      communityCode: [
+        { required: true, message: '请选择社区', trigger: ['blur','change'] },
+      ],
+      gridCode: [
+        { required: true, message: '请选择网格', trigger: ['blur','change'] },
+      ],
+      buildingId: [
+        { required: true, message: '请选择楼栋', trigger: ['blur','change'] },
+      ],
+      house: [
+        { required: true, message: '请选择房屋', trigger: ['blur','change'] },
+      ],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
-      houseNumber: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
+      // houseNumber: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
     }
   }
   return {

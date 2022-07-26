@@ -66,26 +66,15 @@
         </el-select>
       </template>
       <template v-slot:gridCode="">
-        <el-select
-          v-model="dataForm.gridCode"
-          size="mini"
-          clearable
-          placeholder="请选择网格"
-          @change="
-            (val) => {
-              handleChange(3, val, true), handleGetBuild(1, val, true);
-            }
-          "
-        >
-          <el-option
-            v-for="item in gridNameOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-      </template>
+          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
+            <el-option
+              v-for="item in gridNameOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </template>
       <template v-slot:buildingId="">
         <el-select
           v-model="dataForm.buildingId"
