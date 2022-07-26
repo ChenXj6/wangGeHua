@@ -55,9 +55,9 @@ export function renderTable() {
         span: 6,
       },
       {
-        type: 'dateTime',
+        type: 'date',
         label: '发生时间',
-        prop: 'date',
+        prop: 'happenTime',
         value: [],
         format: 'YYYY-MM-DD',
         isClearable: true,
@@ -66,7 +66,7 @@ export function renderTable() {
       {
         type:'slot',
         label:'事件状态',
-        slotName:'status',
+        slotName:'approvalStatus',
         placeholder: '请选择事件类型',
         span:6,
       },
@@ -89,7 +89,7 @@ export function renderTable() {
       {
         type:'slot',
         label:'事件来源',
-        slotName:'source',
+        slotName:'dataSource',
         placeholder: '请选择事件来源',
         span:6,
       },

@@ -243,6 +243,7 @@ export default defineComponent({
       dataForm.value.dealBy = val.operatorName;
       dataForm.value.dealCode = val.operatorId;
       userDialogVisible.value = false
+      
     }
     const handleQueryUserTable = () => {
       getUserList({ pageNum: 1, pageSize: 50 }).then((res) => {
@@ -256,13 +257,17 @@ export default defineComponent({
         proxy.$message.warning('请先选择数据')
         return
       }
-      
+      let flag = true
       multipleSelection.value.forEach(v=>{
         if(v.hotlineStatus != 1){
           proxy.$message.warning('只可选择待处理工单')
+          flag = false
           return
         }
       })
+      if(!flag){
+        return
+      }
       let arr = []
       let idArr = []
       multipleSelection.value.forEach(v=>{
@@ -281,6 +286,7 @@ export default defineComponent({
               if(res.resCode == '000000'){
                 proxy.$message.success('派单成功')
                 eventHandleVisible.value = false
+                handleQuery()
               }
             })
           } else {

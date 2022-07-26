@@ -4,9 +4,9 @@
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+searchForm.gridCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.gridName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -77,8 +77,8 @@ export default defineComponent({
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
     const searchForm = reactive({
-      officeCode:'',
-      officeName:'',
+      gridCode:'',
+      gridName:'',
     }) // 表单数据
     let popupTreeData = ref([])
     const popupTreeProps = {
@@ -182,8 +182,8 @@ export default defineComponent({
       })
     }
     const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.officeCode = officeCode
-      searchForm.officeName = officeName
+      searchForm.gridCode = officeCode
+      searchForm.gridName = officeName
     }
     const getOList = () => {
       getOrganList({}).then(res=>{

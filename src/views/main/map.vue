@@ -1,38 +1,25 @@
 <template>
   <div style="position: relative">
-    <div
-      class="vMap"
-      :style="{ height: !fullHeight ? '100vh' : fullHeight + 'px' }"
-      id="dituContent"
-    ></div>
+    <div class="vMap"
+         :style="{ height: !fullHeight ? '100vh' : fullHeight + 'px' }"
+         id="dituContent"></div>
+    <!-- 侧边导航栏 -->
     <div class="sidebar">
-      <div
-        class="sidebar-item"
-        v-for="item in mapDialogData?.data"
-        :key="item.id"
-      >
-        <el-dropdown placement="left-start" trigger="hover">
-          <el-button
-            type="goon"
-            size="mini"
-            round
-            style="width: 88px"
-            v-if="item?.children?.length"
-          >
+      <div class="sidebar-item"
+           v-for="item in mapDialogData?.data"
+           :key="item.id">
+
+        <el-dropdown v-if="item?.children?.length"
+                     placement="left-start"
+                     trigger="hover">
+          <el-button type="goon"
+                     size="mini"
+                     round
+                     style="width: 88px">
             {{ item?.title }}
             <i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
-          <el-button
-            type="goon"
-            size="mini"
-            round
-            style="width: 88px"
-            @click="handleClick(item)"
-            v-else
-          >
-            {{ item?.title }}
-          </el-button>
-          <template #dropdown v-if="item?.children?.length">
+          <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item
                 v-for="item in item.children"
@@ -41,12 +28,22 @@
                 >{{ item.title }}
               </el-dropdown-item>
             </el-dropdown-menu>
+
           </template>
         </el-dropdown>
+        <el-button type="goon"
+                   size="mini"
+                   round
+                   style="width: 88px"
+                   @click="handleClick(item)"
+                   v-else>
+          {{ item?.title }}
+        </el-button>
       </div>
     </div>
-    <!-- store.state.mapDialog.visible -->
-    <div v-if="isOpen" class="headerDialogBox">
+    <!-- 侧边导航栏弹窗 -->
+    <div v-if="isOpen"
+         class="headerDialogBox">
       <div class="headerDialog">
         <div class="carousel_box">
           <el-row class="showBox">
@@ -56,7 +53,7 @@
                 :interval="5000"
                 arrow="never"
                 v-if="searchParams.list"
-                indicator-position="outside"
+                
                 style="width: 100%; margin-top: 30px"
               >
                 <el-carousel-item
@@ -96,7 +93,7 @@
                 >
                   <h1 style="text-align: center">{{ item.title }}</h1>
                   <div
-                    style="overflow: scroll; height: 500px; margin-top: 20px"
+                    style="overflow: scroll; height: 400px; margin-top: 20px"
                   >
                     <div
                       v-html="item.content"
@@ -120,7 +117,7 @@
                   :key="index"
                 >
                   <h1 style="text-align: center">{{ show }}</h1>
-                  <div style="height: 500px; text-align: center">
+                  <div style="height: 400px; text-align: center">
                     <template v-if="item.type == 'img'">
                       <img
                         :src="item.url"
@@ -144,9 +141,9 @@
              <template
               v-for="(item, index) in searchInfoParams.list"
               :key="index">
-              <p v-if="item.jdbm == '370105005'">
+              <div v-if="item.jdbm == '370105005'">
                 <div v-html="item.synopsis"></div>
-              </p>
+              </div>
              </template>
            </template>
            <template v-else-if="isOpenType == 'building'">
@@ -154,7 +151,7 @@
            </template>
            <template v-else-if="isOpenType == 'location'">
             <h1 style="text-align: center">{{ show }}</h1>
-            <div>
+            <el-col :span="24">
               <VForm
                 :form-data="formConfig"
                 :form-model="searchBuildingForm"
@@ -179,7 +176,8 @@
                   </popup-tree-input>
                 </template>
               </VForm>
-              <V-table
+              <div class="tableBox">
+                <V-table
                 ref="tableBuilding"
                 :table-config="tableConfig"
                 @select-change="(val) => (multipleSelection = val)"
@@ -188,15 +186,17 @@
                   <span>{{ houseType(Number(data.houseType)) }}</span>
                 </template>
                 <template v-slot:operation="{}">
-                  <el-button type="primary" @click="handleOperation"
+                  <el-button type="primary" size="mini" @click="handleOperation"
                     >定位</el-button
                   >
                 </template>
               </V-table>
-          </div>
+              </div>
+            </el-col>
           </template>
           <template  v-else-if="isOpenType == 'eventQuery'">
             <h1 style="text-align: center">{{ show }}</h1>
+            <el-col :span="24">
             <div>
               <VForm
                 :form-data="formEventConfig"
@@ -252,7 +252,8 @@
                   </el-select>
                 </template>
               </VForm>
-              <V-table
+              <div class="tableBox">
+                <V-table
                 ref="tableEvent"
                 :table-config="tableEventConfig"
                 @select-change="(val) => (multipleSelection = val)"
@@ -293,15 +294,18 @@
                   }}</span>
                 </template>
                 <template v-slot:operation="{}">
-                  <el-button type="primary" @click="handleEventOperation"
+                  <el-button type="primary" size="mini" @click="handleEventOperation"
                     >定位</el-button
                   >
                 </template>
               </V-table>
+              </div>
             </div>
+            </el-col>
           </template>
            <template  v-else-if="isOpenType == 'hotline'">
             <h1 style="text-align: center">{{ show }}</h1>
+            <el-col :span="24">
             <div>
               <VForm
                 :form-data="formHotlineConfig"
@@ -327,25 +331,23 @@
                   </popup-tree-input>
                 </template>
               </VForm>
-              <V-table
+              <div class="tableBox">
+                <V-table
                 ref="tableHotline"
                 :table-config="tableHotlineConfig"
                 @select-change="(val) => (multipleSelection = val)"
               >
                 <template v-slot:operation="{}">
-                  <el-button type="primary" @click="handleHotlineOperation"
+                  <el-button type="primary" size="mini" @click="handleHotlineOperation"
                     >定位</el-button
                   >
                 </template>
               </V-table>
+              </div>
             </div>
+            </el-col>
            </template>
           </el-row>
-        </div>
-
-        <div v-for="item in mapDialogData.children" :key="item.id">
-          <img :src="item.img" alt="" />
-          <span>{{ item.title }}</span>
         </div>
       </div>
       <i
@@ -356,74 +358,11 @@
     </div>
     <!-- 驾驶舱弹窗 -->
     <div v-if="isOpenCockpit" class="coclpit">
-      <div class="headerDialog">
+      <div class="coclpitDialog">
         <div>
           <h1 style="text-align: center">驾驶舱</h1>
         </div>
-        <el-row :gutter="10" class="itemBox1">
-          <el-col :span="3" v-for="item in billboardList" :key="item.id">
-            <div class="item">
-              <p class="itemTitle">{{ item.title }}</p>
-              <p class="itemNum">
-                {{ item.num }}<span class="itemUnit">{{ item.unit }}</span>
-              </p>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10" class="itemBox2">
-          <el-col :span="3" v-for="item in personnelDetails" :key="item.id">
-            <div class="item">
-              <p class="itemNum">
-                {{ item.num }}<span class="itemUnit">{{ item.unit }}</span>
-              </p>
-              <p class="itemTitle">{{ item.title }}</p>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="6">
-            <el-card shadow="hover">
-              <div id="main1" style="width: 100%; height: 200px"></div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="hover">
-              <div id="main2" style="width: 100%; height: 200px"></div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="hover">
-              <div id="main3" style="width: 100%; height: 200px"></div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="hover">
-              <div id="main4" style="width: 100%; height: 200px"></div>
-            </el-card>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="6">
-            <el-card shadow="hover">
-              <div id="main5" style="width: 100%; height: 200px"></div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="hover">
-              <div id="main6" style="width: 100%; height: 200px"></div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="hover">
-              <div id="main7" style="width: 100%; height: 200px"></div>
-            </el-card>
-          </el-col>
-          <el-col :span="6">
-            <el-card shadow="hover">
-              <div id="main8" style="width: 100%; height: 200px"></div>
-            </el-card>
-          </el-col>
-        </el-row>
+        <Coclpit />
       </div>
       <i
         class="el-icon-lx-roundclose headerDialogIcon"
@@ -431,134 +370,13 @@
         @click="handleCloseDialog('isOpenCockpit')"
       ></i>
     </div>
-    <!-- 楼栋弹窗 -->
-    <el-dialog
-      :title="`${buildForm.villageName + buildForm.buildingNumber}`"
-      v-model="houseDialogVisible"
-      width="60%"
-      draggable
-      style="z-index: 9999"
-    >
-      <div>
-        <el-row :gutter="10">
-          <el-col :span="5" class="buildInfoBox">
-            <h4>楼栋信息：</h4>
-            <hr />
-            <p><span>楼长：</span> {{ buildForm.housemaster }}</p>
-            <p><span>联系电话：</span>{{ buildForm.housemasterPhone }}</p>
-            <p><span>楼层数：</span> {{ buildForm.floorNumber }}</p>
-            <p><span>总户数：</span> {{ buildForm.houseNumber }}</p>
-          </el-col>
-          <el-col :span="19" class="buildListBox">
-            <h4>楼栋单元：</h4>
-            <hr />
-            <div class="buildListItemBox">
-              <div
-                class="buildListItem"
-                v-for="item in unitList"
-                :key="item.unitNumber"
-                :class="
-                  item.unitNumber == searchForm.unitNumber ? 'active' : ''
-                "
-                @click="getHouseByUnit(item.unitNumber)"
-              >
-                <img src="@/assets/img/unit.jpg" alt="" srcset="" />
-                <span>{{
-                  unitNumberOptions.filter((v) => v.value == item.unitNumber)[0]
-                    ?.label
-                }}</span>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="5" class="buildFloor">
-            <h4>楼层信息：</h4>
-            <hr />
-            <div>
-              <div
-                class="floor"
-                v-for="item in floorArr(buildForm.floorNumber)"
-                :class="item.floorId + 1 == searchForm.floorId ? 'active' : ''"
-                :key="item"
-                @click="getHouseByFloor(item.floorId + 1)"
-              >
-                {{ item.floorId + 1 }}F
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="19" class="houseBox">
-            <h4>
-              {{ buildForm.buildingNumber }}-{{ searchForm.unitNumber
-              }}{{ searchForm.unitNumber ? "单元" : "" }}-{{ searchForm.floorId
-              }}{{ searchForm.floorId ? "楼" : "" }}房屋人员信息：
-            </h4>
-            <!-- <hr> -->
-            <el-row :gutter="10">
-              <el-col :span="10">
-                <!-- {{ houseList.length }} -->
-                <div v-if="!isHaveHouse" class="noHouse">
-                  <img src="@/assets/img/loading.gif" alt="loading" srcset="" />
-                  <p>Loading...</p>
-                </div>
-                <div v-else-if="houseList.length <= 0" class="noList">
-                  暂无数据
-                </div>
-                <div v-else class="house">
-                  <div
-                    class="houseItem"
-                    @click="getPeople(item.houseNumber)"
-                    v-for="item in houseList"
-                    :key="item"
-                  >
-                    <img src="@/assets/img/house.png" alt="" />
-                    <p>{{ item.houseNumber }}</p>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="14" class="borderRight">
-                <div v-if="!isHavePeople" class="noPeople">
-                  <img src="@/assets/img/loading.gif" alt="loading" srcset="" />
-                  <p>Loading...</p>
-                </div>
-                <div v-else-if="peopleList.length <= 0" class="noList">
-                  暂无数据
-                </div>
-                <div v-else class="people house">
-                  <div
-                    class="peopleItem"
-                    v-for="item in peopleList"
-                    :key="item"
-                  >
-                    <img
-                      :src="
-                        item?.certificates?.length
-                          ? `${imgUrl}${item.certificates.split(',')[0]}`
-                          : ''
-                      "
-                      alt=""
-                    />
-                    <p>
-                      <span>姓名：</span> <span>{{ item.name }}</span>
-                    </p>
-                    <p>
-                      <span>户籍：</span> <span>{{ item.domicile }}</span>
-                    </p>
-                    <p>
-                      <span>户主关系：</span>
-                      <span>{{
-                        relationshipOptions.filter(
-                          (v) => v.value == item.relationship
-                        )[0]?.label
-                      }}</span>
-                    </p>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
-      </div>
+    <!-- 楼栋弹窗-->
+    <el-dialog title="楼栋人员信息"
+               v-model="houseDialogVisible"
+               width="60%"
+               draggable
+               style="z-index: 9999">
+      <Building :buildingId="buildingId" />
     </el-dialog>
     <!-- 事件处置弹窗 -->
     <el-dialog title="" v-model="eventHandleVisible" width="width">
@@ -672,7 +490,7 @@
     </el-dialog>
   </div>
 </template>
-<script lang='jsx'>
+<script>
 import {
   getCurrentInstance,
   onBeforeMount,
@@ -685,13 +503,10 @@ import {
 } from "@vue/runtime-core";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { useStore } from "vuex";
-import { getUnitByBuild } from "@/api/ActualInfo/build.js";
 import { searchDict } from "@/api/sys/dict";
 import { getUserList } from "@/api/sys/user";
 import { eventProcessing } from "@/api/ResidentsReport/index";
 import { resetFormat as resetFormatStatus } from "@/utils/util";
-import { getHouseList } from "@/api/ActualInfo/house";
-import { getPeopleList } from "@/api/ActualInfo/people";
 import { PartyList } from "@/api/PartyBuilding/partyInfo";
 import { PartyPeopleList } from "@/api/PartyBuilding/partyPeople";
 import { getDraft } from '@/api/Propaganda/draft'
@@ -705,9 +520,12 @@ import { renderTable as renderHotlineTable} from '@/views/home/SocialGovernance/
 import { getBuildList } from "@/api/ActualInfo/build";
 import { getDetailList } from "@/api/ResidentsReport/index";
 import { getOrganList } from "@/api/sys/organ";
+import Coclpit from './components/coclpit.vue'
+import Building from './components/building.vue'
+
+import Notice from './components/notice.vue'
 export default {
-  components: [PopupTreeInput],
-  //#region 
+  components: { Notice, Coclpit, Building },
   setup() {
     let vMap = ref(null);
     let fullHeight = ref("");
@@ -717,390 +535,9 @@ export default {
     const dialogVisible = ref(false);
     const mapDialogData = ref(null);
     const { proxy } = getCurrentInstance();
-    // 驾驶舱看板
-    const billboardList = ref([
-      { id: 1, title: '街道', num: 2, unit: '个' },
-      { id: 2, title: '基础网格', num: 80, unit: '个' },
-      { id: 3, title: '专属网格', num: 16, unit: '个' },
-      { id: 4, title: '常住户', num: 28802, unit: '户' },
-      { id: 5, title: '社区', num: 11, unit: '个' },
-      { id: 6, title: '单位', num: 695, unit: '个' },
-      { id: 7, title: '楼栋', num: 658, unit: '个' },
-      { id: 8, title: '重点服务人员', num: 3871, unit: '个' },
-    ])
-    const personnelDetails = ref([
-      { id: 1, title: '网格书记', num: 49, unit: '名' },
-      { id: 2, title: '网格长', num: 29, unit: '名' },
-      { id: 3, title: '网格员', num: 114, unit: '名' },
-      { id: 4, title: '帮包服务队', num: 70, unit: '个' },
-      { id: 5, title: '事件处置', num: 4488, unit: '件' },
-      { id: 6, title: '12345工单', num: 6091, unit: '件' },
-      { id: 7, title: '雪亮工程监控', num: 594, unit: '路' },
-      { id: 8, title: '重点监控管理人员', num: 162, unit: '人' },
-    ])
-    const myChart1 = ref(null)
-    const myChart2 = ref(null)
-    const myChart3 = ref(null)
-    const myChart4 = ref(null)
-    const myChart5 = ref(null)
-    const myChart6 = ref(null)
-    const myChart7 = ref(null)
-    const myChart8 = ref(null)
-    const drawEcharts = () => {
-      myChart1.value = proxy.$echart.init(document.getElementById('main1'))
-      myChart2.value = proxy.$echart.init(document.getElementById('main2'))
-      myChart3.value = proxy.$echart.init(document.getElementById('main3'))
-      myChart4.value = proxy.$echart.init(document.getElementById('main4'))
-      myChart5.value = proxy.$echart.init(document.getElementById('main5'))
-      myChart6.value = proxy.$echart.init(document.getElementById('main6'))
-      myChart7.value = proxy.$echart.init(document.getElementById('main7'))
-      myChart8.value = proxy.$echart.init(document.getElementById('main8'))
-      // 绘制图表
-      myChart1.value.setOption({
-        title: {
-          text: '网格人员力量类型统计'
-        },
-        tooltip: {},
-        xAxis: {
-          data: ['网格书记', '网格长', '网格员', '帮包服务队']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '人数以及人员类型',
-            type: 'bar',
-            data: [49, 26, 114, 70]
-          }
-        ]
-      });
-      // 饼图
-      myChart2.value.setOption({
-        title: {
-          text: '网格人员类型占比统计',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'bottom'
-        },
-        series: [
-          {
-            name: '人员占比',
-            type: 'pie',
-            radius: '50%',
-            data: [
-              { value: 49, name: '网格书记' },
-              { value: 26, name: '网格长' },
-              { value: 114, name: '网格员' },
-              { value: 70, name: '帮包服务队' },
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      })
-      // 绘制图表
-      myChart3.value.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow',
-            label: {
-              show: true
-            }
-          }
-        },
-        calculable: true,
-        legend: {
-          data: ['总数量', '已完成'],
-          itemGap: 5
-        },
-        grid: {
-          top: '12%',
-          left: '1%',
-          right: '10%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            data: ['网格书记', '网格长', '网格员', '帮包服务队']
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '处理数量',
-            axisLabel: {
-              formatter: function (a) {
-                a = +a;
-                return isFinite(a) ? proxy.$echart.format.addCommas(+a / 1000) : '';
-              }
-            }
-          }
-        ],
-        dataZoom: [
-          {
-            show: true,
-            start: 94,
-            end: 100
-          },
-          {
-            type: 'inside',
-            start: 94,
-            end: 100
-          },
-          {
-            show: true,
-            yAxisIndex: 0,
-            filterMode: 'empty',
-            width: 30,
-            height: '80%',
-            showDataShadow: false,
-            left: '93%'
-          }
-        ],
-        series: [
-          {
-            name: 'Budget 2011',
-            type: 'bar',
-            data: [0, 0, 0, 0, 0]
-          },
-          {
-            name: 'Budget 2012',
-            type: 'bar',
-            data: [0, 0, 0, 0, 0]
-          }
-        ]
-      });
-      // 绘制图表
-      myChart4.value.setOption({
-        // title: {
-        //   text: '事项处置效率排名',
-        //   subtext:'完成数/总数',
-        // },
-        tooltip: {},
-        xAxis: {
-          data: ['东区社区', '西区社区', '南区社区', '北区社区', '泉星社区', '绿地社区']
-        },
-        legend: [
-          {
-            name: '总数量',
-          },
-          {
-            name: '效率',
-          },
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '处理数量',
-          },
-          {
-            type: 'value',
-            name: '处理效率',
-          }
-        ],
-        series: [
-          {
-            name: '总数量',
-            type: 'bar',
-            data: [49, 26, 114, 70, 20, 30]
-          },
-          {
-            name: '效率',
-            type: 'line',
-            data: [10, 20, 40, 65, 50, 86]
-          }
-        ]
-      });
-      // 饼图
-      myChart5.value.setOption({
-        title: {
-          text: '事项处置完成率统计',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'bottom'
-        },
-        series: [
-          {
-            name: '',
-            type: 'pie',
-            radius: '50%',
-            data: [
-              { value: 835, name: '西区社区' },
-              { value: 794, name: '南区社区' },
-              { value: 781, name: '北区社区' },
-              { value: 764, name: '绿地社区' },
-              { value: 710, name: '东区社区' },
-              { value: 619, name: '泉星社区' },
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      })
-      // 绘制图表
-      myChart6.value.setOption({
-        // title: {
-        //   text: '事项处置效率排名',
-        //   subtext:'完成数/总数',
-        // },
-        tooltip: {},
-        xAxis: {
-          data: ['东区社区', '西区社区', '南区社区', '北区社区', '泉星社区', '绿地社区'],
-          min: 0,
-        },
-        legend: [
-          {
-            name: '总数量',
-          },
-          {
-            name: '已完成',
-          },
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '处理数量',
-          }
-        ],
-        series: [
-          {
-            name: '总数量',
-            type: 'bar',
-            data: [2, 18, 8, 3, 0, 0]
-          },
-          {
-            name: '已完成',
-            type: 'bar',
-            data: [0, 18, 5, 0, 0, 0]
-          }
-        ]
-      });
-      // 绘制图表
-      myChart7.value.setOption({
-        title: {
-          text: '事项处置效率排名',
-          // subtext:'完成数/总数',
-        },
-        tooltip: {},
-        xAxis: {
-          data: ['工人南村街道'],
-          min: 0,
-        },
-        // legend: [
-        //   {
-        //     name:'总数量',
-        //   },
-        //   {
-        //     name:'已完成',
-        //   },
-        // ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '处理数量',
-          },
-          {
-            type: 'value',
-            name: '处置效率',
-            min: 0,
-            max: 100,
-          }
-        ],
-        series: [
-          {
-            name: '总数量',
-            type: 'bar',
-            data: [2, 18, 8, 3, 0, 0]
-          },
-          {
-            name: '已完成',
-            type: 'bar',
-            data: [0, 18, 5, 0, 0, 0]
-          },
-          {
-            name: '处理效率',
-            type: 'line',
-            data: [0, 18, 5, 0, 0, 0]
-          }
-        ]
-      });
-      // 饼图
-      myChart8.value.setOption({
-        title: {
-          text: '南村街道12345热线办理比例分析图',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          bottom: 'bottom'
-        },
-        series: [
-          {
-            name: '',
-            type: 'pie',
-            radius: '50%',
-            label: {
-              normal: {
-                show: true,
-                formatter: '{b}: {c}件({d}%)' //自定义显示格式(b:name, c:value, d:百分比)
-              }
-            },
-            data: [
-              { value: 2138, name: '城乡建设' },
-              { value: 420, name: '社会事业' },
-              { value: 2812, name: '城市综合' },
-              { value: 39, name: '三农问题' },
-              { value: 179, name: '人力资源保障' },
-              { value: 139, name: '经济综合' },
-              { value: 32, name: '其他' },
-              { value: 501, name: '疫情防控' },
-              { value: 0, name: '城市更新' },
-              { value: 13, name: '自然资源' },
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      })
-    }
     // 楼栋
-    const imgUrl = ref(import.meta.env.VITE_IMG_BASE_API);
-    const houseDialogVisible = ref(false); //楼栋弹窗
-    const buildForm = ref({}); // 楼栋表单
-    const unitList = ref([]); // 楼栋弹窗单元列表
-    const houseList = ref([]);
-    const peopleList = ref([]);
-    const isHaveHouse = ref(true);
-    const isHavePeople = ref(true);
+    const houseDialogVisible = ref(false)
+    const buildingId = ref('')
     const tableBuilding = ref(null);
     const tableEvent = ref(null);
     const tableHotline = ref(null);
@@ -1148,20 +585,20 @@ export default {
     });
 
     const handleOperation = () => {
-      var html = '<div id="release" onClick="hj2(18512,7420,\'1公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>1公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+      var html = '<div id="release" onClick="hj2(18512,7420,\'1公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>1公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
       vMap.showMapMark(18512, 7420, html);
       return;
     };
     
     const handleEventOperation = () => {
-      var html = '<div id="release" onClick="hj2(17088,9828,\'3公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>3公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+      var html = '<div id="release" onClick="hj2(17088,9828,\'3公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>3公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
       vMap.showMapMark(17088, 9828, html);
       return;
     };
 
     
     const handleHotlineOperation = () => {
-       var html = '<div id="release" onClick="hj2(14328,8812,\'西区公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>西区公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+       var html = '<div id="release" onClick="hj2(14328,8812,\'西区公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>西区公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
       vMap.showMapMark(14328, 8812, html);
       return;
     };
@@ -1279,26 +716,6 @@ export default {
         { type: "primary", label: "查询", key: "search", handle: handleHotlineQuery },
         { type: "primary", label: "重置", key: "reset", handle: handleHotlineReset },
       ],
-    };
-
-    // 小区名字  楼号  单元号   房屋号
-    const searchForm = ref({
-      villageName: "",
-      buildingNumber: "",
-      unitNumber: "1",
-      floorId: 1,
-      houseNumber: "",
-      pageNum: "1",
-      pageSize: "9999",
-    });
-    const floorArr = (floorNumber) => {
-      let arr = [];
-      for (let i = floorNumber; i > 0; i--) {
-        let obj = {};
-        obj.floorId = i - 1;
-        arr.push(obj);
-      }
-      return arr;
     };
 
     // 事件处置弹窗
@@ -1435,7 +852,8 @@ export default {
       () => store.state.mapDialog,
       () => {
         mapDialogData.value = store.state.mapDialog.data;
-        handleAssign();
+        handleClickOpen('')
+        handleAssign()
       },
       { deep: true }
     );
@@ -1458,11 +876,13 @@ export default {
       // 一级分类触发不同弹窗方法 >>> 驾驶舱、数字党建等
       if (mapDialogData.value.type && mapDialogData.value.type == 'cockpit') {
         handleClickOpen('isOpenCockpit')
-        // 渲染驾驶舱看板 Echarts
-        setTimeout(() => drawEcharts(), 0)
       }
     }
     const handleCloseDialog = (flag) => {
+      if (mapDialogData.value.type && mapDialogData.value.type == 'cockpit') {
+        store.state.mapDialog = { type: '', data: [] }
+        mapDialogData.value = null
+      }
       dialogVis[flag] = false;
     }
     const handleQueryTable = () => {
@@ -1551,24 +971,6 @@ export default {
       //vMap.showMapMark(18821,10596,html);
       vMap.showMapMark(18888, 5250, html);
     };
-    
-    // 获取楼栋信息
-    const getBuild = (buildingId) => {
-      getUnitByBuild({ buildingId }).then(async (res) => {
-        if (res.resCode == "000000") {
-          unitList.value = res.data.unit;
-          buildForm.value = res.data.build;
-          searchForm.value.villageName = res.data.build.villageName;
-          searchForm.value.buildingNumber = res.data.build.buildingNumber;
-          houseList.value = await getHouseApi();
-          isHaveHouse.value = true;
-          peopleList.value = await getPeopleApi();
-          isHavePeople.value = true;
-          // console.log(houseList.value.length,peopleList.value.length,'????')
-          houseDialogVisible.value = true;
-        }
-      });
-    };
     let searchParams = ref({});
     const getPartyList = () => {
       PartyPeopleList({ pageNum: 1, pageSize: 99 }).then((res) => {
@@ -1583,71 +985,7 @@ export default {
       });
     };
 
-    const getHouseByUnit = (unitNumber) => {
-      searchForm.value.unitNumber = unitNumber;
-      searchForm.value.houseNumber = "";
-      isHaveHouse.value = false;
-      isHavePeople.value = false;
-      peopleList.value = [];
-      getHouseApi().then((res) => {
-        isHaveHouse.value = true;
-        houseList.value = res;
-      });
-      getPeopleApi().then((res) => {
-        isHavePeople.value = true;
-        peopleList.value = res;
-      });
-    };
-    const getHouseByFloor = (floorNumber) => {
-      searchForm.value.floorId = floorNumber;
-      searchForm.value.houseNumber = "";
-      isHaveHouse.value = false;
-      isHavePeople.value = false;
-      peopleList.value = [];
-      getHouseApi().then((res) => {
-        isHaveHouse.value = true;
-        houseList.value = res;
-      });
-      getPeopleApi().then((res) => {
-        isHavePeople.value = true;
-        peopleList.value = res;
-      });
-    };
-    const getPeople = (houseNumber) => {
-      searchForm.value.houseNumber = houseNumber;
-      isHavePeople.value = false;
-      getPeopleApi().then((res) => {
-        peopleList.value = res;
-        isHavePeople.value = true;
-      });
-    };
-    const getHouseApi = async () => {
-      return new Promise((resolve, reject) => {
-        getPeopleList(searchForm.value).then((res) => {
-          if (res.resCode == "000000") {
-            resolve(res.data.list)
-          }
-        });
-      })
-    };
-    // const getPeopleApi = async () => {
-    //   return new Promise((resolve, reject) => {
-    //     getPeopleList(searchForm.value).then((res) => {
-    //       if (res.resCode == "000000") {
-    //         resolve(res.data.list);
-    //       }
-    //     });
-    //   });
-    // };
-    const getPeopleApi = async () => {
-      return new Promise((resolve, reject) => {
-        getPeopleList(searchForm.value).then((res) => {
-          if (res.resCode == "000000") {
-            resolve(res.data.list);
-          }
-        });
-      });
-    };
+    
     // websocket 事件触发
     // 自行触发弹窗函数
     const eventDialogStyle = () => {
@@ -1682,11 +1020,11 @@ export default {
       setTimeout(() => drawMyRoute3(), 1000);
 
       vMap.onMapClick((x0, y0, id, title, identitycode) => {
-        console.log(x0,y0,id,title,identitycode)
-        // getBuild(19);
+        buildingId.value = '19'
+        houseDialogVisible.value = true
       });
     });
-    
+
     watch(
       () => store.state.eventList,
       () => {
@@ -1706,11 +1044,11 @@ export default {
     const show = ref('');
     const brandList = ref([])
     const getDraftList = () => {
-      getDraft({pageNum:1,pageSize:999}).then(res=>{
-        if(res.resCode == '000000'){
+      getDraft({ pageNum: 1, pageSize: 999 }).then(res => {
+        if (res.resCode == '000000') {
           let arr = []
-          res.data.list.forEach(v=>{
-            v.content.replace('/\/g','')
+          res.data.list.forEach(v => {
+            v.content.replace('/\/g', '')
             arr.push(v)
           })
           brandList.value = arr
@@ -1719,42 +1057,42 @@ export default {
     }
     // 数字党建 >>> 工作展示模块
     const workShowList = ref([
-      { id:1,title:'a',type:'img',url:'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418474776831426560.jpg' },
-      { id:2,title:'a',type:'video',url:'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202112/1468426165151420416.mp4' },
-      { id:3,title:'a',type:'img',url:'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418474760540749824.jpg' },
-      { id:4,title:'a',type:'img',url:'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418464766973935616.jpg' },
+      { id: 1, title: 'a', type: 'img', url: 'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418474776831426560.jpg' },
+      { id: 2, title: 'a', type: 'video', url: 'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202112/1468426165151420416.mp4' },
+      { id: 3, title: 'a', type: 'img', url: 'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418474760540749824.jpg' },
+      { id: 4, title: 'a', type: 'img', url: 'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418464766973935616.jpg' },
     ])
     // 数字党建弹窗控制模块
     const handleClick = (item) => {
       if (item.type == 'party') {
-        var html = '<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(17408, 7178,html);
+        var html = '<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(17408, 7178, html);
         isOpenType.value = item.type
         return
-      }else if(item.type == 'underParty') {
-        var html = '<div id="party" onClick="hj2(19524,7796,\'南村街道直属党组织\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道直属党组织</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'        
-        vMap.showMapMark(19524, 7796,html);
+      } else if (item.type == 'underParty') {
+        var html = '<div id="party" onClick="hj2(19524,7796,\'南村街道直属党组织\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道直属党组织</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(19524, 7796, html);
         isOpenType.value = item.type
         return
-      }else if(item.type == 'partyBranch') {
-        var html = '<div id="party" onClick="hj2(18648,9718,\'南村街道党支部\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党支部</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'        
+      } else if (item.type == 'partyBranch') {
+        var html = '<div id="party" onClick="hj2(18648,9718,\'南村街道党支部\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党支部</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
 
-        vMap.showMapMark(18648, 9718,html);
+        vMap.showMapMark(18648, 9718, html);
         isOpenType.value = item.type
         return
-      }else if(item.type == 'partyVan') {
+      } else if (item.type == 'partyVan') {
         handleClickOpen('')
         getPartyList();
         handleClickOpen('isOpen')
         show.value = item.title;
         isOpenType.value = item.type
-      }else if (item.type == 'brand'){
+      } else if (item.type == 'brand') {
         getDraftList()
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-      } else if(item.type == 'workShow'){
+      } else if (item.type == 'workShow') {
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
@@ -1823,17 +1161,9 @@ export default {
             getInfo();
         }, 1000);
       }
-      
 
-    }
-    // const handleClick = (item) => {
-    //   getInfo();
-    //   getBuilList();
-    // };
-    window.aa = () => {
-      console.log('1111')
-    }
 
+    };
     onBeforeMount(() => {
       getOptionsByCode(1026, dataSourceOptions);
       getOptionsByCode(1009, sexOptions);
@@ -1856,12 +1186,6 @@ export default {
     });
 
     //
-    const unitNumberOptions = ref([]);
-    const relationshipOptions = ref([]);
-    // const houseTypeOptions = ref([]);
-    getOptionsByCode(1052, unitNumberOptions);
-    getOptionsByCode(1014, relationshipOptions);
-    // getOptionsByCode(1005, houseTypeOptions);
 
     return {
       fullHeight,
@@ -1869,20 +1193,6 @@ export default {
       dialogVisible,
       handleCloseDialog,
       houseDialogVisible,
-      // 楼栋弹窗
-      imgUrl,
-      buildForm,
-      unitList,
-      houseList,
-      peopleList,
-      getHouseByUnit,
-      isHaveHouse,
-      isHavePeople,
-      getHouseByFloor,
-      getPeople,
-      searchForm,
-      floorArr,
-      relationshipOptions,
       // 事件处置弹窗
       eventHandleVisible,
       dataForm,
@@ -1896,19 +1206,17 @@ export default {
       multipleSelection,
       rules,
       recordFormRef,
-      unitNumberOptions,
       handleClick,
       ...toRefs(dialogVis),
       show,
       // showTitleObj,
       searchParams,
-      // 看板
-      billboardList,
-      personnelDetails,
       // 党建弹窗
       isOpenType,
       brandList,
       workShowList,
+      buildingId,
+      // 
       searchInfoParams,
       formConfig,
       searchBuildingForm,
@@ -1991,11 +1299,11 @@ export default {
   height:100%;
 }
 .carousel_box .showBox{
-  height: calc(100% - 40px);
+  max-height:500px ;
   overflow-y: scroll;
 }
 ::v-deep .el-carousel__container{
-  height:97%;
+  height: 400px;
 }
 .headerDialogIcon {
   position: absolute;
@@ -2004,8 +1312,8 @@ export default {
 }
 .headerDialog {
   width: 100%;
-  height: 500px; 
-  /* min-height: 500px; */
+  height: 100%; 
+  min-height: 500px;
   border: 1px solid #bad23c;
   box-sizing: border-box;
   padding: 5px;
@@ -2022,217 +1330,10 @@ export default {
 .headerDialogBox > h1 {
   text-align: center;
 }
-/* .headerDialog > div {
-  width: 150px;
-  height: 120px;
-  background: #242f42;
-  margin: 10px;
-  box-sizing: border-box;
-  color: #fff;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  cursor: pointer;
-}
-.headerDialog > div:hover {
-  opacity: 0.8;
-  border: 1px dashed #fff;
-  background: block;
-}
-.headerDialog > div > img {
-  width: 80%;
-  height: 60%;
-} */
+
 h4 {
   height: 20px;
 }
-.buildInfoBox {
-  height: 122px;
-  color: #333;
-}
-.buildInfoBox > p > span {
-  display: inline-block;
-  width: 80px;
-  color: #999;
-}
-.buildListBox {
-  display: flex;
-  height: 122px;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-.buildListBox > h4 {
-  width: 100%;
-  height: 22px;
-}
-.buildListItemBox {
-  display: flex;
-  height: 100px;
-  justify-content: start;
-  overflow: scroll;
-  scrollbar-width: none;
-  align-items: center;
-}
-.buildListItem {
-  height: 80px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  margin: 0 10px;
-  cursor: pointer;
-  padding: 5px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  font-size: 12px;
-}
-.buildListItem > img {
-  width: 40px;
-  /* height: 200px; */
-}
-.buildFloor {
-  min-height: 300px;
-}
-.buildFloor > div {
-  margin: 0 auto;
-  width: 100%;
-  overflow-y: scroll;
-  max-height: 300px;
-  scrollbar-width: none;
-}
-.floor {
-  width: 60%;
-  margin-left: 20%;
-  height: 40px;
-  background: #bad23c;
-  border-radius: 5px;
-  transform: rotateX(45deg);
-  transform: rotate(10deg);
-  transform: skewX(160deg);
-  transform: translateY(-100);
-  cursor: pointer;
-  line-height: 40px;
-  text-align: center;
-}
-.floor:hover {
-  transform: scale(1.1);
-  background: darkgoldenrod;
-}
-.active {
-  transform: scale(1.1);
-  background: #242f42;
-  color: #fff;
-}
-.houseBox {
-  border: 1px solid #999;
-}
-.houseBox > h4 {
-  border-bottom: 1px dashed #999;
-  height: 25px;
-}
-.houseBox > div {
-  height: calc(100% - 25px);
-}
-.noList {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.noHouse,
-.noPeople {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.noHouse > img,
-.noPeople > img {
-  width: 100px;
-  height: 80px;
-}
-.house {
-  height: 300px;
-  display: flex;
-  padding-right: 5px;
-  width: 100%;
-  justify-content: start;
-  flex-wrap: wrap;
-  overflow-y: scroll;
-  scrollbar-width: none;
-}
-.houseItem {
-  width: 70px;
-  height: 100px;
-  background: #f5f5f5;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  margin: 10px;
-  cursor: pointer;
-}
-.houseItem > img {
-  width: 30px;
-  /* height: 60px; */
-}
-.peopleItem {
-  background: #f5f5f5;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  margin: 10px;
-  cursor: pointer;
-  width: 110px;
-  height: 200px;
-  font-size: 12px;
-  padding: 5px;
-  box-sizing: border-box;
-}
-.peopleItem > img {
-  width: 100%;
-  height: 100px;
-}
-.peopleItem > p {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
-}
-::-webkit-scrollbar {
-  /*隐藏滚轮*/
-  display: none;
-}
-.borderRight {
-  border-left: 1px dashed #999;
-}
-/*  */
-/* .eventBox{
-  width: 400px;
-  height: 400px;
-  background: #242f42;
-  opacity: .8;
-  z-index: 2999;
-  position: absolute;
-  top: 40%;
-  left: 51%;
-  border-radius: 10px;
-}
-.eventBox:before {
-  content: "";
-  position: absolute;
-  right: 100%;
-  top: 80px;
-  border-top: 13px solid transparent;
-  border-right: 30px solid #242f42;
-  border-bottom: 13px solid transparent;
-} */
 
 .checkSpan {
   display: inline-block;
@@ -2279,6 +1380,20 @@ h4 {
 .el-carousel__item {
   background: none !important;
 }
+/* 驾驶舱 */
+.coclpitDialog {
+  width: 100%;
+  /* height: 500px;  */
+  min-height: 300px;
+  border: 1px solid #bad23c;
+  box-sizing: border-box;
+  padding: 5px;
+  background: #242f42;
+  color: #fff;
+}
+.coclpitDialog > div {
+  margin: 20px 0;
+}
 .coclpit {
   width: 100%;
   height: 100vh;
@@ -2292,40 +1407,13 @@ h4 {
   padding: 60px 50px 50px;
   border-radius: 10px;
 }
-.item {
-  width: 100%;
-  padding: 5px 10px 10px;
-  box-sizing: border-box;
-  /* height: 60px; */
-  border: 1px solid #fff;
-  display: flex;
-  flex-direction: column;
-  color: #fff;
-  font-size: 14px;
+::-webkit-scrollbar {
+  /*隐藏滚轮*/
+  display: none;
 }
-.item > p,
-.item > p {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.itemNum {
-  font-size: 36px;
-  text-align: center;
-  height: 40px;
-  line-height: 40px;
-}
-.itemUnit {
-  margin-top: 10px;
-  font-size: 14px;
-  float: right;
-}
-.itemBox1,
-.itemBox2 {
-  height: 80px !important;
-}
-.itemBox2 {
-  text-align: center;
+.tableBox{
+  height: 400px;
+  overflow: scroll;
 }
 </style>
 

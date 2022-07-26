@@ -11,7 +11,7 @@
     <div style="margin-bottom: 20px"><hr /></div>
     <VForm v-if="route.query.type === 'build'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="buildFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree="">
-          <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+          <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" :key="timer" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
               v-for="item in streetNameOptions"
               :key="item.value"
@@ -21,7 +21,7 @@
           </el-select>
         </template>
         <template v-slot:communityCode="">
-          <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+          <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区" :key="timer" @change="(val)=>{handleChange(2,val,true)}">
             <el-option
               v-for="item in communityNameOptions"
               :key="item.value"
@@ -31,7 +31,7 @@
           </el-select>
         </template>
         <template v-slot:gridCode="">
-          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true)}">
+          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" :key="timer" @change="(val)=>{handleChange(3,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
               :key="item.value"
@@ -623,6 +623,7 @@ export default {
       }
     })
     return {
+      timer,
       dataForm,
       table1,
       table2,

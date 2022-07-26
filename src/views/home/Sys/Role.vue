@@ -138,6 +138,9 @@ export default {
                 proxy.$message.success('角色添加成功！')
                 handleQuery()
                 dialogVisible.value = false
+              }else if (res.code == 500){
+                proxy.$message.warning(res.msg)
+                dialogVisible.value = false
               }
             })
           } else {
@@ -145,6 +148,9 @@ export default {
               if (res.code === 200) {
                 proxy.$message.success('角色修改成功！')
                 handleQuery()
+                dialogVisible.value = false
+              }else if (res.code == 500){
+                proxy.$message.warning(res.msg)
                 dialogVisible.value = false
               }
             })

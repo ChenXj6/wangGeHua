@@ -131,7 +131,7 @@ export function renderTable() {
                 label: '处置状态',
                 prop: 'dealStatus',
                 placeholder: '请选择处置状态',
-                code:'1069',
+                code:'1078',
                 isClearable: true,
                 span: 6,
               },

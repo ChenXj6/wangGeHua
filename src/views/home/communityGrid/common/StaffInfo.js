@@ -12,6 +12,10 @@ export function renderTable() {
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
+      { prop: 'streeName', label: '街道名称',toolTip:true, minWidth: '120' },
+      { prop: 'streetCode', label: '街道编码',toolTip:true, minWidth: '120' },
+      { prop: 'communityName', label: '社区名称',toolTip:true, minWidth: '120' },
+      { prop: 'countyCode', label: '社区编码',toolTip:true, minWidth: '120' },
       {
         prop: '',
         label: '网格力量类型',
@@ -32,7 +36,7 @@ export function renderTable() {
       {
         type: 'slot',
         label: '组织结构',
-        prop: 'status',
+        prop: 'officeName',
         value: '',
         slotName:'status',
         isClearable: true,
@@ -50,18 +54,9 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '力量类型',
-        prop: 'status',
+        prop: 'type',
         code:'1017',
         placeholder:'选择力量类型',
-        isClearable: true,
-        span: 4,
-      },
-      {
-        type: 'Input',
-        label: '身份证号',
-        prop: 'idcard',
-        value: '',
-        placeholder: '请输入身份证号',
         isClearable: true,
         span: 4,
       },

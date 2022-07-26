@@ -1,8 +1,8 @@
 <template>
   <div>
     <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle">
-      <template v-slot:status>
-        <el-select v-model="searchForm.status" size="mini" clearable placeholder="请选择事件状态">
+      <template v-slot:approvalStatus>
+        <el-select v-model="searchForm.approvalStatus" size="mini" clearable placeholder="请选择事件状态">
           <el-option
             v-for="item in approvalStatusOptions"
             :key="item.value"
@@ -21,8 +21,8 @@
           </el-option>
         </el-select>
       </template>
-      <template v-slot:source>
-        <el-select v-model="searchForm.source" size="mini" clearable placeholder="请选择事件来源">
+      <template v-slot:dataSource>
+        <el-select v-model="searchForm.dataSource" size="mini" clearable placeholder="请选择事件来源">
           <el-option
             v-for="item in dataSourceOptions"
             :key="item.value"
@@ -117,20 +117,21 @@ export default defineComponent({
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm.value)
-      for (const key in searchParams.value) {
-        if (
-          Array.isArray(searchParams.value[key]) &&
-          searchParams.value[key].length > 0
-        ) {
-          searchParams.value[`${key}Start`] = formatterDate(
-            searchParams.value[key][0]
-          )
-          searchParams.value[`${key}End`] = formatterDate(
-            searchParams.value[key][1]
-          )
-          delete searchParams.value[key]
-        }
-      }
+      // for (const key in searchParams.value) {
+      //   if (
+      //     Array.isArray(searchParams.value[key]) &&
+      //     searchParams.value[key].length > 0
+      //   ) {
+      //     searchParams.value[`${key}Start`] = formatterDate(
+      //       searchParams.value[key][0]
+      //     )
+      //     searchParams.value[`${key}End`] = formatterDate(
+      //       searchParams.value[key][1]
+      //     )
+      //     delete searchParams.value[key]
+      //   }
+      // }
+      console.log(searchParams.value)
       table.currentPage = 1
       handleQueryTable()
     }

@@ -46,8 +46,10 @@
           default-expand-all
           :default-checked-keys="treeCheckArr"
           node-key="id"
-          @check-change="handleCheckChange"
+          check-strictly
+          @check="nodeClick"
         >
+        <!-- @check-change="handleCheckChange" -->
           <template #default="{ node, data }">
             <span class="custom-tree-node">
               <span>{{ data.name }}</span>
@@ -202,8 +204,45 @@ export default {
         }
       })
     }
-    const handleCheckChange = () => {
-      let checkArr = treeRef.value.getCheckedKeys(false)
+    // 角色分配菜单树逻辑
+    const nodeClick = (data,node) => {
+      let result = node.checkedKeys.indexOf(data.id) >= 0
+      if(data.children.length > 0 && result){ // 如果直接选择了父级，下级全部勾选
+        data.children.forEach(val=>{
+          if(node.checkedKeys.indexOf(val.id) >= 0){
+            node.checkedKeys.forEach((v,i)=>{
+              if(val.id == v){
+                node.checkedKeys.splice(i,1)              
+              }
+            })
+          }else{
+            node.checkedKeys.push(val.id)
+          }
+        })
+      }else if(!result){  // 如果点击取消了父级，下级全部移除
+        data.children.forEach(val=>{
+          if(node.checkedKeys.indexOf(val.id) >= 0){
+            node.checkedKeys.forEach((v,i)=>{
+              if(val.id == v){
+                node.checkedKeys.splice(i,1)              
+              }
+            })
+          }
+        })
+      }
+      // 如果只选择了一个下级，则把他的父级也勾选
+      if(!!data.parentId){
+        let result = node.checkedKeys.indexOf(data.parentId) >= 0
+        !result && node.checkedKeys.push(data.parentId)
+      }
+      // 把半选中的父级改为选中
+      node.halfCheckedKeys.forEach((v,i)=>{
+        node.checkedKeys.push(v)
+        node.halfCheckedKeys.splice(i,1)
+      })
+      treeRef.value.setCheckedKeys(node.checkedKeys,false)
+      // 给接口所用数据赋值
+      let checkArr = node.checkedKeys
       if(checkArr.length == 0) treeSelectArr.value = []
       let arr = []
       checkArr.forEach(v=>{
@@ -258,7 +297,7 @@ export default {
         saveRoleToUser(multipleSelection.value).then(res=>{
           if(res.code == '200'){
             proxy.$message.success('用户分配角色成功')
-            // delCurrentTag(route)
+            delCurrentTag(route)
           }
         })
       }else if(route.query.type == 'role') {
@@ -269,7 +308,7 @@ export default {
         saveMenuByRole(treeSelectArr.value).then(res=>{
           if(res.code == '200'){
             proxy.$message.success('角色分配菜单权限成功')
-            // delCurrentTag(route)
+            delCurrentTag(route)
           }
         })
       }else{
@@ -280,6 +319,7 @@ export default {
         saveDataByRole(treeCheckData.value).then(res=>{
           if(res.code == '200'){
             proxy.$message.success('角色分配数据权限成功')
+            delCurrentTag(route)
           }
         })
       }
@@ -316,7 +356,7 @@ export default {
       handleBack,
       items,
       treeRef,
-      handleCheckChange,
+      nodeClick,
       treeCheckArr,
       data,
       treeDataRef,
