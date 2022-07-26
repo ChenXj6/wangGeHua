@@ -17,9 +17,16 @@
     <VForm :key="timer" :isDisabled="route.query.operation == 1" :form-data="InfoFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
         <el-form-item label="组织结构">
-          <el-input v-if="dataForm.streeName" size="mini" disabled v-model="dataForm.streeName"></el-input>
+          <!-- <el-input v-if="dataForm.streeName" size="mini" disabled v-model="dataForm.streeName"></el-input>
           <el-input v-else-if="dataForm.communityName" size="mini" disabled v-model="dataForm.communityName"></el-input>
-          <el-input v-else size="mini" disabled v-model="dataForm.gridName"></el-input>
+          <el-input v-else size="mini" disabled v-model="dataForm.gridName"></el-input> -->
+          <popup-tree-input
+            :data="popupTreeData" :propa="popupTreeProps"
+            :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            <template v-slot>
+              <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+            </template>
+        </popup-tree-input>
         </el-form-item>
       </template>
       <template v-slot:remarks>
@@ -110,6 +117,7 @@ import mixin from '@/mixins/tagView.js'
 import { renderTable } from './common/EditBorderInfo'
 import { saveBorderInfo,editBorderInfo } from '@/api/communityGrid/borderInfo'
 import { defaultObject } from '@/utils/util'
+import { getOrganList } from '@/api/sys/organ'
 export default {
   name:'EditActual',
   mixins: [mixin],
@@ -220,6 +228,22 @@ export default {
         {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
       ]
     }
+    let popupTreeData = ref([])
+    const popupTreeProps = {
+      label: "officeName",
+      children: "children"
+    } 
+    const handleTreeSelectChange = ({officeCode,officeName}) => {
+      dataForm.officeCode = officeCode
+      dataForm.officeName = officeName
+    }
+    const getOList = () => {
+      getOrganList({}).then(res=>{
+        if(res.resCode == '000000'){
+          popupTreeData.value = res.data
+        }
+      })
+    }
     onBeforeMount(()=>{
       timer.value = new Date().getTime()
     })
@@ -234,6 +258,7 @@ export default {
       })
     }
     route.query.operation != 3 && (formatReset(JSON.parse(decodeURIComponent(route.query.data)),dataForm))
+    getOList()
     onMounted(() => {
       route.query.operation === 3 &&( defaultObject(dataForm))
     })
@@ -247,6 +272,9 @@ export default {
       addList,
       removeBtn,
       // rules,
+      handleTreeSelectChange,
+      popupTreeProps,
+      popupTreeData,
     }
   },
 }

@@ -188,6 +188,8 @@ export default defineComponent({
           peopleList.value = await getPeopleApi()
           isHavePeople.value = true
           isShow.value = true
+        }else{
+          
         }
       });
     };

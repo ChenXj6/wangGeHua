@@ -522,5 +522,6 @@ export default {
 }
 .coclpit-content > div {
   margin: 10px 0;
+  
 }
 </style>

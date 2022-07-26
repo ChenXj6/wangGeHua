@@ -21,9 +21,11 @@
           </el-button>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item v-for="item in item.children"
-                                :key="item"
-                                @click="handleClick(item)">{{ item.title }}
+              <el-dropdown-item
+                v-for="item in item.children"
+                :key="item"
+                @click="handleClick(item)"
+                >{{ item.title }}
               </el-dropdown-item>
             </el-dropdown-menu>
 
@@ -43,93 +45,330 @@
     <div v-if="isOpen"
          class="headerDialogBox">
       <div class="headerDialog">
-        <div>
+        <div class="carousel_box">
           <el-row class="showBox">
             <template v-if="isOpenType == 'partyVan'">
-              <h1 style="text-align: center">{{show}}</h1>
-              <el-carousel :interval="5000"
-                           arrow="never"
-                           v-if="searchParams.list"
-                           indicator-position="outside"
-                           style="width: 1000px;margin-top:30px">
-                <el-carousel-item :span="18"
-                                  v-for="(item, index) in searchParams.list"
-                                  :key="index">
-                  <el-col :span="6"
-                          class="vanguard">
-                    <img src="https://img0.baidu.com/it/u=640038218,836613496&fm=253&fmt=auto&app=138&f=JPEG?w=460&h=620" />
+              <h1 style="text-align: center">{{ show }}</h1>
+              <el-carousel
+                :interval="5000"
+                arrow="never"
+                v-if="searchParams.list"
+                
+                style="width: 100%; margin-top: 30px"
+              >
+                <el-carousel-item
+                  :span="18"
+                  v-for="(item, index) in searchParams.list"
+                  :key="index"
+                >
+                  <el-col :span="6" class="vanguard">
+                    <img
+                      src="https://img0.baidu.com/it/u=640038218,836613496&fm=253&fmt=auto&app=138&f=JPEG?w=460&h=620"
+                    />
                   </el-col>
                   <p>姓名：{{ item.memberName }}</p>
                   <p>
-                    性别：{{sexOptions.filter((v) => v.value == item.gender)[0]?.label}}
+                    性别：{{
+                      sexOptions.filter((v) => v.value == item.gender)[0]?.label
+                    }}
                   </p>
-                  <p>归属党组织：{{item.infoName}}</p>
-                  <p>电话：{{item.phone}}</p>
+                  <p>归属党组织：{{ item.infoName }}</p>
+                  <p>电话：{{ item.phone }}</p>
                   <span>简介：{{ item.memberSynopsis }}</span>
                 </el-carousel-item>
               </el-carousel>
             </template>
             <template v-else-if="isOpenType == 'brand'">
-              <el-carousel :interval="5000"
-                           arrow="never"
-                           v-if="brandList.length"
-                           indicator-position="outside"
-                           style="width: 1000px;">
-                <el-carousel-item :span="24"
-                                  v-for="(item, index) in brandList"
-                                  :key="index">
-                  <h1 style="text-align: center">{{item.title}}</h1>
-                  <div style="overflow:scroll;height:300px;margin-top:20px;">
-                    <div v-html="item.content"
-                         style="margin-bottom:100px"></div>
+              <el-carousel
+                :interval="5000"
+                arrow="never"
+                v-if="brandList.length"
+                indicator-position="outside"
+                style="width: 100%;height:100%"
+              >
+                <el-carousel-item
+                  :span="24"
+                  v-for="(item, index) in brandList"
+                  :key="index"
+                >
+                  <h1 style="text-align: center">{{ item.title }}</h1>
+                  <div
+                    style="overflow: scroll; height: 400px; margin-top: 20px"
+                  >
+                    <div
+                      v-html="item.content"
+                      style="margin-bottom: 100px"
+                    ></div>
                   </div>
                 </el-carousel-item>
               </el-carousel>
             </template>
             <template v-else-if="isOpenType == 'workShow'">
-              <el-carousel :interval="5000"
-                           arrow="never"
-                           v-if="workShowList.length"
-                           indicator-position="outside"
-                           style="width: 1000px;">
-                <el-carousel-item :span="24"
-                                  v-for="(item, index) in workShowList"
-                                  :key="index">
-                  <h1 style="text-align: center">{{show}}</h1>
-                  <div style="height:300px;text-align:center">
+              <el-carousel
+                :interval="5000"
+                arrow="never"
+                v-if="workShowList.length"
+                indicator-position="outside"
+                style="width: 100%"
+              >
+                <el-carousel-item
+                  :span="24"
+                  v-for="(item, index) in workShowList"
+                  :key="index"
+                >
+                  <h1 style="text-align: center">{{ show }}</h1>
+                  <div style="height: 400px; text-align: center">
                     <template v-if="item.type == 'img'">
-                      <img :src="item.url"
-                           :alt="item.title"
-                           style="height:100%">
+                      <img
+                        :src="item.url"
+                        :alt="item.title"
+                        style="height: 100%"
+                      />
                     </template>
                     <template v-else-if="item.type == 'video'">
-                      <video :src="item.url"
-                             style="height:100%"
-                             controls></video>
+                      <video
+                        :src="item.url"
+                        style="height: 100%"
+                        controls
+                      ></video>
                     </template>
                   </div>
                 </el-carousel-item>
               </el-carousel>
             </template>
+           <template v-else-if="isOpenType == 'briefIntroduction'">
+               <h1 style="text-align: center">{{ show }}</h1>
+             <template
+              v-for="(item, index) in searchInfoParams.list"
+              :key="index">
+              <div v-if="item.jdbm == '370105005'">
+                <div v-html="item.synopsis"></div>
+              </div>
+             </template>
+           </template>
+           <template v-else-if="isOpenType == 'building'">
+            <h1 style="text-align: center">{{ show }}</h1>
+           </template>
+           <template v-else-if="isOpenType == 'location'">
+            <h1 style="text-align: center">{{ show }}</h1>
+            <el-col :span="24">
+              <VForm
+                :form-data="formConfig"
+                :form-model="searchBuildingForm"
+                :form-handle="formHandle"
+              >
+                <template v-slot:status>
+                  <popup-tree-input
+                    :data="popupTreeData"
+                    :propa="popupTreeProps"
+                    :nodeKey="'' + searchBuildingForm.officeCode"
+                    @update:dataForm="handleTreeSelectChange"
+                  >
+                    <template v-slot>
+                      <el-input
+                        v-model="searchBuildingForm.officeName"
+                        size="mini"
+                        :readonly="true"
+                        placeholder="点击选择机构"
+                        style="cursor: pointer"
+                      ></el-input>
+                    </template>
+                  </popup-tree-input>
+                </template>
+              </VForm>
+              <div class="tableBox">
+                <V-table
+                ref="tableBuilding"
+                :table-config="tableConfig"
+                @select-change="(val) => (multipleSelection = val)"
+              >
+                <template v-slot:houseType="{ data }">
+                  <span>{{ houseType(Number(data.houseType)) }}</span>
+                </template>
+                <template v-slot:operation="{}">
+                  <el-button type="primary" size="mini" @click="handleOperation"
+                    >定位</el-button
+                  >
+                </template>
+              </V-table>
+              </div>
+            </el-col>
+          </template>
+          <template  v-else-if="isOpenType == 'eventQuery'">
+            <h1 style="text-align: center">{{ show }}</h1>
+            <el-col :span="24">
+            <div>
+              <VForm
+                :form-data="formEventConfig"
+                :form-model="searchEventForm"
+                :form-handle="formEventHandle"
+              >
+                <template v-slot:approvalStatus>
+                  <el-select
+                    v-model="searchEventForm.approvalStatus"
+                    size="mini"
+                    clearable
+                    placeholder="请选择事件状态"
+                  >
+                    <el-option
+                      v-for="item in approvalStatusOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </template>
+                <template v-slot:eventFirstType>
+                  <el-select
+                    v-model="searchEventForm.eventFirstType"
+                    size="mini"
+                    clearable
+                    placeholder="请选择事件类型"
+                  >
+                    <el-option
+                      v-for="item in eventFirstTypeOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </template>
+                <template v-slot:source>
+                  <el-select
+                    v-model="searchEventForm.source"
+                    size="mini"
+                    clearable
+                    placeholder="请选择事件来源"
+                  >
+                    <el-option
+                      v-for="item in eventSourceOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    >
+                    </el-option>
+                  </el-select>
+                </template>
+              </VForm>
+              <div class="tableBox">
+                <V-table
+                ref="tableEvent"
+                :table-config="tableEventConfig"
+                @select-change="(val) => (multipleSelection = val)"
+              >
+                <template v-slot:name="data">
+                  <span
+                    type="success"
+                    @click.prevent="handleOperation(1, data.data)"
+                    >{{ data.data.eventName }}</span
+                  >
+                </template>
+                <template v-slot:eventScope="{ data }">
+                  <span>{{
+                    eventScopeOptions.filter(
+                      (v) => v.value == data.eventScope
+                    )[0]?.label
+                  }}</span>
+                </template>
+                <template v-slot:eventFirstType="{ data }">
+                  <span>{{
+                    eventFirstTypeOptions.filter(
+                      (v) => v.value == data.eventFirstType
+                    )[0]?.label
+                  }}</span>
+                </template>
+                <template v-slot:approvalStatus="{ data }">
+                  <span>{{
+                    approvalStatusOptions.filter(
+                      (v) => v.value == data.approvalStatus
+                    )[0]?.label
+                  }}</span>
+                </template>
+                <template v-slot:dataSource="{ data }">
+                  <span>{{
+                    eventSourceOptions.filter(
+                      (v) => v.value == data.dataSource
+                    )[0]?.label
+                  }}</span>
+                </template>
+                <template v-slot:operation="{}">
+                  <el-button type="primary" size="mini" @click="handleEventOperation"
+                    >定位</el-button
+                  >
+                </template>
+              </V-table>
+              </div>
+            </div>
+            </el-col>
+          </template>
+           <template  v-else-if="isOpenType == 'hotline'">
+            <h1 style="text-align: center">{{ show }}</h1>
+            <el-col :span="24">
+            <div>
+              <VForm
+                :form-data="formHotlineConfig"
+                :form-model="searchHotlineForm"
+                :form-handle="formHotlineHandle"
+              >
+                <template v-slot:status>
+                  <popup-tree-input
+                    :data="popupTreeData"
+                    :propa="popupTreeProps"
+                    :nodeKey="'' + searchHotlineForm.officeCode"
+                    @update:dataForm="handleTreeSelectHotlineChange"
+                  >
+                    <template v-slot>
+                      <el-input
+                        v-model="searchHotlineForm.officeName"
+                        size="mini"
+                        :readonly="true"
+                        placeholder="点击选择机构"
+                        style="cursor: pointer"
+                      ></el-input>
+                    </template>
+                  </popup-tree-input>
+                </template>
+              </VForm>
+              <div class="tableBox">
+                <V-table
+                ref="tableHotline"
+                :table-config="tableHotlineConfig"
+                @select-change="(val) => (multipleSelection = val)"
+              >
+                <template v-slot:operation="{}">
+                  <el-button type="primary" size="mini" @click="handleHotlineOperation"
+                    >定位</el-button
+                  >
+                </template>
+              </V-table>
+              </div>
+            </div>
+            </el-col>
+           </template>
           </el-row>
         </div>
       </div>
-      <i class="el-icon-lx-roundclose headerDialogIcon"
-         style="color: #fff; font-size: 30px; cursor: pointer"
-         @click="handleCloseDialog('isOpen')"></i>
+      <i
+        class="el-icon-lx-roundclose headerDialogIcon"
+        style="color: #fff; font-size: 30px; cursor: pointer"
+        @click="handleCloseDialog('isOpen')"
+      ></i>
     </div>
     <!-- 驾驶舱弹窗 -->
-    <div v-if="isOpenCockpit"
-         class="coclpit">
-      <div class="headerDialog">
+    <div v-if="isOpenCockpit" class="coclpit">
+      <div class="coclpitDialog">
         <div>
           <h1 style="text-align: center">驾驶舱</h1>
         </div>
         <Coclpit />
       </div>
-      <i class="el-icon-lx-roundclose headerDialogIcon"
-         style="color: #fff; font-size: 30px; cursor: pointer"
-         @click="handleCloseDialog('isOpenCockpit')"></i>
+      <i
+        class="el-icon-lx-roundclose headerDialogIcon"
+        style="color: #fff; font-size: 30px; cursor: pointer"
+        @click="handleCloseDialog('isOpenCockpit')"
+      ></i>
     </div>
     <!-- 楼栋弹窗-->
     <el-dialog title="楼栋人员信息"
@@ -140,103 +379,113 @@
       <Building :buildingId="buildingId" />
     </el-dialog>
     <!-- 事件处置弹窗 -->
-    <el-dialog title=""
-               v-model="eventHandleVisible"
-               width="width">
+    <el-dialog title="" v-model="eventHandleVisible" width="width">
       <div>
-        <el-form ref="recordFormRef"
-                 :model="dataForm"
-                 :rules="rules"
-                 label-width="150px">
-          <el-form-item label="处置方式"
-                        prop="dealStatus">
-            <el-select v-model="dataForm.dealStatus"
-                       size="mini"
-                       placeholder="请选择处置方式">
-              <el-option v-for="item in dataSourceOptions"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
+        <el-form
+          ref="recordFormRef"
+          :model="dataForm"
+          :rules="rules"
+          label-width="150px"
+        >
+          <el-form-item label="处置方式" prop="dealStatus">
+            <el-select
+              v-model="dataForm.dealStatus"
+              size="mini"
+              placeholder="请选择处置方式"
+            >
+              <el-option
+                v-for="item in dataSourceOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="流转人"
-                        v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3"
-                        prop="launchBy">
-            <el-input v-model="dataForm.launchRemark"
-                      size="mini"
-                      placeholder=""
-                      @click="handleChangeLaunch"></el-input>
+          <el-form-item
+            label="流转人"
+            v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3"
+            prop="launchBy"
+          >
+            <el-input
+              v-model="dataForm.launchRemark"
+              size="mini"
+              placeholder=""
+              @click="handleChangeLaunch"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="处理时限"
-                        v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3">
-            <el-date-picker v-model="dataForm.updateDate"
-                            type="datetime"
-                            size="mini"
-                            placeholder="请选择时间"
-                            style="width: 100%" />
+          <el-form-item
+            label="处理时限"
+            v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3"
+          >
+            <el-date-picker
+              v-model="dataForm.updateDate"
+              type="datetime"
+              size="mini"
+              placeholder="请选择时间"
+              style="width: 100%"
+            />
           </el-form-item>
-          <el-form-item label="处理意见"
-                        prop="dealRemark">
-            <el-input v-model="dataForm.dealRemark"
-                      type="textarea"
-                      size="mini"
-                      placeholder=""></el-input>
+          <el-form-item label="处理意见" prop="dealRemark">
+            <el-input
+              v-model="dataForm.dealRemark"
+              type="textarea"
+              size="mini"
+              placeholder=""
+            ></el-input>
           </el-form-item>
         </el-form>
       </div>
       <template #footer>
-        <el-button size="mini"
-                   @click="eventHandleVisible = false">取 消</el-button>
-        <el-button size="mini"
-                   type="primary"
-                   @click="handleRecord(recordFormRef)">确 定</el-button>
+        <el-button size="mini" @click="eventHandleVisible = false"
+          >取 消</el-button
+        >
+        <el-button
+          size="mini"
+          type="primary"
+          @click="handleRecord(recordFormRef)"
+          >确 定</el-button
+        >
       </template>
     </el-dialog>
     <!-- 流转人弹窗 -->
-    <el-dialog title="选择流转人"
-               v-model="userDialogVisible"
-               width="40%">
+    <el-dialog title="选择流转人" v-model="userDialogVisible" width="40%">
       <div>
         <el-row :gutter="10">
           <el-col :span="18">
-            <el-table :data="launchList"
-                      @selection-change="(val) => (multipleSelection = val)"
-                      style="width: 100%">
-              <el-table-column type="selection"
-                               width="55" />
-              <el-table-column prop="id"
-                               label="ID"
-                               width="100">
+            <el-table
+              :data="launchList"
+              @selection-change="(val) => (multipleSelection = val)"
+              style="width: 100%"
+            >
+              <el-table-column type="selection" width="55" />
+              <el-table-column prop="id" label="ID" width="100">
               </el-table-column>
-              <el-table-column prop="operatorId"
-                               label="账号"
-                               width="140">
+              <el-table-column prop="operatorId" label="账号" width="140">
               </el-table-column>
-              <el-table-column prop="operatorName"
-                               label="姓名"
-                               width="width">
+              <el-table-column prop="operatorName" label="姓名" width="width">
               </el-table-column>
             </el-table>
           </el-col>
-          <el-col :span="6"
-                  style="border: 1px solid #ddd">
+          <el-col :span="6" style="border: 1px solid #ddd">
             <div>当前已选择{{ multipleSelection.length }}项：</div>
-            <div class="checkSpan"
-                 v-for="item in multipleSelection"
-                 :key="item.id">
+            <div
+              class="checkSpan"
+              v-for="item in multipleSelection"
+              :key="item.id"
+            >
               {{ item.operatorName }}
             </div>
           </el-col>
         </el-row>
       </div>
       <template #footer>
-        <el-button size="mini"
-                   type="primary"
-                   @click="handleSubmitUser">确定</el-button>
-        <el-button size="mini"
-                   type="primary"
-                   @click="userDialogVisible = false">返回</el-button>
+        <el-button size="mini" type="primary" @click="handleSubmitUser"
+          >确定</el-button
+        >
+        <el-button size="mini" type="primary" @click="userDialogVisible = false"
+          >返回</el-button
+        >
       </template>
     </el-dialog>
   </div>
@@ -250,6 +499,7 @@ import {
   ref,
   toRefs,
   watch,
+  computed,
 } from "@vue/runtime-core";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { useStore } from "vuex";
@@ -260,13 +510,23 @@ import { resetFormat as resetFormatStatus } from "@/utils/util";
 import { PartyList } from "@/api/PartyBuilding/partyInfo";
 import { PartyPeopleList } from "@/api/PartyBuilding/partyPeople";
 import { getDraft } from '@/api/Propaganda/draft'
+import { ElButton } from 'element-plus'
+import { getInfoList } from "@/api/communityGrid/info";
+import PopupTreeInput from "@/components/PopupTreeInput/index.vue";
+import { deepClone, defaultObject,formatterDate } from "@/utils/util";
+import { renderTable } from "@/views/home/ActualInfo/common/build";
+import { renderTable as renderEventTable } from "@/views/home/ResidentsReport/common/eventHandle";
+import { renderTable as renderHotlineTable} from '@/views/home/SocialGovernance/common/hotlineManage'
+import { getBuildList } from "@/api/ActualInfo/build";
+import { getDetailList } from "@/api/ResidentsReport/index";
+import { getOrganList } from "@/api/sys/organ";
 import Coclpit from './components/coclpit.vue'
 import Building from './components/building.vue'
 
 import Notice from './components/notice.vue'
 export default {
   components: { Notice, Coclpit, Building },
-  setup () {
+  setup() {
     let vMap = ref(null);
     let fullHeight = ref("");
     let timer = null;
@@ -278,6 +538,186 @@ export default {
     // 楼栋
     const houseDialogVisible = ref(false)
     const buildingId = ref('')
+    const tableBuilding = ref(null);
+    const tableEvent = ref(null);
+    const tableHotline = ref(null);
+    const { tableConfig, formConfig } = renderTable.call(proxy);
+    const { tableConfig:tableEventConfig,formConfig:formEventConfig } = renderEventTable.call(proxy);
+    const { tableConfig:tableHotlineConfig,formConfig:formHotlineConfig } = renderHotlineTable.call(proxy);
+    const searchBuildingForm = reactive({
+      officeName: "",
+      officeCode: "",
+    });
+
+      const searchHotlineForm = reactive({
+      officeName: "",
+      officeCode: "",
+    });
+
+    const searchEventForm = ref({
+      date: [],
+    });
+    const houseType = computed(() => {
+      return (val) => {
+        switch (val) {
+          case 0:
+            return "居民楼";
+          case 1:
+            return "平房";
+          case 2:
+            return "商品房";
+          case 3:
+            return "房改房";
+          case 4:
+            return "小产权";
+          case 5:
+            return "单位用房";
+          case 6:
+            return "商品门头房";
+          case 7:
+            return "住改商";
+          case 8:
+            return "商业体";
+          case 9:
+            return "经济体";
+        }
+      };
+    });
+
+    const handleOperation = () => {
+      var html = '<div id="release" onClick="hj2(18512,7420,\'1公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>1公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+      vMap.showMapMark(18512, 7420, html);
+      return;
+    };
+    
+    const handleEventOperation = () => {
+      var html = '<div id="release" onClick="hj2(17088,9828,\'3公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>3公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+      vMap.showMapMark(17088, 9828, html);
+      return;
+    };
+
+    
+    const handleHotlineOperation = () => {
+       var html = '<div id="release" onClick="hj2(14328,8812,\'西区公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>西区公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+      vMap.showMapMark(14328, 8812, html);
+      return;
+    };
+
+    let searchBuildingParams = ref({}); // 表单数据备份
+    const getBuilList = () => {
+      getBuildList({ pageNum: 1, pageSize: 99 }).then((res) => {
+        searchBuildingParams.value = res.data;
+      });
+    };
+
+    let searchEventParams = ref({}); // 事件查询表单数据备份
+    let searchHotlineParams = ref({}); // 12345热线查询表单数据备份
+  
+
+    // 组织结构
+    let popupTreeData = ref([]);
+    const popupTreeProps = {
+      label: "officeName",
+      children: "children",
+    };
+    const getOList = () => {
+      getOrganList({}).then((res) => {
+        if (res.resCode == "000000") {
+          popupTreeData.value = res.data;
+        }
+      });
+    };
+
+    const handleTreeSelectChange = ({ officeCode, officeName }) => {
+      searchBuildingForm.officeCode = officeCode;
+      searchBuildingForm.officeName = officeName;
+    };
+
+    //热线
+    const handleTreeSelectHotlineChange  = ({ officeCode, officeName }) => {
+      searchHotlineForm.officeCode = officeCode;
+      searchHotlineForm.officeName = officeName;
+    };
+
+    // 定位表格相關操作
+    const handleQuery = () => {
+      searchBuildingParams.value = deepClone(searchBuildingForm);
+      tableBuilding.currentPage = 1;
+      handleQueryTable();
+    };
+    const handleReset = (formEL) => {
+      formEL.resetFields();
+      searchBuildingParams.value = {};
+      defaultObject(searchBuildingForm);
+      handleQuery();
+    };
+
+    // 事件查询表格相關操作
+    const handleEventQuery = () => {
+      searchEventParams.value = deepClone(searchEventForm.value);
+       for (const key in searchEventParams.value) {
+        if (
+          Array.isArray(searchEventParams.value[key]) &&
+          searchEventParams.value[key].length > 0
+        ) {
+          searchEventParams.value[`${key}Start`] = formatterDate(
+            searchEventParams.value[key][0]
+          )
+          searchEventParams.value[`${key}End`] = formatterDate(
+            searchEventParams.value[key][1]
+          )
+          delete searchEventParams.value[key]
+        }
+      }
+      tableEvent.currentPage = 1;
+      handleQueryEventTable();
+    };
+    const handleEventReset = (formEL) => {
+      formEL.resetFields();
+      searchEventParams.value = {};
+      defaultObject(searchEventForm);
+      handleEventQuery();
+    };
+
+
+    // 12345热线表格相關操作
+    const handleHotlineQuery = () => {
+      searchHotlineParams.value = deepClone(searchHotlineForm);
+      tableHotline.currentPage = 1;
+      handleQueryHotlineTable();
+    };
+    const handleHotlineReset = (formEL) => {
+      formEL.resetFields();
+      searchHotlineParams.value = {};
+      defaultObject(searchHotlineForm);
+      handleHotlineQuery();
+    };
+
+    // 定位查询表單操作按鈕配置
+    const formHandle = {
+      btns: [
+        { type: "primary", label: "查询", key: "search", handle: handleQuery },
+        { type: "primary", label: "重置", key: "reset", handle: handleReset },
+      ],
+    };
+
+    // 事件查询表單操作按鈕配置
+    const formEventHandle = {
+      btns: [
+        {type: "primary",label: "查询", key: "search",handle: handleEventQuery,},
+        {type: "primary", label: "重置", key: "reset", handle: handleEventReset,},
+      ],
+    };
+
+
+    // 12345热线表單操作按鈕配置
+    const formHotlineHandle = {
+      btns: [
+        { type: "primary", label: "查询", key: "search", handle: handleHotlineQuery },
+        { type: "primary", label: "重置", key: "reset", handle: handleHotlineReset },
+      ],
+    };
+
     // 事件处置弹窗
     const recordFormRef = ref(null);
     const eventHandleVisible = ref(false);
@@ -288,6 +728,11 @@ export default {
     const sexOptions = ref([]);
     const launchList = ref([]);
     const multipleSelection = ref([]);
+    // 获取事件来源、事项类型1025、事件处理状态1001
+    const eventScopeOptions = ref([]);
+    const eventFirstTypeOptions = ref([]);
+    const approvalStatusOptions = ref([]);
+    const eventSourceOptions = ref([]);
     const rules = reactive({
       dealStatus: [
         { required: true, message: "请选择处置方式", trigger: "blur" },
@@ -439,6 +884,26 @@ export default {
         mapDialogData.value = null
       }
       dialogVis[flag] = false;
+    }
+    const handleQueryTable = () => {
+      tableBuilding.value.getTableData(searchBuildingParams.value, (res) => {
+        const data = res.list || [];
+        tableConfig.data = data;
+      });
+    };
+
+    const handleQueryEventTable = () => {
+      tableEvent.value.getTableData(searchEventParams.value, (res) => {
+        const data = res.list || [];
+        tableEventConfig.data = data;
+      });
+    };
+
+    const handleQueryHotlineTable = () => {
+      tableHotline.value.getTableData(searchHotlineParams.value, (res) => {
+        const data = res.list || [];
+        tableHotlineConfig.data = data;
+      });
     };
     // 随机获取x，y值
     const randomAddress = () => {
@@ -513,6 +978,14 @@ export default {
       });
     };
 
+    let searchInfoParams = ref({});
+    const getInfo = () => {
+      getInfoList({ pageNum: 1, pageSize: 99 }).then((res) => {
+        searchInfoParams.value = res.data;
+      });
+    };
+
+    
     // websocket 事件触发
     // 自行触发弹窗函数
     const eventDialogStyle = () => {
@@ -592,17 +1065,17 @@ export default {
     // 数字党建弹窗控制模块
     const handleClick = (item) => {
       if (item.type == 'party') {
-        var html = '<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        var html = '<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(17408, 7178, html);
         isOpenType.value = item.type
         return
       } else if (item.type == 'underParty') {
-        var html = '<div id="party" onClick="hj2(19524,7796,\'南村街道直属党组织\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道直属党组织</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        var html = '<div id="party" onClick="hj2(19524,7796,\'南村街道直属党组织\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道直属党组织</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(19524, 7796, html);
         isOpenType.value = item.type
         return
       } else if (item.type == 'partyBranch') {
-        var html = '<div id="party" onClick="hj2(18648,9718,\'南村街道党支部\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党支部</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        var html = '<div id="party" onClick="hj2(18648,9718,\'南村街道党支部\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党支部</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
 
         vMap.showMapMark(18648, 9718, html);
         isOpenType.value = item.type
@@ -624,6 +1097,69 @@ export default {
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
+      }else if (item.type == "building") {
+         var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(18988, 8830, html);
+        return;
+      } else if (item.type == "location") {
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(() => {
+          handleQuery();
+        }, 1000);
+          getOList();
+        // return;
+      }else if(item.type == "eventQuery"){
+        isOpenType.value = item.type
+        handleClickOpen('')
+         show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(() => {
+            handleEventQuery();
+        }, 1000);
+      }else if(item.type == "hotline"){
+         isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(() => {
+            handleHotlineQuery();
+        }, 1000);
+      }else if(item.type == "release"){
+        var html = '<div id="release" onClick="hj2(17176,7026,\'2号\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>2号</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(17176, 7026, html);
+        // isOpenType.value = item.type
+       return;
+      }else if(item.type == "neuropathy"){
+        var html = '<div id="release" onClick="hj2(22736,5876,\'5公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>5公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(22736, 5876, html);
+        return;
+      }else if(item.type == "someDayEvent"){
+         var html = '<div id="release" onClick="hj2(16600,9484,\'计算小楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>计算小楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(16600, 9484, html);
+        return;
+      }else if(item.type == "drugDetoxification"){
+         var html = '<div id="release" onClick="hj2(15032,8020,\'2公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>2公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(15032, 8020, html);
+        return;
+      }else if(item.type == "correct"){
+         var html = '<div id="release" onClick="hj2(16824,6492,\'东区\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>东区</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(16824, 6492, html);
+        return;
+      }else if(item.type == "control"){
+         var html = '<div id="release" onClick="hj2(21176,5124,\'北楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>北楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        vMap.showMapMark(21176, 5124, html);
+        return;
+      }else if(item.type == "briefIntroduction"){
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(() => {
+            getInfo();
+        }, 1000);
       }
 
 
@@ -631,6 +1167,10 @@ export default {
     onBeforeMount(() => {
       getOptionsByCode(1026, dataSourceOptions);
       getOptionsByCode(1009, sexOptions);
+      getOptionsByCode(1019,eventScopeOptions);
+      getOptionsByCode(1025, eventFirstTypeOptions);
+      getOptionsByCode(1027, approvalStatusOptions);
+      getOptionsByCode(1003, eventSourceOptions);
     });
     // 恢复地图未加载默认状态
     const reLoadMap = () => {
@@ -644,8 +1184,8 @@ export default {
     onBeforeRouteLeave(() => {
       reLoadMap();
     });
-    //
 
+    //
 
     return {
       fullHeight,
@@ -669,15 +1209,51 @@ export default {
       handleClick,
       ...toRefs(dialogVis),
       show,
+      // showTitleObj,
       searchParams,
       // 党建弹窗
       isOpenType,
       brandList,
       workShowList,
       buildingId,
-    };
-  },
-};
+      // 
+      searchInfoParams,
+      formConfig,
+      searchBuildingForm,
+      searchHotlineForm,
+      formHandle,
+      formHotlineHandle,
+      popupTreeProps,
+      popupTreeData,
+      handleQuery,
+      tableBuilding,
+      tableEvent,
+      tableHotline,
+      tableConfig,
+      handleTreeSelectChange,
+      handleTreeSelectHotlineChange,
+      houseType,
+      handleOperation,
+      handleEventOperation,
+      handleHotlineOperation,
+      formEventConfig,
+      formHotlineConfig,
+      tableEventConfig,
+      tableHotlineConfig,
+      searchEventForm,
+      formEventHandle,
+      handleEventQuery,
+      handleEventReset,
+      eventScopeOptions,
+      eventFirstTypeOptions,
+      approvalStatusOptions,
+      eventSourceOptions,
+      handleHotlineQuery,
+      handleHotlineReset,
+    }
+  }
+  //#endregion
+}
 </script>
 <style scoped>
 .sidebar {
@@ -708,15 +1284,26 @@ export default {
 }
 .headerDialogBox {
   position: absolute;
-  width: 900px;
+  width: 75%;
   min-height: 300px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -60%);
   background: rgba(36, 47, 66, 0.7);
-  z-index: 9999;
+  z-index: 2;
   padding: 50px;
   border-radius: 10px;
+}
+.carousel_box{
+  width:100%;
+  height:100%;
+}
+.carousel_box .showBox{
+  max-height:500px ;
+  overflow-y: scroll;
+}
+::v-deep .el-carousel__container{
+  height: 400px;
 }
 .headerDialogIcon {
   position: absolute;
@@ -725,8 +1312,8 @@ export default {
 }
 .headerDialog {
   width: 100%;
-  height: 100%;
-  min-height: 300px;
+  height: 100%; 
+  min-height: 500px;
   border: 1px solid #bad23c;
   box-sizing: border-box;
   padding: 5px;
@@ -743,29 +1330,7 @@ export default {
 .headerDialogBox > h1 {
   text-align: center;
 }
-/* .headerDialog > div {
-  width: 150px;
-  height: 120px;
-  background: #242f42;
-  margin: 10px;
-  box-sizing: border-box;
-  color: #fff;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  cursor: pointer;
-}
-.headerDialog > div:hover {
-  opacity: 0.8;
-  border: 1px dashed #fff;
-  background: block;
-}
-.headerDialog > div > img {
-  width: 80%;
-  height: 60%;
-} */
+
 h4 {
   height: 20px;
 }
@@ -815,6 +1380,20 @@ h4 {
 .el-carousel__item {
   background: none !important;
 }
+/* 驾驶舱 */
+.coclpitDialog {
+  width: 100%;
+  /* height: 500px;  */
+  min-height: 300px;
+  border: 1px solid #bad23c;
+  box-sizing: border-box;
+  padding: 5px;
+  background: #242f42;
+  color: #fff;
+}
+.coclpitDialog > div {
+  margin: 20px 0;
+}
 .coclpit {
   width: 100%;
   height: 100vh;
@@ -832,4 +1411,9 @@ h4 {
   /*隐藏滚轮*/
   display: none;
 }
+.tableBox{
+  height: 400px;
+  overflow: scroll;
+}
 </style>
+

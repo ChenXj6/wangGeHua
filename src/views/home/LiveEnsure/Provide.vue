@@ -4,9 +4,9 @@
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+searchForm.gridCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.gridName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -60,8 +60,8 @@ export default {
     const router = useRouter()
     const { infoFormConfig,infoTtableConfig } = renderTable.call(proxy)
     const searchForm = ref({
-      officeCode:'',
-      officeName:'',
+      gridCode:'',
+      gridName:'',
     })
     const table = ref(null)
     const searchParams = ref({})
@@ -118,8 +118,8 @@ export default {
       })
     }
     const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.value.officeCode = officeCode
-      searchForm.value.officeName = officeName
+      searchForm.value.gridCode = officeCode
+      searchForm.value.gridName = officeName
     }
     getOList()
     // 查看/编辑

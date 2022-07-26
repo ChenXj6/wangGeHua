@@ -125,13 +125,7 @@ export default defineComponent({
         tableConfig.data = data
       })
     }
-    // 表單操作按鈕配置
-    const formHandle = {
-      btns: [
-        {type:'primary',label:'查询',key:'search',handle:handleQuery},
-      ]
-    }
-    //
+    
     // 查看/编辑
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData)
@@ -140,6 +134,17 @@ export default defineComponent({
         query: { data : encodeURIComponent(data), operation: type},
       })
     }
+    const handleAdd = () => {
+      handleOperation(3,{})
+    }
+    // 表單操作按鈕配置
+    const formHandle = {
+      btns: [
+        {type:'primary',label:'查询',key:'search',handle:handleQuery},
+        {type:'primary',label:'添加',key:'add',handle:handleAdd},
+      ]
+    }
+    //
     onMounted(() => {
       handleQuery()
     })

@@ -107,7 +107,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '使用方式',
-        prop: 'useMode',
+        prop: 'usageMode',
         value: '',
         placeholder: '请选择使用方式',
         code:'1007',

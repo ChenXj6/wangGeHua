@@ -4,9 +4,9 @@
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+searchForm.gridCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.gridName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -65,7 +65,7 @@ import {
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
-import { renderTable } from './common/Build'
+import { renderTable } from './common/build'
 import { deepClone, defaultObject } from '@/utils/util'
 import { deleteBuild } from '@/api/ActualInfo/build'
 export default defineComponent({
@@ -77,8 +77,8 @@ export default defineComponent({
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
     const searchForm = reactive({
-      officeName:'',
-      officeCode:'',
+      gridName:'',
+      gridCode:'',
       userDataId:String(JSON.parse(sessionStorage.getItem('user')).user.id),
     })
     let popupTreeData = ref([])
@@ -89,8 +89,8 @@ export default defineComponent({
     // 表单数据
     let searchParams = ref({}) // 表单数据备份
     const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.officeCode = officeCode
-      searchForm.officeName = officeName
+      searchForm.gridCode = officeCode
+      searchForm.gridName = officeName
     }
     const multipleSelection = ref([]) // 选中数据
     const houseType = computed(()=>{

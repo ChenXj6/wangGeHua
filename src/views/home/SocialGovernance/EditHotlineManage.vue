@@ -111,6 +111,9 @@
         </el-table-column>
         <el-table-column prop="dealRemark" label="退回原因/回单内容" />
         <el-table-column prop="filePath" label="办理文件">
+          <template #default="scope">
+            <img :src="url + scope.row.filePath" alt="" style="width:100%">
+          </template>
         </el-table-column>
         <el-table-column prop="processeTime" label="撤回时间/审核时间/办结时间" width="200">
           <template #default="scope">
@@ -342,6 +345,7 @@ export default {
   components: { PopupTreeInput },
   setup() {
     const route = useRoute()
+    const url = ref(import.meta.env.VITE_IMG_BASE_API)
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
     const { InfoFormConfig } = renderTable.call(proxy)
@@ -777,6 +781,7 @@ export default {
       dialogVisible,
       dialogImageUrl,
       handlePreview,
+      url,
       // 
       orderTreeProps,
       orderTreeData,

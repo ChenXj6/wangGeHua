@@ -11,7 +11,7 @@ export const delHotline = query => {
 
   export const getHotlineManageList = query => {
     return service.post(
-      `/real/realInfo/hotline/list`, query
+      `/real/realInfo/hotline/select`, query
     )
   };
 
