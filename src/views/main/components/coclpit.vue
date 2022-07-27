@@ -479,6 +479,7 @@ export default {
   z-index: 9999;
   padding: 60px 50px 50px;
   border-radius: 10px;
+  
 }
 .item {
   width: 100%;
@@ -519,6 +520,10 @@ export default {
   overflow: scroll;
   /* min-height: 500px; */
   /* max-height: 700px; */
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+  scrollbar-track-color: transparent;
+  -ms-scrollbar-track-color: transparent;
 }
 .coclpit-content > div {
   margin: 10px 0;

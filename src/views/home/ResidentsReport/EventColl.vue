@@ -131,7 +131,7 @@ export default defineComponent({
       //     delete searchParams.value[key]
       //   }
       // }
-      console.log(searchParams.value)
+      // console.log(searchParams.value)
       table.currentPage = 1
       handleQueryTable()
     }

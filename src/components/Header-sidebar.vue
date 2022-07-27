@@ -99,31 +99,36 @@ export default {
       {
         id: 4,
         title: "民生保障",
+        type:'liveensure',
         data: [
           {
             title: "服务机构",
-            children: [{ title: "残联服务中心" }, { title: "养老中心" }],
+            children: [{ title: "残联服务中心", type:'haidi' }, { title: "养老中心", type:'provide' }],
           },
           {
             title: "重点服务人员",
             children: [
-              { title: "高龄老人" },
-              { title: "独居老人" },
-              { title: "失业人员" },
-              { title: "残疾人" },
+              { title: "高龄老人", type:'service',staffType:'3'},
+              { title: "独居老人", type:'service',staffType:'10' },
+              { title: "失业人员", type:'service',staffType:'2' },
+              { title: "残疾人", type:'service',staffType:'6' },
             ],
           },
           {
             title: "政策法规",
+            type:'policy'
           },
           {
             title: "办事流程",
+            type:'process',
           },
           {
             title: "邻里互动",
+            type:'neighborhood',
           },
           {
             title: "工作展示",
+            type:'liveworkshow',
           },
         ],
       },
@@ -133,27 +138,32 @@ export default {
         data: [
           {
             title: "应急物资",
+            type:'supplies',
           },
           {
             title: "应急站点",
+            type:'site',
           },
           {
             title: "消防栓",
+            type:'fireHydrant',
           },
-          { title: "摄像头" },
+          { title: "摄像头",
+            type: 'camera',
+          },
           {
             title: "烟雾报警器",
-            children: [{ title: "设备定位" }, { title: "报警记录" }],
+            children: [{ title: "设备定位",type:'smokeDetector' }, { title: "报警记录",type:'smokeRecord' }],
           },
-          { title: "一键报警器" },
-          { title: "隐患记录" },
+          { title: "一键报警器",type:'alarm' },
+          { title: "隐患记录",type:'hiddenDanger' },
            {
             title: "应急管理",
-            children: [{ title: "疫情防控" }, { title: "法律法规" }, { title: "企业管理" }, { title: "风险评估" }],
+            children: [{ title: "疫情防控",type:'pandemic' }, { title: "法律法规",type:'law' }, { title: "企业管理",type:'business' }, { title: "风险评估",type:'risk' }],
           },
            {
             title: "培训宣传",
-            children: [{ title: "应急演练" }, { title: "应急培训" }, { title: "案例警告" }],
+            children: [{ title: "应急演练",type:'drill' }, { title: "应急培训",type:'training' }, { title: "案例警告",type:'casewarning' }],
           },
         ],
       },

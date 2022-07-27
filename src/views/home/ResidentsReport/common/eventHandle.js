@@ -1,4 +1,4 @@
-import { getDetailList } from '@/api/ResidentsReport/index'
+import { getHandleList } from '@/api/ResidentsReport/index'
 
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
@@ -7,7 +7,7 @@ export function renderTable() {
     data: [],
     pagination: true, // 开启分页器
     mutiSelect: false, // 开启选择
-    method: getDetailList, // 請求api
+    method: getHandleList, // 請求api
     index: false, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
@@ -55,10 +55,10 @@ export function renderTable() {
         span: 6,
       },
       {
-        type: 'dateTime',
+        type: 'date',
         label: '发生时间',
         prop: 'date',
-        value: [],
+        value: '',
         format: 'YYYY-MM-DD',
         isClearable: true,
         span: 6,

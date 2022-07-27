@@ -126,7 +126,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="流转人" v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3" prop="launchBy">
+        <el-form-item label="流转人" v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3" prop="dealBy">
           <el-input v-model="dataForm.launchRemark" size="mini" placeholder="" @click="handleChangeLaunch"></el-input>
         </el-form-item>
         <el-form-item label="处理时限" v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3">
@@ -332,7 +332,7 @@ export default {
       dealStatus:[
         {required: true, message:'请选择处置方式', trigger: 'blur'}
       ],
-      launchBy:[
+      dealBy:[
         {required: true, message:'请选择流转人', trigger: ['change','blur']}
       ],
       dealRemark:[
@@ -533,6 +533,7 @@ export default {
       dataForm.value.id = formData.value.id
       dataForm.value.eventId = formData.value.id
       dataForm.value.createBy = JSON.parse(sessionStorage.getItem('user')).user.operatorId,
+      delete dataForm.value.launchRemark
       await formRef.validate((vaild) => {
         if(vaild){
           eventProcessing(dataForm.value).then(res=>{
