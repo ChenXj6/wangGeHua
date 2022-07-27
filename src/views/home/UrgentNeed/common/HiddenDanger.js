@@ -12,7 +12,7 @@ export function renderTable() {
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
-      { prop: '', label: '名称', slot:'dangerName', minWidth: '200', },
+      { prop: '', label: '名称', slot:'dangerName', minWidth: '120', },
       { type:'code',code:'1058',prop: 'dangerType', label: '类型', minWidth: '120'},
       {
         prop: 'treeNames',
