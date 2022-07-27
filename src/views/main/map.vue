@@ -347,6 +347,39 @@
             </div>
             </el-col>
            </template>
+           <template v-else-if="isOpenType == 'workResults'">
+              <el-carousel
+                :interval="5000"
+                arrow="never"
+                v-if="workShowList.length"
+                indicator-position="outside"
+                style="width: 100%"
+              >
+                <el-carousel-item
+                  :span="24"
+                  v-for="(item, index) in workShowList"
+                  :key="index"
+                >
+                  <h1 style="text-align: center">{{ show }}</h1>
+                  <div style="height: 400px; text-align: center">
+                    <template v-if="item.type == 'img'">
+                      <img
+                        :src="item.url"
+                        :alt="item.title"
+                        style="height: 100%"
+                      />
+                    </template>
+                    <template v-else-if="item.type == 'video'">
+                      <video
+                        :src="item.url"
+                        style="height: 100%"
+                        controls
+                      ></video>
+                    </template>
+                  </div>
+                </el-carousel-item>
+              </el-carousel>
+            </template>
           </el-row>
         </div>
       </div>
@@ -1097,7 +1130,14 @@ export default {
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-      }else if (item.type == "building") {
+      }
+      else if (item.type == 'workResults') {
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+      }
+      else if (item.type == "building") {
          var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(18988, 8830, html);
         return;

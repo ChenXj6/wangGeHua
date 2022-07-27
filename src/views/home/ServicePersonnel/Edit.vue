@@ -129,7 +129,7 @@
         >
       </div>
     </el-row>
-    <el-row v-if="route.query.operation == 2">
+    <!-- <el-row v-if="route.query.operation == 2">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -139,7 +139,7 @@
           >审核</el-button
         >
       </div>
-    </el-row>
+    </el-row> -->
     <!-- 地图弹窗 -->
     <el-dialog width="37.5%" v-model="mapDialogVisible">
       <VMap

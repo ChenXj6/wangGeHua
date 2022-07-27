@@ -160,10 +160,42 @@ export default {
       {
         id: 6,
         title: "智慧物业",
+        data:[
+          {
+            title: "车位位置",
+          },
+           {
+            title: "摄像头位置",
+          },
+           {
+            title: "道闸位置",
+          },
+           {
+            title: "垃圾桶位置",
+          },
+           {
+            title: "充电桩位置",
+          },
+          {
+            title: "工作成果",
+            type:"workResults"
+          },
+        ]
       },
       {
         id: 7,
         title: "经济运行",
+        data:[
+          {
+            title: "商务楼宇",
+          },
+           {
+            title: "重点项目",
+          },
+           {
+            title: "重点企业",
+          },
+        ]
       },
     ];
     const router = useRouter();
