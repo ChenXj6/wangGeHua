@@ -38,6 +38,13 @@ export const getRecordList = query => {
   )
 };
 
+// 采集
+export const getHandleList = query => {
+  return service.post(
+    `/real/realInfo/record/query`, query
+  )
+};
+
 export const editRecord = query => {
   return service.post(
     `/real/realInfo/record/update`, query

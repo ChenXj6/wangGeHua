@@ -22,7 +22,6 @@ declare module 'vue' {
     ElForm: typeof import('element-plus/es/el-form')['default']
     ElFormItem: typeof import('element-plus/es/el-form-item')['default']
     ElInput: typeof import('element-plus/es/el-input')['default']
-    'ElInput:mini': typeof import('element-plus/es/el-input:mini')['default']
     ElLink: typeof import('element-plus/es/el-link')['default']
     ElMenu: typeof import('element-plus/es/el-menu')['default']
     ElMenuItem: typeof import('element-plus/es/el-menu-item')['default']
