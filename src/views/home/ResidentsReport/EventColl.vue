@@ -65,6 +65,7 @@
           type="success"
         />
         <el-button
+          v-if="data.data.approvalStatus == 1"
           size="small"
           icon="el-icon-lx-edit"
           @click="handleOperation(2, data.data)"

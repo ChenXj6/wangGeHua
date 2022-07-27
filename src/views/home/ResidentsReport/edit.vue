@@ -516,7 +516,10 @@ export default {
     }
     const handleSubmitUser = () => {
       if(multipleSelection.value.length <= 0){
-        proxy.$message.warning({message:'请至少选择一位流转人',customClass:'messageIndex'})
+        proxy.$message.warning({message:'请选择一位流转人',customClass:'messageIndex'})
+        return
+      }else if(multipleSelection.value.length > 1){
+        proxy.$message.warning({message:'有且只能选择一位流转人',customClass:'messageIndex'})
         return
       }
       userDialogVisible.value = false
