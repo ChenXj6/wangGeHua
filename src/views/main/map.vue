@@ -54,7 +54,6 @@
                 :interval="5000"
                 arrow="never"
                 v-if="searchParams.list"
-                
                 style="width: 100%; margin-top: 30px"
               >
                 <el-carousel-item
@@ -104,7 +103,7 @@
                 </el-carousel-item>
               </el-carousel>
             </template>
-            <template v-else-if="isOpenType == 'workShow' || isOpenType == 'liveworkshow'">
+            <template v-else-if="isOpenType == 'workShow' || isOpenType == 'liveworkshow' || isOpenType == 'drill' || isOpenType == 'training' || isOpenType == 'casewarning'">
               <!-- {{ workShowList }} -->
               <el-carousel
                 :interval="5000"
@@ -196,7 +195,8 @@
               </div>
             </el-col>
           </template>
-          <template  v-else-if="isOpenType == 'eventQuery'">
+          <!-- 事件查询 && 烟感报警记录 -->
+          <template  v-else-if="isOpenType == 'eventQuery' || isOpenType == 'smokeRecord'">
             <h1 style="text-align: center">{{ show }}</h1>
             <el-col :span="24">
             <div>
@@ -350,7 +350,7 @@
             </el-col>
            </template>
            <!-- policy、process、neighborhood -->
-           <template v-else-if="isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood'">
+           <template v-else-if="isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood' || isOpenType == 'pandemic'  || isOpenType == 'law'  || isOpenType == 'business'  || isOpenType == 'risk'">
              <el-row style="width:100%" gutter="20">
                <el-col :span="4">
                  <div class="policy_left_top"><img src="http://123.233.250.69:9090/tqqgridManage/static/img/nc/msbz/tb.png" alt=""> <h2>{{ show }}</h2></div>
@@ -372,6 +372,51 @@
                  </div>
                </el-col>
              </el-row>
+            </template>
+            <template v-else-if="isOpenType == 'hiddenDanger'">
+              <h1 style="text-align: center">{{ show }}</h1>
+            <el-col :span="24">
+              <VForm
+                :form-data="formHiddenDangerConfig"
+                :form-model="searchHiddenDangerForm"
+                :form-handle="formHiddenHandle"
+              >
+                <template v-slot:status>
+                  <popup-tree-input
+                    :data="popupTreeData"
+                    :propa="popupTreeProps"
+                    :nodeKey="'' + searchHiddenDangerForm.officeCode"
+                    @update:dataForm="handleHiddenSelectChange"
+                  >
+                    <template v-slot>
+                      <el-input
+                        v-model="searchHiddenDangerForm.officeName"
+                        size="mini"
+                        :readonly="true"
+                        placeholder="点击选择机构"
+                        style="cursor: pointer"
+                      ></el-input>
+                    </template>
+                  </popup-tree-input>
+                </template>
+              </VForm>
+              <div class="tableBox">
+                <V-table
+                ref="hiddenDangerRef"
+                :table-config="tableHiddenDangerConfig"
+                @select-change="(val) => (multipleSelection = val)"
+              >
+              <template v-slot:dangerName="{data}">
+                <el-link type="success" @click.prevent="javascript();">{{ data.dangerName }}</el-link>
+              </template>
+                <template v-slot:operation="{}">
+                  <el-button type="primary" size="mini" @click="handleOperation"
+                    >定位</el-button
+                  >
+                </template>
+              </V-table>
+              </div>
+            </el-col>
             </template>
           </el-row>
         </div>
@@ -543,6 +588,7 @@ import { deepClone, defaultObject,formatterDate } from "@/utils/util";
 import { renderTable } from "@/views/home/ActualInfo/common/build";
 import { renderTable as renderEventTable } from "@/views/home/ResidentsReport/common/eventHandle";
 import { renderTable as renderHotlineTable} from '@/views/home/SocialGovernance/common/hotlineManage'
+import { renderTable as renderHiddenDangerTable } from '@/views/home/UrgentNeed/common/HiddenDanger'
 import { getBuildList } from "@/api/ActualInfo/build";
 import { getDetailList } from "@/api/ResidentsReport/index";
 import { getOrganList } from "@/api/sys/organ";
@@ -553,6 +599,7 @@ import { getStaffList } from '@/api/ServicePersonnel/servicePersonnel'
 import { getMedia } from '@/api/Propaganda/media'
 // 应急指挥
 import { getSupp } from '@/api/UrgentNeed/supplies'
+import { getSmoke } from '@/api/UrgentNeed/smoke'
 // 
 import Coclpit from './components/coclpit.vue'
 import Building from './components/building.vue'
@@ -579,6 +626,7 @@ export default {
     const { tableConfig, formConfig } = renderTable.call(proxy);
     const { tableConfig:tableEventConfig,formConfig:formEventConfig } = renderEventTable.call(proxy);
     const { tableConfig:tableHotlineConfig,formConfig:formHotlineConfig } = renderHotlineTable.call(proxy);
+    const { tableConfig:tableHiddenDangerConfig,formConfig:formHiddenDangerConfig } = renderHiddenDangerTable.call(proxy);
     const searchBuildingForm = reactive({
       officeName: "",
       officeCode: "",
@@ -590,7 +638,7 @@ export default {
     });
 
     const searchEventForm = ref({
-      date: [],
+      operatorId: JSON.parse(sessionStorage.getItem('user')).user.operatorId
     });
     const houseType = computed(() => {
       return (val) => {
@@ -1097,10 +1145,6 @@ export default {
     }
     // 数字党建 >>> 工作展示模块
     const workShowList = ref([])    
-      // { id: 1, title: 'a', type: 'img', url: 'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418474776831426560.jpg' },
-      // { id: 2, title: 'a', type: 'video', url: 'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202112/1468426165151420416.mp4' },
-      // { id: 3, title: 'a', type: 'img', url: 'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418474760540749824.jpg' },
-      // { id: 4, title: 'a', type: 'img', url: 'http://123.233.250.69:9090/gridManageFiles/userfiles/fileupload/202107/1418464766973935616.jpg' },
     // 数字党建弹窗控制模块
     const handleClick = (item) => {
       if (item.type == 'party') {
@@ -1137,6 +1181,8 @@ export default {
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
         return
@@ -1212,6 +1258,8 @@ export default {
               var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.orgName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
               vMap.showMapMark(lng, lat, html);
             })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )
         return
@@ -1224,6 +1272,8 @@ export default {
               var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.orgName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
               vMap.showMapMark(lng, lat, html);
             })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('养老中心数据请求错误！请稍后重试') )
         return
@@ -1293,15 +1343,172 @@ export default {
         return
       } else if (item.type == 'supplies') {
         isOpenType.value = item.type
-        getHaidi(1).then(res=>{
+        getSuppList(1).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.orgName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.suppliesName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
               vMap.showMapMark(lng, lat, html);
             })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )
+        },err=> proxy.$message.error('应急物资数据请求错误！请稍后重试') )
+        return
+      } else if (item.type == 'site') {
+        isOpenType.value = item.type
+        getSuppList(3).then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.suppliesName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('应急物资数据请求错误！请稍后重试') )
+        return
+      } else if (item.type == 'fireHydrant') {
+        isOpenType.value = item.type
+        getSuppList(4).then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.suppliesName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('应急物资数据请求错误！请稍后重试') )
+        return
+      } else if (item.type == 'camera') {
+        isOpenType.value = item.type
+        let {lng,lat} = randomAddress()
+        var html = `<div id="party" onClick="hj2(${lng},${lat},\'村头超市监控\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>村头超市监控</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+        vMap.showMapMark(lng, lat, html);
+        return
+      } else if (item.type == 'smokeDetector') {
+        isOpenType.value = item.type
+        getSmokeList(1).then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('烟感报警器数据请求错误！请稍后重试') )
+        return
+      } else if (item.type == "smokeRecord") {
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        searchEventForm.value.eventFirstType = "8"
+        setTimeout(() => {
+          handleEventQuery();
+        }, 1000);
+      } else if (item.type == 'alarm') {
+        isOpenType.value = item.type
+        getSmokeList(2).then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('一键报警器数据请求错误！请稍后重试') )
+        return
+      } else if (item.type == "hiddenDanger") {
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(() => {
+          handleHiddenDangerQuery();
+        }, 1000);
+      } else if (item.type == 'pandemic') {
+        getDraftList()
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(()=>{
+          brandList.value.length && handleSelect(brandList.value[1])
+        },10)
+        return
+      } else if (item.type == 'law') {
+        getDraftList()
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(()=>{
+          brandList.value.length && handleSelect(brandList.value[1])
+        },10)
+        return
+      } else if (item.type == 'business') {
+        getDraftList()
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(()=>{
+          brandList.value.length && handleSelect(brandList.value[1])
+        },10)
+        return
+      } else if (item.type == 'risk') {
+        getDraftList()
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(()=>{
+          brandList.value.length && handleSelect(brandList.value[1])
+        },10)
+        return
+      } else if (item.type == 'drill') {
+        isOpenType.value = item.type
+        show.value = item.title;
+        getmediaList().then(res=>{
+          if(res.list.length > 0){
+            workShowList.value = res.list
+            handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('培训宣传数据请求错误！请稍后重试') )        
+        return
+      } else if (item.type == 'training') {
+        isOpenType.value = item.type
+        show.value = item.title;
+        getmediaList().then(res=>{
+          if(res.list.length > 0){
+            workShowList.value = res.list
+            handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('应急培训数据请求错误！请稍后重试') )        
+        return
+      } else if (item.type == 'casewarning') {
+        isOpenType.value = item.type
+        show.value = item.title;
+        getmediaList().then(res=>{
+          if(res.list.length > 0){
+            workShowList.value = res.list
+            handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('案列警告数据请求错误！请稍后重试') )        
         return
       }
 
@@ -1349,7 +1556,63 @@ export default {
       })
     }
     // 应急指挥 >>> 应急物资
-
+    const getSuppList = (type1) => {
+      return new Promise((resolve,reject)=>{
+        getSupp({pageNum:1,pageSize:9999,type1}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+    // 应急指挥 >>> 烟感设备&一键报警器
+    const getSmokeList = (deviceType) => {
+      return new Promise((resolve,reject)=>{
+        getSmoke({pageNum:1,pageSize:9999,deviceType}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+    // 应急指挥 >>> 烟隐患排查记录
+    const hiddenDangerRef = ref(null)
+    const searchHiddenDangerForm = reactive({
+      officeName: "",
+      officeCode: "",
+    });
+    const searchHiddenDangerParams = ref({})
+    const handleHiddenDangerReset = (formEL) => {
+      formEL.resetFields();
+      searchEventParams.value = {};
+      defaultObject(searchHiddenDangerForm);
+      handleHiddenDangerQuery();
+    };
+    const handleHiddenDangerQuery = () => {
+      searchHiddenDangerParams.value = deepClone(searchHiddenDangerForm);
+      hiddenDangerRef.currentPage = 1;
+      handleQueryHiddenTable();
+    }
+    const formHiddenHandle =  {
+      btns: [
+        {type: "primary",label: "查询", key: "search",handle: handleHiddenDangerQuery,},
+        {type: "primary", label: "重置", key: "reset", handle: handleHiddenDangerReset,},
+      ],
+    };
+    const handleQueryHiddenTable = () => {
+      hiddenDangerRef.value.getTableData(searchHiddenDangerParams.value, (res) => {
+        const data = res.list || [];
+        tableHiddenDangerConfig.data = data;
+      });
+    };
+    const handleHiddenSelectChange  = ({ officeCode, officeName }) => {
+      searchHiddenDangerForm.officeCode = officeCode;
+      searchHiddenDangerForm.officeName = officeName;
+    };
 
     // 
     onBeforeMount(() => {
@@ -1441,6 +1704,12 @@ export default {
       handleSelect,
       policyItem,
       url,
+      hiddenDangerRef,
+      formHiddenHandle,
+      searchHiddenDangerForm,
+      formHiddenDangerConfig,
+      tableHiddenDangerConfig,
+      handleHiddenSelectChange,
     }
   }
   //#endregion

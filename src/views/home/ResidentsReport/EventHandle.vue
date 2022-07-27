@@ -66,7 +66,7 @@
         />
         <el-button
           size="small"
-          v-if="data.data.approvalStatus == 1 || data.data.approvalStatus == 2"
+          v-if="data.data.recordState == 0 && (data.data.approvalStatus != 4 && data.data.approvalStatus != 5)"
           icon="el-icon-lx-forwardfill"
           circle
           type="priamry"
