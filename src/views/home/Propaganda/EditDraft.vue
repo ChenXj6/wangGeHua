@@ -57,6 +57,7 @@
               :auto-upload="false"
               :file-list="fileList"
               list-type="picture-card"
+              limit="1"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
               <i class="el-icon-lx-add"></i>

@@ -115,7 +115,7 @@ export default defineComponent({
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
     const searchForm = ref({
-      date: []
+      operatorId: JSON.parse(sessionStorage.getItem('user')).user.operatorId
     }) // 表单数据
     let searchParams = ref({}) // 表单数据备份
     const multipleSelection = ref([]) // 选中数据
