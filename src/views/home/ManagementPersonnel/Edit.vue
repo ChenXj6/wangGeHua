@@ -237,6 +237,7 @@ import { saveRelease, editRelease } from '@/api/ManagementPersonnel/releasePer'
 import { getSubClass, getBuildClass, getHouseClass } from '@/api/ActualInfo/build'
 import { updateStatus } from '@/api/ManagementPersonnel/drugPer'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
+import { searchDict } from '@/api/sys/dict'
 import { getOrganList } from '@/api/sys/organ'
 
 
@@ -301,7 +302,7 @@ export default {
         (!dataForm.value.communityName || trigMode) && (dataForm.value.communityName = communityNameOptions.value.filter((obj) => obj.value == parentCode)[0].label)
         subClass(2, parentCode, trigMode)
       } else {
-        (!dataForm.value.gridName || trigMode) && (dataForm.value.gridName = gridNameOptions.value.filter((obj) => obj.value == parentCode)[0].label)
+        (!dataForm.value.officeName || trigMode) && (dataForm.value.officeName = gridNameOptions.value.filter((obj) => obj.value == parentCode)[0].label)
         subClass(3, parentCode, trigMode)
       }
     }
@@ -320,8 +321,8 @@ export default {
             if (trigMode) {
               dataForm.value.communityName = ''
               dataForm.value.communityCode = ''
-              dataForm.value.gridName = ''
-              dataForm.value.gridCode = ''
+              dataForm.value.officeName = ''
+              dataForm.value.officeCode = ''
               communityNameOptions.value = []
               gridNameOptions.value = []
                 dataForm.value.buildingId = ''
@@ -332,8 +333,8 @@ export default {
             resetFormat(res.data, communityNameOptions)
           } else if (type == 2) {
             if (trigMode) {
-              dataForm.value.gridName = ''
-              dataForm.value.gridCode = ''
+              dataForm.value.officeName = ''
+              dataForm.value.officeCode = ''
               gridNameOptions.value = []
                 dataForm.value.buildingId = ''
                 buildingOptions.value = []
@@ -393,7 +394,9 @@ export default {
           if (route.query.type == 'Drug') {
             delete dataForm.value.buildingNumber
             delete dataForm.value.villageName
-            editDrug(dataForm).then(res => {
+            delete dataForm.value.unitNumber
+            delete dataForm.value.houseNumber
+            editDrug(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -402,7 +405,11 @@ export default {
             })
           }
           if (route.query.type == 'Release') {
-            editRelease(dataForm).then(res => {
+            delete dataForm.value.buildingNumber
+            delete dataForm.value.villageName
+            delete dataForm.value.unitNumber
+            delete dataForm.value.houseNumber
+            editRelease(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -411,7 +418,11 @@ export default {
             })
           }
           if (route.query.type == 'Rrectify') {
-            editRectify(dataForm).then(res => {
+            delete dataForm.value.buildingNumber
+            delete dataForm.value.villageName
+            delete dataForm.value.unitNumber
+            delete dataForm.value.houseNumber
+            editRectify(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -420,7 +431,11 @@ export default {
             })
           }
           if (route.query.type == 'Petition') {
-            editPetition(dataForm).then(res => {
+            delete dataForm.value.buildingNumber
+            delete dataForm.value.villageName
+            delete dataForm.value.unitNumber
+            delete dataForm.value.houseNumber
+            editPetition(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -429,7 +444,11 @@ export default {
             })
           }
           if (route.query.type == 'Mentaldisorders') {
-            editMental(dataForm).then(res => {
+            delete dataForm.value.buildingNumber
+            delete dataForm.value.villageName
+            delete dataForm.value.unitNumber
+            delete dataForm.value.houseNumber
+            editMental(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -489,14 +508,13 @@ export default {
         }
       })
     }
-    const handleSubmit = (formRef) => {
+    const handleSubmit = (formRef) => { 
       formRef.validate((vaild) => {
         if (vaild) {
           handleSave().then(res => {
             proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)
           }).catch(err => {
-            console.log(proxy)
             proxy.$message.warning(`操作失败，请稍后再试！`)
           })
         } else {
@@ -542,6 +560,30 @@ export default {
         handleChange(3)
         handleGetBuild(1, dataForm.value.gridCode)
         handleGetHouse(1, dataForm.value.buildingId)
+      }else if(route.query.type == 'Release'){
+        handleChange(1, dataForm.value.streetCode)
+        handleChange(2, dataForm.value.communityCode)
+        handleChange(3)
+        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetHouse(1, dataForm.value.buildingId)
+      }else if(route.query.type == 'Rrectify'){
+        handleChange(1, dataForm.value.streetCode)
+        handleChange(2, dataForm.value.communityCode)
+        handleChange(3)
+        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetHouse(1, dataForm.value.buildingId)
+      }else if(route.query.type == 'Mentaldisorders'){
+        handleChange(1, dataForm.value.streetCode)
+        handleChange(2, dataForm.value.communityCode)
+        handleChange(3)
+        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetHouse(1, dataForm.value.buildingId)
+      }else if(route.query.type == 'Petition'){
+        handleChange(1, dataForm.value.streetCode)
+        handleChange(2, dataForm.value.communityCode)
+        handleChange(3)
+        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetHouse(1, dataForm.value.buildingId)
       }
     }
     const getLatAndLng = ({ lat, lng }) => {
@@ -553,12 +595,14 @@ export default {
     onBeforeMount(() => {
       timer.value = new Date().getTime()
     })
-    route.query.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.treeNames)
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.value.treeNames)
 
     onMounted(() => {
       route.query.operation === 3 && (dataForm = {})
       // handleQueryTable()
     })
+
+
     return {
       dataForm,
       route,
@@ -591,7 +635,7 @@ export default {
       mapDialogVisible,
       handleClick,
       getLatAndLng,
-      Examine
+      Examine,
     }
   },
 }
