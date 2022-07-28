@@ -207,12 +207,21 @@ export default {
         data:[
           {
             title: "商务楼宇",
+            type:'businessBuilding',
+            cbType:"1"
           },
            {
             title: "重点项目",
+            type:'keyProjects',
           },
            {
             title: "重点企业",
+            type:'keyEnterprises',
+            cbType:"2"
+          },
+           {
+            title: "招商政策",
+            children: [{ title: "专业综合市场",type:'integratedMarket' }, { title: "楼宇经济",type:'buildingEconomy' }],
           },
         ]
       },

@@ -18,7 +18,7 @@ export function renderTable() {
         minWidth: '120',
       },
       { prop: 'communityName', label: '社区名称', minWidth: '150' },
-      { prop: 'gridName', label: '网格名称', minWidth: '150' },
+      { prop: 'officeName', label: '网格名称', minWidth: '150' },
       { prop: 'villageName', label: '小区名称', minWidth: '150' },
       { prop: 'buildingNumber', label: '楼栋名称', minWidth: '150' },
       { prop: 'unitNumber', label: '单元名称', minWidth: '150' },

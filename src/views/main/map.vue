@@ -383,7 +383,7 @@
               </el-carousel>
            </template> -->
            <!-- policy、process、neighborhood -->
-           <template v-else-if="isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood' || isOpenType == 'pandemic'  || isOpenType == 'law'  || isOpenType == 'business'  || isOpenType == 'risk'">
+           <template v-else-if="isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood' || isOpenType == 'pandemic'  || isOpenType == 'law'  || isOpenType == 'business'  || isOpenType == 'risk' || isOpenType == 'integratedMarket' || isOpenType == 'buildingEconomy'">
              <el-row style="width:100%" gutter="20">
                <el-col :span="4">
                  <div class="policy_left_top"><img src="http://123.233.250.69:9090/tqqgridManage/static/img/nc/msbz/tb.png" alt=""> <h2>{{ show }}</h2></div>
@@ -642,6 +642,12 @@ import { getParkLotList } from '@/api/SmartProperty/parkLot'
 
 //应急指挥
 import { getPubilcList } from '@/api/SmartProperty/pubilc'
+
+//经济运行>>商务楼宇,重点企业
+import { buildingList } from '@/api/Economics/building'
+
+//经济运行>>重点项目
+import { itemList } from '@/api/Economics/itemList'
 
 
 import Notice from './components/notice.vue'
@@ -1187,6 +1193,7 @@ export default {
     const workShowList = ref([])    
     // 数字党建弹窗控制模块
     const handleClick = (item) => {
+      handleClickOpen('')
       if (item.type == 'party') {
         var html = '<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(17408, 7178, html);
@@ -1231,6 +1238,7 @@ export default {
         // return
       }
       else if (item.type == "building") {
+        handleClickOpen('')
         getmediaList().then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
@@ -1305,6 +1313,7 @@ export default {
         }, 1000);
       } else if (item.type == 'haidi') {
         isOpenType.value = item.type
+        handleClickOpen('')
         getHaidi(1).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
@@ -1319,6 +1328,7 @@ export default {
         return
       } else if (item.type == 'provide') {
         isOpenType.value = item.type
+        handleClickOpen('')
         getHaidi(2).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
@@ -1404,8 +1414,55 @@ export default {
         },err=> proxy.$message.error('充电桩请求错误！请稍后重试') )
         return
       }
+      else if (item.type == 'businessBuilding') {
+        isOpenType.value = item.type
+        getBuildingList(item.cbType).then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.cbName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('商务楼宇数据请求错误！请稍后重试') )
+        return
+      }
+      else if (item.type == 'keyEnterprises') {
+        isOpenType.value = item.type
+        getBuildingList(item.cbType).then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.cbName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('重点企业数据请求错误！请稍后重试') )
+        return
+      }
+      else if (item.type == 'keyProjects') {
+        isOpenType.value = item.type
+        handleClickOpen('')
+        getItemList(1).then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.projectName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.projectName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('重点项目数据请求错误！请稍后重试') )
+        return
+      }
       else if (item.type == 'service') {
         isOpenType.value = item.type
+        handleClickOpen('')
         getStaff(item.staffType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
@@ -1451,25 +1508,19 @@ export default {
       } else if (item.type == 'liveworkshow') {
         isOpenType.value = item.type
         show.value = item.title;
+        handleClickOpen('')
         getmediaList().then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
-          }
-        },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
-        return
-      } else if (item.type == 'liveworkshow') {
-        isOpenType.value = item.type
-        show.value = item.title;
-        getmediaList().then(res=>{
-          if(res.list.length > 0){
-            workShowList.value = res.list
-            handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
         return
       } else if (item.type == 'supplies') {
         isOpenType.value = item.type
+        handleClickOpen('')
         getSuppList(1).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
@@ -1484,6 +1535,7 @@ export default {
         return
       } else if (item.type == 'site') {
         isOpenType.value = item.type
+        handleClickOpen('')
         getSuppList(3).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
@@ -1498,6 +1550,7 @@ export default {
         return
       } else if (item.type == 'fireHydrant') {
         isOpenType.value = item.type
+        handleClickOpen('')
         getSuppList(4).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
@@ -1512,12 +1565,14 @@ export default {
         return
       } else if (item.type == 'camera') {
         isOpenType.value = item.type
+        handleClickOpen('')
         let {lng,lat} = randomAddress()
         var html = `<div id="party" onClick="hj2(${lng},${lat},\'村头超市监控\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>村头超市监控</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
         vMap.showMapMark(lng, lat, html);
         return
       } else if (item.type == 'smokeDetector') {
         isOpenType.value = item.type
+        handleClickOpen('')
         getSmokeList(1).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
@@ -1541,6 +1596,7 @@ export default {
         }, 1000);
       } else if (item.type == 'alarm') {
         isOpenType.value = item.type
+        handleClickOpen('')
         getSmokeList(2).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
@@ -1601,9 +1657,31 @@ export default {
           brandList.value.length && handleSelect(brandList.value[1])
         },10)
         return
-      } else if (item.type == 'drill') {
+      } else if (item.type == 'integratedMarket') {
+        getDraftList()
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(()=>{
+          brandList.value.length && handleSelect(brandList.value[1])
+        },10)
+        return
+      } else if (item.type == 'buildingEconomy') {
+        getDraftList()
+        isOpenType.value = item.type
+        handleClickOpen('')
+        show.value = item.title;
+        handleClickOpen('isOpen')
+        setTimeout(()=>{
+          brandList.value.length && handleSelect(brandList.value[1])
+        },10)
+        return
+      }
+      else if (item.type == 'drill') {
         isOpenType.value = item.type
         show.value = item.title;
+        handleClickOpen('')
         getmediaList().then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
@@ -1616,6 +1694,7 @@ export default {
       } else if (item.type == 'training') {
         isOpenType.value = item.type
         show.value = item.title;
+        handleClickOpen('')
         getmediaList().then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
@@ -1628,6 +1707,7 @@ export default {
       } else if (item.type == 'casewarning') {
         isOpenType.value = item.type
         show.value = item.title;
+        handleClickOpen('')
         getmediaList().then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
@@ -1658,6 +1738,32 @@ export default {
     const getCommunalFacilities = (deviceType) => {
        return new Promise((resolve,reject)=>{
         getPubilcList({pageNum:1,pageSize:9999,deviceType}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+
+    //经济运行>>重点企业,商务楼宇 
+    const getBuildingList = (cbType) => {
+       return new Promise((resolve,reject)=>{
+        buildingList({pageNum:1,pageSize:9999,cbType}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+
+    //经济运行>>重点项目 
+      const getItemList = (orgType) => {
+      return new Promise((resolve,reject)=>{
+        itemList({pageNum:1,pageSize:9999,orgType}).then(res=>{
           if(res.resCode == '000000'){
             resolve(res.data)
           }else{
