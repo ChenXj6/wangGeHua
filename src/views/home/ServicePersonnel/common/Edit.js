@@ -80,8 +80,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -93,21 +93,21 @@ export function renderTable() {
         isClearable: true,
         span: 11,
       },
-      // {
-      //   type: 'slot',
-      //   label: '房屋',
-      //   prop: 'houseId',
-      //   slotName:'house',
-      //   isClearable: true,
-      //   span: 11,
-      // },
       {
         type: 'slot',
         label: '房屋',
-        slotName: 'house',
+        prop: 'houseId',
+        slotName:'house',
+        isClearable: true,
         span: 11,
-        prop:'house'
       },
+      // {
+      //   type: 'slot',
+      //   label: '房屋',
+      //   slotName: 'house',
+      //   span: 11,
+      //   prop:'houseId'
+      // },
       {
         type: 'Input',
         label: '身份证号',
@@ -357,15 +357,15 @@ export function renderTable() {
       communityCode: [
         { required: true, message: '请选择社区', trigger: ['blur','change'] },
       ],
-      gridCode: [
+      officeCode: [
         { required: true, message: '请选择网格', trigger: ['blur','change'] },
       ],
       buildingId: [
         { required: true, message: '请选择楼栋', trigger: ['blur','change'] },
       ],
-      // house: [
-      //   { required: true, message: '请选择房屋', trigger: ['blur','change'] },
-      // ],
+      houseId: [
+        { required: true, message: '请选择房屋', trigger: ['blur','change'] },
+      ],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],

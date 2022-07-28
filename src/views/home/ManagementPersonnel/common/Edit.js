@@ -80,8 +80,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -413,7 +413,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
@@ -444,8 +444,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -797,7 +797,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
@@ -827,8 +827,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -1326,7 +1326,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
@@ -1356,8 +1356,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -1750,7 +1750,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
@@ -1780,8 +1780,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -2046,7 +2046,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
