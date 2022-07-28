@@ -22,7 +22,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '街道名称',
-        prop: 'streeName',
+        prop: 'streetName',
         value: '',
         disabled:true,
         span: 11,

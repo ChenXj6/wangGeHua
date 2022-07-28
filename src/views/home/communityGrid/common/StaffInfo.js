@@ -12,10 +12,10 @@ export function renderTable() {
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
-      { prop: 'streeName', label: '街道名称',toolTip:true, minWidth: '120' },
-      { prop: 'streetCode', label: '街道编码',toolTip:true, minWidth: '120' },
+      { prop: 'streetName', label: '街道名称',toolTip:true, minWidth: '120' },
+      { prop: 'jdbm', label: '街道编码',toolTip:true, minWidth: '120' },
       { prop: 'communityName', label: '社区名称',toolTip:true, minWidth: '120' },
-      { prop: 'countyCode', label: '社区编码',toolTip:true, minWidth: '120' },
+      { prop: 'sqbm', label: '社区编码',toolTip:true, minWidth: '120' },
       {
         prop: '',
         label: '网格力量类型',

@@ -1,136 +1,139 @@
 <template>
   <div v-show="isShow">
-        <el-row :gutter="10">
-          <el-col :span="5"
-                  class="buildInfoBox">
-            <h4>楼栋信息：</h4>
-            <hr />
-            <p><span>楼长：</span> {{ buildForm.housemaster }}</p>
-            <p><span>联系电话：</span>{{ buildForm.housemasterPhone }}</p>
-            <p><span>楼层数：</span> {{ buildForm.floorNumber }}</p>
-            <p><span>总户数：</span> {{ buildForm.houseNumber }}</p>
-          </el-col>
-          <el-col :span="19"
-                  class="buildListBox">
-            <h4>楼栋单元：</h4>
-            <hr />
-            <div class="buildListItemBox">
-              <div class="buildListItem"
-                   v-for="item in unitList"
-                   :key="item.unitNumber"
-                   :class="
+    <el-row :gutter="10">
+      <el-col :span="5"
+              class="buildInfoBox">
+        <h4>楼栋信息：</h4>
+        <hr />
+        <p><span>楼长：</span> {{ buildForm.housemaster }}</p>
+        <p><span>联系电话：</span>{{ buildForm.housemasterPhone }}</p>
+        <p><span>楼层数：</span> {{ buildForm.floorNumber }}</p>
+        <p><span>总户数：</span> {{ buildForm.houseNumber }}</p>
+      </el-col>
+      <el-col :span="19"
+              class="buildListBox">
+        <h4>楼栋单元：</h4>
+        <hr />
+        <div class="buildListItemBox">
+          <div class="buildListItem"
+               v-for="item in unitList"
+               :key="item.unitNumber"
+               :class="
                   item.unitNumber == searchForm.unitNumber ? 'active' : ''
                 "
-                   @click="getHouseByUnit(item.unitNumber)">
-                <img src="@/assets/img/unit.jpg"
-                     alt=""
-                     srcset="" />
-                <span>{{
+               @click="getHouseByUnit(item.unitNumber)">
+            <img src="@/assets/img/unit.jpg"
+                 alt=""
+                 srcset="" />
+            <span>{{
                   unitNumberOptions.filter((v) => v.value == item.unitNumber)[0]
                     ?.label
                 }}</span>
-              </div>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="5"
-                  class="buildFloor">
-            <h4>楼层信息：</h4>
-            <hr />
-            <div>
-              <div class="floor"
-                   v-for="item in floorArr(buildForm.floorNumber)"
-                   :class="item.floorId + 1 == searchForm.floorId ? 'active' : ''"
-                   :key="item"
-                   @click="getHouseByFloor(item.floorId + 1)">
-                {{ item.floorId + 1 }}F
-              </div>
-            </div>
-          </el-col>
-          <el-col :span="19"
-                  class="houseBox">
-            <h4>
-              {{ buildForm.buildingNumber }}-{{ searchForm.unitNumber
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row :gutter="10">
+      <el-col :span="5"
+              class="buildFloor">
+        <h4>楼层信息：</h4>
+        <hr />
+        <div>
+          <div class="floor"
+               v-for="item in floorArr(buildForm.floorNumber)"
+               :class="item.floorId + 1 == searchForm.floorId ? 'active' : ''"
+               :key="item"
+               @click="getHouseByFloor(item.floorId + 1)">
+            {{ item.floorId + 1 }}F
+          </div>
+        </div>
+      </el-col>
+      <el-col :span="19"
+              class="houseBox">
+        <h4>
+          {{ buildForm.buildingNumber }}-{{ searchForm.unitNumber
               }}{{ searchForm.unitNumber ? "单元" : "" }}-{{ searchForm.floorId
               }}{{ searchForm.floorId ? "楼" : "" }}房屋人员信息：
-            </h4>
-            <!-- <hr> -->
-            <el-row :gutter="10">
-              <el-col :span="10">
-                <!-- {{ houseList.length }} -->
-                <div v-if="!isHaveHouse"
-                     class="noHouse">
-                  <img src="@/assets/img/loading.gif"
-                       alt="loading"
-                       srcset="" />
-                  <p>Loading...</p>
-                </div>
-                <div v-else-if="houseList.length <= 0"
-                     class="noList">
-                  暂无数据
-                </div>
-                <div v-else
-                     class="house">
-                  <div class="houseItem"
-                       @click="getPeople(item.houseNumber)"
-                       v-for="item in houseList"
-                       :class="item.houseNumber == searchForm.houseNumber ? 'active' : ''"
-                       :key="item">
-                    <img src="@/assets/img/house.png"
-                         alt="" />
-                    <p>{{ item.houseNumber }}</p>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="14"
-                      class="borderRight">
-                <div v-if="!isHavePeople"
-                     class="noPeople">
-                  <img src="@/assets/img/loading.gif"
-                       alt="loading"
-                       srcset="" />
-                  <p>Loading...</p>
-                </div>
-                <div v-else-if="peopleList.length <= 0"
-                     class="noList">
-                  暂无数据
-                </div>
-                <div v-else
-                     class="people house">
-                  <div class="peopleItem"
-                       v-for="item in peopleList"
-                       :key="item">
-                    <img :src="
+        </h4>
+        <!-- <hr> -->
+        <el-row :gutter="10">
+          <el-col :span="10">
+            <!-- {{ houseList.length }} -->
+            <div v-if="!isHaveHouse"
+                 class="noHouse">
+              <img src="@/assets/img/loading.gif"
+                   alt="loading"
+                   srcset="" />
+              <p>Loading...</p>
+            </div>
+            <div v-else-if="houseList.length <= 0"
+                 class="noList">
+              暂无数据
+            </div>
+            <div v-else
+                 class="house">
+              <div class="houseItem"
+                   @click="getPeople(item.houseNumber)"
+                   v-for="item in houseList"
+                   :class="item.houseNumber == searchForm.houseNumber ? 'active' : ''"
+                   :key="item">
+                <img src="@/assets/img/house.png"
+                     alt="" />
+                <p>{{ item.houseNumber }}</p>
+              </div>
+            </div>
+          </el-col>
+          <el-col :span="14"
+                  class="borderRight">
+            <div v-if="!isHavePeople"
+                 class="noPeople">
+              <img src="@/assets/img/loading.gif"
+                   alt="loading"
+                   srcset="" />
+              <p>Loading...</p>
+            </div>
+            <div v-else-if="peopleList.length <= 0"
+                 class="noList">
+              暂无数据
+            </div>
+            <div v-else
+                 class="people house">
+              <div class="peopleItem"
+                   v-for="item in peopleList"
+                   :key="item">
+                <img :src="
                         item?.certificates?.length
                           ? `${imgUrl}${item.certificates.split(',')[0]}`
                           : ''
                       "
-                         alt="" />
-                    <p>
-                      <span>姓名：</span> <span>{{ item.name }}</span>
-                    </p>
-                    <p>
-                      <span>户籍：</span> <span>{{ item.domicile }}</span>
-                    </p>
-                    <p>
-                      <span>户主关系：</span>
-                      <!-- <span>{{
+                     alt="" />
+                <p>
+                  <span>姓名：</span> <span>{{ item.name }}</span>
+                </p>
+                <p>
+                  <span>户籍：</span> <span>{{ item.domicile }}</span>
+                </p>
+                <p>
+                  <span>户主关系：</span>
+                  <!-- <span>{{
                         relationshipOptions.filter(
                           (v) => v.value == item.relationship
                         )[0]?.label
                       }}</span> -->
-                    </p>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
+                </p>
+              </div>
+            </div>
           </el-col>
         </el-row>
-      </div>
+      </el-col>
+    </el-row>
+  </div>
+  <div v-if="!isShow" style="">
+
+  </div>
 </template>
 <script>
-import { getPeopleList,getGISPeople } from "@/api/ActualInfo/people";
+import { getPeopleList, getGISPeople } from "@/api/ActualInfo/people";
 import { ref } from '@vue/reactivity';
 import { searchDict } from "@/api/sys/dict";
 import { resetFormat as resetFormatStatus } from "@/utils/util";
@@ -143,7 +146,8 @@ export default defineComponent({
       default: () => ''
     },
   },
-  setup(props) {
+  emits: ['update:buildingVisible'],
+  setup (props) {
     const buildId = ref(props.buildingId)
     // 楼栋
     const imgUrl = ref(import.meta.env.VITE_IMG_BASE_API);
@@ -155,7 +159,7 @@ export default defineComponent({
     const isHavePeople = ref(true);
     // 小区名字  楼号  单元号   房屋号
     const searchForm = ref({
-      buildingId:'',
+      buildingId: '',
       villageName: "",
       buildingNumber: "",
       unitNumber: "1",
@@ -188,8 +192,8 @@ export default defineComponent({
           peopleList.value = await getPeopleApi()
           isHavePeople.value = true
           isShow.value = true
-        }else{
-          
+        } else {
+
         }
       });
     };
@@ -263,10 +267,10 @@ export default defineComponent({
     const unitNumberOptions = ref([]);
     getOptionsByCode(1052, unitNumberOptions);
     getOptionsByCode(1014, relationshipOptions);
-    onBeforeMount(()=>{
+    onBeforeMount(() => {
       getBuild(buildId.value)
     })
-    return{
+    return {
       // 楼栋弹窗
       imgUrl,
       buildForm,
@@ -285,7 +289,7 @@ export default defineComponent({
       getBuild,
       // 
       isShow,
-      
+
     }
   },
 })
