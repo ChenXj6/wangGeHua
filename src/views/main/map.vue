@@ -385,7 +385,7 @@
            <!-- policy、process、neighborhood -->
            <template v-else-if="isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood' || isOpenType == 'pandemic'  || isOpenType == 'law'  || isOpenType == 'business'  || isOpenType == 'risk' || isOpenType == 'integratedMarket' || isOpenType == 'buildingEconomy'">
              <el-row style="width:100%" gutter="20">
-               <el-col :span="4">
+               <el-col :span="5">
                  <div class="policy_left_top"><img src="http://123.233.250.69:9090/tqqgridManage/static/img/nc/msbz/tb.png" alt=""> <h2>{{ show }}</h2></div>
                  <div class="policy_left">
                       <p class="policy_left_item" v-for="(item, index) in brandList" :key="index" @click="handleSelect(item)">{{item.title}}</p>
@@ -395,7 +395,7 @@
                  <div>
                       <h1 style="text-align: center">{{ policyItem.title }}</h1>
                       <div
-                        style="overflow: scroll; height: 400px; margin-top: 20px"
+                        style="overflow: scroll; height: 400px; margin-top: 25px"
                       >
                         <div
                           v-html="policyItem.content"
@@ -2143,12 +2143,14 @@ h4 {
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
+  width: 230px;
 }
 .policy_left_top>img{
   width: 50px;
   margin-right: 20px;
 }
 .policy_left{
+  width: 230px;
   padding: 10px;
   box-sizing: border-box;
   margin-top: 20px;
