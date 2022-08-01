@@ -85,6 +85,10 @@ export default {
   box-sizing: border-box;
   color: #f5f5f5;
   font-size: 14px;
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+  scrollbar-track-color: transparent;
+  -ms-scrollbar-track-color: transparent;
   .notice-title {
     display: flex;
     justify-content: space-between;

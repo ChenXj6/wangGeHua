@@ -87,7 +87,7 @@ export default {
     }
     const handleReset = (formEL) => {
       formEL.resetFields()
-      searchParams.value = {}
+      searchParams.value = {processePerCode:JSON.parse(sessionStorage.getItem('user')).user.operatorId}
       defaultObject(searchForm.value)
       handleQuery()
     }
@@ -99,6 +99,7 @@ export default {
       ]
     }
     const handleQueryTable = () => {
+      searchParams.value.processePerCode = JSON.parse(sessionStorage.getItem('user')).user.operatorId
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
         tableConfig.data = data

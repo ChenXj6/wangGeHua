@@ -101,7 +101,8 @@ export default defineComponent({
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm)
-      table.currentPage = 1
+      delete searchParams.value.officeName
+      table.value.currentPage = 1
       handleQueryTable()
     }
     const handleReset = (formEL) => {

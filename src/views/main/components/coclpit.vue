@@ -1,84 +1,119 @@
 <template>
   <div class="coclpit-content">
-    <el-row :gutter="10"
-            class="itemBox1">
-      <el-col :span="3"
-              v-for="item in billboardList"
-              :key="item.id">
-        <div class="item">
-          <p class="itemTitle">{{ item.title }}</p>
-          <p class="itemNum">{{ item.num }}<span class="itemUnit">{{ item.unit }}</span></p>
+    <div>
+      <h1 style="text-align: center;margin-bottom:40px">{{ currentTitle }}</h1>
+    </div>
+    <el-row :gutter="10" >
+      <el-col :span="isOpen ? 22 : 24">
+        <template v-if="currentMenu == 0">
+          <el-row :gutter="10"
+                  class="itemBox1">
+            <el-col :span="3"
+                    v-for="item in billboardList"
+                    :key="item.id">
+              <div class="item">
+                <p class="itemTitle">{{ item.title }}</p>
+                <p class="itemNum">{{ item.num }}<span class="itemUnit">{{ item.unit }}</span></p>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10"
+                  class="itemBox2">
+            <el-col :span="3"
+                    v-for="item in personnelDetails"
+                    :key="item.id">
+              <div class="item">
+                <p class="itemNum">{{ item.num }}<span class="itemUnit">{{ item.unit }}</span></p>
+                <p class="itemTitle">{{ item.title }}</p>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10" style="margin-bottom:20px">
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="main1"
+                     ref="main1"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="main2"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="main3"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="main4"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="main5"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="main6"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="main7"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="main8"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </template>
+        <template v-else-if="currentMenu == 1">
+          <el-row :gutter="10">
+            <el-col :span="6">
+              <el-card shadow="hover">
+                <div id="epidemic"
+                     style="width: 100%;height:200px;"></div>
+              </el-card>
+            </el-col>
+          </el-row>
+        </template>
+      </el-col>
+      <el-col v-if="isOpen"
+              :span="2">
+        <div class="menuList">
+          <div class="menuItem"
+               v-for="item in menuList"
+               :key="item.id"
+               :class="currentMenu == item.id ? 'active':''"
+               @click="changeSelect(item)">{{ item.title }}</div>
         </div>
       </el-col>
     </el-row>
-    <el-row :gutter="10"
-            class="itemBox2">
-      <el-col :span="3"
-              v-for="item in personnelDetails"
-              :key="item.id">
-        <div class="item">
-          <p class="itemNum">{{ item.num }}<span class="itemUnit">{{ item.unit }}</span></p>
-          <p class="itemTitle">{{ item.title }}</p>
-        </div>
-      </el-col>
-    </el-row>
-    <el-row :gutter="10">
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <div id="main1"
-               ref="main1"
-               style="width: 100%;height:200px;"></div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <div id="main2"
-               style="width: 100%;height:200px;"></div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <div id="main3"
-               style="width: 100%;height:200px;"></div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <div id="main4"
-               style="width: 100%;height:200px;"></div>
-        </el-card>
-      </el-col>
-    </el-row>
-    <el-row :gutter="10">
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <div id="main5"
-               style="width: 100%;height:200px;"></div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <div id="main6"
-               style="width: 100%;height:200px;"></div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <div id="main7"
-               style="width: 100%;height:200px;"></div>
-        </el-card>
-      </el-col>
-      <el-col :span="6">
-        <el-card shadow="hover">
-          <div id="main8"
-               style="width: 100%;height:200px;"></div>
-        </el-card>
-      </el-col>
-    </el-row>
+    <div class="flag">
+      <div @click="openMenu">
+        <i class="el-icon-s-fold"></i>&nbsp;
+        <span>{{ isOpen ? '折叠' : '展开' }}</span>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import { getCurrentInstance, onMounted, ref } from '@vue/runtime-core'
+import { getCurrentInstance, nextTick, onMounted, ref } from '@vue/runtime-core'
 export default {
   setup () {
     const { proxy } = getCurrentInstance()
@@ -457,11 +492,66 @@ export default {
         ]
       })
     }
+    const epidemic = ref(null)
+    const epidemicEcharts = () => {
+      epidemic.value = proxy.$echart.init(document.getElementById('epidemic'))
+      epidemic.value.setOption({
+        title: {
+          text: '疫苗接种',
+          left: 'center'
+        },
+        tooltip: {},
+        xAxis: {
+          data: ['东区社区', '西区社区', '南区社区', '北区社区','泉星社区','绿地社区']
+        },
+        yAxis: {},
+        series: [
+          {
+            name: '已接种人数',
+            type: 'bar',
+            data: [3791, 5267, 2785, 3872,4740,5567]
+          }
+        ]
+      });
+    }
+    const isOpen = ref(true)
+    const openMenu = () => {
+      isOpen.value = !isOpen.value
+      resetDom()
+    }
+    const currentMenu = ref(0)
+    const currentTitle = ref('驾驶舱')
+    const menuList = ref([
+      { id: 0, title: '驾驶舱' },
+      { id: 1, title: '疫情防控' },
+      { id: 2, title: '数字党建' },
+      { id: 3, title: '网格政务' },
+      { id: 4, title: '民生保障' },
+      { id: 5, title: '应急指挥' },
+      { id: 6, title: '智慧物业' },
+      { id: 7, title: '经济运行' },
+    ])
+    const resetDom = () => {
+      if(currentMenu.value == 0){
+        nextTick(()=>{
+          drawEcharts()
+        })
+      }else if(currentMenu.value == 1){
+        nextTick(()=>{
+          epidemicEcharts()
+        })
+      }
+    }
+    const changeSelect = ({ id,title }) => {
+      currentMenu.value = id
+      currentTitle.value = title
+      resetDom()
+    }
     onMounted(() => {
       drawEcharts()
     })
     return {
-      billboardList, personnelDetails,
+      billboardList, personnelDetails, openMenu, isOpen, menuList, currentMenu, changeSelect,currentTitle
     }
   },
 }
@@ -479,7 +569,6 @@ export default {
   z-index: 9999;
   padding: 60px 50px 50px;
   border-radius: 10px;
-  
 }
 .item {
   width: 100%;
@@ -526,7 +615,39 @@ export default {
   -ms-scrollbar-track-color: transparent;
 }
 .coclpit-content > div {
-  margin: 10px 0;
-  
+  margin: 10px 0 !important;
+}
+.menuList {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  padding: 10px;
+}
+.menuItem {
+  width: 100%;
+  height: 30px;
+  line-height: 30px;
+  margin: 5px 0;
+  box-sizing: border-box;
+  text-align: center;
+  border: 1px dashed darkcyan;
+  cursor: pointer;
+}
+.active {
+  background: #f9f9f9;
+  color: #333;
+  font-weight: 700;
+  border: 1px dashed rgba(238, 255, 0, 0.225);
+}
+.flag {
+  position: absolute;
+  top: 100px;
+  right: 60px;
+  font-size: 14px;
+  cursor: pointer;
 }
 </style>

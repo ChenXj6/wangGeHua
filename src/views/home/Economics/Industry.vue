@@ -81,7 +81,7 @@ export default {
     const handleReset = (formEL) => {
       formEL.resetFields()
       searchParams.value = {}
-      defaultObject(searchForm)
+      defaultObject(searchForm.value)
       handleQuery()
     }
     const handleAdd = () => {

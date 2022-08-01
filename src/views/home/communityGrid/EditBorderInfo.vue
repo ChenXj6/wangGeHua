@@ -117,7 +117,8 @@ import mixin from '@/mixins/tagView.js'
 import { renderTable } from './common/EditBorderInfo'
 import { saveBorderInfo,editBorderInfo } from '@/api/communityGrid/borderInfo'
 import { defaultObject } from '@/utils/util'
-import { getOrganList } from '@/api/sys/organ'
+import { getOrganList,getSmallOrganList } from '@/api/sys/organ'
+import { isNull } from '@/utils/util'
 export default {
   name:'EditActual',
   mixins: [mixin],
@@ -142,13 +143,14 @@ export default {
     // }
     let dataForm = reactive({
       id:'',
-      gridBasicid:'',
       countyCode:'',
       countyName:'',
       streetCode:'',
-      streeName:'',
+      streetName:'',
       communityCode:'',
       communityName:'',
+      officeCode:'',
+      officeName:'',
       info:[
         {
           borderScope:'',
@@ -233,9 +235,36 @@ export default {
       label: "officeName",
       children: "children"
     } 
+    // 组织结构 功能
+    const getSOList = (officeCode) => {
+      getSmallOrganList({officeCode}).then(res=>{
+        if(!dataForm.officeName && dataForm.officeCode == res.data[0].officeCode){
+          dataForm.officeName = res.data[0].officeName
+        }
+        if(res.resCode == '000000' && !isNull(res.data)){
+          res.data.forEach(v => {
+            if(v.officeType == 2){
+              dataForm.countyName = v.officeName
+              dataForm.countyCode = v.officeCode
+            } else if (v.officeType == 3){
+              dataForm.streetName = v.officeName
+              dataForm.streetCode = v.officeCode
+            } else if (v.officeType == 4){
+              dataForm.communityName = v.officeName
+              dataForm.communityCode = v.officeCode
+            } 
+            else if (v.officeType == 5){
+              dataForm.gridName = v.officeName
+              dataForm.gridCode = v.officeCode
+            }
+          })
+        }
+      })
+    }
     const handleTreeSelectChange = ({officeCode,officeName}) => {
       dataForm.officeCode = officeCode
       dataForm.officeName = officeName
+      getSOList(officeCode)
     }
     const getOList = () => {
       getOrganList({}).then(res=>{

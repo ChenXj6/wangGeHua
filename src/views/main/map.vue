@@ -463,9 +463,6 @@
     <!-- 驾驶舱弹窗 -->
     <div v-if="isOpenCockpit" class="coclpit">
       <div class="coclpitDialog">
-        <div>
-          <h1 style="text-align: center">驾驶舱</h1>
-        </div>
         <Coclpit />
       </div>
       <i
@@ -1194,7 +1191,7 @@ export default {
     // 数字党建弹窗控制模块
     const handleClick = (item) => {
       handleClickOpen('')
-      if (item.type == 'party') {
+      if (item.type == 'party') {        
         var html = '<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(17408, 7178, html);
         isOpenType.value = item.type

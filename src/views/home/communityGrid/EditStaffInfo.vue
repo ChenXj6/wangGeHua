@@ -262,7 +262,7 @@ export default {
               dataForm.areaName = v.officeName
               dataForm.qbm = v.officeCode
             } else if (v.officeType == 3){
-              dataForm.streeName = v.officeName
+              dataForm.streetName = v.officeName
               dataForm.jdbm = v.officeCode
             } else if (v.officeType == 4){
               dataForm.communityName = v.officeName
