@@ -80,35 +80,31 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
         label: '楼栋',
-        prop: 'buildingId',
-        // value: '',
         slotName:'buildingId',
-        // placeholder: '请选择楼栋名称',
+        span: 11,
+        prop:'buildingId'
+      },
+      {
+        type: 'slot',
+        label: '房屋',
+        prop: 'houseId',
+        slotName:'house',
         isClearable: true,
         span: 11,
       },
       // {
       //   type: 'slot',
       //   label: '房屋',
-      //   prop: 'houseId',
-      //   // value: '',
-      //   slotName:'house',
-      //   isClearable: true,
+      //   slotName: 'house',
       //   span: 11,
+      //   prop:'houseId'
       // },
-      {
-        type: 'slot',
-        label: '房屋',
-        slotName: 'house',
-        span: 11,
-        prop:'house'
-      },
       {
         type: 'Input',
         label: '身份证号',
@@ -151,8 +147,8 @@ export function renderTable() {
         type: 'date',
         label: '出生日期',
         prop: 'birthDate',
-        value: '',
-        format: 'YYYY-MM-DD HH:mm:ss',
+        value: [],
+        format: 'YYYY-MM-DD',
         isClearable: true,
         span: 11,
       },
@@ -358,13 +354,13 @@ export function renderTable() {
       communityCode: [
         { required: true, message: '请选择社区', trigger: ['blur','change'] },
       ],
-      gridCode: [
+      officeCode: [
         { required: true, message: '请选择网格', trigger: ['blur','change'] },
       ],
       buildingId: [
         { required: true, message: '请选择楼栋', trigger: ['blur','change'] },
       ],
-      house: [
+      houseId: [
         { required: true, message: '请选择房屋', trigger: ['blur','change'] },
       ],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],

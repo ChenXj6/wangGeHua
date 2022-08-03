@@ -171,10 +171,60 @@ export default {
       {
         id: 6,
         title: "智慧物业",
+        data:[
+          {
+            title: "车位位置",
+            type:'parkingLotPosition',
+          },
+           {
+            title: "摄像头位置",
+            type:'cameraPosition',
+            deviceType:'2'
+          },
+           {
+            title: "道闸位置",
+            type:'roadGatePosition',
+            deviceType:'3'
+          },
+           {
+            title: "垃圾桶位置",
+            type:'trashCanPosition',
+            deviceType:'4'
+          },
+           {
+            title: "充电桩位置",
+            type:'chargingPilePosition',
+            deviceType:'5'
+          },
+          {
+            title: "工作成果",
+            type:"workResults"
+          },
+        ]
       },
       {
         id: 7,
         title: "经济运行",
+        data:[
+          {
+            title: "商务楼宇",
+            type:'businessBuilding',
+            cbType:"1"
+          },
+           {
+            title: "重点项目",
+            type:'keyProjects',
+          },
+           {
+            title: "重点企业",
+            type:'keyEnterprises',
+            cbType:"2"
+          },
+           {
+            title: "招商政策",
+            children: [{ title: "专业综合市场",type:'integratedMarket' }, { title: "楼宇经济",type:'buildingEconomy' }],
+          },
+        ]
       },
     ];
     const router = useRouter();

@@ -80,8 +80,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -209,11 +209,12 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
-        span: 11,
+        prop: 'occupationTypeFrist',
+        value: '',
         code : '1032',
         placeholder: '请选择职业类别',
         isClearable: true,
+        span: 11,
       },
       {
         type: 'Input',
@@ -413,7 +414,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
@@ -444,8 +445,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -570,7 +571,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
+        prop: 'occupationTypeFrist',
         span: 11,
         code : '1032',
         placeholder: '请选择职业类别',
@@ -797,7 +798,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
@@ -827,8 +828,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -953,7 +954,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
+        prop: 'occupationTypeFrist',
         span: 11,
         code : '1032',
         placeholder: '请选择职业类别',
@@ -1026,7 +1027,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '矫正人员编号',
-        prop: 'rectifyNO',
+        prop: 'rectifyNo',
         value: '',
         placeholder: '请输入矫正人员编号',
         isClearable: true,
@@ -1326,7 +1327,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
@@ -1356,8 +1357,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -1486,7 +1487,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
+        prop: 'occupationTypeFrist',
         span: 11,
         code : '1032',
         placeholder: '请选择职业类别',
@@ -1750,7 +1751,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
@@ -1780,8 +1781,8 @@ export function renderTable() {
         type: 'slot',
         label: '',
         span: 6,
-        slotName:'gridCode',
-        prop:'gridCode'
+        slotName:'officeCode',
+        prop:'officeCode'
       },
       {
         type: 'slot',
@@ -1910,7 +1911,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
+        prop: 'occupationTypeFrist',
         span: 11,
         code : '1032',
         placeholder: '请选择职业类别',
@@ -2046,7 +2047,7 @@ export function renderTable() {
     ],
     rules: {
       streetCode: [{ required: true, message: '请选择街道', trigger: ['blur', 'change'] }],
-      gridCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
+      officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
       idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],

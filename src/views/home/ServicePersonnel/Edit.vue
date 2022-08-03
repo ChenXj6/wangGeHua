@@ -65,8 +65,8 @@
           </el-option>
         </el-select>
       </template>
-      <template v-slot:gridCode="">
-          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
+      <template v-slot:officeCode="">
+          <el-select v-model="dataForm.officeCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
               :key="item.value"
@@ -96,24 +96,10 @@
           </el-option>
         </el-select>
       </template>
-      <template v-slot:house="">
-        <el-select
-          v-model="dataForm.house"
-          size="mini"
-          clearable
-          placeholder="请选择房屋"
-          @change="
-            (val) => {
-              handleGetHouse(2, val, true);
-            }
-          "
-        >
-          <el-option
-            v-for="item in houseOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
+<template v-slot:house>
+        <el-select v-model="dataForm.houseId" size="mini" clearable placeholder="请选择房屋"
+          @change="(val) => { handleGetHouse(2, val, true) }">
+          <el-option v-for="item in houseOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
@@ -129,7 +115,7 @@
         >
       </div>
     </el-row>
-    <el-row v-if="route.query.operation == 2">
+    <!-- <el-row v-if="route.query.operation == 2">
       <div class="btn-box">
         <el-button
           type="primary"
@@ -139,7 +125,7 @@
           >审核</el-button
         >
       </div>
-    </el-row>
+    </el-row> -->
     <!-- 地图弹窗 -->
     <el-dialog width="37.5%" v-model="mapDialogVisible">
       <VMap
@@ -231,6 +217,7 @@ export default {
         arr.push(obj);
       });
       options.value = arr;
+      // console.log('111111',arr)
     };
     // trigMode 用来区分是编辑初始化还是自己手动触发的
     const handleChange = (type, parentCode, trigMode = false) => {
@@ -275,7 +262,7 @@ export default {
               gridNameOptions.value = [];
               dataForm.value.buildingId = "";
               buildingOptions.value = [];
-              dataForm.value.house = "";
+              dataForm.value.houseId = "";
               houseOptions.value = [];
             }
             resetFormat(res.data, communityNameOptions);
@@ -286,7 +273,7 @@ export default {
               gridNameOptions.value = [];
               dataForm.value.buildingId = "";
               buildingOptions.value = [];
-              dataForm.value.house = "";
+              dataForm.value.houseId = "";
               houseOptions.value = [];
             }
             resetFormat(res.data, gridNameOptions);
@@ -294,7 +281,7 @@ export default {
             if (trigMode) {
               dataForm.value.buildingId = "";
               buildingOptions.value = [];
-              dataForm.value.house = "";
+              dataForm.value.houseId = "";
               houseOptions.value = [];
             }
           }
@@ -318,7 +305,7 @@ export default {
       getHouseClass({ buildingId }).then((res) => {
         if (res.resCode == "000000") {
           if (trigMode && type == 1) {
-            dataForm.value.house = "";
+            dataForm.value.houseId = "";
             houseOptions.value = [];
           }
           resetFormat(res.data, houseOptions, 3);
@@ -478,12 +465,13 @@ export default {
       handleGetBuild,
       buildingOptions,
       popupTreeData,
-      handleChange,
+      // handleChange,
       // 获取经纬度
       mapDialogVisible,
       handleClick,
       getLatAndLng,
       timer,
+      houseOptions
     };
   },
 };
