@@ -264,10 +264,11 @@ export default defineComponent({
     const getBuild = (gisid) => {
       getUnitByBuild({ gisid }).then(async (res) => {
         if (res.resCode == "000000") {
-          // console.log(res.data.unit.length == 0 && isNull(res.data.build),'---------')
           if(res.data.unit.length == 0 && isNull(res.data.build)){
-            emit('update:buildingVisible')
-            $message.warning('暂无该楼栋信息')
+            setTimeout(() => {
+              emit('update:buildingVisible')
+            }, 500);
+            $message.warning({message:'暂无该楼栋信息',customClass:'messageIndex'})
           }else{
             unitList.value = res.data.unit;
             buildForm.value = res.data.build;
@@ -282,7 +283,7 @@ export default defineComponent({
           }
         } else {
           emit('update:buildingVisible')
-          $message.error(res.message)
+          $message.error({message:res.message,customClass:'messageIndex'})
         }
       });
     };
@@ -401,6 +402,11 @@ export default defineComponent({
   },
 })
 </script>
+<style>
+.messageIndex{
+  z-index: 9999 !important;
+}
+</style>
 <style scoped>
 .buildInfoBox {
   height: 122px;
