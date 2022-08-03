@@ -647,6 +647,7 @@ import { buildingList } from '@/api/Economics/building'
 import { itemList } from '@/api/Economics/itemList'
 
 
+
 import Notice from './components/notice.vue'
 export default {
   components: { Notice, Coclpit, Building },
@@ -1191,8 +1192,15 @@ export default {
     // 数字党建弹窗控制模块
     const handleClick = (item) => {
       handleClickOpen('')
-      if (item.type == 'party') {        
-        var html = '<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+      if (item.type == 'party') {     
+        const hongqiUrl = "src/assets/img/hongqi.png" 
+        // var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.officeName}\',
+        //       \'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; 
+        //       line-height:18px;border:red solid 1px;padding:1px 2px 0px 2px;text-align:center;
+        //        background-color:red"><nobr>${v.officeName}</nobr></div>
+        //        <div style="height:9px;text-align:center;margin:-3px 0px 0px 0px">
+        //        <img src="${hongqiUrl}" style="width:60px;margin-bottom: 10px;"></div>`  
+        var html = `<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${hongqiUrl}" style="width:60px;margin-bottom: 5px;"></div>`
         vMap.showMapMark(17408, 7178, html);
         isOpenType.value = item.type
         return
@@ -1341,10 +1349,16 @@ export default {
       } else if (item.type == 'parkingLotPosition') {
         isOpenType.value = item.type
         getParkLot(2).then(res=>{
+          const hongqiUrl = "src/assets/img/hongqi.png"
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.officeName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.officeName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.officeName}\',
+              \'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; 
+              line-height:18px;border:red solid 1px;padding:1px 2px 0px 2px;text-align:center;
+               background-color:red"><nobr>${v.officeName}</nobr></div>
+               <div style="height:9px;text-align:center;margin:-3px 0px 0px 0px">
+               <img src="${hongqiUrl}" style="width:60px;margin-bottom: 10px;"></div>`
               vMap.showMapMark(lng, lat, html);
             })
           }
@@ -1574,7 +1588,11 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',
+              \'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px;
+               line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center;
+                background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px">
+                <img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
               vMap.showMapMark(lng, lat, html);
             })
           }else{

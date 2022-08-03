@@ -465,7 +465,7 @@ export default {
       handleGetBuild,
       buildingOptions,
       popupTreeData,
-      handleChange,
+      // handleChange,
       // 获取经纬度
       mapDialogVisible,
       handleClick,

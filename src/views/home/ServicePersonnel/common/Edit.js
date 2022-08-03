@@ -86,12 +86,9 @@ export function renderTable() {
       {
         type: 'slot',
         label: '楼栋',
-        prop: 'buildingId',
-        // value: '',
         slotName:'buildingId',
-        // placeholder: '请选择楼栋名称',
-        isClearable: true,
         span: 11,
+        prop:'buildingId'
       },
       {
         type: 'slot',
@@ -150,8 +147,8 @@ export function renderTable() {
         type: 'date',
         label: '出生日期',
         prop: 'birthDate',
-        value: '',
-        format: 'YYYY-MM-DD HH:mm:ss',
+        value: [],
+        format: 'YYYY-MM-DD',
         isClearable: true,
         span: 11,
       },

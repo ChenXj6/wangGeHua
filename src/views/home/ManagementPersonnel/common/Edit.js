@@ -209,11 +209,12 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
-        span: 11,
+        prop: 'occupationTypeFrist',
+        value: '',
         code : '1032',
         placeholder: '请选择职业类别',
         isClearable: true,
+        span: 11,
       },
       {
         type: 'Input',
@@ -570,7 +571,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
+        prop: 'occupationTypeFrist',
         span: 11,
         code : '1032',
         placeholder: '请选择职业类别',
@@ -953,7 +954,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
+        prop: 'occupationTypeFrist',
         span: 11,
         code : '1032',
         placeholder: '请选择职业类别',
@@ -1026,7 +1027,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '矫正人员编号',
-        prop: 'rectifyNO',
+        prop: 'rectifyNo',
         value: '',
         placeholder: '请输入矫正人员编号',
         isClearable: true,
@@ -1486,7 +1487,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
+        prop: 'occupationTypeFrist',
         span: 11,
         code : '1032',
         placeholder: '请选择职业类别',
@@ -1910,7 +1911,7 @@ export function renderTable() {
       {
         type: 'selectSearch',
         label: '职业类别',
-        prop: 'staffType',
+        prop: 'occupationTypeFrist',
         span: 11,
         code : '1032',
         placeholder: '请选择职业类别',
