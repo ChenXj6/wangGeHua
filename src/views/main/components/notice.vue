@@ -25,13 +25,14 @@
   </div>
 </template>
 <script>
-import { computed, onMounted, ref,watch } from '@vue/runtime-core'
+import { computed, getCurrentInstance, onMounted, ref,watch } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 export default {
   setup() {
     const store = useStore()
     const router = useRouter()
+    const { proxy } = getCurrentInstance()
     const isUnfold = ref(true)
     const noticeListBox = ref(null)
     // 消息通知
@@ -46,12 +47,17 @@ export default {
       isUnfold.value = !isUnfold.value
     }
     
-    const handleViewDetail = (data,type = 1) => {
-      data = JSON.stringify(data)
-      router.push({
-        path: '/editResidentsReport',
-        query: { data: encodeURIComponent(data), operation: type },
-      })
+    const handleViewDetail = (data,type = 4) => {
+      if(data.recordState == 0 && (data.approvalStatus != 4 && data.approvalStatus != 5)){
+        data = JSON.stringify(data)
+        router.push({
+          path: '/editResidentsReport',
+          query: { data: encodeURIComponent(data), operation: type },
+        })
+      }else{
+        proxy.$message.warning('该事件已被处理')
+      }
+      
     }
     // onMounted(()=>{
       

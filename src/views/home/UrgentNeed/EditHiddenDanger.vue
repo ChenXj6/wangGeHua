@@ -77,7 +77,7 @@
         </el-upload>
       </template>
     </VForm>
-    <div>
+    <div v-if="route.query.care">
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
@@ -96,13 +96,13 @@
         </el-table-column>
         <el-table-column prop="isDanger" label="是否存在隐患" >
           <template #default="scope">
-            {{isDangerOptions.filter(v=>v.value == scope.row.dealStatus)[0]?.label}}
+            {{isDangerOptions.filter(v=>v.value == scope.row.isDanger)[0]?.label}}
           </template>
         </el-table-column>
         <el-table-column prop="" label="上传图片">
           <template #default="scope">
-            <img v-if="scope.row.img.indexOf(',') <= 0" style="width:100px;height:100px" :src="`${IMGprefix}${scope.row.img}`" alt="">
-            <template v-else v-for="(item) in scope.row.img.split(',')" :key="item">
+            <img v-if="!isNull(scope.row.img) && String(scope.row.img).indexOf(',') <= 0" style="width:100px;height:100px" :src="`${IMGprefix}${scope.row.img}`" alt="">
+            <template v-else-if="!isNull(scope.row.img)" v-for="(item) in scope.row.img.split(',')" :key="item">
               <img style="width:100px;height:100px" :src="`${IMGprefix}${item}`" alt="">
             </template>
           </template>
@@ -179,7 +179,7 @@
 import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref } from '@vue/runtime-core'
 import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
-import { formatterDate,resetFormat as resetFormatStatus } from '@/utils/util'
+import { formatterDate,resetFormat as resetFormatStatus,isNull } from '@/utils/util'
 import { renderTable } from './common/EditHiddenDanger'
 import { getOrganList } from '@/api/sys/organ'
 import { saveHiddenDanger,updateHiddenDanger } from '@/api/UrgentNeed/hiddenDanger'
@@ -452,7 +452,7 @@ export default {
           })
         })
         dataForm.value.processeTime = proxy.$moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-        getOptionsByCode(1006,isDangerOptions)
+        
         resetFileList()
       }
       if(route.query.type == 'content' && route.query.care == ''){
@@ -482,6 +482,7 @@ export default {
     })
     onMounted(() => {
       route.query.operation === 3 &&( dataForm.value = {})
+      getOptionsByCode(1006,isDangerOptions)
     })
     return {
       dataForm,
@@ -518,6 +519,7 @@ export default {
       handleClickRecord,
       formatterDate,
       isDangerOptions,
+      isNull,
     }
   },
 }

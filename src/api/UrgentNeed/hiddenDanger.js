@@ -23,6 +23,6 @@ export const deleteHiddenDanger = query => {
 // 获取角色列表
 export const getHiddenDanger = query => {
   return service.post(
-    `/real/realInfo/danger/manager/select`, query
+    `/real/realInfo/danger/manager/selectByPC`, query
   )
 };

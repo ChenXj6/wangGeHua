@@ -36,7 +36,7 @@
     >
        <template v-slot:orderNo="{ data }">
         <!-- @click.prevent="handleOperation(2, data)" -->
-        <el-link type="success">{{ data.orderNo }}</el-link>
+        <el-link type="success" @click.prevent="javascript:;">{{ data.orderNo }}</el-link>
       </template>
       <template v-slot:operation="{data}">
         <el-button
@@ -156,7 +156,7 @@ export default defineComponent({
     }
     const handleReset = (formEL) => {
       formEL.resetFields()
-      searchParams.value = {}
+      searchParams.value = {dealCode:JSON.parse(sessionStorage.getItem('user')).user.operatorId}
       defaultObject(searchForm)
       handleQuery()
     }
@@ -165,6 +165,7 @@ export default defineComponent({
     }
 
      const handleQueryTable = () => {
+       searchParams.value.dealCode = JSON.parse(sessionStorage.getItem('user')).user.operatorId
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
         tableConfig.data = data

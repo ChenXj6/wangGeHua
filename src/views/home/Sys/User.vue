@@ -20,7 +20,7 @@
         />
         <el-button size="small" circle type="primary" @click="handleCommand(data.data)"><i class="el-icon-lx-people"></i></el-button>
         <el-button size="small" circle type="primary" @click="handleData(data.data)"><i class="el-icon-lx-rank"></i></el-button>
-        <el-popconfirm title="确定要删除该用户吗？" @confirm="handleDelete(data.data.operatorId)">
+        <el-popconfirm title="确定要删除该用户吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
               size="small"
@@ -122,8 +122,8 @@ export default {
         }
       })
     }
-    const handleDelete = (operatorId) => {
-      deleteUser({operatorId}).then(res=>{
+    const handleDelete = ({operatorId,id}) => {
+      deleteUser({operatorId,id}).then(res=>{
         handleQuery()
         proxy.$message.success('用户删除成功。')
       })

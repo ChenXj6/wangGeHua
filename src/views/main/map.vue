@@ -8,11 +8,9 @@
       <div class="sidebar-item"
            v-for="item in mapDialogData?.data"
            :key="item.id">
-
         <el-dropdown v-if="item?.children?.length"
                      placement="left-start"
-                     hide-timeout="10"
-                     trigger="hover">
+                     trigger="click">
           <el-button type="goon"
                      size="mini"
                      round
@@ -443,8 +441,8 @@
                v-model="houseDialogVisible"
                width="60%"
                draggable
-               style="z-index: 9999">
-      <Building :buildingId="buildingId" />
+               style="z-index: 9999;">
+      <Building :key="buildTime" :gisid="gisid" @update:buildingVisible="handleCloseBuild"/>
     </el-dialog>
     <!-- 事件处置弹窗 -->
     <el-dialog title="" v-model="eventHandleVisible" width="width">
@@ -609,6 +607,7 @@ export default {
     const url = ref(import.meta.env.VITE_IMG_BASE_API)
     let fullHeight = ref("");
     let timer = null;
+    let buildTime = ref(new Date().getTime());
     const store = useStore();
     const route = useRoute();
     const dialogVisible = ref(false);
@@ -616,7 +615,7 @@ export default {
     const { proxy } = getCurrentInstance();
     // 楼栋
     const houseDialogVisible = ref(false)
-    const buildingId = ref('')
+    const gisid = ref('')
     const tableBuilding = ref(null);
     const tableEvent = ref(null);
     const tableHotline = ref(null);
@@ -1105,7 +1104,9 @@ export default {
       setTimeout(() => drawMyRoute3(), 1000);
 
       vMap.onMapClick((x0, y0, id, title, identitycode) => {
-        buildingId.value = '19'
+        console.log(id)
+        buildTime.value = new Date().getTime()
+        gisid.value = id
         houseDialogVisible.value = true
       });
     });
@@ -1617,7 +1618,9 @@ export default {
       searchHiddenDangerForm.officeCode = officeCode;
       searchHiddenDangerForm.officeName = officeName;
     };
-
+    const handleCloseBuild = () => {
+      houseDialogVisible.value = false
+    }
     // 
     onBeforeMount(() => {
       getOptionsByCode(1026, dataSourceOptions);
@@ -1670,7 +1673,7 @@ export default {
       isOpenType,
       brandList,
       workShowList,
-      buildingId,
+      gisid,
       // 
       searchInfoParams,
       formConfig,
@@ -1714,6 +1717,10 @@ export default {
       formHiddenDangerConfig,
       tableHiddenDangerConfig,
       handleHiddenSelectChange,
+      // 
+      handleCloseBuild,
+      buildTime,
+      // 
     }
   }
   //#endregion

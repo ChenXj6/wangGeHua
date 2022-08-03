@@ -57,8 +57,8 @@ export default {
     const router = useRouter()
     const { formConfig,tableConfig } = renderTable.call(proxy)
     const searchForm = ref({
-      officeCode:'',
-      officeName:'',
+      gridCode:'',
+      gridName:'',
     })
     const table = ref(null)
     const searchParams = ref({})
@@ -70,7 +70,7 @@ export default {
     }
     const handleReset = (formEL) => {
       formEL.resetFields()
-      searchParams.value = {}
+      searchParams.value = {realpopulation_id:JSON.parse(sessionStorage.getItem('user')).user.operatorId}
       defaultObject(searchForm.value)
       handleQuery()
     }
@@ -96,6 +96,7 @@ export default {
       ]
     }
     const handleQueryTable = () => {
+      searchParams.value.realpopulation_id = JSON.parse(sessionStorage.getItem('user')).user.operatorId
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
         tableConfig.data = data
@@ -115,8 +116,8 @@ export default {
       })
     }
     const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.value.officeCode = officeCode
-      searchForm.value.officeName = officeName
+      searchForm.value.gridCode = officeCode
+      searchForm.value.gridName = officeName
     }
     getOList()
     // 查看/编辑
