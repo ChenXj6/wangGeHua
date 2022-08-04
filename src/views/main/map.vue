@@ -1242,18 +1242,19 @@ export default {
         // },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
         // return
       }
+      // else if (item.type == "building") {
+      //   handleClickOpen('')
+      //   getmediaList().then(res=>{
+      //     if(res.list.length > 0){
+      //       workShowList.value = res.list
+      //       handleClickOpen('isOpen')
+      //     }else{
+      //       proxy.$message.warning('暂无此类数据!')
+      //     }
+      //   },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
+      //   return
+      // } 
       else if (item.type == "building") {
-        handleClickOpen('')
-        getmediaList().then(res=>{
-          if(res.list.length > 0){
-            workShowList.value = res.list
-            handleClickOpen('isOpen')
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
-        return
-      } else if (item.type == "building") {
          var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(18988, 8830, html);
         return;
