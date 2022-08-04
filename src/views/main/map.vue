@@ -23,6 +23,7 @@
               <el-dropdown-item
                 v-for="item in item.children"
                 :key="item"
+                :icon="tagShow.hasOwnProperty([item.type]) ? ( !!tagShow[item.type] ? 'el-icon-lx-attentionforbidfill' : 'el-icon-lx-attentionfill') : ''"
                 @click="handleClick(item)"
                 >{{ item.title }}
               </el-dropdown-item>
@@ -33,6 +34,7 @@
         <el-button type="goon"
                    size="mini"
                    round
+                   :icon="tagShow.hasOwnProperty([item.type]) ? ( !!tagShow[item.type] ? 'el-icon-lx-attentionforbidfill' : 'el-icon-lx-attentionfill') : ''"
                    style="width: 88px"
                    @click="handleClick(item)"
                    v-else>
@@ -999,6 +1001,64 @@ export default {
         }
       })
     }
+    // GIS显示地图标签
+    // ---------对象属性与Header-sidebar组件命名保持一致-----------
+    const tagShow = ref({})
+    const tagList = ref({
+      party:'01',
+      underParty:'02',
+      partyBranch:'03',
+      building:'04',
+      location:'05',
+      someDayEvent:'06',
+      eventQuery:'07',
+      release:'08',
+      neuropathy:'09',
+      drugDetoxification:'10',
+      correct:'11',
+      control:'12',
+      haidi:'13',
+      provide:'14',
+      service3:'15',
+      service10:'16',
+      service2:'17',
+      service6:'18',
+      supplies:'19',
+      site:'20',
+      fireHydrant:'21',
+      // camera:'22',
+      smokeDetector:'23',
+      smokeRecord:'24',
+      alarm:'25',
+      hiddenDanger:'26',
+      parkingLotPosition:'27',
+      cameraPosition:'28',
+      roadGatePosition:'29',
+      trashCanPosition:'30',
+      chargingPilePosition:'31',
+      businessBuilding:'32',
+      keyProjects:'33',
+      keyEnterprises:'34',
+    })
+    const initTagState = () => {
+      Object.keys(tagList.value).forEach(v=>{
+        tagShow.value[v] = false
+      })
+    }
+    
+    const tagClick = (tagNanme,isShow,{lng,lat,html}) => {
+      Object.keys(tagList.value).forEach(v=>{
+        if(v == tagNanme){
+          if(!isShow){
+            vMap.delAllMapMark(tagList.value[tagNanme]);
+            // console.log(1)
+          }else{
+            vMap.showMapMark(lng, lat, html,tagList.value[tagNanme]);
+            // console.log(2)
+          }
+        }
+      })
+    }
     const handleAssign = () => {
       // 一级分类触发不同弹窗方法 >>> 驾驶舱、数字党建等
       if (mapDialogData.value.type && mapDialogData.value.type == 'cockpit') {
@@ -1189,7 +1249,6 @@ export default {
         }
       })
     }
-    
     // 数字党建 >>> 工作展示模块
     const workShowList = ref([])    
     // 数字党建弹窗控制模块
@@ -1205,17 +1264,18 @@ export default {
       })
     }
     // 数字党建 >>> 党组织
-    const partyClick = (orgType) => {
+    const partyClick = (orgType,type) => {
       const party1Url = "src/assets/img/党工委.png"
       const party2Url = "src/assets/img/党支部.png"
       const party3Url = "src/assets/img/党组织.png"
+      tagShow.value[type] = !tagShow.value[type]
       getPartyInfoList(orgType).then(res=>{
         if(res.list.length > 0){
           sessionStorage.setItem(`partyInfo${orgType}`,JSON.stringify({data:res.list}))
           res.list.forEach((v,i)=>{
             let {lng,lat} = randomAddress()
             var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'/src/assets/party.html?id=${v.id}&type=${orgType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
-            vMap.showMapMark(lng, lat, html);
+            tagClick(type,tagShow.value[type],{lng,lat,html})
           })
         }else{
           proxy.$message.warning('暂无此类数据!')
@@ -1224,16 +1284,17 @@ export default {
       return
     }
     // 民生保障 >>> 服务机构
-    const serviceClick = (orgType) => {
+    const serviceClick = (orgType,type) => {
       const Url1 = "src/assets/img/残联服务中心.png"
       const Url2 = "src/assets/img/养老中心.png"
+      tagShow.value[type] = !tagShow.value[type]
       getHaidi(orgType).then(res=>{
           if(res.list.length > 0){
             sessionStorage.setItem(`service${orgType}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
               var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'/src/assets/service.html?id=${v.id}&type=${orgType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? Url1 : Url2}" style="width:50px;margin-bottom: 5px;"></div>`
-              vMap.showMapMark(lng, lat, html);
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
@@ -1242,18 +1303,18 @@ export default {
         return
     }
     // 民生保障 >>> 应急
-    const meetClick = (type1) => {
+    const meetClick = (type1,type) => {
       const Url1 = "src/assets/img/应急物资.png"
       const Url2 = "src/assets/img/应急站点.png"
       const Url3 = "src/assets/img/消防栓.png"
-      const Url4 = "src/assets/img/摄像头.png"
+      tagShow.value[type] = !tagShow.value[type]
       getSuppList(type1).then(res=>{
           if(res.list.length > 0){
             sessionStorage.setItem(`meet${type1}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
               var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'/src/assets/meet.html?id=${v.id}&type=${type1}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? Url1 : (type1 == 3 ? Url2 : Url3)}" style="width:50px;margin-bottom: 5px;"></div>`
-              vMap.showMapMark(lng, lat, html);
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
@@ -1261,16 +1322,19 @@ export default {
         },err=> proxy.$message.error(`${type1 == 1 ? '应急物资' : (type1 == 3 ? '应急站点':'消防栓')}数据请求错误！请稍后重试`) )
         return
     }
-    const smokeClick = (deviceType) => {
-      const Url1 = "src/assets/img/应急物资.png"
-      const Url2 = "src/assets/img/应急站点.png"
+    // 应急指挥 >>> 烟感&一键报警器
+    const smokeClick = (deviceType,type) => {
+      const Url1 = "src/assets/img/烟雾报警.png"
+      const Url2 = "src/assets/img/一键报警器.png"
+      const Url3 = "src/assets/img/摄像头.png"
+      tagShow.value[type] = !tagShow.value[type]
       getSmokeList(deviceType).then(res=>{
           if(res.list.length > 0){
             sessionStorage.setItem(`smoke${deviceType}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
               var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/smoke.html?id=${v.id}&type=${deviceType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? Url1 : Url2}" style="width:50px;margin-bottom: 5px;"></div>`
-              vMap.showMapMark(lng, lat, html);
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
@@ -1282,15 +1346,15 @@ export default {
       if (item.type == 'party') {
         isOpenType.value = item.type
         handleClickOpen('')
-        partyClick(1)
+        partyClick(1,item.type)
       } else if (item.type == 'underParty') {
         isOpenType.value = item.type
         handleClickOpen('')
-        partyClick(2)
+        partyClick(2,item.type)
       } else if (item.type == 'partyBranch') {
         isOpenType.value = item.type
-        handleClickOpen('')
-        partyClick(3)
+        handleClickOpen('')        
+        partyClick(3,item.type)
         return
       } else if (item.type == 'partyVan') {
         handleClickOpen('')
@@ -1398,11 +1462,11 @@ export default {
       } else if (item.type == 'haidi') {
         isOpenType.value = item.type
         handleClickOpen('')
-        serviceClick(1)
+        serviceClick(1,item.type)
       } else if (item.type == 'provide') {
         isOpenType.value = item.type
         handleClickOpen('')
-        serviceClick(2)
+        serviceClick(2,item.type)
         return
       } else if (item.type == 'parkingLotPosition') {
         isOpenType.value = item.type
@@ -1536,14 +1600,16 @@ export default {
         const Url2 = "src/assets/img/独居老人.png"
         const Url3 = "src/assets/img/失业人员.png"
         const Url4 = "src/assets/img/残疾人.png"
+        let type = item.type + item.staffType
+        tagShow.value[type] = !tagShow.value[type]
+        // console.log(tagShow.value[type],type)
         getStaff(item.staffType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               sessionStorage.setItem(`servicePeople${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              // var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'/src/assets/party.html?id=${v.id}&type=${orgType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
               var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'/src/assets/servicePeople.html?id=${v.id}&type=${item.staffType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? Url1 : (item.staffType == 10 ? Url2 : (item.staffType == 2 ? Url3 : Url4))}" style="width:50px;margin-bottom: 5px;"></div>`
-              vMap.showMapMark(lng, lat, html);
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
@@ -1596,27 +1662,15 @@ export default {
       } else if (item.type == 'supplies') {
         isOpenType.value = item.type
         handleClickOpen('')
-        meetClick(2)
-        // getSuppList(1).then(res=>{
-        //   if(res.list.length > 0){
-        //     res.list.forEach((v,i)=>{
-        //       let {lng,lat} = randomAddress()
-        //       var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.suppliesName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-        //       vMap.showMapMark(lng, lat, html);
-        //     })
-        //   }else{
-        //     proxy.$message.warning('暂无此类数据!')
-        //   }
-        // },err=> proxy.$message.error('应急物资数据请求错误！请稍后重试') )
-        // return
+        meetClick(2,item.type)
       } else if (item.type == 'site') {
         isOpenType.value = item.type
         handleClickOpen('')
-        meetClick(3)
+        meetClick(3,item.type)
       } else if (item.type == 'fireHydrant') {
         isOpenType.value = item.type
         handleClickOpen('')
-        meetClick(4)
+        meetClick(4,item.type)
         return
       } else if (item.type == 'camera') {
         isOpenType.value = item.type
@@ -1628,7 +1682,7 @@ export default {
       } else if (item.type == 'smokeDetector') {
         isOpenType.value = item.type
         handleClickOpen('')
-        smokeClick(1)
+        smokeClick(1,item.type)
         return
       } else if (item.type == "smokeRecord") {
         isOpenType.value = item.type
@@ -1642,7 +1696,7 @@ export default {
       } else if (item.type == 'alarm') {
         isOpenType.value = item.type
         handleClickOpen('')
-        smokeClick(2)
+        smokeClick(2,item.type)
         return
       } else if (item.type == "hiddenDanger") {
         isOpenType.value = item.type
@@ -1912,6 +1966,7 @@ export default {
     }
     // 
     onBeforeMount(() => {
+      initTagState()
       getOptionsByCode(1026, dataSourceOptions);
       getOptionsByCode(1009, sexOptions);
       getOptionsByCode(1019,eventScopeOptions);
@@ -1964,6 +2019,7 @@ export default {
       workShowList,
       gisid,
       // 
+      tagShow,
       searchInfoParams,
       formConfig,
       searchBuildingForm,
