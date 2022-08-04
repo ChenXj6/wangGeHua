@@ -1324,8 +1324,8 @@ export default {
     }
     // 应急指挥 >>> 烟感&一键报警器
     const smokeClick = (deviceType,type) => {
-      const Url1 = "src/assets/img/应急物资.png"
-      const Url2 = "src/assets/img/应急站点.png"
+      const Url1 = "src/assets/img/烟雾报警.png"
+      const Url2 = "src/assets/img/一键报警器.png"
       const Url3 = "src/assets/img/摄像头.png"
       tagShow.value[type] = !tagShow.value[type]
       getSmokeList(deviceType).then(res=>{
