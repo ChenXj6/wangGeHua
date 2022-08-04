@@ -204,7 +204,7 @@ export default defineComponent({
     }
     const handleReset = (formEL) => {
       formEL.resetFields()
-      searchParams.value = {}
+      searchParams.value = {dealCode:JSON.parse(sessionStorage.getItem('user')).user.operatorId}
       defaultObject(searchForm.value)
       handleQuery()
     }
@@ -213,6 +213,7 @@ export default defineComponent({
     }
 
     const handleQueryTable = () => {
+      searchParams.value.dealCode = JSON.parse(sessionStorage.getItem('user')).user.operatorId
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
         tableConfig.data = data

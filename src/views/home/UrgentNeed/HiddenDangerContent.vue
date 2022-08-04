@@ -22,12 +22,13 @@
       <el-button
           size="small"
           icon="el-icon-lx-search"
-          @click="handleOperation(1, data)"
+          @click="handleOperation(1, data,'a')"
           circle
           title="查看隐患"
           type="primary"
         />
         <el-button
+          v-if="data.status == 1 && data.isDanger != 0"
           size="small"
           icon="el-icon-lx-edit"
           @click="handleOperation(2, data)"
@@ -36,7 +37,7 @@
           type="success"
         />
         <el-button
-          v-if="data.dangerstatus != 1"
+          v-if="data.status == 2 && data.isDanger != 0"
           size="small"
           icon="el-icon-lx-forward"
           circle
@@ -44,8 +45,9 @@
           @click="handleOperation(2, data,'rectification')"
           type="success"
         />
+        <!-- v-if="data.dangerstatus == 3 && data.isDanger != 0" -->
         <el-button
-          v-if="data.dangerstatus != 1"
+          v-if="data.status == 3 && data.isDanger != 0"
           size="small"
           icon="el-icon-lx-roundcheck"
           circle
@@ -119,8 +121,8 @@ export default {
       })
     }
     const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.value.officeCode = officeCode
-      searchForm.value.officeName = officeName
+      searchForm.value.gridCode = officeCode
+      searchForm.value.gridName = officeName
     }
     getOList()
     // 查看/编辑

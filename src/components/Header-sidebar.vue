@@ -4,6 +4,7 @@
       v-for="item in menuList"
       :key="item.id"
       class="menu-item"
+      :class="currentMenu == item.title ? 'active':''"
       @click="handleClick(item)"
       >{{ item.title }}</span
     >
@@ -228,7 +229,9 @@ export default {
     ];
     const router = useRouter();
     const store = useStore();
+    const currentMenu = ref('')
     const handleClick = (data) => {
+      currentMenu.value = data.title
       store.dispatch("handleClick", data);
     };
     return {
@@ -236,6 +239,7 @@ export default {
       router,
       handleClick,
       store,
+      currentMenu,
     };
   },
 };
@@ -252,11 +256,12 @@ export default {
 .menu-item {
   position: relative;
   display: block;
-  height: 25px;
-  line-height: 25px;
+  height: 30px;
+  line-height: 30px;
   cursor: pointer;
   box-sizing: border-box;
 }
+
 .active::after {
   content: " ";
   position: absolute;
@@ -264,7 +269,7 @@ export default {
   bottom: -5px;
   width: 100%;
   height: 1px;
-  border-top: 1px solid #20a0ff;
+  border-top: 1px solid #fff;
   -webkit-transform-origin: 0 0;
   transform-origin: 0 0;
 }

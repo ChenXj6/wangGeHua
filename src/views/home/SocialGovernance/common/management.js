@@ -82,6 +82,7 @@ export function renderTable() {
                 type: 'Input',
                 label: '工单编号',
                 prop: 'orderNO',
+                placeholder:'请输入工单编号',
                 isClearable: true,
                 span: 6,
               }, 
@@ -97,6 +98,7 @@ export function renderTable() {
               {
                 type: 'Input',
                 label: '承办单位',
+                placeholder:'请输入承办单位',
                 prop: '',
                 isClearable: true,
                 span: 6,
@@ -105,6 +107,7 @@ export function renderTable() {
                 type: 'Input',
                 label: '问题描述',
                 prop: 'problemDescription',
+                placeholder:'请输入问题描述',
                 isClearable: true,
                 span: 6,
               }, 

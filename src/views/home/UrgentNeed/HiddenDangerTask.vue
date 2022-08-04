@@ -146,8 +146,8 @@ export default {
       })
     }
     const handleTreeSelectChange = ({officeCode,officeName}) => {
-      searchForm.value.officeCode = officeCode
-      searchForm.value.officeName = officeName
+      searchForm.value.gridCode = officeCode
+      searchForm.value.gridName = officeName
     }
     getOList()
     // 查看/编辑

@@ -8,11 +8,9 @@
       <div class="sidebar-item"
            v-for="item in mapDialogData?.data"
            :key="item.id">
-
         <el-dropdown v-if="item?.children?.length"
                      placement="left-start"
-                     hide-timeout="10"
-                     trigger="hover">
+                     trigger="click">
           <el-button type="goon"
                      size="mini"
                      round
@@ -476,8 +474,8 @@
                v-model="houseDialogVisible"
                width="60%"
                draggable
-               style="z-index: 9999">
-      <Building :buildingId="buildingId" />
+               style="z-index: 9999;">
+      <Building :key="buildTime" :gisid="gisid" @update:buildingVisible="handleCloseBuild"/>
     </el-dialog>
     <!-- 事件处置弹窗 -->
     <el-dialog title="" v-model="eventHandleVisible" width="width">
@@ -608,7 +606,6 @@ import { searchDict } from "@/api/sys/dict";
 import { getUserList } from "@/api/sys/user";
 import { eventProcessing } from "@/api/ResidentsReport/index";
 import { resetFormat as resetFormatStatus } from "@/utils/util";
-import { PartyList } from "@/api/PartyBuilding/partyInfo";
 import { PartyPeopleList } from "@/api/PartyBuilding/partyPeople";
 import { getDraft } from '@/api/Propaganda/draft'
 import { ElButton } from 'element-plus'
@@ -622,6 +619,8 @@ import { renderTable as renderHiddenDangerTable } from '@/views/home/UrgentNeed/
 import { getBuildList } from "@/api/ActualInfo/build";
 import { getDetailList } from "@/api/ResidentsReport/index";
 import { getOrganList } from "@/api/sys/organ";
+// 数字党建
+import { PartyList } from '@/api/PartyBuilding/partyInfo'
 
 // 民生保障
 import { getProvide } from '@/api/LiveEnsure/provide'
@@ -656,6 +655,7 @@ export default {
     const url = ref(import.meta.env.VITE_IMG_BASE_API)
     let fullHeight = ref("");
     let timer = null;
+    let buildTime = ref(new Date().getTime());
     const store = useStore();
     const route = useRoute();
     const dialogVisible = ref(false);
@@ -663,7 +663,7 @@ export default {
     const { proxy } = getCurrentInstance();
     // 楼栋
     const houseDialogVisible = ref(false)
-    const buildingId = ref('')
+    const gisid = ref('')
     const tableBuilding = ref(null);
     const tableEvent = ref(null);
     const tableHotline = ref(null);
@@ -1152,7 +1152,9 @@ export default {
       setTimeout(() => drawMyRoute3(), 1000);
 
       vMap.onMapClick((x0, y0, id, title, identitycode) => {
-        buildingId.value = '19'
+        console.log(id)
+        buildTime.value = new Date().getTime()
+        gisid.value = id
         houseDialogVisible.value = true
       });
     });
@@ -1187,32 +1189,108 @@ export default {
         }
       })
     }
+    
     // 数字党建 >>> 工作展示模块
     const workShowList = ref([])    
     // 数字党建弹窗控制模块
+    const getPartyInfoList = (orgType) => {
+      return new Promise((resolve,reject)=>{
+        PartyList({pageNum:1,pageSize:999,orgType}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+    // 数字党建 >>> 党组织
+    const partyClick = (orgType) => {
+      const party1Url = "src/assets/img/党工委.png"
+      const party2Url = "src/assets/img/党支部.png"
+      const party3Url = "src/assets/img/党组织.png"
+      getPartyInfoList(orgType).then(res=>{
+        if(res.list.length > 0){
+          sessionStorage.setItem(`partyInfo${orgType}`,JSON.stringify({data:res.list}))
+          res.list.forEach((v,i)=>{
+            let {lng,lat} = randomAddress()
+            var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'/src/assets/party.html?id=${v.id}&type=${orgType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
+            vMap.showMapMark(lng, lat, html);
+          })
+        }else{
+          proxy.$message.warning('暂无此类数据!')
+        }
+      },err=> proxy.$message.error(`${orgType == 1 ?'党工委' : (orgType == 2 ? '党直属组织' : '党支部')}数据请求错误！请稍后重试`) )
+      return
+    }
+    // 民生保障 >>> 服务机构
+    const serviceClick = (orgType) => {
+      const Url1 = "src/assets/img/残联服务中心.png"
+      const Url2 = "src/assets/img/养老中心.png"
+      getHaidi(orgType).then(res=>{
+          if(res.list.length > 0){
+            sessionStorage.setItem(`service${orgType}`,JSON.stringify({data:res.list}))
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'/src/assets/service.html?id=${v.id}&type=${orgType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? Url1 : Url2}" style="width:50px;margin-bottom: 5px;"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error(`${orgType == 1 ? '残联服务中心' : '养老中心'}数据请求错误！请稍后重试`) )
+        return
+    }
+    // 民生保障 >>> 应急
+    const meetClick = (type1) => {
+      const Url1 = "src/assets/img/应急物资.png"
+      const Url2 = "src/assets/img/应急站点.png"
+      const Url3 = "src/assets/img/消防栓.png"
+      const Url4 = "src/assets/img/摄像头.png"
+      getSuppList(type1).then(res=>{
+          if(res.list.length > 0){
+            sessionStorage.setItem(`meet${type1}`,JSON.stringify({data:res.list}))
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'/src/assets/meet.html?id=${v.id}&type=${type1}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? Url1 : (type1 == 3 ? Url2 : Url3)}" style="width:50px;margin-bottom: 5px;"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error(`${type1 == 1 ? '应急物资' : (type1 == 3 ? '应急站点':'消防栓')}数据请求错误！请稍后重试`) )
+        return
+    }
+    const smokeClick = (deviceType) => {
+      const Url1 = "src/assets/img/应急物资.png"
+      const Url2 = "src/assets/img/应急站点.png"
+      getSmokeList(deviceType).then(res=>{
+          if(res.list.length > 0){
+            sessionStorage.setItem(`smoke${deviceType}`,JSON.stringify({data:res.list}))
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/smoke.html?id=${v.id}&type=${deviceType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? Url1 : Url2}" style="width:50px;margin-bottom: 5px;"></div>`
+              vMap.showMapMark(lng, lat, html);
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error(`${deviceType == 1 ? '烟感' : '一键'}报警器数据请求错误！请稍后重试`) )
+    }
     const handleClick = (item) => {
       handleClickOpen('')
-      if (item.type == 'party') {     
-        const hongqiUrl = "src/assets/img/hongqi.png" 
-        // var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.officeName}\',
-        //       \'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; 
-        //       line-height:18px;border:red solid 1px;padding:1px 2px 0px 2px;text-align:center;
-        //        background-color:red"><nobr>${v.officeName}</nobr></div>
-        //        <div style="height:9px;text-align:center;margin:-3px 0px 0px 0px">
-        //        <img src="${hongqiUrl}" style="width:60px;margin-bottom: 10px;"></div>`  
-        var html = `<div id="party" onClick="hj2(17408,7178,\'南村街道党工委\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党工委</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${hongqiUrl}" style="width:60px;margin-bottom: 5px;"></div>`
-        vMap.showMapMark(17408, 7178, html);
+      if (item.type == 'party') {
         isOpenType.value = item.type
-        return
+        handleClickOpen('')
+        partyClick(1)
       } else if (item.type == 'underParty') {
-        var html = '<div id="party" onClick="hj2(19524,7796,\'南村街道直属党组织\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道直属党组织</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(19524, 7796, html);
         isOpenType.value = item.type
-        return
+        handleClickOpen('')
+        partyClick(2)
       } else if (item.type == 'partyBranch') {
-        var html = '<div id="party" onClick="hj2(18648,9718,\'南村街道党支部\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>南村街道党支部</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(18648, 9718, html);
         isOpenType.value = item.type
+        handleClickOpen('')
+        partyClick(3)
         return
       } else if (item.type == 'partyVan') {
         handleClickOpen('')
@@ -1320,32 +1398,11 @@ export default {
       } else if (item.type == 'haidi') {
         isOpenType.value = item.type
         handleClickOpen('')
-        getHaidi(1).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-              let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.orgName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )
-        return
+        serviceClick(1)
       } else if (item.type == 'provide') {
         isOpenType.value = item.type
         handleClickOpen('')
-        getHaidi(2).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-              let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.orgName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('养老中心数据请求错误！请稍后重试') )
+        serviceClick(2)
         return
       } else if (item.type == 'parkingLotPosition') {
         isOpenType.value = item.type
@@ -1475,11 +1532,17 @@ export default {
       else if (item.type == 'service') {
         isOpenType.value = item.type
         handleClickOpen('')
+        const Url1 = "src/assets/img/高龄老人.png"
+        const Url2 = "src/assets/img/独居老人.png"
+        const Url3 = "src/assets/img/失业人员.png"
+        const Url4 = "src/assets/img/残疾人.png"
         getStaff(item.staffType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+              sessionStorage.setItem(`servicePeople${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.staffName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.staffName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+              // var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'/src/assets/party.html?id=${v.id}&type=${orgType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'/src/assets/servicePeople.html?id=${v.id}&type=${item.staffType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? Url1 : (item.staffType == 10 ? Url2 : (item.staffType == 2 ? Url3 : Url4))}" style="width:50px;margin-bottom: 5px;"></div>`
               vMap.showMapMark(lng, lat, html);
             })
           }else{
@@ -1528,52 +1591,32 @@ export default {
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
+        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )        
         return
       } else if (item.type == 'supplies') {
         isOpenType.value = item.type
         handleClickOpen('')
-        getSuppList(1).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-              let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.suppliesName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('应急物资数据请求错误！请稍后重试') )
-        return
+        meetClick(2)
+        // getSuppList(1).then(res=>{
+        //   if(res.list.length > 0){
+        //     res.list.forEach((v,i)=>{
+        //       let {lng,lat} = randomAddress()
+        //       var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.suppliesName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
+        //       vMap.showMapMark(lng, lat, html);
+        //     })
+        //   }else{
+        //     proxy.$message.warning('暂无此类数据!')
+        //   }
+        // },err=> proxy.$message.error('应急物资数据请求错误！请稍后重试') )
+        // return
       } else if (item.type == 'site') {
         isOpenType.value = item.type
         handleClickOpen('')
-        getSuppList(3).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-              let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.suppliesName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('应急物资数据请求错误！请稍后重试') )
-        return
+        meetClick(3)
       } else if (item.type == 'fireHydrant') {
         isOpenType.value = item.type
         handleClickOpen('')
-        getSuppList(4).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-              let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.suppliesName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('应急物资数据请求错误！请稍后重试') )
+        meetClick(4)
         return
       } else if (item.type == 'camera') {
         isOpenType.value = item.type
@@ -1585,21 +1628,7 @@ export default {
       } else if (item.type == 'smokeDetector') {
         isOpenType.value = item.type
         handleClickOpen('')
-        getSmokeList(1).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-              let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',
-              \'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px;
-               line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center;
-                background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px">
-                <img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('烟感报警器数据请求错误！请稍后重试') )
+        smokeClick(1)
         return
       } else if (item.type == "smokeRecord") {
         isOpenType.value = item.type
@@ -1613,17 +1642,7 @@ export default {
       } else if (item.type == 'alarm') {
         isOpenType.value = item.type
         handleClickOpen('')
-        getSmokeList(2).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-              let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('一键报警器数据请求错误！请稍后重试') )
+        smokeClick(2)
         return
       } else if (item.type == "hiddenDanger") {
         isOpenType.value = item.type
@@ -1888,7 +1907,9 @@ export default {
       searchHiddenDangerForm.officeCode = officeCode;
       searchHiddenDangerForm.officeName = officeName;
     };
-
+    const handleCloseBuild = () => {
+      houseDialogVisible.value = false
+    }
     // 
     onBeforeMount(() => {
       getOptionsByCode(1026, dataSourceOptions);
@@ -1941,7 +1962,7 @@ export default {
       isOpenType,
       brandList,
       workShowList,
-      buildingId,
+      gisid,
       // 
       searchInfoParams,
       formConfig,
@@ -1985,6 +2006,10 @@ export default {
       formHiddenDangerConfig,
       tableHiddenDangerConfig,
       handleHiddenSelectChange,
+      // 
+      handleCloseBuild,
+      buildTime,
+      // 
     }
   }
   //#endregion

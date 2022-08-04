@@ -93,6 +93,15 @@ export function renderTable() {
       },
       {
         type: 'Input',
+        label: 'GISID',
+        prop: 'gisid',
+        value: '',
+        placeholder: '请填写GIS地图id',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
         label: '楼号',
         prop: 'buildingNumber',
         value: '',

@@ -1,5 +1,5 @@
 <template>
-  <div v-show="isShow">
+  <div v-if="isShow" >
     <el-row :gutter="10">
       <el-col :span="5"
               class="buildInfoBox">
@@ -100,6 +100,7 @@
                  class="people house">
               <div class="peopleItem"
                    v-for="item in peopleList"
+                   @click="handleOpenDetail(item)"
                    :key="item">
                 <img :src="
                         item?.certificates?.length
@@ -128,27 +129,108 @@
       </el-col>
     </el-row>
   </div>
-  <div v-if="!isShow" style="">
-
+  <!-- 骨架屏 -->
+  <div v-else-if="!isShow" style="min-height:450px">
+    <el-skeleton :throttle="500" animated >
+    <template #template>
+      <el-row :gutter="10">
+        <el-col :span="5" class="buildInfoBox">
+          <h4>楼栋信息：</h4>
+          <hr />
+          <el-skeleton-item variant="p"/>
+          <el-skeleton-item variant="p"/>
+          <el-skeleton-item variant="p"/>
+          <el-skeleton-item variant="p"/>
+        </el-col>
+        <el-col :span="19" class="buildListBox">
+          <h4>楼栋单元：</h4>
+          <hr/>
+          <div class="buildListItemBox">
+            <div class="buildListItem"
+                v-for="item in 10"
+                :key="item">
+                <el-skeleton-item variant="img" style="width:40px;height:65px" />
+                <el-skeleton-item></el-skeleton-item>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="10">
+        <el-col :span="5" class="buildFloor">
+          <h4>楼层信息：</h4>
+          <hr/>
+          <div>
+            <el-skeleton-item class="skeletonFloor" v-for="item in 5" :key="item"/>
+          </div>
+        </el-col>
+        <el-col :span="19" class="houseBox">
+          <h4>房屋人员信息：</h4>
+          <el-row :gutter="10">
+            <el-col :span="10">
+              <div class="house">
+                <div class="houseItem" v-for="item in 4" :key="item">
+                  <el-skeleton-item variant="img" style="width: 30px;height:60px"/>
+                  <el-skeleton-item variant="p"/>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="14" class="borderRight">
+              <div class="people house">
+                <div class="peopleItem" v-for="item in 4" :key="item">
+                  <el-skeleton-item variant="img" style="width: 100%;height: 100px;"/>
+                  <el-skeleton-item variant="p"/>
+                  <el-skeleton-item variant="p"/>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+    </template>
+  </el-skeleton>
   </div>
+  <!--  -->
+  <el-drawer
+    v-model="drawer"
+    title="人员详细信息"
+    :direction="direction"
+    :before-close="handleClose"
+  >
+    <el-row :gutter="10">
+      <el-col :span="24">
+        <div class="peopleDetail">
+          <div class="imgBox">
+            <img class="peopleImg" :src="imgUrl+peopleDeatil.certificates" alt="">
+          </div>
+          <p>姓名：<span>{{ peopleDeatil.name }}</span></p>
+          <p>性别：<span>{{ peopleDeatil.gender == 0 ? '男' : '女' }}</span></p>
+          <p>户籍：<span>{{ peopleDeatil.domicile }}</span></p>
+          <p>住址：<span> {{ peopleDeatil.countyName }}{{ peopleDeatil.streetName }}{{ peopleDeatil.communityName }}{{ peopleDeatil.gridName }}</span></p>
+          <p>楼栋：<span>{{ peopleDeatil.villageName }}{{ peopleDeatil.buildingNumber }}{{ peopleDeatil.unitNumber }}{{ peopleDeatil.unitNumber?'单元':'' }} {{ peopleDeatil.houseNumber }}</span></p>
+          <p>疫苗接种情况：<span>{{ peopleDeatil.flagYmXg == 1 ? '已接种' : '未接种' }}</span></p>
+        </div>
+      </el-col>
+    </el-row>
+  </el-drawer>
 </template>
 <script>
 import { getPeopleList, getGISPeople } from "@/api/ActualInfo/people";
 import { ref } from '@vue/reactivity';
 import { searchDict } from "@/api/sys/dict";
-import { resetFormat as resetFormatStatus } from "@/utils/util";
-import { defineComponent, onBeforeMount } from '@vue/runtime-core';
+import { resetFormat as resetFormatStatus,isNull } from "@/utils/util";
+import { defineComponent, getCurrentInstance, onBeforeMount, onMounted } from '@vue/runtime-core';
 import { getUnitByBuild } from "@/api/ActualInfo/build.js";
 export default defineComponent({
   props: {
-    buildingId: {
+    gisid: {
       type: String,
       default: () => ''
     },
   },
   emits: ['update:buildingVisible'],
-  setup (props) {
-    const buildId = ref(props.buildingId)
+  setup (props,{emit}) {
+    const gisid = ref(props.gisid)
+    const { proxy:{$message} } = getCurrentInstance()
     // 楼栋
     const imgUrl = ref(import.meta.env.VITE_IMG_BASE_API);
     const buildForm = ref({}); // 楼栋表单
@@ -179,21 +261,29 @@ export default defineComponent({
     };
     const isShow = ref(false)
     // 获取楼栋信息
-    const getBuild = (buildingId) => {
-      getUnitByBuild({ buildingId }).then(async (res) => {
+    const getBuild = (gisid) => {
+      getUnitByBuild({ gisid }).then(async (res) => {
         if (res.resCode == "000000") {
-          unitList.value = res.data.unit;
-          buildForm.value = res.data.build;
-          searchForm.value.buildingId = buildingId
-          searchForm.value.villageName = res.data.build.villageName;
-          searchForm.value.buildingNumber = res.data.build.buildingNumber;
-          houseList.value = await getHouseApi()
-          isHaveHouse.value = true
-          peopleList.value = await getPeopleApi()
-          isHavePeople.value = true
-          isShow.value = true
+          if(res.data.unit.length == 0 && isNull(res.data.build)){
+            setTimeout(() => {
+              emit('update:buildingVisible')
+            }, 500);
+            $message.warning({message:'暂无该楼栋信息',customClass:'messageIndex'})
+          }else{
+            unitList.value = res.data.unit;
+            buildForm.value = res.data.build;
+            searchForm.value.buildingId = res.data.build.id
+            searchForm.value.villageName = res.data.build.villageName;
+            searchForm.value.buildingNumber = res.data.build.buildingNumber;
+            houseList.value = await getHouseApi()
+            isHaveHouse.value = true
+            peopleList.value = await getPeopleApi()
+            isHavePeople.value = true
+            isShow.value = true
+          }
         } else {
-
+          emit('update:buildingVisible')
+          $message.error({message:res.message,customClass:'messageIndex'})
         }
       });
     };
@@ -263,12 +353,26 @@ export default defineComponent({
         }
       });
     };
+    // 打开
+    const drawer = ref(false)
+    const peopleDeatil = ref({})
+    const handleOpenDetail = (data) => {
+      // console.log('打开人员详细信息')
+      // console.log(data)
+      peopleDeatil.value = data
+      drawer.value = true
+    }
+    const handleClose = () => {
+      peopleDeatil.value = {}
+      drawer.value = false
+    }
     const relationshipOptions = ref([]);
     const unitNumberOptions = ref([]);
     getOptionsByCode(1052, unitNumberOptions);
     getOptionsByCode(1014, relationshipOptions);
-    onBeforeMount(() => {
-      getBuild(buildId.value)
+    onMounted(() => {
+      // console.log(gisid.value,';;;;;')
+      getBuild(gisid.value)
     })
     return {
       // 楼栋弹窗
@@ -289,11 +393,20 @@ export default defineComponent({
       getBuild,
       // 
       isShow,
-
+      // 
+      handleOpenDetail,
+      peopleDeatil,
+      drawer,
+      handleClose,
     }
   },
 })
 </script>
+<style>
+.messageIndex{
+  z-index: 9999 !important;
+}
+</style>
 <style scoped>
 .buildInfoBox {
   height: 122px;
@@ -366,6 +479,19 @@ export default defineComponent({
 .floor:hover {
   transform: scale(1.1);
   background: darkgoldenrod;
+}
+.skeletonFloor{
+  width: 60%;
+  margin-left: 20%;
+  height: 40px;
+  border-radius: 5px;
+  transform: rotateX(45deg);
+  transform: rotate(10deg);
+  transform: skewX(160deg);
+  transform: translateY(-100);
+  cursor: pointer;
+  line-height: 40px;
+  text-align: center;
 }
 .active {
   transform: scale(1.1);
@@ -458,5 +584,25 @@ export default defineComponent({
 }
 .borderRight {
   border-left: 1px dashed #999;
+}
+.peopleDetail{
+  padding: 30px;
+  font-size: 14px;
+}
+.peopleDetail > p{
+  margin: 10px 0;
+  font-weight: 700;
+}
+.imgBox{
+  width: 100%;
+  /* height: 150px; */
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.peopleImg{
+  width: 200px;
+  border-radius: 20px;
 }
 </style>
