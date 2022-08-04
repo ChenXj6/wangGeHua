@@ -647,6 +647,19 @@ import { buildingList } from '@/api/Economics/building'
 //经济运行>>重点项目
 import { itemList } from '@/api/Economics/itemList'
 
+//重点管理人员>>戒毒
+import { getDrugList } from '@/api/ManagementPersonnel/drugPer'
+
+//重点管理人员>>精神障碍
+import { getMentalList } from '@/api/ManagementPersonnel/mentaldisordersPer'
+
+//重点管理人员>>刑满释放
+import { getReleaseList } from '@/api/ManagementPersonnel/releasePer'
+
+//重点管理人员>>社会矫正
+import { getRectifyList } from '@/api/ManagementPersonnel/rectifyStaff'
+
+
 
 
 import Notice from './components/notice.vue'
@@ -1427,26 +1440,91 @@ export default {
             handleHotlineQuery();
         }, 1000);
       } else if(item.type == "release"){
-        var html = '<div id="release" onClick="hj2(17176,7026,\'2号\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>2号</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(17176, 7026, html);
-        // isOpenType.value = item.type
-       return;
+        isOpenType.value = item.type
+        handleClickOpen('')
+        const Url1 = "src/assets/img/刑满释放.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
+         getRelease().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+            sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
+              let {lng,lat} = randomAddress()
+              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'刑满释放人员\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('刑满释放人员数据请求错误！请稍后重试') )
+        return
       } else if(item.type == "neuropathy"){
-        var html = '<div id="release" onClick="hj2(22736,5876,\'5公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>5公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(22736, 5876, html);
-        return;
+        isOpenType.value = item.type
+        handleClickOpen('')
+        const Url1 = "src/assets/img/精神障碍.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
+         console.log(tagShow.value[type])
+         getMental().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+               sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
+              let {lng,lat} = randomAddress()
+               var html = `<div id="serive" onClick="hj2(${lng},${lat},\'精神障碍人员\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('精神障碍人员数据请求错误！请稍后重试') )
+        return
+        // var html = '<div id="release" onClick="hj2(22736,5876,\'5公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>5公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        // vMap.showMapMark(22736, 5876, html);
+        // return;
       } else if(item.type == "someDayEvent"){
          var html = '<div id="release" onClick="hj2(16600,9484,\'计算小楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>计算小楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(16600, 9484, html);
         return;
       } else if(item.type == "drugDetoxification"){
-         var html = '<div id="release" onClick="hj2(15032,8020,\'2公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>2公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(15032, 8020, html);
-        return;
+         isOpenType.value = item.type
+        handleClickOpen('')
+        const Url1 = "src/assets/img/社区戒毒.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
+         console.log(tagShow.value[type])
+         getDrug().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+               sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
+              let {lng,lat} = randomAddress()
+              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒人员\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('戒毒人员数据请求错误！请稍后重试') )
+        return
       } else if(item.type == "correct"){
-         var html = '<div id="release" onClick="hj2(16824,6492,\'东区\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>东区</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(16824, 6492, html);
-        return;
+         isOpenType.value = item.type
+        handleClickOpen('')
+        const Url1 = "src/assets/img/社会矫正.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
+         console.log(tagShow.value[type])
+         getRectify().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
+              let {lng,lat} = randomAddress()
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正人员\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('社区矫正数据请求错误！请稍后重试') )
+        return
       } else if(item.type == "control"){
          var html = '<div id="release" onClick="hj2(21176,5124,\'北楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>北楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(21176, 5124, html);
@@ -1470,130 +1548,157 @@ export default {
         return
       } else if (item.type == 'parkingLotPosition') {
         isOpenType.value = item.type
-        getParkLot(2).then(res=>{
-          const hongqiUrl = "src/assets/img/hongqi.png"
+        handleClickOpen('')
+        const Url1 = "src/assets/img/车位位置.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
+        getParkLot().then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`parkLot${item.orgType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.officeName}\',
-              \'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; 
-              line-height:18px;border:red solid 1px;padding:1px 2px 0px 2px;text-align:center;
-               background-color:red"><nobr>${v.officeName}</nobr></div>
-               <div style="height:9px;text-align:center;margin:-3px 0px 0px 0px">
-               <img src="${hongqiUrl}" style="width:60px;margin-bottom: 10px;"></div>`
-              vMap.showMapMark(lng, lat, html);
+              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'/src/assets/parkLot.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('车位信息数据请求错误！请稍后重试') )
+        }, err=> proxy.$message.error('车位信息数据请求错误！请稍后重试') )
         return
-      } 
-      else if (item.type == 'cameraPosition') {
-        isOpenType.value = item.type
+      } else if (item.type == 'cameraPosition') {
+          isOpenType.value = item.type
+        handleClickOpen('')
+         const Url1 = "src/assets/img/摄像头.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
         getCommunalFacilities(item.deviceType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'摄像头\',\'/src/assets/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('摄像头数据请求错误！请稍后重试') )
         return
-      }
-       else if (item.type == 'roadGatePosition') {
+      } else if (item.type == 'roadGatePosition') {
         isOpenType.value = item.type
+        handleClickOpen('')
+        const Url1 = "src/assets/img/道闸.png"
+       let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
         getCommunalFacilities(item.deviceType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'道闸\',\'/src/assets/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('道闸数据请求错误！请稍后重试') )
         return
-      }
-       else if (item.type == 'trashCanPosition') {
+      }else if (item.type == 'trashCanPosition') {
         isOpenType.value = item.type
-        getCommunalFacilities(item.deviceType).then(res=>{
+        handleClickOpen('')
+        const Url1 = "src/assets/img/垃圾桶.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
+       getCommunalFacilities(item.deviceType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'垃圾桶\',\'/src/assets/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('垃圾桶请求错误！请稍后重试') )
         return
-      }
-       else if (item.type == 'chargingPilePosition') {
+      } else if (item.type == 'chargingPilePosition') {
         isOpenType.value = item.type
+        handleClickOpen('')
+         const Url1 = "src/assets/img/充电桩.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
         getCommunalFacilities(item.deviceType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.deviceName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'充电桩\',\'/src/assets/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('充电桩请求错误！请稍后重试') )
         return
-      }
-      else if (item.type == 'businessBuilding') {
+      } else if (item.type == 'businessBuilding') {
         isOpenType.value = item.type
+        handleClickOpen('')
+         const Url1 = "src/assets/img/商务楼宇.png"
+       let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
         getBuildingList(item.cbType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`enterpriseBuilding${item.cbType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.cbName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
+              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'商务楼宇\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${item.cbType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('商务楼宇数据请求错误！请稍后重试') )
         return
-      }
-      else if (item.type == 'keyEnterprises') {
+      }else if (item.type == 'keyEnterprises') {
         isOpenType.value = item.type
+        handleClickOpen('')
+         const Url1 = "src/assets/img/重点企业.png"
+       let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
         getBuildingList(item.cbType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`enterpriseBuilding${item.cbType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.cbName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
+              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'重点企业\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${item.cbType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('重点企业数据请求错误！请稍后重试') )
         return
-      }
-      else if (item.type == 'keyProjects') {
-        isOpenType.value = item.type
+      }else if (item.type == 'keyProjects') {
+         isOpenType.value = item.type
         handleClickOpen('')
-        getItemList(1).then(res=>{
+         const Url1 = "src/assets/img/重点项目.png"
+        let type = item.type
+         tagShow.value[type] = !tagShow.value[type]
+        getItemList(item.orgType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
+                sessionStorage.setItem(`keyProjects${item.orgType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.projectName}\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>${v.projectName}</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-              vMap.showMapMark(lng, lat, html);
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'重点项目\',\'/src/assets/keyProjects.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
         },err=> proxy.$message.error('重点项目数据请求错误！请稍后重试') )
         return
-      }
-      else if (item.type == 'service') {
+      }else if (item.type == 'service') {
         isOpenType.value = item.type
         handleClickOpen('')
         const Url1 = "src/assets/img/高龄老人.png"
@@ -1811,9 +1916,9 @@ export default {
 
     };
     // 智能物业 >>> 车位位置
-    const getParkLot = (orgType) => {
+    const getParkLot = () => {
       return new Promise((resolve,reject)=>{
-        getParkLotList({pageNum:1,pageSize:9999,orgType}).then(res=>{
+        getParkLotList({pageNum:1,pageSize:9999}).then(res=>{
           if(res.resCode == '000000'){
             resolve(res.data)
           }else{
@@ -1827,6 +1932,60 @@ export default {
     const getCommunalFacilities = (deviceType) => {
        return new Promise((resolve,reject)=>{
         getPubilcList({pageNum:1,pageSize:9999,deviceType}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+
+
+//刑满释放
+        const getRelease = () => {
+       return new Promise((resolve,reject)=>{
+        getReleaseList({pageNum:1,pageSize:9999}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+
+
+//戒毒
+        const getDrug = () => {
+       return new Promise((resolve,reject)=>{
+        getDrugList({pageNum:1,pageSize:9999}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+
+    //精神障碍
+        const getMental = () => {
+       return new Promise((resolve,reject)=>{
+        getMentalList({pageNum:1,pageSize:9999}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+
+    //社会矫正
+        const getRectify = () => {
+       return new Promise((resolve,reject)=>{
+        getRectifyList({pageNum:1,pageSize:9999}).then(res=>{
           if(res.resCode == '000000'){
             resolve(res.data)
           }else{
