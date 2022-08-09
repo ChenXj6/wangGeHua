@@ -269,6 +269,10 @@ export default defineComponent({
       if(!flag){
         return
       }
+      if(multipleSelection.value.length > 1) {
+        proxy.$message.warning('只可选择一份工单')
+        return
+      }
       let arr = []
       let idArr = []
       multipleSelection.value.forEach(v=>{
@@ -277,6 +281,8 @@ export default defineComponent({
       })
       dataForm.value.orderNo = arr.join(',')
       dataForm.value.id = idArr.join(',')
+      dataForm.value.concludeTime = multipleSelection.value[0].concludeTime
+      dataForm.value.receivingTime = multipleSelection.value[0].receivingTime
       eventHandleVisible.value = true
       
     }

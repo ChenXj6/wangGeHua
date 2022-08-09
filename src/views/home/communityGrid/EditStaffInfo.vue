@@ -146,7 +146,7 @@
                     <el-input v-model="scope.row.politicsstatus" size="mini" placeholder=""></el-input>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" min-width="30">
+                <el-table-column v-if="route.query.operation == 3 " label="操作" min-width="30">
                   <template #default="scope">
                     <el-popconfirm title="确定要删除吗？" @confirm="removeBtn(scope.$index)">
                       <template #reference>

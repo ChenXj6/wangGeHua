@@ -19,6 +19,14 @@
     <template v-slot:title="{data}">
       <el-link type="success" @click.prevent="handleOperation(1, data)">{{ data.title }}</el-link>
     </template>
+    <!-- <template v-slot:level1="{data}">
+      {{level1Options.filter(v=>v.value == data.level1)[0]?.label}}
+    </template>
+    <template v-slot:level2="{data}">
+    </template>
+    <template v-slot:level3="{data}">
+      {{level3Options.filter(v=>v.value == data.level3)[0]?.label}}
+    </template> -->
       <template v-slot:operation="{data}">
         <el-button
           size="small"
@@ -35,7 +43,7 @@
           circle
           type="priamry"
         />
-        <!-- <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
+        <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
               size="small"
@@ -44,7 +52,7 @@
               type="danger"
             />
           </template>
-        </el-popconfirm> -->
+        </el-popconfirm>
       </template>
     </V-table>
   </div>
@@ -64,6 +72,7 @@ import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/Draft'
 import { deepClone, defaultObject } from '@/utils/util'
 import { deleteDraft } from '@/api/Propaganda/draft'
+import { getDictThTreeBy } from '@/api/sys/multilevel'
 export default defineComponent({
   name: 'Draft',
   components:[PopupTreeInput],
@@ -97,6 +106,13 @@ export default defineComponent({
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm)
+      for ( const key in searchParams.value ){
+        if(Array.isArray(searchParams.value[key]) && searchParams.value[key].length > 1){
+          searchParams.value[`${key}Start`] = searchParams.value[key][0]
+          searchParams.value[`${key}End`] = searchParams.value[key][1]
+          delete searchParams.value[key]
+        }
+      }
       table.currentPage = 1
       handleQueryTable()
     }
@@ -113,9 +129,9 @@ export default defineComponent({
       deleteDraft({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
-          proxy.$message.success('删除楼栋成功')
+          proxy.$message.success('删除文稿成功')
         }else{
-          proxy.$message.danger('删除楼栋失败')
+          proxy.$message.danger('删除文稿失败')
         }
       })
     }

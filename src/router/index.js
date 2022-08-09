@@ -113,6 +113,14 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/Dict.vue")
       },
       {
+        path: "/multilevel",
+        name: "multilevel",
+        meta: {
+          title: '多级字典管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/multilevel.vue")
+      },
+      {
         path: "/menu",
         name: "menu",
         meta: {

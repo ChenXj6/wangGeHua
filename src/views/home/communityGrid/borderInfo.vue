@@ -106,7 +106,7 @@ export default defineComponent({
       formEL.resetFields()
       // searchForm.value = {}
       searchParams.value = {}
-      defaultObject(searchForm.value)
+      defaultObject(searchForm)
       handleQuery()
     }
     const handleDel = (id) => {
@@ -141,6 +141,7 @@ export default defineComponent({
     const formHandle = {
       btns: [
         {type:'primary',label:'查询',key:'search',handle:handleQuery},
+        {type:'primary',label:'重置',key:'reset',handle:handleReset},
         {type:'primary',label:'添加',key:'add',handle:handleAdd},
       ]
     }

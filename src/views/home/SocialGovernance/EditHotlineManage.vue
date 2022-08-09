@@ -93,7 +93,7 @@
       <el-table :data="tableData" border style="width: 100%" size="mini">
         <el-table-column prop="dealBy" label="承办单位" />
         <el-table-column prop="orderType" label="工单标签" />
-        <el-table-column prop="concludeTime" label="办理时效(天)" />
+        <el-table-column prop="handleTime" label="办理时效(天)" />
         <el-table-column prop="dispatchTime" label="派单时间" width="200">
           <template #default="scope">
             {{ formatterDate(scope.row.dispatchTime) }}
@@ -106,7 +106,7 @@
         </el-table-column>
         <el-table-column prop="replyOrderDate" label="回单时间" width="200">
           <template #default="scope">
-            {{ formatterDate(scope.row.processeTime) }}
+            {{ formatterDate(scope.row.replyOrderDate) }}
           </template>
         </el-table-column>
         <el-table-column prop="dealRemark" label="退回原因/回单内容" />
@@ -183,7 +183,7 @@
             ></el-input>
         </el-form-item>
         <el-form-item v-if="route.query.operation == 4" label="审核意见" prop="dealRemark">
-          <el-input v-model="orderForm.dealRemark" type="textarea" size="mini" placeholder=""></el-input>
+          <el-input v-model="orderForm.processingResults" type="textarea" size="mini" placeholder=""></el-input>
         </el-form-item>
         <!-- 接单/退回 -->
         <el-form-item v-if="route.query.operation == 5" label="退回原因" prop="dealRemark">
@@ -608,6 +608,8 @@ export default {
     // 转派
     const handleReass = (formRef) => {
       orderForm.value.id = dataForm.value.id
+      orderForm.value.concludeTime = dataForm.value.concludeTime
+      orderForm.value.receivingTime = dataForm.value.receivingTime
       // orderForm.value.recordId = dataForm.value.recordId
       delete orderForm.value.orderName
       formRef.validate((vaild) => {

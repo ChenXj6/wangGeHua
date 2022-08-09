@@ -49,8 +49,8 @@
         <el-button
           size="small"
           title="审核"
-          v-if="data.status == 5"
-          icon="el-icon-lx-forwardfill"
+          v-if="data.status == 5 && data.buttonStatus == 1"
+          icon="el-icon-lx-edit"
           @click="handleOperation(4, data)"
           circle
           type="priamry"
@@ -58,7 +58,7 @@
         <el-button
           size="small"
           title="接单/退回"
-          v-if="data.status == 1"
+          v-if="data.status == 1 && data.buttonStatus != 1"
           icon="el-icon-lx-forwardfill"
           @click="handleOperation(5, data)"
           circle
@@ -67,8 +67,8 @@
         <el-button
           size="small"
           title="回单"
-          v-if="data.status == 4"
-          icon="el-icon-lx-forwardfill"
+          v-if="(data.status == 4 || data.status == 7) && data.buttonStatus != 1"
+          icon="el-icon-lx-back"
           @click="handleOperation(6, data)"
           circle
           type="priamry"
@@ -76,8 +76,8 @@
         <el-button
           size="small"
           title="转派"
-          v-if="data.status == 2 || data.status == 3 || data.status == 7"
-          icon="el-icon-lx-forwardfill"
+          v-if="(data.status == 2 || data.status == 3 )  && data.buttonStatus == 1"
+          icon="el-icon-lx-share"
           @click="handleOperation(7, data)"
           circle
           type="priamry"
@@ -85,8 +85,8 @@
         <el-button
           size="small"
           title="撤回"
-          v-if="data.status == 1"
-          icon="el-icon-lx-forwardfill"
+          v-if="data.status == 1 && data.buttonStatus == 1"
+          icon="el-icon-lx-roundclose"
           @click="handleOperation(8, data)"
           circle
           type="priamry"

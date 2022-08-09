@@ -94,6 +94,13 @@ export default defineComponent({
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm)
+      for ( const key in searchParams.value ){
+        if(Array.isArray(searchParams.value[key]) && searchParams.value[key].length > 1){
+          searchParams.value[`${key}Start`] = searchParams.value[key][0]
+          searchParams.value[`${key}End`] = searchParams.value[key][1]
+          delete searchParams.value[key]
+        }
+      }
       table.currentPage = 1
       handleQueryTable()
     }

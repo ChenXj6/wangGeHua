@@ -19,20 +19,36 @@
             </template>
         </popup-tree-input>
       </template>
-      <!-- <template v-slot:upload="">
-        <el-upload
-              class="upload-demo"
-              action=""
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :auto-upload="false"
-              :file-list="fileList"
-              list-type="picture-card"
-              :on-change="(file,fileList) => changeFile(file,fileList)"
-            >
-              <i class="el-icon-lx-add"></i>
-            </el-upload>
-      </template> -->
+      <template v-slot:level1="">
+        <el-select v-model="dataForm.level1" clearable size="mini" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
+          <el-option
+            v-for="item in level1Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level2="">
+        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="mini" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
+          <el-option
+            v-for="item in level2Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level3="">
+        <el-select v-model="dataForm.level3" clearable :disabled="!dataForm.level2" size="mini" placeholder="请选择文稿三级分类">
+          <el-option
+            v-for="item in level3Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
       <template v-slot:content="">
         <div class="mgb20" ref='editor'></div>
       </template>
@@ -46,6 +62,36 @@
               <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
+      </template>
+      <template v-slot:level1="">
+        <el-select v-model="dataForm.level1" clearable size="mini" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
+          <el-option
+            v-for="item in level1Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level2="">
+        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="mini" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
+          <el-option
+            v-for="item in level2Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level3="">
+        <el-select v-model="dataForm.level3" clearable :disabled="!dataForm.level2" size="mini" placeholder="请选择文稿三级分类">
+          <el-option
+            v-for="item in level3Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </template>
       <template v-slot:upload="">
         <el-upload
@@ -108,6 +154,7 @@ import { saveMedia,updateMedia } from '@/api/Propaganda/media'
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList,getSmallOrganList } from '@/api/sys/organ'
+import { getDictThTreeBy } from '@/api/sys/multilevel'
 import { isNull } from '@/utils/util'
 import { uploadApi } from '@/api/upload.js'
 export default {
@@ -145,6 +192,9 @@ export default {
       return new Promise((resolve,reject)=>{
         // true: 编辑；false:添加
         delete dataForm.value.treeNames
+        delete dataForm.value.levelName1
+        delete dataForm.value.levelName2
+        delete dataForm.value.levelName3
         dataForm.value.releaseUser = JSON.parse(sessionStorage.getItem('user')).user.operatorName
         if (route.query.operation == 2) {
           if(route.query.type === 'draft'){
@@ -216,7 +266,40 @@ export default {
         {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
       ]
     }
-        // 图片相关配置
+    // 多级分类
+    const level1Options = ref([])
+    const level2Options = ref([])
+    const level3Options = ref([])
+    const resetFormat = (data,option) => {
+      let arr = []
+      data.forEach(v=>{
+        let obj = {}
+        obj.label = v.name
+        obj.value = String(v.id)
+        arr.push(obj)
+      })
+      option.value = arr
+    }
+    const handleChangelevel1 = () => {
+      let id = dataForm.value.level1
+      getDictThTreeByApi({id},level2Options)
+    }
+    const handleChangelevel2 = () => {
+      let id = dataForm.value.level2
+      getDictThTreeByApi({id},level3Options)
+    }
+    const getDictThTreeByApi = (data,option) => {
+      getDictThTreeBy(data).then(res=>{
+        if(res.code == 200){
+          // console.log(res.data,';;;')
+          // option.value = res.data
+          resetFormat(res.data,option)
+        }        
+      })
+    }
+    getDictThTreeByApi({perms:'0003'},level1Options)
+    
+    // 图片相关配置
     const fileList = ref([])
     const dialogVisible = ref(false)
     const dialogImageUrl = ref('')
@@ -298,6 +381,10 @@ export default {
       timer.value = new Date().getTime()
     })
     route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)),resetFileList())
+    if(route.query.operation != 3){
+      handleChangelevel1()
+      handleChangelevel2()
+    }
     onMounted(() => {
       if(route.query.type === 'draft'){
         instance = new WangEditor(editor.value);
@@ -334,6 +421,12 @@ export default {
       dialogVisible,
       dialogImageUrl,
       handlePreview,
+      // 多级分类
+      level1Options,
+      level2Options,
+      level3Options,
+      handleChangelevel1,
+      handleChangelevel2,
     }
   },
 }

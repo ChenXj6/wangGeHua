@@ -62,7 +62,7 @@ export const takeOrder = query => {
 // 撤回
 export const recallOrder = query => {
   return service.post(
-    `/real/realInfo/hotline/record/accept`, query
+    `/real/realInfo/hotline/record/recall`, query
   )
 };
 

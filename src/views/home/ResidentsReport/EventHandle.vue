@@ -21,8 +21,8 @@
           </el-option>
         </el-select>
       </template>
-      <template v-slot:source>
-        <el-select v-model="searchForm.source" size="mini" clearable placeholder="请选择事件来源">
+      <template v-slot:dataSource>
+        <el-select v-model="searchForm.dataSource" size="mini" clearable placeholder="请选择事件来源">
           <el-option
             v-for="item in dataSourceOptions"
             :key="item.value"
@@ -100,7 +100,7 @@ import {
 } from '@vue/runtime-core'
 
 import { renderTable } from './common/eventHandle'
-import { deepClone, formatterDate,resetFormat } from '@/utils/util'
+import { deepClone, formatterDate,resetFormat,defaultObject } from '@/utils/util'
 
 import { searchDict } from '@/api/sys/dict'
 import { queryByEventId,eventLock } from '@/api/ResidentsReport/index'
@@ -115,7 +115,10 @@ export default defineComponent({
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
     const searchForm = ref({
-      operatorId: JSON.parse(sessionStorage.getItem('user')).user.operatorId
+      operatorId: JSON.parse(sessionStorage.getItem('user')).user.operatorId,
+      approvalStatus:'',
+      dataSource:'',
+      eventFirstType:'',
     }) // 表单数据
     let searchParams = ref({}) // 表单数据备份
     const multipleSelection = ref([]) // 选中数据
@@ -127,26 +130,27 @@ export default defineComponent({
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm.value)
-      for (const key in searchParams.value) {
-        if (
-          Array.isArray(searchParams.value[key]) &&
-          searchParams.value[key].length > 0
-        ) {
-          searchParams.value[`${key}Start`] = formatterDate(
-            searchParams.value[key][0]
-          )
-          searchParams.value[`${key}End`] = formatterDate(
-            searchParams.value[key][1]
-          )
-          delete searchParams.value[key]
-        }
-      }
+      // for (const key in searchParams.value) {
+      //   if (
+      //     Array.isArray(searchParams.value[key]) &&
+      //     searchParams.value[key].length > 0
+      //   ) {
+      //     searchParams.value[`${key}Start`] = formatterDate(
+      //       searchParams.value[key][0]
+      //     )
+      //     searchParams.value[`${key}End`] = formatterDate(
+      //       searchParams.value[key][1]
+      //     )
+      //     delete searchParams.value[key]
+      //   }
+      // }
       table.currentPage = 1
       handleQueryTable()
     }
     const handleReset = (formEL) => {
       formEL.resetFields()
-      searchForm.value = {}
+      defaultObject(searchForm.value)
+      searchForm.value.operatorId = JSON.parse(sessionStorage.getItem('user')).user.operatorId,
       searchParams.value = {}
       handleQuery()
     }

@@ -59,7 +59,7 @@ export function renderTable() {
               {
                 type: 'Input',
                 label: '工单编号',
-                prop: 'orderNO',
+                prop: 'orderNo',
                 value: '',
                 isClearable: true,
                 span: 11,
