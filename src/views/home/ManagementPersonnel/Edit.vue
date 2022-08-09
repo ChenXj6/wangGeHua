@@ -558,31 +558,31 @@ export default {
         handleChange(1, dataForm.value.streetCode)
         handleChange(2, dataForm.value.communityCode)
         handleChange(3)
-        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetBuild(1, dataForm.value.officeCode)
         handleGetHouse(1, dataForm.value.buildingId)
       }else if(route.query.type == 'Release'){
         handleChange(1, dataForm.value.streetCode)
         handleChange(2, dataForm.value.communityCode)
         handleChange(3)
-        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetBuild(1, dataForm.value.officeCode)
         handleGetHouse(1, dataForm.value.buildingId)
       }else if(route.query.type == 'Rrectify'){
         handleChange(1, dataForm.value.streetCode)
         handleChange(2, dataForm.value.communityCode)
         handleChange(3)
-        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetBuild(1, dataForm.value.officeCode)
         handleGetHouse(1, dataForm.value.buildingId)
       }else if(route.query.type == 'Mentaldisorders'){
         handleChange(1, dataForm.value.streetCode)
         handleChange(2, dataForm.value.communityCode)
         handleChange(3)
-        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetBuild(1, dataForm.value.officeCode)
         handleGetHouse(1, dataForm.value.buildingId)
       }else if(route.query.type == 'Petition'){
         handleChange(1, dataForm.value.streetCode)
         handleChange(2, dataForm.value.communityCode)
         handleChange(3)
-        handleGetBuild(1, dataForm.value.gridCode)
+        handleGetBuild(1, dataForm.value.officeCode)
         handleGetHouse(1, dataForm.value.buildingId)
       }
     }
