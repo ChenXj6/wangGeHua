@@ -554,6 +554,33 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/EditOrder.vue")
       },
       {
+        path: "/AssessmentManagement",
+        name: "AssessmentManagement",
+        meta: {
+          title: '考核管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/AssessmentManagement.vue")
+      },
+      {
+        path: "/editAssessmentManagement",
+        name: "editAssessmentManagement",
+        meta: {
+          title: '考核管理',
+          getTitle: function(route) {
+            return `${route.query.operation == 1 ? '查看' : (route.query.operation == 2 ? '编辑' : '新增')}考核管理`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/EditAssessmentManagement.vue")
+      },
+      {
+        path: "/AssessmentScore",
+        name: "AssessmentScore",
+        meta: {
+          title: '考核得分'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/AssessmentScore.vue")
+      },
+      {
         path: "/taxList",
         name: "taxList",
         meta: {

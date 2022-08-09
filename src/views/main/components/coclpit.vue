@@ -523,13 +523,13 @@ export default {
     const currentTitle = ref('驾驶舱')
     const menuList = ref([
       { id: 0, title: '驾驶舱看板' },
-      { id: 1, title: '疫情防控看板' },
-      { id: 2, title: '数字党建看板' },
-      { id: 3, title: '网格政务看板' },
-      { id: 4, title: '民生保障看板' },
-      { id: 5, title: '应急指挥看板' },
-      { id: 6, title: '智慧物业看板' },
-      { id: 7, title: '经济运行看板' },
+      { id: 1, title: '疫情看板' },
+      { id: 2, title: '党建看板' },
+      { id: 3, title: '网格看板' },
+      { id: 4, title: '民生看板' },
+      { id: 5, title: '应急看板' },
+      { id: 6, title: '物业看板' },
+      { id: 7, title: '经济看板' },
     ])
     const resetDom = () => {
       if(currentMenu.value == 0){
