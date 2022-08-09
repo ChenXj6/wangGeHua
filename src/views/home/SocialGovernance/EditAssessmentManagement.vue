@@ -27,15 +27,16 @@
     import WangEditor from "wangEditor";
     import mixin from '@/mixins/tagView.js'
 
-    import { renderTable } from './common/EditAssessmentManagement'
-    import { saveAssessmentManagement, editAssessmentManagement } from '@/api/SocialGovernance/AssessmentManagement'
+    import { renderTable } from './common/editAssessmentManagement'
+    import { saveAssessmentManagement, updateAssessmentManagement } from '@/api/SocialGovernance/AssessmentManagement'
     import { getOrganList, getSmallOrganList } from '@/api/sys/organ'
     import { isNull } from '@/utils/util'
     export default {
-        name: 'EditAssessmentManagement',
+        name: 'editAssessmentManagement',
         mixins: [mixin],
         setup() {
             const route = useRoute()
+
             const { delCurrentTag } = mixin.setup()
             const { proxy } = getCurrentInstance()
             const { InfoFormConfig } = renderTable.call(proxy)
@@ -57,7 +58,7 @@
                 return new Promise((resolve, reject) => {
                     // true: 编辑；false:添加
                     if (route.query.operation == 2) {
-                        editInfo(dataForm).then(res => {
+                        updateAssessmentManagement(dataForm).then(res => {
                             if (res.resCode === '000000') {
                                 resolve(res.message)
                             } else {
@@ -65,7 +66,7 @@
                             }
                         })
                     } else {
-                        saveInfo(dataForm).then(res => {
+                        saveAssessmentManagement(dataForm).then(res => {
                             if (res.resCode === '000000') {
                                 resolve(res.message)
                             } else {
@@ -76,7 +77,7 @@
                 })
             }
             const handleSubmit = (formRef) => {
-                dataForm.synopsis = instance.txt.html();
+                // dataForm.synopsis = instance.txt.html();
                 formRef.validate((vaild) => {
                     if (vaild) {
                         handleSave().then(res => {
@@ -104,11 +105,18 @@
             onBeforeMount(() => {
                 timer.value = new Date().getTime()
             })
+            route.query.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.treeNames)
 
-            onBeforeUnmount(() => {
-                instance.destroy();
-                instance = null;
-            })
+    onMounted(() => {
+      route.query.operation === 3 && (dataForm = {})
+      // handleQueryTable()
+    })
+
+
+            // onBeforeUnmount(() => {
+            //     instance.destroy();
+            //     instance = null;
+            // })
             return {
                 dataForm,
                 route,
@@ -117,9 +125,6 @@
                 InfoFormConfig,
                 formHandle,
                 editor,
-                handleTreeSelectChange,
-                popupTreeProps,
-                popupTreeData,
             }
 
         }

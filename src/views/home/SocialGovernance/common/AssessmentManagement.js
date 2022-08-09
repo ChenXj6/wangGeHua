@@ -19,7 +19,7 @@ export function renderTable() {
         { prop: 'num', label: '次数',toolTip:true, minWidth: '120' }, 
         { prop: 'assessType', label: '类型',toolTip:true, minWidth: '120' }, 
         { prop: 'remarks', label: '备注',toolTip:true, minWidth: '120' }, 
-        { prop: 'status', label: '状态',toolTip:true, minWidth: '120' }, 
+        { prop: 'status', label: '状态',slot:'status',toolTip:true, minWidth: '120' }, 
         { prop: 'createDate', label: '创建时间',toolTip:true, minWidth: '120' },
         { prop: '', label: '操作', slot: 'operation', minWidth: '120' }, 
     ]

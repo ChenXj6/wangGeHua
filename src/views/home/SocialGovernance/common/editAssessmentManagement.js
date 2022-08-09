@@ -9,7 +9,6 @@ export function renderTable() {
                 label: '标题名称',
                 prop: 'titleName',
                 value: '',
-                disabled:true,
                 span: 11,
               },
               {
@@ -17,7 +16,6 @@ export function renderTable() {
                 label: '考核名称',
                 prop: 'assessName',
                 value: '',
-                disabled:true,
                 span: 11,
               },
               {
@@ -25,7 +23,6 @@ export function renderTable() {
                 label: '单项考核',
                 prop: 'assessDetail',
                 value: '',
-                disabled:true,
                 span: 11,
               },  
               {
@@ -33,7 +30,6 @@ export function renderTable() {
                 label: '满分',
                 prop: 'fullMarks',
                 value: '',
-                disabled:true,
                 span: 11,
               },
               {
@@ -41,7 +37,6 @@ export function renderTable() {
                 label: '次数',
                 prop: 'num',
                 value: '',
-                disabled:true,
                 span: 11,
               },
               {
@@ -49,7 +44,6 @@ export function renderTable() {
                 label: '类型',
                 prop: 'assessType',
                 value: '',
-                disabled:true,
                 span: 11,
               },
               {
@@ -57,7 +51,6 @@ export function renderTable() {
                 label: '备注',
                 prop: 'remarks',
                 value: '',
-                disabled:true,
                 span: 11,
               },
         ]   
