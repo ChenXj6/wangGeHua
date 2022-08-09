@@ -105,6 +105,9 @@ export default {
         }
       )
         .then(() => {
+          multipleSelection.value.forEach(v=>{
+            v.originator = JSON.parse(sessionStorage.getItem('user')).user.operatorName
+          })
           saveTask(multipleSelection.value).then(res=>{
             if(res.resCode == '000000'){
               proxy.$message.success('手动派发定时任务成功！')

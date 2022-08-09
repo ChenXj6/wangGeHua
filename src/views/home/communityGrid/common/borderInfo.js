@@ -34,7 +34,7 @@ export function renderTable() {
       {
         type: 'slot',
         label: '组织结构',
-        prop: 'status',
+        prop: '',
         value: '',
         slotName:'status',
         isClearable: true,
@@ -42,10 +42,10 @@ export function renderTable() {
       },
       {
         type: 'Input',
-        label: '名称',
-        prop: 'villageName',
+        label: '社区名称',
+        prop: 'communityName',
         value: '',
-        placeholder: '请输入名称',
+        placeholder: '请输入社区名称',
         isClearable: true,
         span: 4,
       },

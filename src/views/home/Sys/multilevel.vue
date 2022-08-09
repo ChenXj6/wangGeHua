@@ -1,6 +1,6 @@
 <template>
   <div>
-        <VForm
+    <VForm
       :form-data="formConfig"
       :form-model="searchForm"
       :form-handle="formHandle"
@@ -8,17 +8,7 @@
     <V-table
       ref="table"
       :table-config="tableConfig"
-      @select-change="(val) => (multipleSelection = val)"
     >
-    <template v-slot:type="{data}">
-      <span class="tagClass"
-                ><el-button
-                  size="mini"
-                  :type="data.type == 1 ? 'success' : ''"
-                  >{{ data.type != 1 ? '目录' : '菜单' }}</el-button
-                ></span
-              >
-    </template>
       <template v-slot:operation="data">
         <el-button
           size="small"
@@ -27,7 +17,7 @@
           circle
           type="primary"
         ></el-button>
-        <el-popconfirm title="确定要删除该角色吗？" @confirm="handleDelete(data.data)">
+        <el-popconfirm v-if="data.data.level != 0" title="确定要删除该数据吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
               size="small"
@@ -45,16 +35,11 @@
       v-model="dialogVisible"
       width="35%"
     >
-    <el-form ref="form" :model="dataForm" :rules="rules" label-width="80px">
-      <el-form-item label="菜单类型">
-        <el-radio-group v-model="dataForm.type" size="mini">
-          <el-radio v-for="item in typeList" :label="item.value" :key="item.label">{{item.label}}</el-radio>
-        </el-radio-group>
+    <el-form ref="form" :key="timer" :model="dataForm" :rules="rules" label-width="80px">
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="dataForm.name" size="mini" placeholder="名称" clearable></el-input>
       </el-form-item>
-      <el-form-item :label="`${typeList[dataForm.type].label}名称`" prop="name">
-        <el-input v-model="dataForm.name" size="mini" :placeholder="`${typeList[dataForm.type].label}名称`" clearable></el-input>
-      </el-form-item>
-      <el-form-item label="上级菜单">
+      <el-form-item label="上级菜单" prop="parentId">
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+dataForm.parentId" @update:dataForm="handleTreeSelectChange">
@@ -63,17 +48,14 @@
             </template>
         </popup-tree-input>
       </el-form-item>
-      <el-form-item v-if="dataForm.type != 0" label="授权标识">
-        <el-input v-model="dataForm.perms" size="mini" clearable></el-input>
+      <el-form-item label="编码值" v-if="!dataForm.parentId" prop="perms">
+        <el-input v-model="dataForm.perms" size="mini" disabled placeholder="" clearable></el-input>
       </el-form-item>
-      <el-form-item v-if="dataForm.type == 1" label="菜单路由">
-        <el-input v-model="dataForm.url" size="mini" placeholder="菜单路由" clearable></el-input>
+      <el-form-item label="排序" prop="orderNum">
+        <el-input v-model="dataForm.orderNum" size="mini" placeholder="" clearable></el-input>
       </el-form-item>
-      <el-form-item v-if="dataForm.type != 2" label="排序编号">
-        <el-input v-model="dataForm.orderNum" type="number" size="mini"></el-input>
-      </el-form-item>
-      <el-form-item v-if="dataForm.type != 2" label="菜单图标">
-        <el-input v-model="dataForm.icon" size="mini" placeholder="菜单图标 (如 el-icon-lx-weibo；el-icon-lx-emojifill)" clearable></el-input>
+      <el-form-item label="备注">
+        <el-input v-model="dataForm.remark" size="mini" placeholder="" clearable></el-input>
       </el-form-item>
     </el-form>
     <div style="margin-top:4px;text-align:right">
@@ -84,11 +66,11 @@
   </div>
 </template>
 <script>
-import { getCurrentInstance, reactive, ref, onMounted, onBeforeMount } from '@vue/runtime-core'
+import { getCurrentInstance, reactive, ref, onMounted, onBeforeMount, watch } from '@vue/runtime-core'
 import { deepClone, formatterDate, listAssign, defaultObject } from '@/utils/util'
 
-import { renderTable } from './common/Menu'
-import { saveMenu,deleteMenu } from '@/api/sys/menu'
+import { renderTable } from './common/multilevel'
+import { saveDictTh,deleteDictTh } from '@/api/sys/multilevel'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 export default {
   name:'Menu',
@@ -98,6 +80,7 @@ export default {
     const { tableConfig, formConfig, addFormConfig } = renderTable.call(proxy)
     const table = ref(null)
     const form = ref(null)
+    const timer = ref(new Date().getTime())
     let searchParams = ref({}) // 表单数据备份
     const searchForm = reactive({
       name:''
@@ -110,16 +93,23 @@ export default {
     const dataForm = reactive({
       id:'',
       name:'',
-      type: '',
-      icon: '',
-      parentId:'',
+      parentId:0,
       parentName:'',
-      orderNum:1,
-      url:'',
+      orderNum:'',
+      perms:''
     })
     const rules = reactive({
       name: [
-        { required: true, message: '请输入角色名', trigger: 'blur' },
+        { required: true, message: '请输入名称', trigger: 'blur' },
+      ],
+      orderNum: [
+        { required: true, message: '请输入排序号', trigger: 'blur' },
+      ],
+      parentId:[
+        { required: true, message: '请选择上级菜单', trigger: 'blur' },
+      ],
+      perms:[
+        { required: true, message: '编码值必填', trigger: 'blur' },
       ],
     })
     let popupTreeData = ref([])
@@ -135,22 +125,33 @@ export default {
     const operation = ref(false) // true:新增, false:编辑
     // 表單操作按鈕配置
     const handleEdit = async (data) => {
-      data.type = String(data.type)
-      !(data.parentId) && (data.parentName = '顶级菜单')
-      listAssign(dataForm, data)
       operation.value = false
+      defaultObject(dataForm)
+      timer.value = new Date().getTime()
+      data.type = String(data.type)
+      listAssign(dataForm, data)
+      dataForm.parentId == 0 && (dataForm.parentName = '顶级菜单')      
       dialogVisible.value = true
     }
+    watch(()=>dataForm.parentId,(val)=>{
+      if(!!val && operation.value){
+        dataForm.perms = ''
+      }else if(operation.value){
+        dataForm.perms = String(tableConfig.data.length + 1).padStart(4,'0')
+      }
+    },{deep:true})
     const handleAdd = async () => {
-      defaultObject(dataForm)
-      !(dataForm.parentId) && (dataForm.parentName = '顶级菜单')
-      dataForm.type = '1'
       operation.value = true
+      timer.value = new Date().getTime()
+      defaultObject(dataForm)
+      dataForm.parentId = 0
+      dataForm.parentName = '顶级菜单'
+      dataForm.perms = String(tableConfig.data.length + 1).padStart(4,'0')      
       dialogVisible.value = true
     }
     const handleDelete = ({id}) => {
-      deleteMenu({id}).then(res=>{
-        res.code === 200 && (handleQuery(),proxy.$message.success('用户删除成功。'))
+      deleteDictTh({id}).then(res=>{
+        res.code === 200 && (handleQuery(),proxy.$message.success('数据删除成功。'))
       })
     }
     // 表格操作
@@ -162,21 +163,26 @@ export default {
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
         tableConfig.data = res
+        let obj = [{
+          name:'顶级菜单',
+          id:0,
+        }]
         popupTreeData.value = res
+        popupTreeData.value = obj.concat(popupTreeData.value)
       })
     }
     // 表单按钮组
     const formHandle = {
       span: 4,
       btns: [
-        // { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
+        { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
         { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
       ],
     }
     const handleSave = () => {
       form.value.validate((valid) => {
         if (valid) {
-          saveMenu(dataForm).then(res=>{
+          saveDictTh(dataForm).then(res=>{
             if(res.code == '200'){
               handleQuery()
               proxy.$message.success(`${operation.value ? '新增' : '编辑'}成功`)
@@ -210,6 +216,7 @@ export default {
       rules,
       popupTreeProps,
       handleTreeSelectChange,
+      timer,
     }
   },
 }

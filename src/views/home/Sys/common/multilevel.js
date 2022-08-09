@@ -1,4 +1,4 @@
-import { getMenuTree } from '@/api/sys/menu'
+import { getDictThTree } from '@/api/sys/multilevel'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const tableConfig = {
@@ -7,7 +7,7 @@ export function renderTable() {
     pagination: false, // 开启分页器
     paginationAlign: 'right', // 分页器方向
     mutiSelect: false, // 开启选择
-    method: getMenuTree, // 請求api
+    method: getDictThTree, // 請求api
     index: false, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
@@ -18,31 +18,24 @@ export function renderTable() {
         minWidth: '60',
       },
       { prop: 'name', label: '名称', minWidth: '120' },
-      { prop: '', label: '类型', slot:'type', minWidth: '60' },
-      { prop: 'icon', label: '图标',icon:'icon'},
-      { prop: 'url', label: '菜单URL',minWidth:'150' },
       {
-        prop: 'perms',
-        label: '授权标识',
-      },
-      {
-        prop: 'orderNum',
-        label: '排序',
+        prop: 'remarks',
+        label: '备注',
       },
       { prop: '', label: '操作', slot: 'operation', minWidth: '100' },
     ],
   }
   const formConfig = {
     formItems: [
-      // {
-      //   type: 'Input',
-      //   label: '',
-      //   prop: 'name',
-      //   value: '',
-      //   placeholder: '请输入名称',
-      //   isClearable: true,
-      //   span: 4,
-      // },
+      {
+        type: 'Input',
+        label: '',
+        prop: 'name',
+        value: '',
+        placeholder: '请输入名称',
+        isClearable: true,
+        span: 4,
+      },
     ],
   }
   const addFormConfig = {

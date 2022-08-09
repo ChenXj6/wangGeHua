@@ -38,7 +38,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '名称',
-        prop: 'villageName',
+        prop: 'pointName',
         value: '',
         placeholder: '请输入名称',
         isClearable: true,

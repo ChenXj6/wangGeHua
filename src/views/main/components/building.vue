@@ -1,4 +1,9 @@
 <template>
+<el-dialog title="楼栋人员信息"
+               v-model="houseDialogVisible"
+               width="60%"
+               draggable
+               style="z-index: 9999;">
   <div v-if="isShow" >
     <el-row :gutter="10">
       <el-col :span="5"
@@ -189,6 +194,7 @@
     </template>
   </el-skeleton>
   </div>
+  </el-dialog>
   <!--  -->
   <el-drawer
     v-model="drawer"
@@ -226,11 +232,16 @@ export default defineComponent({
       type: String,
       default: () => ''
     },
+    houseDialogVisible: {
+      type: Boolean,
+      default: () => false
+    }
   },
-  emits: ['update:buildingVisible'],
+  emits:['update:houseDialogVisible'],
   setup (props,{emit}) {
     const gisid = ref(props.gisid)
     const { proxy:{$message} } = getCurrentInstance()
+    const houseDialogVisible = ref(props.houseDialogVisible)
     // 楼栋
     const imgUrl = ref(import.meta.env.VITE_IMG_BASE_API);
     const buildForm = ref({}); // 楼栋表单
@@ -266,8 +277,8 @@ export default defineComponent({
         if (res.resCode == "000000") {
           if(res.data.unit.length == 0 && isNull(res.data.build)){
             setTimeout(() => {
-              emit('update:buildingVisible')
-            }, 500);
+              emit('update:houseDialogVisible',false)
+            }, 100);
             $message.warning({message:'暂无该楼栋信息',customClass:'messageIndex'})
           }else{
             unitList.value = res.data.unit;
@@ -279,10 +290,12 @@ export default defineComponent({
             isHaveHouse.value = true
             peopleList.value = await getPeopleApi()
             isHavePeople.value = true
+            emit('update:houseDialogVisible',true)
             isShow.value = true
+
           }
         } else {
-          emit('update:buildingVisible')
+          emit('update:houseDialogVisible',false)
           $message.error({message:res.message,customClass:'messageIndex'})
         }
       });
@@ -371,7 +384,6 @@ export default defineComponent({
     getOptionsByCode(1052, unitNumberOptions);
     getOptionsByCode(1014, relationshipOptions);
     onMounted(() => {
-      // console.log(gisid.value,';;;;;')
       getBuild(gisid.value)
     })
     return {
@@ -398,6 +410,7 @@ export default defineComponent({
       peopleDeatil,
       drawer,
       handleClose,
+      houseDialogVisible,
     }
   },
 })

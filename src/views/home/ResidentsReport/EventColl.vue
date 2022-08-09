@@ -92,7 +92,7 @@ import {
 
 
 import { renderTable } from './common/eventColl'
-import { deepClone, formatterDate,resetFormat } from '@/utils/util'
+import { deepClone, formatterDate,resetFormat,defaultObject } from '@/utils/util'
 
 import { searchDict } from '@/api/sys/dict'
 import { useStore } from 'vuex'
@@ -107,6 +107,9 @@ export default defineComponent({
     const table = ref(null)
     const searchForm = ref({
       // date: []
+      approvalStatus:'',
+      dataSource:'',
+      eventFirstType:'',
     }) // 表单数据
     let searchParams = ref({}) // 表单数据备份
     const multipleSelection = ref([]) // 选中数据
@@ -118,27 +121,12 @@ export default defineComponent({
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm.value)
-      // for (const key in searchParams.value) {
-      //   if (
-      //     Array.isArray(searchParams.value[key]) &&
-      //     searchParams.value[key].length > 0
-      //   ) {
-      //     searchParams.value[`${key}Start`] = formatterDate(
-      //       searchParams.value[key][0]
-      //     )
-      //     searchParams.value[`${key}End`] = formatterDate(
-      //       searchParams.value[key][1]
-      //     )
-      //     delete searchParams.value[key]
-      //   }
-      // }
-      // console.log(searchParams.value)
       table.currentPage = 1
       handleQueryTable()
     }
     const handleReset = (formEL) => {
       formEL.resetFields()
-      searchForm.value = {}
+      defaultObject(searchForm.value)
       searchParams.value = {}
       handleQuery()
     }

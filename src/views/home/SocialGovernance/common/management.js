@@ -59,8 +59,8 @@ export function renderTable() {
             },
             {
                 type:'code',
-                code:'1078',
-                prop: 'dealStatus',
+                code:'1069',
+                prop: 'status',
                 label: '处置状态',
                 minWidth: '120',
             },
@@ -132,9 +132,9 @@ export function renderTable() {
               {
                 type: 'selectSearch',
                 label: '处置状态',
-                prop: 'dealStatus',
+                prop: 'status',
                 placeholder: '请选择处置状态',
-                code:'1078',
+                code:'1069',
                 isClearable: true,
                 span: 6,
               },

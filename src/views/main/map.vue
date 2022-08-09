@@ -472,13 +472,7 @@
       ></i>
     </div>
     <!-- 楼栋弹窗-->
-    <el-dialog title="楼栋人员信息"
-               v-model="houseDialogVisible"
-               width="60%"
-               draggable
-               style="z-index: 9999;">
-      <Building :key="buildTime" :gisid="gisid" @update:buildingVisible="handleCloseBuild"/>
-    </el-dialog>
+      <Building :key="buildTime" v-if="houseDialogVisible" :houseDialogVisible="houseDialogVisible" @update:houseDialogVisible="handleCloseBuild" :gisid="gisid" />
     <!-- 事件处置弹窗 -->
     <el-dialog title="" v-model="eventHandleVisible" width="width">
       <div>
@@ -646,6 +640,22 @@ import { buildingList } from '@/api/Economics/building'
 
 //经济运行>>重点项目
 import { itemList } from '@/api/Economics/itemList'
+// 图标引入
+import party1Url  from '@/assets/img/dgw.png'
+import party2Url from "/src/assets/img/党支部.png"
+import party3Url from "/src/assets/img/党组织.png"
+import serviceUrl1 from "/src/assets/img/残联服务中心.png"
+import serviceUrl2 from "/src/assets/img/养老中心.png"
+import meetUrl1 from "/src/assets/img/应急物资.png"
+import meetUrl2 from "/src/assets/img/应急站点.png"
+import meetUrl3 from "/src/assets/img/消防栓.png"
+import smokeUrl1 from "/src/assets/img/烟雾报警.png"
+import smokeUrl2 from "/src/assets/img/一键报警器.png"
+import smokeUrl3 from "/src/assets/img/摄像头.png"
+import servicePeoUrl1 from "/src/assets/img/高龄老人.png"
+import servicePeoUrl2 from "/src/assets/img/独居老人.png"
+import servicePeoUrl3 from "/src/assets/img/失业人员.png"
+import servicePeoUrl4 from "/src/assets/img/残疾人.png"
 
 //重点管理人员>>戒毒
 import { getDrugList } from '@/api/ManagementPersonnel/drugPer'
@@ -679,6 +689,9 @@ export default {
     // 楼栋
     const houseDialogVisible = ref(false)
     const gisid = ref('')
+    const handleCloseBuild = (flag) => {
+      houseDialogVisible.value = flag
+    }
     const tableBuilding = ref(null);
     const tableEvent = ref(null);
     const tableHotline = ref(null);
@@ -1250,8 +1263,8 @@ export default {
     // 数字党建 >>> 品牌打造模块
     const show = ref('');
     const brandList = ref([])
-    const getDraftList = () => {
-      getDraft({ pageNum: 1, pageSize: 999 }).then(res => {
+    const getDraftList = (level1,level2) => {
+      getDraft({ pageNum: 1, pageSize: 999,level1,level2 }).then(res => {
         if (res.resCode == '000000') {
           let arr = []
           res.data.list.forEach(v => {
@@ -1278,9 +1291,6 @@ export default {
     }
     // 数字党建 >>> 党组织
     const partyClick = (orgType,type) => {
-      const party1Url = "src/assets/img/党工委.png"
-      const party2Url = "src/assets/img/党支部.png"
-      const party3Url = "src/assets/img/党组织.png"
       tagShow.value[type] = !tagShow.value[type]
       getPartyInfoList(orgType).then(res=>{
         if(res.list.length > 0){
@@ -1298,15 +1308,14 @@ export default {
     }
     // 民生保障 >>> 服务机构
     const serviceClick = (orgType,type) => {
-      const Url1 = "src/assets/img/残联服务中心.png"
-      const Url2 = "src/assets/img/养老中心.png"
+      
       tagShow.value[type] = !tagShow.value[type]
       getHaidi(orgType).then(res=>{
           if(res.list.length > 0){
             sessionStorage.setItem(`service${orgType}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'/src/assets/service.html?id=${v.id}&type=${orgType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? Url1 : Url2}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'/src/assets/service.html?id=${v.id}&type=${orgType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1317,16 +1326,14 @@ export default {
     }
     // 民生保障 >>> 应急
     const meetClick = (type1,type) => {
-      const Url1 = "src/assets/img/应急物资.png"
-      const Url2 = "src/assets/img/应急站点.png"
-      const Url3 = "src/assets/img/消防栓.png"
+      
       tagShow.value[type] = !tagShow.value[type]
       getSuppList(type1).then(res=>{
           if(res.list.length > 0){
             sessionStorage.setItem(`meet${type1}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'/src/assets/meet.html?id=${v.id}&type=${type1}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? Url1 : (type1 == 3 ? Url2 : Url3)}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'/src/assets/meet.html?id=${v.id}&type=${type1}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? meetUrl1 : (type1 == 3 ? meetUrl2 : meetUrl3)}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1337,16 +1344,14 @@ export default {
     }
     // 应急指挥 >>> 烟感&一键报警器
     const smokeClick = (deviceType,type) => {
-      const Url1 = "src/assets/img/烟雾报警.png"
-      const Url2 = "src/assets/img/一键报警器.png"
-      const Url3 = "src/assets/img/摄像头.png"
+      
       tagShow.value[type] = !tagShow.value[type]
       getSmokeList(deviceType).then(res=>{
           if(res.list.length > 0){
             sessionStorage.setItem(`smoke${deviceType}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/smoke.html?id=${v.id}&type=${deviceType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? Url1 : Url2}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/smoke.html?id=${v.id}&type=${deviceType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? smokeUrl1 : smokeUrl2}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1701,10 +1706,7 @@ export default {
       }else if (item.type == 'service') {
         isOpenType.value = item.type
         handleClickOpen('')
-        const Url1 = "src/assets/img/高龄老人.png"
-        const Url2 = "src/assets/img/独居老人.png"
-        const Url3 = "src/assets/img/失业人员.png"
-        const Url4 = "src/assets/img/残疾人.png"
+        
         let type = item.type + item.staffType
         tagShow.value[type] = !tagShow.value[type]
         // console.log(tagShow.value[type],type)
@@ -1713,7 +1715,7 @@ export default {
             res.list.forEach((v,i)=>{
               sessionStorage.setItem(`servicePeople${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'/src/assets/servicePeople.html?id=${v.id}&type=${item.staffType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? Url1 : (item.staffType == 10 ? Url2 : (item.staffType == 2 ? Url3 : Url4))}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'/src/assets/servicePeople.html?id=${v.id}&type=${item.staffType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? servicePeoUrl1 : (item.staffType == 10 ? servicePeoUrl2 : (item.staffType == 2 ? servicePeoUrl3 : servicePeoUrl4))}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1722,7 +1724,7 @@ export default {
         },err=> proxy.$message.error('重点服务人员数据请求错误！请稍后重试') )
         return
       } else if (item.type == 'policy') {
-        getDraftList()
+        getDraftList(207,213)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
@@ -1732,7 +1734,7 @@ export default {
         },10)
         return
       } else if (item.type == 'process') {
-        getDraftList()
+        getDraftList(207,214)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
@@ -2120,9 +2122,6 @@ export default {
       searchHiddenDangerForm.officeCode = officeCode;
       searchHiddenDangerForm.officeName = officeName;
     };
-    const handleCloseBuild = () => {
-      houseDialogVisible.value = false
-    }
     // 
     onBeforeMount(() => {
       initTagState()
@@ -2153,7 +2152,6 @@ export default {
       mapDialogData,
       dialogVisible,
       handleCloseDialog,
-      houseDialogVisible,
       // 事件处置弹窗
       eventHandleVisible,
       dataForm,
@@ -2222,8 +2220,9 @@ export default {
       tableHiddenDangerConfig,
       handleHiddenSelectChange,
       // 
-      handleCloseBuild,
       buildTime,
+      houseDialogVisible,
+      handleCloseBuild,
       // 
     }
   }
@@ -2370,6 +2369,7 @@ h4 {
   padding: 5px;
   background: #242f42;
   color: #fff;
+  background: transparent;
 }
 .coclpitDialog > div {
   margin: 20px 0;

@@ -44,7 +44,7 @@ export function renderTable() {
       },
       {
         type: 'Input',
-        label: '名称',
+        label: '姓名',
         prop: 'name',
         value: '',
         placeholder: '请输入姓名',
