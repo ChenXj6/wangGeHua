@@ -1313,7 +1313,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'/src/assets/service.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://192.168.1.146:8081/biaoqian//service.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{

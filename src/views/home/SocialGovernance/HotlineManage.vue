@@ -154,8 +154,9 @@ import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/hotlineManage'
 import { deepClone, defaultObject } from '@/utils/util'
 import { getTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
-import { dispatchOrder,delHotline } from '@/api/SocialGovernance/HotlineManage'
+import { dispatchOrder,delHotline,exportHotline } from '@/api/SocialGovernance/HotlineManage'
 import { getUserList } from "@/api/sys/user";
+import { downLoadFile } from '@/utils/util'
 
 export default defineComponent({
   name: 'HotlineManage',
@@ -331,7 +332,24 @@ export default defineComponent({
         })
       }
     }
-
+    // 导出
+    const handleExport = () => {
+      if(!isHaveSelect.value){
+        proxy.$message.warning('请至少选择一条数据！')
+        return
+      }else{
+        exportHotline(multipleSelection.value).then(res=>{
+          if(res.resCode == '000000'){
+            console.log(res)
+            // proxy.$message.success('数据删除成功')
+            // handleQuery()
+          }else{
+            proxy.$message.error(res.message)
+            return
+          }
+        })
+      }
+    }
     // 表單操作按鈕配置
     const formHandle = {
       btns: [
@@ -340,6 +358,7 @@ export default defineComponent({
         { type: 'primary', label: '添加', key: 'reset', handle: handleAdd },
         { type: 'primary', label: '派单', key: 'dispatch', handle: handleDispatch },
         { type: 'danger', label: '批量删除', key: 'delete', handle: handleDelte },
+        { type: 'Primary', label: '导出', key: 'export', handle: handleExport },
       ],
     }
 

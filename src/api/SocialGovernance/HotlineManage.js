@@ -1,5 +1,11 @@
 import service from '@/utils/request';
 
+// 获取列表
+export const exportHotline = query => {
+  return service.post(
+    `/real/realInfo/hotline/OutExcel`, query
+  )
+};
 
 // 获取列表
 export const delHotline = query => {

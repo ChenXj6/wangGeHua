@@ -134,6 +134,7 @@
             v-model="dataForm.updateDate"
             type="datetime"
             size="mini"
+            value-format="YYYY-MM-DD HH:mm:ss"
             placeholder="请选择时间"
             style="width:100%"
           />

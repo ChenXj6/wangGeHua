@@ -198,6 +198,7 @@ export default defineComponent({
           dataForm.value.id = res.data[0].id
         }
       })
+      dataForm.value.dealBy = JSON.parse(sessionStorage.getItem('user')).user.operatorId
       if(data.approvalStatus == 4){
         dataForm.value.dealStatus = '2'
         eventLock(dataForm.value).then(res=>{
