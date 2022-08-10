@@ -1297,11 +1297,10 @@ export default {
       tagShow.value[type] = !tagShow.value[type]
       getPartyInfoList(orgType).then(res=>{
         if(res.list.length > 0){
-          sessionStorage.setItem(`partyInfo${orgType}`,JSON.stringify({data:res.list}))
           res.list.forEach((v,i)=>{
             console.log(v)
             let {lng,lat} = randomAddress()
-            var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'/src/assets/party.html?id=${v.id}&type=${orgType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
+            var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\','/src/assets/party.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
           })
         }else{
@@ -1317,9 +1316,8 @@ export default {
       getRelease().then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`releaseIndex${item}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="release" onClick="hj2(${lng},${lat},\'刑满释放\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${releaseUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="release" onClick="hj2(${lng},${lat},\'刑满释放\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${releaseUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1335,9 +1333,8 @@ export default {
       getMental().then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-              sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="neuropathy" onClick="hj2(${lng},${lat},\'精神障碍\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${neuropathyUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="neuropathy" onClick="hj2(${lng},${lat},\'精神障碍\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${neuropathyUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1353,9 +1350,8 @@ export default {
       getDrug().then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-              sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${drugDetoxificationUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${drugDetoxificationUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1371,9 +1367,8 @@ export default {
       getRectify().then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-              sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${correctUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${correctUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1389,9 +1384,8 @@ export default {
       getControl().then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-              sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="control" onClick="hj2(${lng},${lat},\'稳控对象\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="control" onClick="hj2(${lng},${lat},\'稳控对象\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1409,9 +1403,8 @@ export default {
       getParkLot().then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`parkLot${item}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'/src/assets/parkLot.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${lotUrl}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'/src/assets/parkLot.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${lotUrl}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1426,11 +1419,10 @@ export default {
       tagShow.value[type] = !tagShow.value[type]
       getCommunalFacilities(deviceType).then(res=>{
         if(res.list.length > 0){
-          sessionStorage.setItem(`communal${deviceType}`,JSON.stringify({data:res.list}))
           res.list.forEach((v,i)=>{
             console.log(v)
             let {lng,lat} = randomAddress()
-            var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/communal.html?id=${v.id}&type=${deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
+            var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
           })
         }else{
@@ -1445,11 +1437,10 @@ export default {
       tagShow.value[type] = !tagShow.value[type]
       getBuildingList(cbType).then(res=>{
           if(res.list.length > 0){
-            sessionStorage.setItem(`enterpriseBuilding${cbType}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               console.log(v)
               let {lng,lat} = randomAddress()
-              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${cbType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${cbType == 1 ? economyUr1  : economyUr2 }" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${cbType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${cbType == 1 ? economyUr1  : economyUr2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1465,9 +1456,8 @@ export default {
       getItemList().then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`keyProjects${item.orgType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="keyProjects" onClick="hj2(${lng},${lat},\'重点项目\',\'/src/assets/keyProjects.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${keyProjectsUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="keyProjects" onClick="hj2(${lng},${lat},\'重点项目\',\'/src/assets/keyProjects.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${keyProjectsUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1484,10 +1474,9 @@ export default {
       tagShow.value[type] = !tagShow.value[type]
       getHaidi(orgType).then(res=>{
           if(res.list.length > 0){
-            sessionStorage.setItem(`service${orgType}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'/src/assets/service.html?id=${v.id}&type=${orgType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'/src/assets/service.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1502,10 +1491,9 @@ export default {
       tagShow.value[type] = !tagShow.value[type]
       getSuppList(type1).then(res=>{
           if(res.list.length > 0){
-            sessionStorage.setItem(`meet${type1}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'/src/assets/meet.html?id=${v.id}&type=${type1}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? meetUrl1 : (type1 == 3 ? meetUrl2 : meetUrl3)}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'/src/assets/meet.html?id=${v.id}&type=${type1}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? meetUrl1 : (type1 == 3 ? meetUrl2 : meetUrl3)}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1520,10 +1508,9 @@ export default {
       tagShow.value[type] = !tagShow.value[type]
       getSmokeList(deviceType).then(res=>{
           if(res.list.length > 0){
-            sessionStorage.setItem(`smoke${deviceType}`,JSON.stringify({data:res.list}))
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/smoke.html?id=${v.id}&type=${deviceType}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? smokeUrl1 : smokeUrl2}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/smoke.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? smokeUrl1 : smokeUrl2}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1587,8 +1574,9 @@ export default {
       //   return
       // } 
       else if (item.type == "building") {
-         var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(18988, 8830, html);
+        // vMap.lv('97',true)
+        //  var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        // vMap.showMapMark(18988, 8830, html);
         return;
       } else if (item.type == "location") {
         isOpenType.value = item.type
@@ -1668,6 +1656,7 @@ export default {
         isOpenType.value = item.type
         handleClickOpen('')
         communalFacilitiesClick(2,item.type)
+
       } else if (item.type == 'roadGatePosition') {
         isOpenType.value = item.type
         handleClickOpen('')
@@ -1704,9 +1693,8 @@ export default {
         getStaff(item.staffType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-              sessionStorage.setItem(`servicePeople${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'/src/assets/servicePeople.html?id=${v.id}&type=${item.staffType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? servicePeoUrl1 : (item.staffType == 10 ? servicePeoUrl2 : (item.staffType == 2 ? servicePeoUrl3 : servicePeoUrl4))}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'/src/assets/servicePeople.html?id=${v.id}&type=${item.staffType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? servicePeoUrl1 : (item.staffType == 10 ? servicePeoUrl2 : (item.staffType == 2 ? servicePeoUrl3 : servicePeoUrl4))}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
