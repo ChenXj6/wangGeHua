@@ -67,10 +67,10 @@ export default {
             title: "网格事件",
             children: [{ title: "当日事件",type:'someDayEvent' }, { title: "事件查询",type:'eventQuery' }],
           },
-          {
-            title: "12345热线",
-            type:"hotline"
-          },
+          // {
+          //   title: "12345热线",
+          //   type:"hotline"
+          // },
           {
             title: "重点管理人员",
             children: [
