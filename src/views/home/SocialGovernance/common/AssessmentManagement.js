@@ -21,7 +21,7 @@ export function renderTable() {
         { prop: 'remarks', label: '备注',toolTip:true, minWidth: '120' }, 
         { prop: 'status', label: '状态',slot:'status',toolTip:true, minWidth: '120' }, 
         { prop: 'createDate', label: '创建时间',toolTip:true, minWidth: '120' },
-        { prop: '', label: '操作', slot: 'operation', minWidth: '120' }, 
+        { prop: '', label: '操作', slot: 'operation', minWidth: '270' }, 
     ]
     }
     const formConfig = {

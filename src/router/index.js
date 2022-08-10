@@ -581,6 +581,25 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/AssessmentScore.vue")
       },
       {
+        path: "/AssessmentScoreUser",
+        name: "AssessmentScoreUser",
+        meta: {
+          title: '单项考核得分管理'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/AssessmentScoreUser.vue")
+      },
+      {
+        path: "/EditAssessmentScoreUser",
+        name: "EditAssessmentScoreUser",
+        meta: {
+          title: '单项考核得分管理',
+          getTitle: function(route) {
+            return `${route.query.operation == 1 ? '查看' : (route.query.operation == 2 ? '编辑' : '新增')}单项考核得分管理`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/SocialGovernance/EditAssessmentScoreUser.vue")
+      },
+      {
         path: "/taxList",
         name: "taxList",
         meta: {

@@ -10,18 +10,7 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
-     <template v-slot:status="{data}">
-       <span>{{ data.status == 1 ? '启用' : '禁用' }}</span>
-      </template>
       <template v-slot:operation="{ data }">
-        <el-button
-          size="small"
-          @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
-          circle
-          type="success"
-        />
-
         <el-button
           size="small"
           icon="el-icon-lx-edit"
@@ -29,22 +18,6 @@
           circle
           type="priamry"
         />
-        <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
-          <template #reference>
-            <el-button
-              size="small"
-              icon="el-icon-lx-delete"
-              circle
-              type="danger"
-            />
-          </template>
-        </el-popconfirm>
-        <el-switch
-          :value="data.status"
-          active-value="1"
-          inactive-value="0"
-          @click="switchChange(data)"
-        ></el-switch>
       </template>
     </V-table>
   </div>
@@ -60,14 +33,10 @@ import {
   onMounted,
   watch,
 } from "@vue/runtime-core";
-import { renderTable } from "./common/AssessmentManagement";
+import { renderTable } from "./common/AssessmentScoreUser";
 import { deepClone, defaultObject } from "@/utils/util";
-import {
-  deleteAssessmentManagement,
-  updateAssessmentManagement,
-} from "@/api/SocialGovernance/AssessmentManagement";
 export default defineComponent({
-  name: "AssessmentManagement",
+  name: "AssessmentScoreUser",
   setup() {
     const router = useRouter();
     const { proxy } = getCurrentInstance();
@@ -89,19 +58,7 @@ export default defineComponent({
       defaultObject(searchForm);
       handleQuery();
     };
-    const handleAdd = () => {
-      handleOperation(3, {});
-    };
-    const handleDel = (id) => {
-      deleteAssessmentManagement({ id }).then((res) => {
-        if (res.resCode == "000000") {
-          handleQuery();
-          proxy.$message.success("删除数据成功");
-        } else {
-          proxy.$message.danger("删除数据失败");
-        }
-      });
-    };
+
 
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
@@ -114,7 +71,6 @@ export default defineComponent({
       btns: [
         { type: "primary", label: "查询", key: "search", handle: handleQuery },
         { type: "primary", label: "重置", key: "reset", handle: handleReset },
-        { type: "primary", label: "新增", key: "reset", handle: handleAdd },
       ],
     };
 
@@ -122,34 +78,9 @@ export default defineComponent({
     const handleOperation = (type, rowData) => {
       let data = JSON.stringify(rowData);
       router.push({
-        path: "/editAssessmentManagement",
+        path: "/editAssessmentScoreUser",
         query: { data: encodeURIComponent(data), operation: type },
       });
-    };
-
-    const switchChange = ({ id, status }) => {
-      // 0:禁用  1:启用
-      if (status == 0) {
-        status = 1;
-        updateAssessmentManagement({ id, status }).then((res) => {
-          if (res.resCode == "000000") {
-            handleQuery();
-            proxy.$message.success("启用成功");
-          } else {
-            proxy.$message.danger("启用失败");
-          }
-        });
-      } else {
-        status = 0;
-        updateAssessmentManagement({ id, status }).then((res) => {
-          if (res.resCode == "000000") {
-            handleQuery();
-            proxy.$message.success("禁用成功");
-          } else {
-            proxy.$message.danger("禁用失败");
-          }
-        });
-      }
     };
 
     onMounted(() => {
@@ -166,8 +97,6 @@ export default defineComponent({
       handleQuery,
       handleReset,
       handleOperation,
-      handleDel,
-      switchChange,
     };
   },
 });

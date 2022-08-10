@@ -91,10 +91,10 @@ export default defineComponent({
       handleQuery()
     }
     const handleQueryTable = () => {
-    //   table.value.getTableData(searchParams.value, (res) => {
-    //     const data = res.list || []
-    //     tableConfig.data = data
-    //   })
+      table.value.getTableData(searchParams.value, (res) => {
+        const data = res.list || []
+        tableConfig.data = data
+      })
     }
     // 表單操作按鈕配置
     const formHandle = {
@@ -105,11 +105,11 @@ export default defineComponent({
     }
     // 查看/编辑
     const handleOperation = (type, rowData) => {
-    //   let data = JSON.stringify(rowData)
-    //   router.push({
-    //     path: '/editInfo',
-    //     query: { data : encodeURIComponent(data), operation: type},
-    //   })
+      let data = JSON.stringify(rowData)
+      router.push({
+        path: '/AssessmentScoreUser',
+        query: { data : encodeURIComponent(data), operation: type},
+      })
     }
 
     onMounted(() => {

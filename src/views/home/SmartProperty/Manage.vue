@@ -17,7 +17,7 @@
       @select-change="(val) => (multipleSelection = val)"
     >
       <template v-slot:name="{data}">
-        <el-link size="mini" type="primary" @click.prevent="handleOperation(2, data)">{{ data.name }}</el-link>
+        <span>{{ data.name }}</span>
       </template>
       <template v-slot:operation="{data}">
         <el-button

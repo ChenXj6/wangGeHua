@@ -423,6 +423,7 @@ export default {
     };
 
     onBeforeMount(() => {
+      
       timer.value = new Date().getTime();
     });
     if (route.query.operation != 3) {
@@ -431,7 +432,7 @@ export default {
         handleChange(1, dataForm.value.streetCode);
         handleChange(2, dataForm.value.communityCode);
         handleChange(3);
-        handleGetBuild(1, dataForm.value.gridCode);
+        handleGetBuild(1, dataForm.value.officeCode);
         handleGetHouse(1, dataForm.value.buildingId);
       }
     }
