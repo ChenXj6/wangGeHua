@@ -1574,9 +1574,7 @@ export default {
       //   return
       // } 
       else if (item.type == "building") {
-        // vMap.lv('97',true)
-        //  var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        // vMap.showMapMark(18988, 8830, html);
+        vMap.Iv('g7',true);
         return;
       } else if (item.type == "location") {
         isOpenType.value = item.type
