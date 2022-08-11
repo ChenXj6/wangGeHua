@@ -1296,7 +1296,7 @@ export default {
         if(res.list.length > 0){
           res.list.forEach((v,i)=>{
             let {lng,lat} = randomAddress()
-            var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\','/src/assets/party.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
+            var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'http://192.168.1.146:8081/biaoqian/party.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
           })
         }else{
@@ -1313,7 +1313,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://192.168.1.146:8081/biaoqian//service.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://192.168.1.146:8081/biaoqian/service.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1330,7 +1330,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'/src/assets/meet.html?id=${v.id}&type=${type1}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? meetUrl1 : (type1 == 3 ? meetUrl2 : meetUrl3)}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://192.168.1.146:8081/biaoqian/meet.html?id=${v.id}&type=${type1}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? meetUrl1 : (type1 == 3 ? meetUrl2 : meetUrl3)}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1347,7 +1347,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/smoke.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? smokeUrl1 : smokeUrl2}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://192.168.1.146:8081/biaoqian/smoke.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? smokeUrl1 : smokeUrl2}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1451,7 +1451,7 @@ export default {
             res.list.forEach((v,i)=>{
             sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'刑满释放人员\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'刑满释放人员\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1471,7 +1471,7 @@ export default {
             res.list.forEach((v,i)=>{
                sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-               var html = `<div id="serive" onClick="hj2(${lng},${lat},\'精神障碍人员\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+               var html = `<div id="serive" onClick="hj2(${lng},${lat},\'精神障碍人员\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1498,7 +1498,7 @@ export default {
             res.list.forEach((v,i)=>{
                sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒人员\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒人员\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1518,7 +1518,7 @@ export default {
             res.list.forEach((v,i)=>{
                 sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正人员\',\'/src/assets/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正人员\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1558,7 +1558,7 @@ export default {
             res.list.forEach((v,i)=>{
                 sessionStorage.setItem(`parkLot${item.orgType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'/src/assets/parkLot.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'http://192.168.1.146:8081/biaoqian/parkLot.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1576,7 +1576,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'摄像头\',\'/src/assets/smartProperty.html?id=${v.id}&type=${item.deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'摄像头\',\'http://192.168.1.146:8081/biaoqian/smartProperty.html?id=${v.id}&type=${item.deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1595,7 +1595,7 @@ export default {
             res.list.forEach((v,i)=>{
                 sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'道闸\',\'/src/assets/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'道闸\',\'http://192.168.1.146:8081/biaoqian/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1614,7 +1614,7 @@ export default {
             res.list.forEach((v,i)=>{
                 sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'垃圾桶\',\'/src/assets/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'垃圾桶\',\'http://192.168.1.146:8081/biaoqian/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1633,7 +1633,7 @@ export default {
             res.list.forEach((v,i)=>{
                 sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'充电桩\',\'/src/assets/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'充电桩\',\'http://192.168.1.146:8081/biaoqian/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1652,7 +1652,7 @@ export default {
             res.list.forEach((v,i)=>{
                 sessionStorage.setItem(`enterpriseBuilding${item.cbType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'商务楼宇\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${item.cbType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'商务楼宇\',\'http://192.168.1.146:8081/biaoqian/enterpriseBuilding.html?id=${v.id}&type=${item.cbType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1671,7 +1671,7 @@ export default {
             res.list.forEach((v,i)=>{
                 sessionStorage.setItem(`enterpriseBuilding${item.cbType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'重点企业\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${item.cbType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'重点企业\',\'http://192.168.1.146:8081/biaoqian/enterpriseBuilding.html?id=${v.id}&type=${item.cbType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1690,7 +1690,7 @@ export default {
             res.list.forEach((v,i)=>{
                 sessionStorage.setItem(`keyProjects${item.orgType}`,JSON.stringify({data:res.list}))
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'重点项目\',\'/src/assets/keyProjects.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'重点项目\',\'http://192.168.1.146:8081/biaoqian/keyProjects.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1709,7 +1709,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'/src/assets/servicePeople.html?id=${v.id}&type=${item.staffType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? servicePeoUrl1 : (item.staffType == 10 ? servicePeoUrl2 : (item.staffType == 2 ? servicePeoUrl3 : servicePeoUrl4))}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'http://192.168.1.146:8081/biaoqian/servicePeople.html?id=${v.id}&type=${item.staffType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? servicePeoUrl1 : (item.staffType == 10 ? servicePeoUrl2 : (item.staffType == 2 ? servicePeoUrl3 : servicePeoUrl4))}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
