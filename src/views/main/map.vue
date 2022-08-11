@@ -1317,7 +1317,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="release" onClick="hj2(${lng},${lat},\'刑满释放\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${releaseUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="release" onClick="hj2(${lng},${lat},\'刑满释放\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${releaseUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1334,7 +1334,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="neuropathy" onClick="hj2(${lng},${lat},\'精神障碍\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${neuropathyUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="neuropathy" onClick="hj2(${lng},${lat},\'精神障碍\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${neuropathyUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1351,7 +1351,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${drugDetoxificationUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${drugDetoxificationUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1368,7 +1368,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${correctUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${correctUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1385,7 +1385,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="control" onClick="hj2(${lng},${lat},\'稳控对象\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="control" onClick="hj2(${lng},${lat},\'稳控对象\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1404,7 +1404,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'/src/assets/parkLot.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${lotUrl}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'http://192.168.1.146:8081/biaoqian/parkLot.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${lotUrl}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1422,7 +1422,7 @@ export default {
           res.list.forEach((v,i)=>{
             // console.log(v)
             let {lng,lat} = randomAddress()
-            var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
+            var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://192.168.1.146:8081/biaoqian/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
           })
         }else{
@@ -1440,7 +1440,7 @@ export default {
             res.list.forEach((v,i)=>{
               // console.log(v)
               let {lng,lat} = randomAddress()
-              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${cbType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${cbType == 1 ? economyUr1  : economyUr2 }" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'http://192.168.1.146:8081/biaoqian/enterpriseBuilding.html?id=${v.id}&type=${cbType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${cbType == 1 ? economyUr1  : economyUr2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1457,7 +1457,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="keyProjects" onClick="hj2(${lng},${lat},\'重点项目\',\'/src/assets/keyProjects.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${keyProjectsUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="keyProjects" onClick="hj2(${lng},${lat},\'重点项目\',\'http://192.168.1.146:8081/biaoqian/keyProjects.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${keyProjectsUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
