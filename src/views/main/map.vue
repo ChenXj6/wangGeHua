@@ -162,12 +162,12 @@
                   <popup-tree-input
                     :data="popupTreeData"
                     :propa="popupTreeProps"
-                    :nodeKey="'' + searchBuildingForm.officeCode"
+                    :nodeKey="'' + searchBuildingForm.gridCode"
                     @update:dataForm="handleTreeSelectChange"
                   >
                     <template v-slot>
                       <el-input
-                        v-model="searchBuildingForm.officeName"
+                        v-model="searchBuildingForm.gridName"
                         size="mini"
                         :readonly="true"
                         placeholder="点击选择机构"
@@ -237,9 +237,9 @@
                     </el-option>
                   </el-select>
                 </template>
-                <template v-slot:source>
+                <template v-slot:dataSource>
                   <el-select
-                    v-model="searchEventForm.source"
+                    v-model="searchEventForm.dataSource"
                     size="mini"
                     clearable
                     placeholder="请选择事件来源"
@@ -656,6 +656,20 @@ import servicePeoUrl1 from "/src/assets/img/高龄老人.png"
 import servicePeoUrl2 from "/src/assets/img/独居老人.png"
 import servicePeoUrl3 from "/src/assets/img/失业人员.png"
 import servicePeoUrl4 from "/src/assets/img/残疾人.png"
+import lotUrl from "/src/assets/img/车位位置.png"
+import communalUrl from "/src/assets/img/摄像头.png"
+import communalUr2 from "/src/assets/img/道闸.png"
+import communalUr3 from "/src/assets/img/垃圾桶.png"
+import communalUr4 from "/src/assets/img/充电桩.png"
+import economyUr1 from "/src/assets/img/商务楼宇.png"
+import economyUr2 from "/src/assets/img/重点企业.png"
+import keyProjectsUr1 from "/src/assets/img/重点项目.png"
+import releaseUr1 from "/src/assets/img/刑满释放.png"
+import neuropathyUr1 from "/src/assets/img/精神障碍.png"
+import drugDetoxificationUr1 from "/src/assets/img/社区戒毒.png"
+import correctUr1 from "/src/assets/img/社会矫正.png"
+import controlUr1 from "/src/assets/img/稳控对象.png"
+
 
 //重点管理人员>>戒毒
 import { getDrugList } from '@/api/ManagementPersonnel/drugPer'
@@ -668,6 +682,9 @@ import { getReleaseList } from '@/api/ManagementPersonnel/releasePer'
 
 //重点管理人员>>社会矫正
 import { getRectifyList } from '@/api/ManagementPersonnel/rectifyStaff'
+
+//重点管理人员>>上访人员
+import { getPetitionList } from '@/api/ManagementPersonnel/petitionStaff'
 
 
 
@@ -700,8 +717,8 @@ export default {
     const { tableConfig:tableHotlineConfig,formConfig:formHotlineConfig } = renderHotlineTable.call(proxy);
     const { tableConfig:tableHiddenDangerConfig,formConfig:formHiddenDangerConfig } = renderHiddenDangerTable.call(proxy);
     const searchBuildingForm = reactive({
-      officeName: "",
-      officeCode: "",
+      gridName: "",
+      gridCode: "",
     });
 
     const searchHotlineForm = reactive({
@@ -784,8 +801,8 @@ export default {
     };
 
     const handleTreeSelectChange = ({ officeCode, officeName }) => {
-      searchBuildingForm.officeCode = officeCode;
-      searchBuildingForm.officeName = officeName;
+      searchBuildingForm.gridCode = officeCode;
+      searchBuildingForm.gridName = officeName;
     };
 
     //热线
@@ -810,28 +827,14 @@ export default {
     // 事件查询表格相關操作
     const handleEventQuery = () => {
       searchEventParams.value = deepClone(searchEventForm.value);
-       for (const key in searchEventParams.value) {
-        if (
-          Array.isArray(searchEventParams.value[key]) &&
-          searchEventParams.value[key].length > 0
-        ) {
-          searchEventParams.value[`${key}Start`] = formatterDate(
-            searchEventParams.value[key][0]
-          )
-          searchEventParams.value[`${key}End`] = formatterDate(
-            searchEventParams.value[key][1]
-          )
-          delete searchEventParams.value[key]
-        }
-      }
       tableEvent.currentPage = 1;
       handleQueryEventTable();
     };
     const handleEventReset = (formEL) => {
-      formEL.resetFields();
-      searchEventParams.value = {};
-      defaultObject(searchEventForm);
-      handleEventQuery();
+      formEL.resetFields()
+      defaultObject(searchEventForm.value)
+      searchEventParams.value = {}
+      handleEventQuery()
     };
 
 
@@ -1295,6 +1298,7 @@ export default {
       getPartyInfoList(orgType).then(res=>{
         if(res.list.length > 0){
           res.list.forEach((v,i)=>{
+            // console.log(v)
             let {lng,lat} = randomAddress()
             var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'http://192.168.1.146:8081/biaoqian/party.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
@@ -1305,6 +1309,165 @@ export default {
       },err=> proxy.$message.error(`${orgType == 1 ?'党工委' : (orgType == 2 ? '党直属组织' : '党支部')}数据请求错误！请稍后重试`) )
       return
     }
+
+        // 重点管理人员 >>> 刑满释放
+    const releaseClick = (item) => {
+      tagShow.value[item] = !tagShow.value[item]
+      getRelease().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="release" onClick="hj2(${lng},${lat},\'刑满释放\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${releaseUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(item,tagShow.value[item],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        }, err=> proxy.$message.error('刑满释放数据请求错误！请稍后重试') )
+        return
+    }
+
+        // 重点管理人员 >>> 精神障碍
+    const neuropathyClick = (item) => {
+      tagShow.value[item] = !tagShow.value[item]
+      getMental().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="neuropathy" onClick="hj2(${lng},${lat},\'精神障碍\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${neuropathyUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(item,tagShow.value[item],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        }, err=> proxy.$message.error('精神障碍数据请求错误！请稍后重试') )
+        return
+    }
+
+        // 重点管理人员 >>> 社区戒毒
+    const drugDetoxificationClick = (item) => {
+      tagShow.value[item] = !tagShow.value[item]
+      getDrug().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${drugDetoxificationUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(item,tagShow.value[item],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        }, err=> proxy.$message.error('社区戒毒数据请求错误！请稍后重试') )
+        return
+    }
+
+       // 重点管理人员 >>> 社会矫正
+    const correctClick = (item) => {
+      tagShow.value[item] = !tagShow.value[item]
+      getRectify().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${correctUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(item,tagShow.value[item],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        }, err=> proxy.$message.error('社会矫正数据请求错误！请稍后重试') )
+        return
+    }
+
+         // 重点管理人员 >>> 稳控对象
+    const controlClick = (item) => {
+      tagShow.value[item] = !tagShow.value[item]
+      getControl().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="control" onClick="hj2(${lng},${lat},\'稳控对象\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(item,tagShow.value[item],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        }, err=> proxy.$message.error('稳控对象数据请求错误！请稍后重试') )
+        return
+    }
+
+
+
+    // 智慧物业 >>> 车位位置
+    const lotClick = (item) => {
+      tagShow.value[item] = !tagShow.value[item]
+      getParkLot().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'/src/assets/parkLot.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${lotUrl}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(item,tagShow.value[item],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        }, err=> proxy.$message.error('车位信息数据请求错误！请稍后重试') )
+        return
+    }
+
+     // 智慧物业 >>> 摄像头,道闸,垃圾桶,充电桩
+    const communalFacilitiesClick = (deviceType,type) => {
+      tagShow.value[type] = !tagShow.value[type]
+      getCommunalFacilities(deviceType).then(res=>{
+        if(res.list.length > 0){
+          res.list.forEach((v,i)=>{
+            // console.log(v)
+            let {lng,lat} = randomAddress()
+            var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
+            tagClick(type,tagShow.value[type],{lng,lat,html})
+          })
+        }else{
+          proxy.$message.warning('暂无此类数据!')
+        }
+      },err=> proxy.$message.error(`${deviceType == 2 ?'摄像头' : deviceType == 3 ?'道闸' : (deviceType == 3 ? '垃圾桶' : '充电桩')}数据请求错误！请稍后重试`) )
+      return
+    }
+
+        // 经济运行 >>> 重点企业,商务楼宇
+    const economyClick = (cbType,type) => {
+      tagShow.value[type] = !tagShow.value[type]
+      getBuildingList(cbType).then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              // console.log(v)
+              let {lng,lat} = randomAddress()
+              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${cbType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${cbType == 1 ? economyUr1  : economyUr2 }" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(type,tagShow.value[type],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error(`${cbType == 1 ? '商务楼宇' : '重点企业'}数据请求错误！请稍后重试`) )
+        return
+    }
+
+    // 经济运行 >>> 重点项目
+    const keyProjectsClick = (item) => {
+      tagShow.value[item] = !tagShow.value[item]
+      getItemList().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+              var html = `<div id="keyProjects" onClick="hj2(${lng},${lat},\'重点项目\',\'/src/assets/keyProjects.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${keyProjectsUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(item,tagShow.value[item],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        }, err=> proxy.$message.error('重点项目数据请求错误！请稍后重试') )
+        return
+    }
+
+
     // 民生保障 >>> 服务机构
     const serviceClick = (orgType,type) => {
       
@@ -1411,8 +1574,9 @@ export default {
       //   return
       // } 
       else if (item.type == "building") {
-         var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(18988, 8830, html);
+        // vMap.lv('97',true)
+        //  var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        // vMap.showMapMark(18988, 8830, html);
         return;
       } else if (item.type == "location") {
         isOpenType.value = item.type
@@ -1442,94 +1606,31 @@ export default {
         }, 1000);
       } else if(item.type == "release"){
         isOpenType.value = item.type
-        handleClickOpen('')
-        const Url1 = "src/assets/img/刑满释放.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-         getRelease().then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-            sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'刑满释放人员\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('刑满释放人员数据请求错误！请稍后重试') )
-        return
+        handleClickOpen('')        
+        releaseClick(item.type)
       } else if(item.type == "neuropathy"){
         isOpenType.value = item.type
-        handleClickOpen('')
-        const Url1 = "src/assets/img/精神障碍.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-         console.log(tagShow.value[type])
-         getMental().then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-               sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-               var html = `<div id="serive" onClick="hj2(${lng},${lat},\'精神障碍人员\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('精神障碍人员数据请求错误！请稍后重试') )
-        return
-        // var html = '<div id="release" onClick="hj2(22736,5876,\'5公寓\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>5公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        // vMap.showMapMark(22736, 5876, html);
-        // return;
+        handleClickOpen('')        
+        neuropathyClick(item.type)
       } else if(item.type == "someDayEvent"){
          var html = '<div id="release" onClick="hj2(16600,9484,\'计算小楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>计算小楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         vMap.showMapMark(16600, 9484, html);
         return;
       } else if(item.type == "drugDetoxification"){
-         isOpenType.value = item.type
-        handleClickOpen('')
-        const Url1 = "src/assets/img/社区戒毒.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-         console.log(tagShow.value[type])
-         getDrug().then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-               sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒人员\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('戒毒人员数据请求错误！请稍后重试') )
-        return
+        isOpenType.value = item.type
+        handleClickOpen('')        
+        drugDetoxificationClick(item.type)
       } else if(item.type == "correct"){
-         isOpenType.value = item.type
-        handleClickOpen('')
-        const Url1 = "src/assets/img/社会矫正.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-         console.log(tagShow.value[type])
-         getRectify().then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`releaseIndex${item.staffType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正人员\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('社区矫正数据请求错误！请稍后重试') )
-        return
+        isOpenType.value = item.type
+        handleClickOpen('')   
+        correctClick(item.type)
       } else if(item.type == "control"){
-         var html = '<div id="release" onClick="hj2(21176,5124,\'北楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>北楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(21176, 5124, html);
-        return;
+        isOpenType.value = item.type
+        handleClickOpen('')   
+        controlClick(item.type)
+        //  var html = '<div id="release" onClick="hj2(21176,5124,\'北楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>北楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        // vMap.showMapMark(21176, 5124, html);
+        // return;
       } else if(item.type == "briefIntroduction"){
         isOpenType.value = item.type
         handleClickOpen('')
@@ -1549,155 +1650,39 @@ export default {
         return
       } else if (item.type == 'parkingLotPosition') {
         isOpenType.value = item.type
-        handleClickOpen('')
-        const Url1 = "src/assets/img/车位位置.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-        getParkLot().then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`parkLot${item.orgType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'http://192.168.1.146:8081/biaoqian/parkLot.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        }, err=> proxy.$message.error('车位信息数据请求错误！请稍后重试') )
-        return
+        handleClickOpen('')        
+        lotClick(item.type)
       } else if (item.type == 'cameraPosition') {
-          isOpenType.value = item.type
+        isOpenType.value = item.type
         handleClickOpen('')
-         const Url1 = "src/assets/img/摄像头.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-        getCommunalFacilities(item.deviceType).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-              let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'摄像头\',\'http://192.168.1.146:8081/biaoqian/smartProperty.html?id=${v.id}&type=${item.deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('摄像头数据请求错误！请稍后重试') )
-        return
+        communalFacilitiesClick(2,item.type)
+
       } else if (item.type == 'roadGatePosition') {
         isOpenType.value = item.type
         handleClickOpen('')
-        const Url1 = "src/assets/img/道闸.png"
-       let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-        getCommunalFacilities(item.deviceType).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'道闸\',\'http://192.168.1.146:8081/biaoqian/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('道闸数据请求错误！请稍后重试') )
-        return
+        communalFacilitiesClick(3,item.type)
       }else if (item.type == 'trashCanPosition') {
         isOpenType.value = item.type
         handleClickOpen('')
-        const Url1 = "src/assets/img/垃圾桶.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-       getCommunalFacilities(item.deviceType).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'垃圾桶\',\'http://192.168.1.146:8081/biaoqian/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('垃圾桶请求错误！请稍后重试') )
-        return
+        communalFacilitiesClick(4,item.type)
       } else if (item.type == 'chargingPilePosition') {
         isOpenType.value = item.type
         handleClickOpen('')
-         const Url1 = "src/assets/img/充电桩.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-        getCommunalFacilities(item.deviceType).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`releaseIndex${item.deviceType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'充电桩\',\'http://192.168.1.146:8081/biaoqian/smartProperty.html?id=${v.id}&type=${item.deviceType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('充电桩请求错误！请稍后重试') )
+        communalFacilitiesClick(5,item.type)
         return
       } else if (item.type == 'businessBuilding') {
         isOpenType.value = item.type
         handleClickOpen('')
-         const Url1 = "src/assets/img/商务楼宇.png"
-       let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-        getBuildingList(item.cbType).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`enterpriseBuilding${item.cbType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'商务楼宇\',\'http://192.168.1.146:8081/biaoqian/enterpriseBuilding.html?id=${v.id}&type=${item.cbType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('商务楼宇数据请求错误！请稍后重试') )
-        return
+        economyClick(1,item.type)
       }else if (item.type == 'keyEnterprises') {
         isOpenType.value = item.type
         handleClickOpen('')
-         const Url1 = "src/assets/img/重点企业.png"
-       let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-        getBuildingList(item.cbType).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`enterpriseBuilding${item.cbType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'重点企业\',\'http://192.168.1.146:8081/biaoqian/enterpriseBuilding.html?id=${v.id}&type=${item.cbType}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('重点企业数据请求错误！请稍后重试') )
+        economyClick(2,item.type)
         return
       }else if (item.type == 'keyProjects') {
-         isOpenType.value = item.type
-        handleClickOpen('')
-         const Url1 = "src/assets/img/重点项目.png"
-        let type = item.type
-         tagShow.value[type] = !tagShow.value[type]
-        getItemList(item.orgType).then(res=>{
-          if(res.list.length > 0){
-            res.list.forEach((v,i)=>{
-                sessionStorage.setItem(`keyProjects${item.orgType}`,JSON.stringify({data:res.list}))
-              let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'重点项目\',\'http://192.168.1.146:8081/biaoqian/keyProjects.html?id=${v.id}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${Url1}" style="width:50px;margin-bottom: 5px;"></div>`
-              tagClick(type,tagShow.value[type],{lng,lat,html})
-            })
-          }else{
-            proxy.$message.warning('暂无此类数据!')
-          }
-        },err=> proxy.$message.error('重点项目数据请求错误！请稍后重试') )
-        return
+        isOpenType.value = item.type
+        handleClickOpen('')        
+        keyProjectsClick(item.type)
       }else if (item.type == 'service') {
         isOpenType.value = item.type
         handleClickOpen('')
@@ -1982,6 +1967,19 @@ export default {
         const getRectify = () => {
        return new Promise((resolve,reject)=>{
         getRectifyList({pageNum:1,pageSize:9999}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+
+    //上访人员
+        const getControl = () => {
+       return new Promise((resolve,reject)=>{
+        getPetitionList({pageNum:1,pageSize:9999}).then(res=>{
           if(res.resCode == '000000'){
             resolve(res.data)
           }else{

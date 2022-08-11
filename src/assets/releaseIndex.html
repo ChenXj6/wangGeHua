@@ -22,6 +22,8 @@ params.split('&').forEach(v=>{
   let arr = v.split('=')
   paramsObj[arr[0]] = arr[1]
 })
+const data =  JSON.parse(decodeURIComponent(paramsObj.data))
+/*
 const { data } = JSON.parse(sessionStorage.getItem(`releaseIndex${paramsObj.type}`))
 
 let obj = {}
@@ -30,16 +32,17 @@ for(let i=0;i<data.length;i++){
     obj = data[i]
   }
 }
+*/
 let div = window.document.createElement('div')
 div.style.cssText = 'min-height:280px;position: relative;font-size:14px'
 // 
 div.innerHTML = `
-  <p><b>姓名：</b>${obj?.staffName}</p>  
-  <p><b>性别：</b>${obj?.gender == 0 ? '男' : '女'}</p>  
-  <p><b>联系方式：</b>${obj.contactPhone ? obj.contactPhone : '无'}</p>
-  <p><b>出生日期：</b>${obj?.birthDate}</p>
-  <p><b>家庭住址：</b>${obj?.villageName}${obj?.buildingNumber}${obj?.unitNumber}${obj.unitNumber ? '单元':''}${obj?.houseNumber}</p>
-  <p><b>隶属网格：</b>${obj?.countyName}${obj?.streetName}${obj?.communityName}${obj.officeName}</p>
+  <p><b>姓名：</b>${data?.staffName}</p>  
+  <p><b>性别：</b>${data?.gender == 0 ? '男' : '女'}</p>  
+  <p><b>联系方式：</b>${data.contactPhone ? data.contactPhone : '无'}</p>
+  <p><b>出生日期：</b>${data?.birthDate}</p>
+  <p><b>家庭住址：</b>${data?.villageName}${data?.buildingNumber}${data?.unitNumber}${data.unitNumber ? '单元':''}${data?.houseNumber}</p>
+  <p><b>隶属网格：</b>${data?.countyName}${data?.streetName}${data?.communityName}${data.officeName}</p>
   <p>&nbsp;</p>
 `
 event.appendChild(div)

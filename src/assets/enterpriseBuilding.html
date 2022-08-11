@@ -22,6 +22,8 @@ params.split('&').forEach(v=>{
   let arr = v.split('=')
   paramsObj[arr[0]] = arr[1]
 })
+const data =  JSON.parse(decodeURIComponent(paramsObj.data))
+/*
 const { data } = JSON.parse(sessionStorage.getItem(`enterpriseBuilding${paramsObj.type}`))
 
 let obj = {}
@@ -30,14 +32,15 @@ for(let i=0;i<data.length;i++){
     obj = data[i]
   }
 }
+*/
 let div = window.document.createElement('div')
 div.style.cssText = 'min-height:280px;position: relative;font-size:14px'
 // 
 div.innerHTML = `
-  <p><b>名称：</b>${obj?.cbName}</p>
-  <p><b>类型：</b>${obj?.cbType == 1 ? '商务楼宇' : '重点企业'}</p>  
-  <p><b>简介：</b>${obj?.synopsis}</p>
-  <p><b>隶属网格：</b>${obj?.treeNames}</p>
+  <p><b>名称：</b>${data?.cbName}</p>
+  <p><b>类型：</b>${data?.cbType == 1 ? '商务楼宇' : '重点企业'}</p>  
+  <p><b>简介：</b>${data?.synopsis}</p>
+  <p><b>隶属网格：</b>${data?.treeNames}</p>
   <p>&nbsp;</p>
 `
 event.appendChild(div)

@@ -14,7 +14,7 @@ export function renderTable() {
     columns: [
         { prop: '', label: '排序',toolTip:true, minWidth: '120' }, 
         { prop: '', label: '考核时间',toolTip:true, minWidth: '120' }, 
-        { prop: 'officeName', label: '考核组织',toolTip:true, minWidth: '120' },
+        // { prop: 'officeName', label: '考核组织',toolTip:true, minWidth: '120' },
         { prop: 'assessPer', label: '网格员',toolTip:true, minWidth: '120' },  
         { prop: 'score', label: '得分',toolTip:true, minWidth: '120' }, 
         { prop: 'fullMarks', label: '满分',toolTip:true, minWidth: '120' }, 
@@ -26,14 +26,23 @@ export function renderTable() {
         labelWidth:'130',
         formItems: [
             {
-                type: 'slot',
-                label: '组织结构',
-                prop: 'officeName',
-                value: '',
-                slotName:'status',
+                type: 'dateTime',
+                label: '时间',
+                prop: '',
+                value: [],
+                format: 'YYYY-MM-DD',
                 isClearable: true,
                 span: 6,
               },
+            // {
+            //     type: 'slot',
+            //     label: '组织结构',
+            //     prop: 'officeName',
+            //     value: '',
+            //     slotName:'status',
+            //     isClearable: true,
+            //     span: 6,
+            //   },
         ] 
     }
     return {

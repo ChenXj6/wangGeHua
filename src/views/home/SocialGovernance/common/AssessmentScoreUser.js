@@ -14,7 +14,7 @@ export function renderTable() {
     columns: [
         { prop: '', label: '开始时间',toolTip:true, minWidth: '120' },
         { prop: '', label: '结束时间',toolTip:true, minWidth: '120' },
-        { prop: 'officeName', label: '考核组织',toolTip:true, minWidth: '120' },
+        // { prop: 'officeName', label: '考核组织',toolTip:true, minWidth: '120' },
         { prop: 'assessType', label: '考核类型',toolTip:true, minWidth: '120' },
         { prop: 'maxSocre', label: '满分',toolTip:true, minWidth: '120' }, 
         { prop: 'score', label: '单项得分',toolTip:true, minWidth: '120' },
@@ -32,7 +32,7 @@ export function renderTable() {
                 label: '考核类型',
                 prop: 'assessType',
                 placeholder: '请选择考核类型',
-                // code:'1076',
+                code:'1089',
                 isClearable: true,
                 span: 4,
               },

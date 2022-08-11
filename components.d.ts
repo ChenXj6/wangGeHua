@@ -32,6 +32,7 @@ declare module 'vue' {
     ElSkeleton: typeof import('element-plus/es/el-skeleton')['default']
     ElSkeletonItem: typeof import('element-plus/es/el-skeleton-item')['default']
     ElSubmenu: typeof import('element-plus/es/el-submenu')['default']
+    ElSwitch: typeof import('element-plus/es/el-switch')['default']
     ElTable: typeof import('element-plus/es/el-table')['default']
     ElTableColumn: typeof import('element-plus/es/el-table-column')['default']
     ElTooltip: typeof import('element-plus/es/el-tooltip')['default']
