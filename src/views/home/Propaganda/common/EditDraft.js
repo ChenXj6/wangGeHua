@@ -83,13 +83,13 @@ export function renderTable() {
       //   span: 11,
       // },
       
-      // {
-      //   type: 'slot',
-      //   label: '图片上传',
-      //   prop: '',
-      //   span: 22,
-      //   slotName:'upload'
-      // },
+      {
+        type: 'slot',
+        label: '图片上传',
+        prop: '',
+        span: 22,
+        slotName:'upload'
+      },
       {
         type: 'slot',
         label: '内容',
