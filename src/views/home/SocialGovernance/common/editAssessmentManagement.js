@@ -40,9 +40,11 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'Input',
+                type: 'selectSearch',
                 label: '类型',
                 prop: 'assessType',
+                placeholder: '请选择考核类型',
+                code:'1089',
                 value: '',
                 span: 11,
               },
