@@ -10,6 +10,13 @@
       :table-config="tableConfig"
       @select-change="(val) => (multipleSelection = val)"
     >
+      <template v-slot:assessType="{ data }">
+        <span>{{
+          data.assessType == 1 ? "网格人物" : data.assessType == 2 ? "网格案例或典型做法": data.assessType == 3 ? "法律宣传" : data.assessType == 4
+            ? "党的路线方针政策宣传" : data.assessType == 5 ? "社会民意采集" : data.assessType == 6 ? "重点人群、特殊人群服务管理": data.assessType == 7
+            ? "网格化信息系统数据动态更新维护" : data.assessType == 8 ? "开展日常的网格巡查" : data.assessType == 9 ? "每周周报上报" : "每周业务工作例会"
+        }}</span>
+      </template>
       <template v-slot:operation="{ data }">
         <el-button
           size="small"
@@ -24,7 +31,7 @@
 </template>
 <script>
 import { reactive, ref } from "@vue/reactivity";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import {
   computed,
   defineComponent,
@@ -45,7 +52,10 @@ export default defineComponent({
     const searchForm = reactive({}); // 表单数据
     let searchParams = ref({}); // 表单数据备份
     const multipleSelection = ref([]); // 选中数据
-
+    const route = useRoute();
+    const assessPer = JSON.parse(
+      decodeURIComponent(route.query.data)
+    ).assessPer;
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm);
@@ -59,8 +69,8 @@ export default defineComponent({
       handleQuery();
     };
 
-
     const handleQueryTable = () => {
+      searchParams.value.assessPer = assessPer;
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || [];
         tableConfig.data = data;

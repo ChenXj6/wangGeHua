@@ -5,9 +5,10 @@ export function renderTable() {
         position:'right',
         formItems: [
             {
-                type: 'Input',
-                label: '考核类型',
+              type: 'selectSearch',
+                label: '类型',
                 prop: 'assessType',
+                code:'1089',
                 value: '',
                 disabled:true,
                 span: 11,
@@ -23,7 +24,7 @@ export function renderTable() {
               {
                 type: 'Input',
                 label: '开始时间',
-                prop: '',
+                prop: 'startTime',
                 value: '',
                 disabled:true,
                 span: 11,
@@ -31,7 +32,7 @@ export function renderTable() {
               {
                 type: 'Input',
                 label: '结束时间',
-                prop: '',
+                prop: 'endTime',
                 value: '',
                 disabled:true,
                 span: 11,
@@ -46,8 +47,8 @@ export function renderTable() {
               },
               {
                 type: 'Input',
-                label: '单项得分',
-                prop: 'score',
+                label: '实际得分',
+                prop: 'sjScoe',
                 value: '',
                 span: 11,
               },

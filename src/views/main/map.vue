@@ -745,7 +745,7 @@ export default {
     };
 
     
-    const handleHotlineOperation = () => {
+    const handleHotlineOperation = () => {  
        var html = '<div id="release" onClick="hj2(14328,8812,\'西区公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>西区公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
       vMap.showMapMark(14328, 8812, html);
       return;
@@ -807,10 +807,10 @@ export default {
       handleQueryEventTable();
     };
     const handleEventReset = (formEL) => {
-      formEL.resetFields()
-      defaultObject(searchEventForm.value)
-      searchEventParams.value = {}
-      handleEventQuery()
+      formEL.resetFields();
+      searchEventParams.value = {};
+      defaultObject(searchEventForm.value);
+      handleEventQuery();
     };
 
 
@@ -1056,10 +1056,22 @@ export default {
         if(v == tagNanme){
           if(!isShow){
             vMap.delAllMapMark(tagList.value[tagNanme]);
-            // console.log(1)
           }else{
             vMap.showMapMark(lng, lat, html,tagList.value[tagNanme]);
-            // console.log(2)
+          }
+        }
+      })
+    }
+
+
+
+    const floorTagClick = (tagNanme,isShow) => {
+      Object.keys(tagList.value).forEach(v=>{
+        if(v == tagNanme.type){
+          if(!isShow){
+            vMap.Iv('g7',false);
+          }else{
+            vMap.Iv('g7',true);
           }
         }
       })
@@ -1217,7 +1229,6 @@ export default {
       setTimeout(() => drawMyRoute3(), 1000);
 
       vMap.onMapClick((x0, y0, id, title, identitycode) => {
-        console.log(id)
         buildTime.value = new Date().getTime()
         gisid.value = id
         houseDialogVisible.value = true
@@ -1305,7 +1316,6 @@ export default {
       getPartyInfoList(orgType).then(res=>{
         if(res.list.length > 0){
           res.list.forEach((v,i)=>{
-            // console.log(v)
             let {lng,lat} = randomAddress()
             var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'http://192.168.1.146:8081/biaoqian/party.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
@@ -1427,7 +1437,6 @@ export default {
       getCommunalFacilities(deviceType).then(res=>{
         if(res.list.length > 0){
           res.list.forEach((v,i)=>{
-            // console.log(v)
             let {lng,lat} = randomAddress()
             var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://192.168.1.146:8081/biaoqian/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
@@ -1445,7 +1454,6 @@ export default {
       getBuildingList(cbType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
-              // console.log(v)
               let {lng,lat} = randomAddress()
               var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'http://192.168.1.146:8081/biaoqian/enterpriseBuilding.html?id=${v.id}&type=${cbType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${cbType == 1 ? economyUr1  : economyUr2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
@@ -1592,9 +1600,8 @@ export default {
       //   return
       // } 
       else if (item.type == "building") {
-        // vMap.lv('97',true)
-        //  var html = '<div id="release" onClick="hj2(18988,8830,\'明德楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>明德楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        // vMap.showMapMark(18988, 8830, html);
+        tagShow.value[item.type] = !tagShow.value[item.type]
+        floorTagClick(item,tagShow.value[item.type])
         return;
       } else if (item.type == "location") {
         isOpenType.value = item.type
@@ -1707,7 +1714,6 @@ export default {
         
         let type = item.type + item.staffType
         tagShow.value[type] = !tagShow.value[type]
-        // console.log(tagShow.value[type],type)
         getStaff(item.staffType).then(res=>{
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
