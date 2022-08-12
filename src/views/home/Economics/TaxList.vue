@@ -16,7 +16,7 @@
       :table-config="tableConfig"
     >
     <template v-slot:revenueName="{data}">
-      <el-link type="success" @click.prevent="handleOperation(2, data)">{{ data.revenueName }}</el-link>
+      <el-link type="success" @click.prevent="handleOperation(1, data)">{{ data.revenueName }}</el-link>
     </template>
     <template v-slot:revenueType="{data}">
       <span >{{revenueTypeOptions.filter(v=>v.value == data.revenueType)[0]?.label}}</span>

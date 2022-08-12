@@ -16,7 +16,7 @@
       :table-config="tableConfig"
     >
     <template v-slot:cbName="{data}">
-      <el-link type="success" @click.prevent="handleOperation(2, data)">{{ data.cbName }}</el-link>
+      <el-link type="success" @click.prevent="handleOperation(1, data)">{{ data.cbName }}</el-link>
     </template>
     <template v-slot:cbType="{data}">
       <span >{{cbTypeOptions.filter(v=>v.value == data.cbType)[0]?.label}}</span>
@@ -81,7 +81,7 @@ export default {
     const handleReset = (formEL) => {
       formEL.resetFields()
       searchParams.value = {}
-      defaultObject(searchForm)
+      defaultObject(searchForm.value)
       handleQuery()
     }
     const handleAdd = () => {
