@@ -49,6 +49,21 @@
           </el-option>
         </el-select>
       </template>
+      <template v-slot:upload="">
+        <el-upload
+              class="upload-demo"
+              action=""
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :auto-upload="false"
+              :file-list="fileList"
+              list-type="picture-card"
+              limit="1"
+              :on-change="(file,fileList) => changeFile(file,fileList)"
+            >
+              <i class="el-icon-lx-add"></i>
+            </el-upload>
+      </template>
       <template v-slot:content="">
         <div class="mgb20" ref='editor'></div>
       </template>
@@ -350,10 +365,8 @@ export default {
     }
     // 图片回显
     const resetFileList = () => {
-      // console.log(dataForm.value)
       if(dataForm.value.mediaPath == null ||  dataForm.value.mediaPath.length == 0 ) return
       let result = dataForm.value.mediaPath.indexOf(',')
-      // console.log(result,'////')
       if(result != '-1'){
         let certificatesArr = dataForm.value.mediaPath.split(',')
         let certificatesNameArr = dataForm.value.mediaName.split(',')
@@ -380,7 +393,7 @@ export default {
     onBeforeMount(()=>{
       timer.value = new Date().getTime()
     })
-    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)),resetFileList())
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
     if(route.query.operation != 3){
       handleChangelevel1()
       handleChangelevel2()
@@ -393,6 +406,8 @@ export default {
         route.query.operation == 1 && (instance.txt.html(dataForm.value.content),instance.disable(),resetFileList())
         route.query.operation == 2 && (instance.txt.html(dataForm.value.content),instance.enable(),resetFileList())
         route.query.operation === 3 &&( dataForm.value = {})
+      }else if(route.query.type != 'draft' && route.query.operation != 3){
+        resetFileList()
       }
       //
     })

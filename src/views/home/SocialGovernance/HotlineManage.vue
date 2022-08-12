@@ -339,14 +339,7 @@ export default defineComponent({
         return
       }else{
         exportHotline(multipleSelection.value).then(res=>{
-          if(res.resCode == '000000'){
-            console.log(res)
-            // proxy.$message.success('数据删除成功')
-            // handleQuery()
-          }else{
-            proxy.$message.error(res.message)
-            return
-          }
+          downLoadFile(res,'12345热线','application/vnd.ms-excel')
         })
       }
     }

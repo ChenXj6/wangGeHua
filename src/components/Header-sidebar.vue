@@ -45,10 +45,18 @@ export default {
           {
             title: "品牌打造",
             type:'brand',
+            showType:'',
+            level1:208,
+            level2:225,
+            level3:''
           },
           {
             title: "工作展示",
             type:'workShow',
+            showType:'media',
+            level1:208,
+            level2:229,
+            level3:''
           },
         ],
       },
@@ -117,19 +125,35 @@ export default {
           },
           {
             title: "政策法规",
-            type:'policy'
+            type:'policy',
+            showType:'',
+            level1:207,
+            level2:213,
+            level3:''
           },
           {
             title: "办事流程",
             type:'process',
+            showType:'',
+            level1:207,
+            level2:214,
+            level3:''
           },
           {
             title: "邻里互动",
             type:'neighborhood',
+            showType:'media',
+            level1:207,
+            level2:215,
+            level3:''
           },
           {
             title: "工作展示",
             type:'liveworkshow',
+            showType:'media',
+            level1:207,
+            level2:216,
+            level3:''
           },
         ],
       },
@@ -160,11 +184,11 @@ export default {
           { title: "隐患记录",type:'hiddenDanger' },
            {
             title: "应急管理",
-            children: [{ title: "疫情防控",type:'pandemic' }, { title: "法律法规",type:'law' }, { title: "企业管理",type:'business' }, { title: "风险评估",type:'risk' }],
+            children: [{ title: "疫情防控",type:'pandemic',showType:'',level1:210, level2:230,level3:231 }, { title: "法律法规",showType:'',type:'law',level1:210, level2:230,level3:232 }, { title: "企业管理",showType:'',type:'business',level1:210, level2:230,level3:233 }, { title: "风险评估",showType:'',type:'risk',level1:210, level2:230,level3:234 }],
           },
            {
             title: "培训宣传",
-            children: [{ title: "应急演练",type:'drill' }, { title: "应急培训",type:'training' }, { title: "案例警告",type:'casewarning' }],
+            children: [{ title: "应急演练",showType:'media',type:'drill',level1:210, level2:235,level3:236 }, { title: "应急培训",showType:'media',type:'training',level1:210, level2:235,level3:237 }, { title: "案例警告",showType:'media',type:'casewarning',level1:210, level2:235,level3:238 }],
           },
         ],
       },
@@ -198,7 +222,11 @@ export default {
           },
           {
             title: "工作成果",
-            type:"workResults"
+            type:"workResults",
+            showType:'media',
+            level1:211, 
+            level2:239,
+            level3:'',
           },
         ]
       },
@@ -222,7 +250,7 @@ export default {
           },
            {
             title: "招商政策",
-            children: [{ title: "专业综合市场",type:'integratedMarket' }, { title: "楼宇经济",type:'buildingEconomy' }],
+            children: [{ title: "专业综合市场",showType:'',type:'integratedMarket',level1:212, level2:240,level3:241 }, { title: "楼宇经济",showType:'',type:'buildingEconomy',level1:212, level2:240,level3:242 }],
           },
         ]
       },
