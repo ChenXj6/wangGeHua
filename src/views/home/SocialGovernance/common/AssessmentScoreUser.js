@@ -17,7 +17,7 @@ export function renderTable() {
         // { prop: 'officeName', label: '考核组织',toolTip:true, minWidth: '120' },
         { prop: 'assessType', type:'code', label: '考核类型',code:'1089', minWidth: '120' },
         { prop: 'maxSocre', label: '满分',toolTip:true, minWidth: '120' }, 
-        { prop: 'score', label: '单项得分',toolTip:true, minWidth: '120' },
+        // { prop: 'score', label: '单项得分',toolTip:true, minWidth: '120' },
         { prop: 'sjScoe', label: '实际得分',toolTip:true, minWidth: '120' }, 
         { prop: '', label: '操作', slot: 'operation', minWidth: '120' }, 
     ]

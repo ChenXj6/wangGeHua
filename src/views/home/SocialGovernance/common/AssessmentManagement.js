@@ -14,9 +14,9 @@ export function renderTable() {
     columns: [
         { prop: 'titleName', label: '标题名称',toolTip:true, minWidth: '120' }, 
         { prop: 'assessName', label: '考核名称',toolTip:true, minWidth: '120' }, 
-        { prop: 'assessDetail', label: '考核细则',toolTip:true, minWidth: '120' },  
+        // { prop: 'assessDetail', label: '考核细则',toolTip:true, minWidth: '120' },  
         { prop: 'fullMarks', label: '满分',toolTip:true, minWidth: '120' }, 
-        { prop: 'num', label: '次数',toolTip:true, minWidth: '120' }, 
+        // { prop: 'num', label: '次数',toolTip:true, minWidth: '120' }, 
         { type:'code',prop: 'assessType', label: '类型',code:'1089',minWidth: '120' }, 
         { prop: 'remarks', label: '备注',toolTip:true, minWidth: '120' }, 
         { prop: 'status', label: '状态',slot:'status',toolTip:true, minWidth: '120' }, 

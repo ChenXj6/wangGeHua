@@ -18,13 +18,13 @@ export function renderTable() {
                 value: '',
                 span: 11,
               },
-              {
-                type: 'Input',
-                label: '单项考核',
-                prop: 'assessDetail',
-                value: '',
-                span: 11,
-              },  
+              // {
+              //   type: 'Input',
+              //   label: '单项考核',
+              //   prop: 'assessDetail',
+              //   value: '',
+              //   span: 11,
+              // },  
               {
                 type: 'Input',
                 label: '满分',
@@ -32,13 +32,13 @@ export function renderTable() {
                 value: '',
                 span: 11,
               },
-              {
-                type: 'Input',
-                label: '次数',
-                prop: 'num',
-                value: '',
-                span: 11,
-              },
+              // {
+              //   type: 'Input',
+              //   label: '次数',
+              //   prop: 'num',
+              //   value: '',
+              //   span: 11,
+              // },
               {
                 type: 'selectSearch',
                 label: '类型',

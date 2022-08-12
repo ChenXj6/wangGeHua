@@ -12,8 +12,8 @@ export function renderTable() {
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
-        { prop: '', label: '排序',toolTip:true, minWidth: '120' }, 
-        { prop: '', label: '考核时间',toolTip:true, minWidth: '120' }, 
+        // { prop: '', label: '排序',toolTip:true, minWidth: '120' }, 
+        { prop: 'createDate', label: '考核时间',toolTip:true, minWidth: '120' }, 
         // { prop: 'officeName', label: '考核组织',toolTip:true, minWidth: '120' },
         { prop: 'assessPer', label: '网格员',toolTip:true, minWidth: '120' },  
         { prop: 'score', label: '得分',toolTip:true, minWidth: '120' }, 
@@ -28,7 +28,7 @@ export function renderTable() {
             {
                 type: 'dateTime',
                 label: '时间',
-                prop: '',
+                prop: 'createDate',
                 value: [],
                 format: 'YYYY-MM-DD',
                 isClearable: true,
