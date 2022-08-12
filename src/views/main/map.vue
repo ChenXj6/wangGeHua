@@ -78,31 +78,6 @@
                 </el-carousel-item>
               </el-carousel>
             </template>
-            <template v-else-if="isOpenType == 'brand'">
-              <el-carousel
-                :interval="5000"
-                arrow="never"
-                v-if="brandList.length"
-                indicator-position="outside"
-                style="width: 100%;height:100%"
-              >
-                <el-carousel-item
-                  :span="24"
-                  v-for="(item, index) in brandList"
-                  :key="index"
-                >
-                  <h1 style="text-align: center">{{ item.title }}</h1>
-                  <div
-                    style="overflow: scroll; height: 400px; margin-top: 20px"
-                  >
-                    <div
-                      v-html="item.content"
-                      style="margin-bottom: 100px"
-                    ></div>
-                  </div>
-                </el-carousel-item>
-              </el-carousel>
-            </template>
             <template v-else-if="isOpenType == 'workShow' || isOpenType == 'liveworkshow' || isOpenType =='workResults' || isOpenType == 'drill' || isOpenType == 'training' || isOpenType == 'casewarning'">
               <!-- {{ workShowList }} -->
               <el-carousel
@@ -383,7 +358,7 @@
               </el-carousel>
            </template> -->
            <!-- policy、process、neighborhood -->
-           <template v-else-if="isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood' || isOpenType == 'pandemic'  || isOpenType == 'law'  || isOpenType == 'business'  || isOpenType == 'risk' || isOpenType == 'integratedMarket' || isOpenType == 'buildingEconomy'">
+           <template v-else-if="isOpenType == 'brand' || isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood' || isOpenType == 'pandemic'  || isOpenType == 'law'  || isOpenType == 'business'  || isOpenType == 'risk' || isOpenType == 'integratedMarket' || isOpenType == 'buildingEconomy'">
              <el-row style="width:100%" gutter="20">
                <el-col :span="5">
                  <div class="policy_left_top"><img src="http://123.233.250.69:9090/tqqgridManage/static/img/nc/msbz/tb.png" alt=""> <h2>{{ show }}</h2></div>
@@ -595,6 +570,7 @@ import {
   toRefs,
   watch,
   computed,
+  nextTick,
 } from "@vue/runtime-core";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { useStore } from "vuex";
@@ -1274,11 +1250,19 @@ export default {
         }${obj?.gridName}${obj.eventPlace ?? ""}`
       );
     };
+    // 民生保障 >>> 政策法规右侧点击事件
+    const policyItem = ref({})
+    const handleSelect = (item) => {
+      policyItem.value = item
+    }
+    // showType:'media',
     // 数字党建 >>> 品牌打造模块
     const show = ref('');
     const brandList = ref([])
-    const getDraftList = (level1,level2) => {
-      getDraft({ pageNum: 1, pageSize: 999,level1,level2 }).then(res => {
+    const getDraftList = (level1,level2,level3) => {
+      brandList.value = []
+      policyItem.value = {}
+      getDraft({ pageNum: 1, pageSize: 999,level1,level2,level3 }).then(res => {
         if (res.resCode == '000000') {
           let arr = []
           res.data.list.forEach(v => {
@@ -1289,6 +1273,29 @@ export default {
         }
       })
     }
+    // 民生保障 >>> 工作展示请求接口
+    const getmediaList = (level1,level2,level3) => {
+      return new Promise((resolve,reject)=>{
+        getMedia({pageNum:1,pageSize:9999,level1,level2,level3}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+    // 获取后台宣传管理列表，根据Header-sidebar中的showType来区分文稿与多媒体
+    const getList = (type,level1,level2,level3)=>{
+      if(type == 'media'){
+        return getmediaList(level1,level2,level3)
+      }else{
+        getDraftList(level1,level2,level3)
+      }
+    }
+    watch(()=>brandList.value,(data)=>{
+      data.length && handleSelect(data[0])
+    })
     // 数字党建 >>> 工作展示模块
     const workShowList = ref([])    
     // 数字党建弹窗控制模块
@@ -1310,7 +1317,7 @@ export default {
         if(res.list.length > 0){
           res.list.forEach((v,i)=>{
             let {lng,lat} = randomAddress()
-            var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\','/src/assets/party.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
+            var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.infoName}\',\'http://192.168.1.146:8081/biaoqian/party.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? party1Url : (orgType == 2 ? party2Url : party3Url)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
           })
         }else{
@@ -1327,7 +1334,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="release" onClick="hj2(${lng},${lat},\'刑满释放\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${releaseUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="release" onClick="hj2(${lng},${lat},\'刑满释放\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${releaseUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1344,7 +1351,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="neuropathy" onClick="hj2(${lng},${lat},\'精神障碍\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${neuropathyUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="neuropathy" onClick="hj2(${lng},${lat},\'精神障碍\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${neuropathyUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1361,7 +1368,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${drugDetoxificationUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="drugDetoxification" onClick="hj2(${lng},${lat},\'社区戒毒\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${drugDetoxificationUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1378,7 +1385,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${correctUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="correct" onClick="hj2(${lng},${lat},\'社会矫正\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${correctUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1395,7 +1402,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="control" onClick="hj2(${lng},${lat},\'稳控对象\',\'/src/assets/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="control" onClick="hj2(${lng},${lat},\'稳控对象\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1414,7 +1421,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'/src/assets/parkLot.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${lotUrl}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="parkingLotPosition" onClick="hj2(${lng},${lat},\'车位位置\',\'http://192.168.1.146:8081/biaoqian/parkLot.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${lotUrl}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1431,7 +1438,7 @@ export default {
         if(res.list.length > 0){
           res.list.forEach((v,i)=>{
             let {lng,lat} = randomAddress()
-            var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
+            var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://192.168.1.146:8081/biaoqian/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
             tagClick(type,tagShow.value[type],{lng,lat,html})
           })
         }else{
@@ -1448,7 +1455,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'/src/assets/enterpriseBuilding.html?id=${v.id}&type=${cbType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${cbType == 1 ? economyUr1  : economyUr2 }" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="businessBuilding" onClick="hj2(${lng},${lat},\'${v.cbName}\',\'http://192.168.1.146:8081/biaoqian/enterpriseBuilding.html?id=${v.id}&type=${cbType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${cbType == 1 ? economyUr1  : economyUr2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1465,7 +1472,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="keyProjects" onClick="hj2(${lng},${lat},\'重点项目\',\'/src/assets/keyProjects.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${keyProjectsUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="keyProjects" onClick="hj2(${lng},${lat},\'重点项目\',\'http://192.168.1.146:8081/biaoqian/keyProjects.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${keyProjectsUr1}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(item,tagShow.value[item],{lng,lat,html})
             })
           }else{
@@ -1484,7 +1491,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'/src/assets/service.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.orgName}\',\'http://192.168.1.146:8081/biaoqian/service.html?id=${v.id}&type=${orgType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${orgType == 1 ? serviceUrl1  : serviceUrl2 }" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1501,7 +1508,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'/src/assets/meet.html?id=${v.id}&type=${type1}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? meetUrl1 : (type1 == 3 ? meetUrl2 : meetUrl3)}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.suppliesName}\',\'http://192.168.1.146:8081/biaoqian/meet.html?id=${v.id}&type=${type1}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${type1 == 2 ? meetUrl1 : (type1 == 3 ? meetUrl2 : meetUrl3)}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1518,7 +1525,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/smoke.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? smokeUrl1 : smokeUrl2}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="party" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://192.168.1.146:8081/biaoqian/smoke.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}',)" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 1 ? smokeUrl1 : smokeUrl2}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1526,7 +1533,7 @@ export default {
           }
         },err=> proxy.$message.error(`${deviceType == 1 ? '烟感' : '一键'}报警器数据请求错误！请稍后重试`) )
     }
-    const handleClick = (item) => {
+    const handleClick = async (item)  => {
       handleClickOpen('')
       if (item.type == 'party') {
         isOpenType.value = item.type
@@ -1548,7 +1555,7 @@ export default {
         show.value = item.title;
         isOpenType.value = item.type
       } else if (item.type == 'brand') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
@@ -1556,22 +1563,33 @@ export default {
       } else if (item.type == 'workShow') {
         isOpenType.value = item.type
         show.value = item.title;
-        handleClickOpen('isOpen')
+        handleClickOpen('')
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
+          if(res.list.length > 0){
+            workShowList.value = res.list
+            handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )        
+        return
       }else if (item.type == 'workResults') {
         isOpenType.value = item.type
         show.value = item.title;
-        handleClickOpen('isOpen')
-        // getmediaList().then(res=>{
-        //   if(res.list.length > 0){
-        //     workShowList.value = res.list
-        //     handleClickOpen('isOpen')
-        //   }
-        // },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
-        // return
+        handleClickOpen('')
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
+          if(res.list.length > 0){
+            workShowList.value = res.list
+            handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )        
+        return
       }
       // else if (item.type == "building") {
       //   handleClickOpen('')
-      //   getmediaList().then(res=>{
+      //   getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
       //     if(res.list.length > 0){
       //       workShowList.value = res.list
       //       handleClickOpen('isOpen')
@@ -1700,7 +1718,7 @@ export default {
           if(res.list.length > 0){
             res.list.forEach((v,i)=>{
               let {lng,lat} = randomAddress()
-              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'/src/assets/servicePeople.html?id=${v.id}&type=${item.staffType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? servicePeoUrl1 : (item.staffType == 10 ? servicePeoUrl2 : (item.staffType == 2 ? servicePeoUrl3 : servicePeoUrl4))}" style="width:50px;margin-bottom: 5px;"></div>`
+              var html = `<div id="serive" onClick="hj2(${lng},${lat},\'重点服务人员\',\'http://192.168.1.146:8081/biaoqian/servicePeople.html?id=${v.id}&type=${item.staffType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${item.staffType == 3 ? servicePeoUrl1 : (item.staffType == 10 ? servicePeoUrl2 : (item.staffType == 2 ? servicePeoUrl3 : servicePeoUrl4))}" style="width:50px;margin-bottom: 5px;"></div>`
               tagClick(type,tagShow.value[type],{lng,lat,html})
             })
           }else{
@@ -1709,40 +1727,38 @@ export default {
         },err=> proxy.$message.error('重点服务人员数据请求错误！请稍后重试') )
         return
       } else if (item.type == 'policy') {
-        getDraftList(207,213)
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[0])
-        },10)
         return
       } else if (item.type == 'process') {
-        getDraftList(207,214)
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
+        // setTimeout(()=>{
+        //   console.log(brandList.value,'222')
+        //   brandList.value.length && handleSelect(brandList.value[0])
+        // },100)
+        nextTick(()=>{
           brandList.value.length && handleSelect(brandList.value[0])
-        },10)
+        })
         return
       } else if (item.type == 'neighborhood') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[0])
-        },10)
         return
       } else if (item.type == 'liveworkshow') {
         isOpenType.value = item.type
         show.value = item.title;
         handleClickOpen('')
-        getmediaList().then(res=>{
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
@@ -1799,71 +1815,53 @@ export default {
           handleHiddenDangerQuery();
         }, 1000);
       } else if (item.type == 'pandemic') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'law') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'business') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'risk') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'integratedMarket') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'buildingEconomy') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       }
       else if (item.type == 'drill') {
         isOpenType.value = item.type
         show.value = item.title;
         handleClickOpen('')
-        getmediaList().then(res=>{
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
@@ -1876,7 +1874,7 @@ export default {
         isOpenType.value = item.type
         show.value = item.title;
         handleClickOpen('')
-        getmediaList().then(res=>{
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
@@ -1889,7 +1887,7 @@ export default {
         isOpenType.value = item.type
         show.value = item.title;
         handleClickOpen('')
-        getmediaList().then(res=>{
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
@@ -2045,23 +2043,8 @@ export default {
         })
       })
     }
-    // 民生保障 >>> 政策法规右侧点击事件
-    const policyItem = ref({})
-    const handleSelect = (item) => {
-      policyItem.value = item
-    }
-    // 民生保障 >>> 工作展示请求接口
-    const getmediaList = () => {
-      return new Promise((resolve,reject)=>{
-        getMedia({pageNum:1,pageSize:9999}).then(res=>{
-          if(res.resCode == '000000'){
-            resolve(res.data)
-          }else{
-            reject('false')
-          }
-        })
-      })
-    }
+    
+
     // 应急指挥 >>> 应急物资
     const getSuppList = (type1) => {
       return new Promise((resolve,reject)=>{

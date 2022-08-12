@@ -174,6 +174,9 @@ export default defineComponent({
       form.value.validate((valid)=>{
         if(valid){
           delete reviewForm.value.treeNames
+          delete reviewForm.value.levelName1
+          delete reviewForm.value.levelName2
+          delete reviewForm.value.levelName3
           reviewForm.value.reviewerUser = JSON.parse(sessionStorage.getItem('user')).user.operatorName
           updateDraft(reviewForm.value).then(res=>{
             if(res.resCode == '000000'){
