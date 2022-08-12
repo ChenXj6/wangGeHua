@@ -78,31 +78,6 @@
                 </el-carousel-item>
               </el-carousel>
             </template>
-            <template v-else-if="isOpenType == 'brand'">
-              <el-carousel
-                :interval="5000"
-                arrow="never"
-                v-if="brandList.length"
-                indicator-position="outside"
-                style="width: 100%;height:100%"
-              >
-                <el-carousel-item
-                  :span="24"
-                  v-for="(item, index) in brandList"
-                  :key="index"
-                >
-                  <h1 style="text-align: center">{{ item.title }}</h1>
-                  <div
-                    style="overflow: scroll; height: 400px; margin-top: 20px"
-                  >
-                    <div
-                      v-html="item.content"
-                      style="margin-bottom: 100px"
-                    ></div>
-                  </div>
-                </el-carousel-item>
-              </el-carousel>
-            </template>
             <template v-else-if="isOpenType == 'workShow' || isOpenType == 'liveworkshow' || isOpenType =='workResults' || isOpenType == 'drill' || isOpenType == 'training' || isOpenType == 'casewarning'">
               <!-- {{ workShowList }} -->
               <el-carousel
@@ -383,7 +358,7 @@
               </el-carousel>
            </template> -->
            <!-- policy、process、neighborhood -->
-           <template v-else-if="isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood' || isOpenType == 'pandemic'  || isOpenType == 'law'  || isOpenType == 'business'  || isOpenType == 'risk' || isOpenType == 'integratedMarket' || isOpenType == 'buildingEconomy'">
+           <template v-else-if="isOpenType == 'brand' || isOpenType == 'policy' || isOpenType == 'process' || isOpenType == 'neighborhood' || isOpenType == 'pandemic'  || isOpenType == 'law'  || isOpenType == 'business'  || isOpenType == 'risk' || isOpenType == 'integratedMarket' || isOpenType == 'buildingEconomy'">
              <el-row style="width:100%" gutter="20">
                <el-col :span="5">
                  <div class="policy_left_top"><img src="http://123.233.250.69:9090/tqqgridManage/static/img/nc/msbz/tb.png" alt=""> <h2>{{ show }}</h2></div>
@@ -595,6 +570,7 @@ import {
   toRefs,
   watch,
   computed,
+  nextTick,
 } from "@vue/runtime-core";
 import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { useStore } from "vuex";
@@ -1263,11 +1239,19 @@ export default {
         }${obj?.gridName}${obj.eventPlace ?? ""}`
       );
     };
+    // 民生保障 >>> 政策法规右侧点击事件
+    const policyItem = ref({})
+    const handleSelect = (item) => {
+      policyItem.value = item
+    }
+    // showType:'media',
     // 数字党建 >>> 品牌打造模块
     const show = ref('');
     const brandList = ref([])
-    const getDraftList = (level1,level2) => {
-      getDraft({ pageNum: 1, pageSize: 999,level1,level2 }).then(res => {
+    const getDraftList = (level1,level2,level3) => {
+      brandList.value = []
+      policyItem.value = {}
+      getDraft({ pageNum: 1, pageSize: 999,level1,level2,level3 }).then(res => {
         if (res.resCode == '000000') {
           let arr = []
           res.data.list.forEach(v => {
@@ -1278,6 +1262,29 @@ export default {
         }
       })
     }
+    // 民生保障 >>> 工作展示请求接口
+    const getmediaList = (level1,level2,level3) => {
+      return new Promise((resolve,reject)=>{
+        getMedia({pageNum:1,pageSize:9999,level1,level2,level3}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+    // 获取后台宣传管理列表，根据Header-sidebar中的showType来区分文稿与多媒体
+    const getList = (type,level1,level2,level3)=>{
+      if(type == 'media'){
+        return getmediaList(level1,level2,level3)
+      }else{
+        getDraftList(level1,level2,level3)
+      }
+    }
+    watch(()=>brandList.value,(data)=>{
+      data.length && handleSelect(data[0])
+    })
     // 数字党建 >>> 工作展示模块
     const workShowList = ref([])    
     // 数字党建弹窗控制模块
@@ -1518,7 +1525,7 @@ export default {
           }
         },err=> proxy.$message.error(`${deviceType == 1 ? '烟感' : '一键'}报警器数据请求错误！请稍后重试`) )
     }
-    const handleClick = (item) => {
+    const handleClick = async (item)  => {
       handleClickOpen('')
       if (item.type == 'party') {
         isOpenType.value = item.type
@@ -1540,7 +1547,7 @@ export default {
         show.value = item.title;
         isOpenType.value = item.type
       } else if (item.type == 'brand') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
@@ -1548,22 +1555,33 @@ export default {
       } else if (item.type == 'workShow') {
         isOpenType.value = item.type
         show.value = item.title;
-        handleClickOpen('isOpen')
+        handleClickOpen('')
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
+          if(res.list.length > 0){
+            workShowList.value = res.list
+            handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )        
+        return
       }else if (item.type == 'workResults') {
         isOpenType.value = item.type
         show.value = item.title;
-        handleClickOpen('isOpen')
-        // getmediaList().then(res=>{
-        //   if(res.list.length > 0){
-        //     workShowList.value = res.list
-        //     handleClickOpen('isOpen')
-        //   }
-        // },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
-        // return
+        handleClickOpen('')
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
+          if(res.list.length > 0){
+            workShowList.value = res.list
+            handleClickOpen('isOpen')
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )        
+        return
       }
       // else if (item.type == "building") {
       //   handleClickOpen('')
-      //   getmediaList().then(res=>{
+      //   getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
       //     if(res.list.length > 0){
       //       workShowList.value = res.list
       //       handleClickOpen('isOpen')
@@ -1703,40 +1721,38 @@ export default {
         },err=> proxy.$message.error('重点服务人员数据请求错误！请稍后重试') )
         return
       } else if (item.type == 'policy') {
-        getDraftList(207,213)
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[0])
-        },10)
         return
       } else if (item.type == 'process') {
-        getDraftList(207,214)
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
+        // setTimeout(()=>{
+        //   console.log(brandList.value,'222')
+        //   brandList.value.length && handleSelect(brandList.value[0])
+        // },100)
+        nextTick(()=>{
           brandList.value.length && handleSelect(brandList.value[0])
-        },10)
+        })
         return
       } else if (item.type == 'neighborhood') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[0])
-        },10)
         return
       } else if (item.type == 'liveworkshow') {
         isOpenType.value = item.type
         show.value = item.title;
         handleClickOpen('')
-        getmediaList().then(res=>{
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
@@ -1793,71 +1809,53 @@ export default {
           handleHiddenDangerQuery();
         }, 1000);
       } else if (item.type == 'pandemic') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'law') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'business') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'risk') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'integratedMarket') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       } else if (item.type == 'buildingEconomy') {
-        getDraftList()
+        getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(()=>{
-          brandList.value.length && handleSelect(brandList.value[1])
-        },10)
         return
       }
       else if (item.type == 'drill') {
         isOpenType.value = item.type
         show.value = item.title;
         handleClickOpen('')
-        getmediaList().then(res=>{
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
@@ -1870,7 +1868,7 @@ export default {
         isOpenType.value = item.type
         show.value = item.title;
         handleClickOpen('')
-        getmediaList().then(res=>{
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
@@ -1883,7 +1881,7 @@ export default {
         isOpenType.value = item.type
         show.value = item.title;
         handleClickOpen('')
-        getmediaList().then(res=>{
+        getList(item.showType,item.level1,item.level2,item.level3).then(res=>{
           if(res.list.length > 0){
             workShowList.value = res.list
             handleClickOpen('isOpen')
@@ -2039,23 +2037,8 @@ export default {
         })
       })
     }
-    // 民生保障 >>> 政策法规右侧点击事件
-    const policyItem = ref({})
-    const handleSelect = (item) => {
-      policyItem.value = item
-    }
-    // 民生保障 >>> 工作展示请求接口
-    const getmediaList = () => {
-      return new Promise((resolve,reject)=>{
-        getMedia({pageNum:1,pageSize:9999}).then(res=>{
-          if(res.resCode == '000000'){
-            resolve(res.data)
-          }else{
-            reject('false')
-          }
-        })
-      })
-    }
+    
+
     // 应急指挥 >>> 应急物资
     const getSuppList = (type1) => {
       return new Promise((resolve,reject)=>{
