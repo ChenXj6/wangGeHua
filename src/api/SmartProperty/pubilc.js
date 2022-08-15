@@ -3,7 +3,7 @@ import service from '@/utils/request';
 // 添加
 export const savePubilc = query => {
   return service.post(
-    `/real/realInfo/smart/commdevice/insert`, query
+    `/api/realInfo/smart/commdevice/insert`, query
   )
 };
 
@@ -11,20 +11,20 @@ export const savePubilc = query => {
 // 编辑
 export const editPubilc = query => {
   return service.post(
-    `/real/realInfo/smart/commdevice/update`, query
+    `/api/realInfo/smart/commdevice/update`, query
   )
 };
 
 // 删除
 export const deletePubilc = query => {
   return service.post(
-    `/real/realInfo/smart/commdevice/delete`, query
+    `/api/realInfo/smart/commdevice/delete`, query
   )
 };
 
 // 获取列表
 export const getPubilcList = query => {
   return service.post(
-    `/real/realInfo/smart/commdevice/select`, query
+    `/api/realInfo/smart/commdevice/select`, query
   )
 };

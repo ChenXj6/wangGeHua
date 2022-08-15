@@ -17,7 +17,7 @@
       @select-change="(val) => (multipleSelection = val)"
     >
     <template v-slot:name="{data}">
-        <el-link size="mini" type="primary" @click.prevent="handleOperation(2, data)">{{ data.pointName }}</el-link>
+        <el-link size="mini" type="primary" @click.prevent="handleOperation(1, data)">{{ data.pointName }}</el-link>
       </template>
       <template v-slot:pointType="{data}">
         <span>{{ data.pointType == 1 ? '可回收物' : (data.pointType == 2 ? '有害垃圾' : (data.pointType == 3 ? '厨余垃圾' : '其他垃圾')) }}</span>

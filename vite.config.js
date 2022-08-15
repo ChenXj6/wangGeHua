@@ -62,11 +62,11 @@ export default defineConfig(({ command, mode }) => {
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
         },
-        '/real': {
-          target: env.VITE_BASE_API2,
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/real/, '')
-        },
+        // '/real': {
+        //   target: env.VITE_BASE_API2,
+        //   changeOrigin: true,
+        //   rewrite: (path) => path.replace(/^\/real/, '')
+        // },
         '/weather':{
           target:'https://devapi.qweather.com/v7/weather/now',
           changeOrigin: true,

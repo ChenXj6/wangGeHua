@@ -17,7 +17,7 @@
       @select-change="(val) => (multipleSelection = val)"
     >
     <template v-slot:name="{data}">
-        <el-link size="mini" type="primary" @click.prevent="handleOperation(2, data)">{{ data.deviceName }}</el-link>
+        <el-link size="mini" type="primary" @click.prevent="handleOperation(1, data)">{{ data.deviceName }}</el-link>
       </template>
       <template v-slot:deviceType="{data}">
         <span>{{ data.deviceType == 1 ? '车位' : (data.deviceType == 2 ? '摄像头' : (data.deviceType == 3 ? '道闸' : (data.deviceType == 4 ? '垃圾桶' : '充电桩'))) }}</span>

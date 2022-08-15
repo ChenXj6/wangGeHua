@@ -90,10 +90,10 @@ export default {
               // { title: "人员查询",type:'personnelQuery' },
             ],
           },
-          // {
-          //   title: "雪亮工程",
-          //   children: [{ title: "监控定位" }, { title: "监控查询" }],
-          // },
+          {
+            title: "雪亮工程",
+            children: [{ title: "监控定位",type:'monitorLocation',deviceType:'2' }, { title: "监控查询",type:'searchMonitor' }],
+          },
           // {
           //   title: "出入口",
           // },
@@ -173,9 +173,6 @@ export default {
             title: "消防栓",
             type:'fireHydrant',
           },
-          { title: "摄像头",
-            type: 'camera',
-          },
           {
             title: "烟雾报警器",
             children: [{ title: "设备定位",type:'smokeDetector' }, { title: "报警记录",type:'smokeRecord' }],
@@ -199,11 +196,6 @@ export default {
           {
             title: "车位位置",
             type:'parkingLotPosition',
-          },
-           {
-            title: "摄像头位置",
-            type:'cameraPosition',
-            deviceType:'2'
           },
            {
             title: "道闸位置",
