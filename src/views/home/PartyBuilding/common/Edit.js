@@ -242,6 +242,13 @@ export function renderTable() {
         span: 22,
       },
       {
+        type: 'slot',
+        label: '图片上传',
+        prop: '',
+        span: 24,
+        slotName:'upload'
+      },
+      {
         type: 'textarea',
         label: '备注',
         prop: 'remarks',

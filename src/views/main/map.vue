@@ -63,7 +63,7 @@
                 >
                   <el-col :span="6" class="vanguard">
                     <img
-                      src="https://img0.baidu.com/it/u=640038218,836613496&fm=253&fmt=auto&app=138&f=JPEG?w=460&h=620"
+                      :src="url + item.photo"
                     />
                   </el-col>
                   <p>姓名：{{ item.memberName }}</p>
@@ -1014,9 +1014,9 @@ export default {
       underParty:'02',
       partyBranch:'03',
       building:'04',
-      location:'05',
+      // location:'05',
       someDayEvent:'06',
-      eventQuery:'07',
+      // eventQuery:'07',
       release:'08',
       neuropathy:'09',
       drugDetoxification:'10',
@@ -1031,13 +1031,12 @@ export default {
       supplies:'19',
       site:'20',
       fireHydrant:'21',
-      // camera:'22',
       smokeDetector:'23',
-      smokeRecord:'24',
+      // smokeRecord:'24',
       alarm:'25',
       hiddenDanger:'26',
       parkingLotPosition:'27',
-      cameraPosition:'28',
+      monitorLocation:'28',
       roadGatePosition:'29',
       trashCanPosition:'30',
       chargingPilePosition:'31',
@@ -1182,7 +1181,7 @@ export default {
     };
     let searchParams = ref({});
     const getPartyList = () => {
-      PartyPeopleList({ pageNum: 1, pageSize: 99 }).then((res) => {
+      PartyPeopleList({ pageNum: 1, pageSize: 99,pioneerFlag:'1' }).then((res) => {
         searchParams.value = res.data;
       });
     };
@@ -1653,9 +1652,13 @@ export default {
         isOpenType.value = item.type
         handleClickOpen('')   
         controlClick(item.type)
-        //  var html = '<div id="release" onClick="hj2(21176,5124,\'北楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>北楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        // vMap.showMapMark(21176, 5124, html);
-        // return;
+      } else if(item.type == "monitorLocation"){
+        isOpenType.value = item.type
+        handleClickOpen('')
+        communalFacilitiesClick(2,item.type)
+      } else if(item.type == "searchMonitor"){
+        isOpenType.value = item.type
+        handleClickOpen('')
       } else if(item.type == "briefIntroduction"){
         isOpenType.value = item.type
         handleClickOpen('')
@@ -1677,11 +1680,6 @@ export default {
         isOpenType.value = item.type
         handleClickOpen('')        
         lotClick(item.type)
-      } else if (item.type == 'cameraPosition') {
-        isOpenType.value = item.type
-        handleClickOpen('')
-        communalFacilitiesClick(2,item.type)
-
       } else if (item.type == 'roadGatePosition') {
         isOpenType.value = item.type
         handleClickOpen('')
@@ -1779,13 +1777,6 @@ export default {
         isOpenType.value = item.type
         handleClickOpen('')
         meetClick(4,item.type)
-        return
-      } else if (item.type == 'camera') {
-        isOpenType.value = item.type
-        handleClickOpen('')
-        let {lng,lat} = randomAddress()
-        var html = `<div id="party" onClick="hj2(${lng},${lat},\'村头超市监控\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>村头超市监控</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>`
-        vMap.showMapMark(lng, lat, html);
         return
       } else if (item.type == 'smokeDetector') {
         isOpenType.value = item.type
