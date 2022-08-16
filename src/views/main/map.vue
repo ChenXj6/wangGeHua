@@ -112,6 +112,9 @@
                 </el-carousel-item>
               </el-carousel>
             </template>
+            <template v-else-if="isOpenType == 'searchMonitor'">
+             
+            </template>
            <template v-else-if="isOpenType == 'briefIntroduction'">
                <h1 style="text-align: center">{{ show }}</h1>
              <template
@@ -161,8 +164,8 @@
                 <template v-slot:houseType="{ data }">
                   <span>{{ houseType(Number(data.houseType)) }}</span>
                 </template>
-                <template v-slot:operation="{}">
-                  <el-button type="primary" size="mini" @click="handleOperation"
+                <template v-slot:operation="{data}">
+                  <el-button type="primary" size="mini" @click="handleLocationOperation(data)"
                     >定位</el-button
                   >
                 </template>
@@ -270,8 +273,8 @@
                     )[0]?.label
                   }}</span>
                 </template>
-                <template v-slot:operation="{}">
-                  <el-button type="primary" size="mini" @click="handleEventOperation"
+                <template v-slot:operation="{data}">
+                  <el-button type="primary" size="mini" @click="handleEventOperation(data)"
                     >定位</el-button
                   >
                 </template>
@@ -590,6 +593,7 @@ import { renderTable as renderHotlineTable} from '@/views/home/SocialGovernance/
 import { renderTable as renderHiddenDangerTable } from '@/views/home/UrgentNeed/common/HiddenDanger'
 import { getBuildList } from "@/api/ActualInfo/build";
 import { getDetailList } from "@/api/ResidentsReport/index";
+import { getRecordList } from "@/api/ResidentsReport/index";
 import { getOrganList } from "@/api/sys/organ";
 // 数字党建
 import { PartyList } from '@/api/PartyBuilding/partyInfo'
@@ -731,18 +735,7 @@ export default {
         }
       };
     });
-
-    const handleOperation = () => {
-      var html = '<div id="release" onClick="hj2(18512,7420,\'1公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>1公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-      vMap.showMapMark(18512, 7420, html);
-      return;
-    };
     
-    const handleEventOperation = () => {
-      var html = '<div id="release" onClick="hj2(17088,9828,\'3公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>3公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-      vMap.showMapMark(17088, 9828, html);
-      return;
-    };
 
     
     const handleHotlineOperation = () => {  
@@ -807,9 +800,10 @@ export default {
       handleQueryEventTable();
     };
     const handleEventReset = (formEL) => {
-      formEL.resetFields();
-      searchEventParams.value = {};
-      defaultObject(searchEventForm.value);
+      formEL.resetFields()
+      searchEventForm.value = {};
+      searchEventForm.value.operatorId =JSON.parse(sessionStorage.getItem('user')).user.operatorId,
+      // defaultObject(searchEventForm.value)
       handleEventQuery();
     };
 
@@ -1110,7 +1104,7 @@ export default {
     };
     // 随机获取x，y值
     const randomAddress = () => {
-      let sum = Math.round(Math.random() * 3);
+      let sum = Math.round(Math.random() * 8);
       let arr = [
         { lng: "18624", lat: "8178" },
         { lng: "14440", lat: "5260" },
@@ -1412,6 +1406,89 @@ export default {
     }
 
 
+        const getsameDayList = () => {
+        const happenTime=proxy.$moment(new Date().getTime()).format('YYYY-MM-DD')
+       return new Promise((resolve,reject)=>{
+        getDetailList({pageNum:1,pageSize:9999,happenTime}).then(res=>{
+          if(res.resCode == '000000'){
+            resolve(res.data)
+          }else{
+            reject('false')
+          }
+        })
+      })
+    }
+
+    // 网格政务 >>> 当日事件
+    const sameDayClick = (item) => {
+      tagShow.value[item] = !tagShow.value[item]
+      getsameDayList().then(res=>{
+          if(res.list.length > 0){
+            res.list.forEach((v,i)=>{
+              let {lng,lat} = randomAddress()
+               var html = `<div id="control" onClick="hj2(${lng},${lat},\'当天事件\',\'http://192.168.1.146:8081/biaoqian/sameDay.html?id=${v.id}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+              tagClick(item,tagShow.value[item],{lng,lat,html})
+            })
+          }else{
+            proxy.$message.warning('暂无此类数据!')
+          }
+        }, err=> proxy.$message.error('当日事件数据请求错误！请稍后重试') )
+        return
+    }
+
+
+
+    // 网格政务 >>> 定位查询
+    /*
+    const locationClick = (item,data) => {
+      let {lng,lat} = randomAddress()
+      console.log(333333333333)
+      var html = `<div id="control" onClick="hj2(${lng},${lat},\'000\',\'\http://192.168.1.146:8081/biaoqian/sameDay.html?id=${data.id}&data=${encodeURIComponent(JSON.stringify(data))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+      // var html = `<div id="control" onClick="hj2(${lng},${lat},\'稳控对象\',\'http://192.168.1.146:8081/biaoqian/releaseIndex.html?id=${data.id}&data=${encodeURIComponent(JSON.stringify(data))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+
+      vMap.showMapMark(lng, lat, html);
+    }
+
+    const handleLocationOperation = (data) => {
+      handleClickOpen('')
+      locationClick(isOpenType.value,data)
+    };
+*/
+
+
+
+// 网格政务 >>> 定位查询
+    const locationClick = (item,data) => {
+      let {lng,lat} = randomAddress()
+      var html = `<div id="control" onClick="hj2(${lng},${lat},\'定位查询\',\'http://192.168.1.146:8081/biaoqian/location.html?id=${data.id}&data=${encodeURIComponent(JSON.stringify(data))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+      vMap.showMapMark(lng, lat, html);
+    }
+
+    const handleLocationOperation = (data) => {
+      handleClickOpen('')
+      locationClick(isOpenType.value,data)
+    };
+
+    // 网格政务 >>> 事件查询
+      const eventClick = (item,data) => {
+      let {lng,lat} = randomAddress()
+      var html = `<div id="control" onClick="hj2(${lng},${lat},\'事件查询\',\'\http://192.168.1.146:8081/biaoqian/eventHandling.html?id=${data.id}&data=${encodeURIComponent(JSON.stringify(data))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+      vMap.showMapMark(lng, lat, html);
+    }
+
+      const handleEventOperation = (data) => {
+      handleClickOpen('')
+      eventClick(isOpenType.value,data)
+     
+    };
+
+
+    const handleOperation = () => {
+
+    };
+
+
+
 
     // 智慧物业 >>> 车位位置
     const lotClick = (item) => {
@@ -1437,7 +1514,11 @@ export default {
         if(res.list.length > 0){
           res.list.forEach((v,i)=>{
             let {lng,lat} = randomAddress()
-            var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://192.168.1.146:8081/biaoqian/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
+            if(type=="monitorLocation"){
+              var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'/src/assets/video.html',\'800\',\'600\')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${communalUrl}" style="width:50px;margin-bottom: 5px;"></div>`
+            }else{
+              var html = `<div id="communal" onClick="hj2(${lng},${lat},\'${v.deviceName}\',\'http://192.168.1.146:8081/biaoqian/communal.html?id=${v.id}&type=${deviceType}&data=${encodeURIComponent(JSON.stringify(v))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${deviceType == 2 ? communalUrl : deviceType == 3 ? communalUr2 : (deviceType == 4 ? communalUr3 : communalUr4)}" style="width:50px;margin-bottom: 5px;"></div>`
+            }
             tagClick(type,tagShow.value[type],{lng,lat,html})
           })
         }else{
@@ -1637,9 +1718,12 @@ export default {
         handleClickOpen('')        
         neuropathyClick(item.type)
       } else if(item.type == "someDayEvent"){
-         var html = '<div id="release" onClick="hj2(16600,9484,\'计算小楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>计算小楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
-        vMap.showMapMark(16600, 9484, html);
-        return;
+        isOpenType.value = item.type
+        handleClickOpen('')   
+        sameDayClick(item.type)
+        //  var html = '<div id="release" onClick="hj2(16600,9484,\'计算小楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>计算小楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
+        // vMap.showMapMark(16600, 9484, html);
+        // return;
       } else if(item.type == "drugDetoxification"){
         isOpenType.value = item.type
         handleClickOpen('')        
@@ -1659,6 +1743,7 @@ export default {
       } else if(item.type == "searchMonitor"){
         isOpenType.value = item.type
         handleClickOpen('')
+        handleClickOpen('isOpen')
       } else if(item.type == "briefIntroduction"){
         isOpenType.value = item.type
         handleClickOpen('')
@@ -2195,6 +2280,7 @@ export default {
       buildTime,
       houseDialogVisible,
       handleCloseBuild,
+      handleLocationOperation,
       // 
     }
   }
