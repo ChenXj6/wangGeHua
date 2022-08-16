@@ -350,6 +350,25 @@ const routes = [
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/ServicePersonnel/Edit.vue")
       },
       {
+        path: "/RoastSuggestion",
+        name: "RoastSuggestion",
+        meta: {
+          title: '吐槽建议'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/RoastSuggestion/RoastSuggestion.vue")
+      },
+      {
+        path: "/editRoastSuggestion",
+        name: "editRoastSuggestion",
+        meta: {
+          title: '吐槽建议',
+          getTitle: function(route) {
+            return `${route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' )}吐槽建议`
+          },
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/RoastSuggestion/editRoastSuggestion.vue")
+      },
+      {
         path: "/DrugPer",
         name: "DrugPer",
         meta: {
