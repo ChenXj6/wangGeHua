@@ -1110,7 +1110,7 @@ export default {
     };
     // 随机获取x，y值
     const randomAddress = () => {
-      let sum = Math.round(Math.random() * 3);
+      let sum = Math.round(Math.random() * 8);
       let arr = [
         { lng: "18624", lat: "8178" },
         { lng: "14440", lat: "5260" },

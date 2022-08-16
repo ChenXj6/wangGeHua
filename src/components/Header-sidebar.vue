@@ -142,7 +142,7 @@ export default {
           {
             title: "邻里互动",
             type:'neighborhood',
-            showType:'media',
+            showType:'',
             level1:207,
             level2:215,
             level3:''
