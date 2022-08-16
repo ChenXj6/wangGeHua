@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <base th:href="${basePath}">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>HTML5播放视频</title>
+    <script src="./hls.js" charset="utf-8"></script>
+</head>
+<body onload="play('http\:\/\/36.152.250.158:83/EUrl/hZr1fXO/live.m3u8')">
+
+<div class="player_container">
+    <video id="video" class="player" muted autoplay loop style="width:800px; height:600px">
+        浏览器不支持 video 标签。
+    </video>
+</div>
+
+
+<script>
+function play(url) {
+	if (Hls.isSupported()) {
+    
+		let hls = new Hls();
+		let video = document.getElementById('video');
+    
+		hls.loadSource(url);
+		hls.attachMedia(video);
+    
+		hls.on(Hls.Events.MANIFEST_PARSED, function () {
+			video.play();
+		})
+    
+		hls.on(Hls.Events.ERROR, function () {
+		})
+	}
+}
+</script>		
+</body>
+</html>
