@@ -8,12 +8,6 @@
           </div>
           <p>{{ item.deviceName }}</p>
         </div>
-        <div class="item" v-for="(item) in videoList" :title="item.deviceName" :class="findElem(checkMultipleSelection, 'id', item.id) > -1? 'active' : ''" :key="item.id" @click="handleCheck(item)">
-          <div>
-            <img src="@/assets/img/videolive.png" alt="">
-          </div>
-          <p>{{ item.deviceName }}</p>
-        </div>
       </div>
       <div class="btnBox">
         <span >已选中:{{ checkMultipleSelection.length }}个</span>
