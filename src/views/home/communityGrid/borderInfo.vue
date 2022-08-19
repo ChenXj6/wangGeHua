@@ -4,9 +4,9 @@
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange" style="width:100%">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -18,15 +18,13 @@
     >
       <template v-slot:operation="{data}">
         <el-button
-          size="small"
           @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
+          :icon="Search"
           circle
           type="success"
         />
         <el-button
-          size="small"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           @click="handleOperation(2, data)"
           circle
           type="priamry"
@@ -34,8 +32,7 @@
         <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              :icon="Delete"
               circle
               type="danger"
             />
@@ -47,6 +44,11 @@
 </template>
 <script>
 import { reactive, ref } from '@vue/reactivity'
+import {
+  Delete,
+  Edit,
+  Search,
+} from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import {
   computed,
@@ -163,6 +165,9 @@ export default defineComponent({
       handleTreeSelectChange,
       popupTreeProps,
       popupTreeData,
+      Delete,
+      Edit,
+      Search,
     }
   },
 })

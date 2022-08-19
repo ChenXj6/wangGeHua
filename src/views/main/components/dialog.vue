@@ -123,7 +123,7 @@
                     <template v-slot>
                       <el-input
                         v-model="searchBuildingForm.officeName"
-                        size="mini"
+                        size="small"
                         :readonly="true"
                         placeholder="点击选择机构"
                         style="cursor: pointer"
@@ -159,7 +159,7 @@
                 <template v-slot:approvalStatus>
                   <el-select
                     v-model="searchEventForm.approvalStatus"
-                    size="mini"
+                    size="small"
                     clearable
                     placeholder="请选择事件状态"
                   >
@@ -175,7 +175,7 @@
                 <template v-slot:eventFirstType>
                   <el-select
                     v-model="searchEventForm.eventFirstType"
-                    size="mini"
+                    size="small"
                     clearable
                     placeholder="请选择事件类型"
                   >
@@ -191,7 +191,7 @@
                 <template v-slot:source>
                   <el-select
                     v-model="searchEventForm.source"
-                    size="mini"
+                    size="small"
                     clearable
                     placeholder="请选择事件来源"
                   >
@@ -271,7 +271,7 @@
                     <template v-slot>
                       <el-input
                         v-model="searchHotlineForm.officeName"
-                        size="mini"
+                        size="small"
                         :readonly="true"
                         placeholder="点击选择机构"
                         style="cursor: pointer"

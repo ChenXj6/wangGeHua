@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -18,9 +18,9 @@
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange" style="width:100%">
             <template v-slot>
-              <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -28,13 +28,13 @@
         <el-row>
           <el-col :span="24" class="menu-header">
             <span><B>网格力量</B></span>
-            <span><el-button v-if="route.query.operation == 3" type="primary" size="mini" @click="addList">添加行</el-button></span>
+            <span><el-button v-if="route.query.operation == 3" type="primary" size="small" @click="addList">添加行</el-button></span>
           </el-col>
           <el-col :span="24">
             <el-form ref="form" :disabled="route.query.operation == 1" :model="dataForm" label-width="80px">
               <el-table
                 :data="dataForm.info"
-                size="mini"
+                size="small"
                 style="width: 100%">
                 <el-table-column
                   prop="prop"
@@ -65,7 +65,7 @@
                   prop="prop"
                   label="姓名" >
                   <template #default="scope">
-                    <el-input v-model="scope.row.name" size="mini" placeholder=""></el-input>
+                    <el-input v-model="scope.row.name" size="small" placeholder=""></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -74,7 +74,7 @@
                   prop="prop"
                   label="身份证号" >
                   <template #default="scope">
-                    <el-input v-model="scope.row.idcard" size="mini" placeholder=""></el-input>
+                    <el-input v-model="scope.row.idcard" size="small" placeholder=""></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -83,7 +83,7 @@
                   prop="prop"
                   label="电话" >
                   <template #default="scope">
-                    <el-input v-model="scope.row.phone" size="mini" placeholder=""></el-input>
+                    <el-input v-model="scope.row.phone" size="small" placeholder=""></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -92,7 +92,7 @@
                   prop="prop"
                   label="职位" >
                   <template #default="scope">
-                    <el-input v-model="scope.row.position" size="mini" placeholder=""></el-input>
+                    <el-input v-model="scope.row.position" size="small" placeholder=""></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -143,7 +143,7 @@
                   prop="prop"
                   label="政治面貌">
                   <template #default="scope">
-                    <el-input v-model="scope.row.politicsstatus" size="mini" placeholder=""></el-input>
+                    <el-input v-model="scope.row.politicsstatus" size="small" placeholder=""></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column v-if="route.query.operation == 3 " label="操作" min-width="30">
@@ -152,7 +152,7 @@
                       <template #reference>
                         <el-button
                           size="small"
-                          icon="el-icon-lx-delete"
+                          icon="delete"
                           circle
                           type="danger"
                         />
@@ -173,7 +173,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -365,8 +365,8 @@ export default {
       span:22,
       textAlign: 'right',
       btns: [
-        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
-        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+        {type:'primary',label:'确认',key:'sub',icon:'CircleCheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'ArrowLeft',handle:handleBack},
       ]
     }
     onBeforeMount(()=>{

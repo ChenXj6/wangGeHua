@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : (route.query.operation == 2 ? '编辑' : '添加') }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -15,35 +15,35 @@
       :isDisabled="route.query.operation == 1" :form-model="dataForm"
       :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
-        <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
+        <el-select v-model="dataForm.streetCode" size="small" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
           <el-option v-for="item in streetNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:communityCode>
-        <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区"
+        <el-select v-model="dataForm.communityCode" size="small" clearable placeholder="请选择社区"
           @change="(val) => { handleChange(2, val, true) }">
           <el-option v-for="item in communityNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:officeCode>
-        <el-select v-model="dataForm.officeCode" size="mini" clearable placeholder="请选择网格"
+        <el-select v-model="dataForm.officeCode" size="small" clearable placeholder="请选择网格"
           @change="(val) => { handleChange(3, val, true), handleGetBuild(1, val, true) }">
           <el-option v-for="item in gridNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:buildingId>
-        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋"
+        <el-select v-model="dataForm.buildingId" size="small" clearable placeholder="请选择楼栋"
           @change="(val) => { handleGetBuild(2, val, true), handleGetHouse(1, val, true) }">
           <el-option v-for="item in buildingOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:house>
-        <el-select v-model="dataForm.houseId" size="mini" clearable placeholder="请选择房屋"
+        <el-select v-model="dataForm.houseId" size="small" clearable placeholder="请选择房屋"
           @change="(val) => { handleGetHouse(2, val, true) }">
           <el-option v-for="item in houseOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -54,35 +54,35 @@
       :isDisabled="route.query.operation == 1" :form-model="dataForm"
       :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
-        <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
+        <el-select v-model="dataForm.streetCode" size="small" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
           <el-option v-for="item in streetNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:communityCode>
-        <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区"
+        <el-select v-model="dataForm.communityCode" size="small" clearable placeholder="请选择社区"
           @change="(val) => { handleChange(2, val, true) }">
           <el-option v-for="item in communityNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:officeCode>
-        <el-select v-model="dataForm.officeCode" size="mini" clearable placeholder="请选择网格"
+        <el-select v-model="dataForm.officeCode" size="small" clearable placeholder="请选择网格"
           @change="(val) => { handleChange(3, val, true), handleGetBuild(1, val, true) }">
           <el-option v-for="item in gridNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:buildingId>
-        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋"
+        <el-select v-model="dataForm.buildingId" size="small" clearable placeholder="请选择楼栋"
           @change="(val) => { handleGetBuild(2, val, true), handleGetHouse(1, val, true) }">
           <el-option v-for="item in buildingOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:house>
-        <el-select v-model="dataForm.houseId" size="mini" clearable placeholder="请选择房屋"
+        <el-select v-model="dataForm.houseId" size="small" clearable placeholder="请选择房屋"
           @change="(val) => { handleGetHouse(2, val, true) }">
           <el-option v-for="item in houseOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -93,35 +93,35 @@
       :isDisabled="route.query.operation == 1" :form-model="dataForm"
       :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
-        <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
+        <el-select v-model="dataForm.streetCode" size="small" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
           <el-option v-for="item in streetNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:communityCode>
-        <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区"
+        <el-select v-model="dataForm.communityCode" size="small" clearable placeholder="请选择社区"
           @change="(val) => { handleChange(2, val, true) }">
           <el-option v-for="item in communityNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:officeCode>
-        <el-select v-model="dataForm.officeCode" size="mini" clearable placeholder="请选择网格"
+        <el-select v-model="dataForm.officeCode" size="small" clearable placeholder="请选择网格"
           @change="(val) => { handleChange(3, val, true), handleGetBuild(1, val, true) }">
           <el-option v-for="item in gridNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:buildingId>
-        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋"
+        <el-select v-model="dataForm.buildingId" size="small" clearable placeholder="请选择楼栋"
           @change="(val) => { handleGetBuild(2, val, true), handleGetHouse(1, val, true) }">
           <el-option v-for="item in buildingOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:house>
-        <el-select v-model="dataForm.houseId" size="mini" clearable placeholder="请选择房屋"
+        <el-select v-model="dataForm.houseId" size="small" clearable placeholder="请选择房屋"
           @change="(val) => { handleGetHouse(2, val, true) }">
           <el-option v-for="item in houseOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -132,35 +132,35 @@
       :isDisabled="route.query.operation == 1" :form-model="dataForm"
       :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
-        <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
+        <el-select v-model="dataForm.streetCode" size="small" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
           <el-option v-for="item in streetNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:communityCode>
-        <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区"
+        <el-select v-model="dataForm.communityCode" size="small" clearable placeholder="请选择社区"
           @change="(val) => { handleChange(2, val, true) }">
           <el-option v-for="item in communityNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:officeCode>
-        <el-select v-model="dataForm.officeCode" size="mini" clearable placeholder="请选择网格"
+        <el-select v-model="dataForm.officeCode" size="small" clearable placeholder="请选择网格"
           @change="(val) => { handleChange(3, val, true), handleGetBuild(1, val, true) }">
           <el-option v-for="item in gridNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:buildingId>
-        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋"
+        <el-select v-model="dataForm.buildingId" size="small" clearable placeholder="请选择楼栋"
           @change="(val) => { handleGetBuild(2, val, true), handleGetHouse(1, val, true) }">
           <el-option v-for="item in buildingOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:house>
-        <el-select v-model="dataForm.houseId" size="mini" clearable placeholder="请选择房屋"
+        <el-select v-model="dataForm.houseId" size="small" clearable placeholder="请选择房屋"
           @change="(val) => { handleGetHouse(2, val, true) }">
           <el-option v-for="item in houseOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -171,35 +171,35 @@
       :isDisabled="route.query.operation == 1" :form-model="dataForm"
       :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree>
-        <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道"
+        <el-select v-model="dataForm.streetCode" size="small" clearable placeholder="请选择街道"
           @change="(val) => { handleChange(1, val, true) }">
           <el-option v-for="item in streetNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:communityCode>
-        <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区"
+        <el-select v-model="dataForm.communityCode" size="small" clearable placeholder="请选择社区"
           @change="(val) => { handleChange(2, val, true) }">
           <el-option v-for="item in communityNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:officeCode>
-        <el-select v-model="dataForm.officeCode" size="mini" clearable placeholder="请选择网格"
+        <el-select v-model="dataForm.officeCode" size="small" clearable placeholder="请选择网格"
           @change="(val) => { handleChange(3, val, true), handleGetBuild(1, val, true) }">
           <el-option v-for="item in gridNameOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:buildingId>
-        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋"
+        <el-select v-model="dataForm.buildingId" size="small" clearable placeholder="请选择楼栋"
           @change="(val) => { handleGetBuild(2, val, true), handleGetHouse(1, val, true) }">
           <el-option v-for="item in buildingOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
         </el-select>
       </template>
       <template v-slot:house>
-        <el-select v-model="dataForm.houseId" size="mini" clearable placeholder="请选择房屋"
+        <el-select v-model="dataForm.houseId" size="small" clearable placeholder="请选择房屋"
           @change="(val) => { handleGetHouse(2, val, true) }">
           <el-option v-for="item in houseOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -208,12 +208,12 @@
     </VForm>
     <el-row v-if="route.query.operation == 1">
       <div class="btn-box">
-        <el-button type="primary" @click="handleBack"  textAlign="right" size="small" icon="el-icon-lx-back">返回</el-button>
+        <el-button type="primary" @click="handleBack"  textAlign="right" size="small" icon="back">返回</el-button>
       </div>
     </el-row>
     <!-- <el-row v-if="route.query.operation == 2">
       <div class="btn-box">
-        <el-button type="primary" @click="Examine" size="small" icon="el-icon-lx-back">审核</el-button>
+        <el-button type="primary" @click="Examine" size="small" icon="back">审核</el-button>
       </div>
     </el-row> -->
     <!-- 地图弹窗 -->
@@ -535,8 +535,8 @@ export default {
       span: 22,
       textAlign: 'right',
       btns: [
-        { type: 'primary', label: '确认', key: 'sub', icon: 'el-icon-lx-roundcheck', handle: handleSubmit },
-        { type: 'primary', label: '返回', key: 'back', icon: 'el-icon-lx-back', handle: handleBack },
+        { type: 'primary', label: '确认', key: 'sub', icon: 'CircleCheck', handle: handleSubmit },
+        { type: 'primary', label: '返回', key: 'back', icon: 'ArrowLeft', handle: handleBack },
       ]
     }
     // 表格相關操作5

@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i>
+                    <i class="cascades"></i>
                     {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
                 </el-breadcrumb-item>
             </el-breadcrumb>
@@ -23,7 +23,7 @@
           <template v-slot>
             <el-input
               v-model="dataForm.officeName"
-              size="mini"
+              size="small"
               :readonly="true"
               placeholder="点击选择机构"
               style="cursor: pointer"
@@ -34,7 +34,7 @@
         </VForm>
         <el-row v-if="route.query.operation == 1">
             <div class="btn-box">
-                <el-button type="primary" @click="handleBack" size="small" icon="el-icon-lx-back">返回</el-button>
+                <el-button type="primary" @click="handleBack" size="small" icon="back">返回</el-button>
             </div>
         </el-row>
     </div>
@@ -113,8 +113,8 @@
                 span: 22,
                 textAlign: 'right',
                 btns: [
-                    { type: 'primary', label: '确认', key: 'sub', icon: 'el-icon-lx-roundcheck', handle: handleSubmit },
-                    { type: 'primary', label: '返回', key: 'back', icon: 'el-icon-lx-back', handle: handleBack },
+                    { type: 'primary', label: '确认', key: 'sub', icon: 'CircleCheck', handle: handleSubmit },
+                    { type: 'primary', label: '返回', key: 'back', icon: 'ArrowLeft', handle: handleBack },
                 ]
             }
             onBeforeMount(() => {

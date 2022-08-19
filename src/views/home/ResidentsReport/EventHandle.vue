@@ -2,7 +2,7 @@
   <div>
     <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle">
       <template v-slot:approvalStatus>
-        <el-select v-model="searchForm.approvalStatus" size="mini" clearable placeholder="请选择事件状态">
+        <el-select v-model="searchForm.approvalStatus" size="small" clearable placeholder="请选择事件状态">
           <el-option
             v-for="item in approvalStatusOptions"
             :key="item.value"
@@ -12,7 +12,7 @@
         </el-select>
       </template>
       <template v-slot:eventFirstType>
-        <el-select v-model="searchForm.eventFirstType" size="mini" clearable placeholder="请选择事件类型">
+        <el-select v-model="searchForm.eventFirstType" size="small" clearable placeholder="请选择事件类型">
           <el-option
             v-for="item in eventFirstTypeOptions"
             :key="item.value"
@@ -22,7 +22,7 @@
         </el-select>
       </template>
       <template v-slot:dataSource>
-        <el-select v-model="searchForm.dataSource" size="mini" clearable placeholder="请选择事件来源">
+        <el-select v-model="searchForm.dataSource" size="small" clearable placeholder="请选择事件来源">
           <el-option
             v-for="item in dataSourceOptions"
             :key="item.value"
@@ -58,16 +58,14 @@
       </template>
       <template v-slot:operation="data">
         <el-button
-          size="small"
           @click="handleOperation(1, data.data)"
-          icon="el-icon-lx-search"
+          :icon="Search"
           circle
           type="success"
         />
         <el-button
-          size="small"
           v-if="data.data.recordState == 0 && (data.data.approvalStatus != 4 && data.data.approvalStatus != 5)"
-          icon="el-icon-lx-forwardfill"
+          :icon="Promotion"
           circle
           type="priamry"
           @click="handleOperation(4, data.data)"
@@ -75,8 +73,7 @@
         <el-popconfirm v-if="data.data.approvalStatus == 1 || data.data.approvalStatus == 2 || data.data.approvalStatus == 4" :title="`是否${data.data.approvalStatus == 4 || data.data.approvalStatus == 5 ? '解挂' : '临时挂起'}该条数据`" @confirm="handleLock(data.data)">
           <template #reference>
             <el-button
-              size="small"
-              :icon="`el-icon-lx-${data.data.approvalStatus == 4 ? 'unlock' : 'lock'}`"
+              :icon="`${data.data.approvalStatus == 4 ? 'Unlock' : 'Lock'}`"
               circle
               type="priamry"
             />
@@ -99,6 +96,14 @@ import {
   watch,
 } from '@vue/runtime-core'
 
+import {
+  Delete,
+  Edit,
+  Search,
+  Promotion,
+  Unlock,
+  Lock
+} from '@element-plus/icons-vue'
 import { renderTable } from './common/eventHandle'
 import { deepClone, formatterDate,resetFormat,defaultObject } from '@/utils/util'
 
@@ -243,6 +248,12 @@ export default defineComponent({
       handleQuery()
     })
     return {
+      Delete,
+      Edit,
+      Search,
+      Promotion,
+      Unlock,
+      Lock,
       table,
       multipleSelection,
       tableConfig,

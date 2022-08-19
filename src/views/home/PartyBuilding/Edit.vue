@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -15,7 +15,7 @@
           :data="popupTreeData" :propa="popupTreeProps"
           :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
           <template v-slot>
-            <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+            <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
           </template>
         </popup-tree-input>
       </template>
@@ -40,7 +40,7 @@
     </VForm>
     <VForm v-else :key="timer" :isDisabled="route.query.operation == 1" :form-data="partyPeopleFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:partyOrgId="">
-        <el-input v-model="dataForm.infoName" size="mini" :readonly="true" placeholder="点击选择党组织" @click="handleOpenInfo" style="cursor:pointer;"></el-input>
+        <el-input v-model="dataForm.infoName" size="small" :readonly="true" placeholder="点击选择党组织" @click="handleOpenInfo" style="cursor:pointer;"></el-input>
       </template>
       <template v-slot:upload>
         <el-upload
@@ -54,7 +54,7 @@
               limit="1"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="el-icon-lx-add"></i>
+              <i class="add"></i>
             </el-upload>
       </template>
     </VForm>
@@ -64,7 +64,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -86,7 +86,7 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -193,8 +193,8 @@ export default {
       span:22,
       textAlign: 'right',
       btns: [
-        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
-        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+        {type:'primary',label:'确认',key:'sub',icon:'CircleCheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'ArrowLeft',handle:handleBack},
       ]
     }
     let popupTreeData = ref([])

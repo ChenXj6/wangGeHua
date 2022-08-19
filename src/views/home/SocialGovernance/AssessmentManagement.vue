@@ -21,16 +21,14 @@
       </template>
       <template v-slot:operation="{ data }">
         <el-button
-          size="small"
           @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
+          :icon="Search"
           circle
           type="success"
         />
 
         <el-button
-          size="small"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           @click="handleOperation(2, data)"
           circle
           type="priamry"
@@ -38,8 +36,7 @@
         <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              :icon="Delete"
               circle
               type="danger"
             />
@@ -56,6 +53,11 @@
   </div>
 </template>
 <script>
+import {
+  Delete,
+  Edit,
+  Search,
+} from '@element-plus/icons-vue'
 import { reactive, ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 import {
@@ -163,6 +165,9 @@ export default defineComponent({
     });
 
     return {
+      Delete,
+      Edit,
+      Search,
       table,
       multipleSelection,
       tableConfig,

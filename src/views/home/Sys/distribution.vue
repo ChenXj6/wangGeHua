@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.type == 'user' ? '用户分配角色' : '基本信息' }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -16,12 +16,12 @@
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 分配角色
+            <i class="cascades"></i> 分配角色
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="margin-bottom: 20px"><hr /></div>
-      <el-table ref="table" :data="tableData" style="width: 100%" size="mini" border @selection-change="handleSelectionChange">
+      <el-table ref="table" :data="tableData" style="width: 100%" size="small" border @selection-change="handleSelectionChange">
         <el-table-column type="index" width="50" />
         <el-table-column type="selection" width="55" />
         <el-table-column prop="name" label="角色名称"/>
@@ -32,7 +32,7 @@
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 授权功能菜单
+            <i class="cascades"></i> 授权功能菜单
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -57,7 +57,7 @@
                 <span><i :class="data.icon"></i></span>
                 <span class="tagClass"
                   ><el-button
-                    size="mini"
+                    size="small"
                     :type="data.children?.length ? 'primary' : 'success'"
                     >{{ data.children?.length ? '目录' : '菜单' }}</el-button
                   ></span
@@ -75,7 +75,7 @@
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 授权数据权限
+            <i class="cascades"></i> 授权数据权限
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -105,15 +105,13 @@
         <el-button
           type="primary"
           @click="handleClick()"
-          size="small"
-          icon="el-icon-lx-roundcheck"
+          icon="CircleCheck"
           >确定</el-button
         >
         <el-button
           type="primary"
           @click="handleBack()"
-          size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>

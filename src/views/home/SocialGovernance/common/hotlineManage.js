@@ -28,11 +28,13 @@ export function renderTable() {
                 prop: 'problemDescription',
                 label: '问题描述',
                 minWidth: '120',
+                tooltip: true,
             },
             {
                 prop: 'transferOpinions',
                 label: '转办意见',
                 minWidth: '120',
+                tooltip: true,
             },
             {
                 prop: 'concludeTime',

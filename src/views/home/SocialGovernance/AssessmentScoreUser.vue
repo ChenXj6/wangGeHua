@@ -19,8 +19,7 @@
       </template>
       <template v-slot:operation="{ data }">
         <el-button
-          size="small"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           @click="handleOperation(2, data)"
           circle
           type="priamry"
@@ -40,6 +39,9 @@ import {
   onMounted,
   watch,
 } from "@vue/runtime-core";
+import {
+  Edit,
+} from '@element-plus/icons-vue'
 import { renderTable } from "./common/AssessmentScoreUser";
 import { deepClone, defaultObject } from "@/utils/util";
 export default defineComponent({
@@ -98,6 +100,7 @@ export default defineComponent({
     });
 
     return {
+      Edit,
       table,
       multipleSelection,
       tableConfig,

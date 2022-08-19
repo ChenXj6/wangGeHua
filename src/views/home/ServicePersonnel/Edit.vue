@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{
             route.query.operation == 1
               ? "查看"
@@ -26,7 +26,7 @@
       <template v-slot:tree="">
         <el-select
           v-model="dataForm.streetCode"
-          size="mini"
+          size="small"
           clearable
           placeholder="请选择街道"
           @change="
@@ -47,7 +47,7 @@
       <template v-slot:communityCode="">
         <el-select
           v-model="dataForm.communityCode"
-          size="mini"
+          size="small"
           clearable
           placeholder="请选择社区"
           @change="
@@ -66,7 +66,7 @@
         </el-select>
       </template>
       <template v-slot:officeCode="">
-          <el-select v-model="dataForm.officeCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
+          <el-select v-model="dataForm.officeCode" size="small" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
               :key="item.value"
@@ -78,7 +78,7 @@
       <template v-slot:buildingId="">
         <el-select
           v-model="dataForm.buildingId"
-          size="mini"
+          size="small"
           clearable
           placeholder="请选择楼栋"
           @change="
@@ -97,7 +97,7 @@
         </el-select>
       </template>
 <template v-slot:house>
-        <el-select v-model="dataForm.houseId" size="mini" clearable placeholder="请选择房屋"
+        <el-select v-model="dataForm.houseId" size="small" clearable placeholder="请选择房屋"
           @change="(val) => { handleGetHouse(2, val, true) }">
           <el-option v-for="item in houseOptions" :key="item.value" :label="item.label" :value="item.value">
           </el-option>
@@ -110,7 +110,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -121,7 +121,7 @@
           type="primary"
           @click="examine"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >审核</el-button
         >
       </div>
@@ -389,14 +389,14 @@ export default {
           type: "primary",
           label: "确认",
           key: "sub",
-          icon: "el-icon-lx-roundcheck",
+          icon: "CircleCheck",
           handle: handleSubmit,
         },
         {
           type: "primary",
           label: "返回",
           key: "back",
-          icon: "el-icon-lx-back",
+          icon: "ArrowLeft",
           handle: handleBack,
         },
       ],

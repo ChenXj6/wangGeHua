@@ -6,7 +6,7 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -24,9 +24,8 @@
         placement="top-start"
       >
         <el-button
-          size="small"
           @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
+          :icon="Search"
           circle
           type="success"
         />
@@ -46,6 +45,9 @@ import {
   onMounted,
   watch,
 } from '@vue/runtime-core'
+import {
+  Search,
+} from '@element-plus/icons-vue'
 import { renderTable } from './common/AssessmentScore'
 import { deepClone, defaultObject } from '@/utils/util'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
@@ -116,6 +118,7 @@ export default defineComponent({
       handleQuery()
     })
     return {
+      Search,
       table,
       multipleSelection,
       tableConfig,

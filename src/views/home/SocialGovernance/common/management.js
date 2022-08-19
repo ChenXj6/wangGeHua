@@ -38,6 +38,7 @@ export function renderTable() {
                 prop: 'problemDescription',
                 label: '问题描述',
                 minWidth: '120',
+                tooltip: true,
             },
             
             {

@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -13,9 +13,9 @@
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange" style="width:100%">
             <template v-slot>
-              <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -29,7 +29,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -156,8 +156,8 @@ export default {
       span:22,
       textAlign: 'right',
       btns: [
-        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
-        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+        {type:'primary',label:'确认',key:'sub',icon:'CircleCheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'ArrowLeft',handle:handleBack},
       ]
     }
     onBeforeMount(()=>{

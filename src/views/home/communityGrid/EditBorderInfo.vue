@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -17,14 +17,14 @@
     <VForm :key="timer" :isDisabled="route.query.operation == 1" :form-data="InfoFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:organ>
         <el-form-item label="组织结构">
-          <!-- <el-input v-if="dataForm.streeName" size="mini" disabled v-model="dataForm.streeName"></el-input>
-          <el-input v-else-if="dataForm.communityName" size="mini" disabled v-model="dataForm.communityName"></el-input>
-          <el-input v-else size="mini" disabled v-model="dataForm.gridName"></el-input> -->
+          <!-- <el-input v-if="dataForm.streeName" size="small" disabled v-model="dataForm.streeName"></el-input>
+          <el-input v-else-if="dataForm.communityName" size="small" disabled v-model="dataForm.communityName"></el-input>
+          <el-input v-else size="small" disabled v-model="dataForm.gridName"></el-input> -->
           <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange" style="width:100%">
             <template v-slot>
-              <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
         </el-form-item>
@@ -33,19 +33,19 @@
         <el-row>
           <el-col :span="24" class="menu-header">
             <span><B>边界信息</B></span>
-            <span v-if="route.query.operation == 3"><el-button type="primary" size="mini" @click="addList">添加行</el-button></span>
+            <span v-if="route.query.operation == 3"><el-button type="primary" size="small" @click="addList">添加行</el-button></span>
           </el-col>
           <el-col :span="24">
             <el-form ref="form" :disabled="route.query.operation == 1" :model="dataForm" label-width="80px">
               <el-table
                 :data="dataForm.info"
-                size="mini"
+                size="small"
                 style="width: 100%">
                 <el-table-column
                   prop="borderScope"
                   label="边界范围">
                   <template #default="scope">
-                    <el-input v-model="scope.row.borderScope" size="mini" placeholder="请输入边界信息"></el-input>
+                    <el-input v-model="scope.row.borderScope" size="small" placeholder="请输入边界信息"></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -53,8 +53,8 @@
                   label="边界颜色">
                   <template #default="scope">
                     <el-row>
-                      <el-col :span="18"><el-input v-model="scope.row.borderColor" size="mini" placeholder="请输入边界颜色"></el-input></el-col>
-                      <el-col :span="6"><el-color-picker v-model="scope.row.borderColor" size="mini" color-format="hex"/></el-col>
+                      <el-col :span="18"><el-input v-model="scope.row.borderColor" size="small" placeholder="请输入边界颜色"></el-input></el-col>
+                      <el-col :span="6"><el-color-picker v-model="scope.row.borderColor" size="small" color-format="hex"/></el-col>
                     </el-row>                    
                   </template>
                 </el-table-column>
@@ -63,8 +63,8 @@
                   label="填充颜色">
                   <template #default="scope">
                     <el-row>
-                      <el-col :span="18"><el-input v-model="scope.row.fillColor" size="mini" placeholder="请输入边界颜色"></el-input></el-col>
-                      <el-col :span="6"><el-color-picker v-model="scope.row.fillColor" size="mini" color-format="hex"/></el-col>
+                      <el-col :span="18"><el-input v-model="scope.row.fillColor" size="small" placeholder="请输入边界颜色"></el-input></el-col>
+                      <el-col :span="6"><el-color-picker v-model="scope.row.fillColor" size="small" color-format="hex"/></el-col>
                     </el-row>                    
                   </template>
                 </el-table-column>
@@ -72,7 +72,7 @@
                   prop="longitude"
                   label="中心点">
                   <template #default="scope">
-                    <el-input v-model="scope.row.longitude" size="mini" placeholder="请输入中心点"></el-input>
+                    <el-input v-model="scope.row.longitude" size="small" placeholder="请输入中心点"></el-input>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作" min-width="30">
@@ -81,7 +81,7 @@
                       <template #reference>
                         <el-button
                           size="small"
-                          icon="el-icon-lx-delete"
+                          :icon="Delete"
                           circle
                           type="danger"
                         />
@@ -102,7 +102,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          :icon="ArrowLeft"
           >返回</el-button
         >
       </div>
@@ -113,6 +113,11 @@
 import { getCurrentInstance, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from '@vue/runtime-core'
 import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
+import {
+  Delete,
+  ArrowLeft,
+  CircleCheck,
+} from '@element-plus/icons-vue'
 
 import { renderTable } from './common/EditBorderInfo'
 import { saveBorderInfo,editBorderInfo } from '@/api/communityGrid/borderInfo'
@@ -226,8 +231,8 @@ export default {
       span:22,
       textAlign: 'right',
       btns: [
-        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
-        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+        {type:'primary',label:'确认',key:'sub',icon:'CircleCheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'ArrowLeft',handle:handleBack},
       ]
     }
     let popupTreeData = ref([])
@@ -304,6 +309,9 @@ export default {
       handleTreeSelectChange,
       popupTreeProps,
       popupTreeData,
+      Delete,
+      ArrowLeft,
+      CircleCheck,
     }
   },
 }

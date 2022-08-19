@@ -6,7 +6,7 @@
     style="width: 100%"
     :data="tableConfig.data"
     border
-    size="mini"
+    size="small"
     :max-height="tableConfig.height"
     :row-class-name="tableConfig.rowClassFunc || rowClassFunc"
     :cell-class-name="tableConfig.cellClassFunc"
@@ -23,9 +23,8 @@
       v-if="tableConfig.index"
       label=""
       type="index"
-      width="30"
+      width="50"
       align="center"
-      fixed="left"
       :index="indexMethod"
     />
     <!-- 多选列 -->
@@ -90,6 +89,7 @@
     <el-pagination
       v-if="tableConfig.pagination"
       background
+      small
       :current-page="currentPage"
       :page-sizes="pageSizeList"
       :page-size="currentPageSize"

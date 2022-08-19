@@ -7,7 +7,7 @@
   :trigger-on-focus="false"
   placeholder="请输入搜索地址"
   @select="handleSelect"
-  size="mini"
+  size="small"
   clearable>
   <template #default="{ item }">
     <i class="el-icon-search fl mgr10"></i>

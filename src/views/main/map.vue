@@ -12,18 +12,21 @@
                      placement="left-start"
                      trigger="click">
           <el-button type="goon"
-                     size="mini"
+                     size="small"
                      round
                      style="width: 88px">
             {{ item?.title }}
-            <i class="el-icon-arrow-down el-icon--right"></i>
+            &nbsp;
+            <el-icon>
+              <ArrowDown/>
+            </el-icon>
           </el-button>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item
                 v-for="item in item.children"
                 :key="item"
-                :icon="tagShow.hasOwnProperty([item.type]) ? ( !!tagShow[item.type] ? 'el-icon-lx-attentionforbidfill' : 'el-icon-lx-attentionfill') : ''"
+                :icon="tagShow.hasOwnProperty([item.type]) ? ( !!tagShow[item.type] ? 'Hide' : 'View') : ''"
                 @click="handleClick(item)"
                 >{{ item.title }}
               </el-dropdown-item>
@@ -32,9 +35,9 @@
           </template>
         </el-dropdown>
         <el-button type="goon"
-                   size="mini"
+                   size="small"
                    round
-                   :icon="tagShow.hasOwnProperty([item.type]) ? ( !!tagShow[item.type] ? 'el-icon-lx-attentionforbidfill' : 'el-icon-lx-attentionfill') : ''"
+                   :icon="tagShow.hasOwnProperty([item.type]) ? ( !!tagShow[item.type] ? 'Hide' : 'View') : ''"
                    style="width: 88px"
                    @click="handleClick(item)"
                    v-else>
@@ -113,7 +116,7 @@
               </el-carousel>
             </template>
             <template v-else-if="isOpenType == 'searchMonitor'">
-             
+              <VideoLive style="width:100%;height:500px"/>
             </template>
            <template v-else-if="isOpenType == 'briefIntroduction'">
                <h1 style="text-align: center">{{ show }}</h1>
@@ -146,7 +149,7 @@
                     <template v-slot>
                       <el-input
                         v-model="searchBuildingForm.gridName"
-                        size="mini"
+                        size="small"
                         :readonly="true"
                         placeholder="点击选择机构"
                         style="cursor: pointer"
@@ -165,7 +168,7 @@
                   <span>{{ houseType(Number(data.houseType)) }}</span>
                 </template>
                 <template v-slot:operation="{data}">
-                  <el-button type="primary" size="mini" @click="handleLocationOperation(data)"
+                  <el-button type="primary" size="small" @click="handleLocationOperation(data)"
                     >定位</el-button
                   >
                 </template>
@@ -186,7 +189,7 @@
                 <template v-slot:approvalStatus>
                   <el-select
                     v-model="searchEventForm.approvalStatus"
-                    size="mini"
+                    size="small"
                     clearable
                     placeholder="请选择事件状态"
                   >
@@ -202,7 +205,7 @@
                 <template v-slot:eventFirstType>
                   <el-select
                     v-model="searchEventForm.eventFirstType"
-                    size="mini"
+                    size="small"
                     clearable
                     placeholder="请选择事件类型"
                   >
@@ -218,7 +221,7 @@
                 <template v-slot:dataSource>
                   <el-select
                     v-model="searchEventForm.dataSource"
-                    size="mini"
+                    size="small"
                     clearable
                     placeholder="请选择事件来源"
                   >
@@ -274,7 +277,7 @@
                   }}</span>
                 </template>
                 <template v-slot:operation="{data}">
-                  <el-button type="primary" size="mini" @click="handleEventOperation(data)"
+                  <el-button type="primary" size="small" @click="handleEventOperation(data)"
                     >定位</el-button
                   >
                 </template>
@@ -302,7 +305,7 @@
                     <template v-slot>
                       <el-input
                         v-model="searchHotlineForm.officeName"
-                        size="mini"
+                        size="small"
                         :readonly="true"
                         placeholder="点击选择机构"
                         style="cursor: pointer"
@@ -318,7 +321,7 @@
                 @select-change="(val) => (multipleSelection = val)"
               >
                 <template v-slot:operation="{}">
-                  <el-button type="primary" size="mini" @click="handleHotlineOperation"
+                  <el-button type="primary" size="small" @click="handleHotlineOperation"
                     >定位</el-button
                   >
                 </template>
@@ -402,7 +405,7 @@
                     <template v-slot>
                       <el-input
                         v-model="searchHiddenDangerForm.officeName"
-                        size="mini"
+                        size="small"
                         :readonly="true"
                         placeholder="点击选择机构"
                         style="cursor: pointer"
@@ -421,7 +424,7 @@
                 <el-link type="success" @click.prevent="javascript();">{{ data.dangerName }}</el-link>
               </template>
                 <template v-slot:operation="{}">
-                  <el-button type="primary" size="mini" @click="handleOperation"
+                  <el-button type="primary" size="small" @click="handleOperation"
                     >定位</el-button
                   >
                 </template>
@@ -432,22 +435,23 @@
           </el-row>
         </div>
       </div>
-      <i
-        class="el-icon-lx-roundclose headerDialogIcon"
+      <el-icon class="headerDialogIcon" @click="handleCloseDialog('isOpen')" color="#fff" style="cursor: pointer" size="30px">
+        <CircleClose/>
+      </el-icon>
+      <!-- <i
+        class="roundclose headerDialogIcon"
         style="color: #fff; font-size: 30px; cursor: pointer"
         @click="handleCloseDialog('isOpen')"
-      ></i>
+      ></i> -->
     </div>
     <!-- 驾驶舱弹窗 -->
     <div v-if="isOpenCockpit" class="coclpit">
       <div class="coclpitDialog">
         <Coclpit />
       </div>
-      <i
-        class="el-icon-lx-roundclose headerDialogIcon"
-        style="color: #fff; font-size: 30px; cursor: pointer"
-        @click="handleCloseDialog('isOpenCockpit')"
-      ></i>
+      <el-icon class="headerDialogIcon" @click="handleCloseDialog('isOpenCockpit')" color="#fff" style="cursor: pointer" size="30px">
+        <CircleClose/>
+      </el-icon>
     </div>
     <!-- 楼栋弹窗-->
       <Building :key="buildTime" v-if="houseDialogVisible" :houseDialogVisible="houseDialogVisible" @update:houseDialogVisible="handleCloseBuild" :gisid="gisid" />
@@ -463,7 +467,7 @@
           <el-form-item label="处置方式" prop="dealStatus">
             <el-select
               v-model="dataForm.dealStatus"
-              size="mini"
+              size="small"
               placeholder="请选择处置方式"
             >
               <el-option
@@ -482,7 +486,7 @@
           >
             <el-input
               v-model="dataForm.launchRemark"
-              size="mini"
+              size="small"
               placeholder=""
               @click="handleChangeLaunch"
             ></el-input>
@@ -494,7 +498,7 @@
             <el-date-picker
               v-model="dataForm.updateDate"
               type="datetime"
-              size="mini"
+              size="small"
               placeholder="请选择时间"
               style="width: 100%"
             />
@@ -503,18 +507,18 @@
             <el-input
               v-model="dataForm.dealRemark"
               type="textarea"
-              size="mini"
+              size="small"
               placeholder=""
             ></el-input>
           </el-form-item>
         </el-form>
       </div>
       <template #footer>
-        <el-button size="mini" @click="eventHandleVisible = false"
+        <el-button size="small" @click="eventHandleVisible = false"
           >取 消</el-button
         >
         <el-button
-          size="mini"
+          size="small"
           type="primary"
           @click="handleRecord(recordFormRef)"
           >确 定</el-button
@@ -553,10 +557,10 @@
         </el-row>
       </div>
       <template #footer>
-        <el-button size="mini" type="primary" @click="handleSubmitUser"
+        <el-button size="small" type="primary" @click="handleSubmitUser"
           >确定</el-button
         >
-        <el-button size="mini" type="primary" @click="userDialogVisible = false"
+        <el-button size="small" type="primary" @click="userDialogVisible = false"
           >返回</el-button
         >
       </template>
@@ -575,6 +579,7 @@ import {
   computed,
   nextTick,
 } from "@vue/runtime-core";
+import {CircleClose} from '@element-plus/icons-vue'
 import { onBeforeRouteLeave, useRoute } from "vue-router";
 import { useStore } from "vuex";
 import { searchDict } from "@/api/sys/dict";
@@ -670,8 +675,9 @@ import { getPetitionList } from '@/api/ManagementPersonnel/petitionStaff'
 
 
 import Notice from './components/notice.vue'
+import VideoLive from './components/videoLive/index.vue'
 export default {
-  components: { Notice, Coclpit, Building },
+  components: { Notice, Coclpit, Building, VideoLive },
   setup() {
     let vMap = ref(null);
     const url = ref(import.meta.env.VITE_IMG_BASE_API)
@@ -2205,6 +2211,7 @@ export default {
     //
 
     return {
+      CircleClose,
       fullHeight,
       mapDialogData,
       dialogVisible,

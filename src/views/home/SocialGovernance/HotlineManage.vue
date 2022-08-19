@@ -11,11 +11,12 @@
           :propa="popupTreeProps"
           :nodeKey="'' + searchForm.officeCode"
           @update:dataForm="handleTreeSelectChange"
+          style="width:100%"
         >
           <template v-slot>
             <el-input
               v-model="searchForm.officeName"
-              size="mini"
+              size="small"
               :readonly="true"
               placeholder="点击选择机构"
               style="cursor: pointer"
@@ -29,11 +30,12 @@
           :propa="orderTreeProps"
           :nodeKey="'' + searchForm.orderType"
           @update:dataForm="handleOrderTreeSelectChange"
+          style="width:100%"
         >
           <template v-slot>
             <el-input
               v-model="searchForm.orderName"
-              size="mini"
+              size="small"
               :readonly="true"
               placeholder="点击选择工单类别"
               style="cursor: pointer"
@@ -52,22 +54,19 @@
       </template>
       <template v-slot:operation="{ data }">
         <el-button
-          size="small"
           @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
+          :icon="Search"
           circle
           type="success"
         />
         <el-button
-          size="small"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           @click="handleOperation(2, data)"
           circle
           type="priamry"
         />
         <el-button
-          size="small"
-          icon="el-icon-lx-delete"
+          :icon="Delete"
           @click="handleDel(data)"
           circle
           type="danger"
@@ -84,7 +83,7 @@
           label-width="150px"
         >
           <el-form-item label="工单编号" prop="dealStatus">
-            <el-input size="mini" disabled v-model="dataForm.orderNo"></el-input>
+            <el-input size="small" disabled v-model="dataForm.orderNo"></el-input>
           </el-form-item>
           <el-form-item
             label="承办单位"
@@ -92,7 +91,7 @@
           >
             <el-input
               v-model="dataForm.dealBy"
-              size="mini"
+              size="small"
               placeholder=""
               @click="handleChangeLaunch"
             ></el-input>
@@ -100,11 +99,11 @@
         </el-form>
       </div>
       <template #footer>
-        <el-button size="mini" @click="eventHandleVisible = false"
+        <el-button size="small" @click="eventHandleVisible = false"
           >取 消</el-button
         >
         <el-button
-          size="mini"
+          size="small"
           type="primary"
           @click="handleRecord(recordFormRef)"
           >确 定</el-button
@@ -132,7 +131,7 @@
         </el-row>
       </div>
       <template #footer>
-        <el-button size="mini" type="primary" @click="userDialogVisible = false"
+        <el-button size="small" type="primary" @click="userDialogVisible = false"
           >返回</el-button
         >
       </template>
@@ -157,6 +156,11 @@ import { getTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
 import { dispatchOrder,delHotline,exportHotline } from '@/api/SocialGovernance/HotlineManage'
 import { getUserList } from "@/api/sys/user";
 import { downLoadFile } from '@/utils/util'
+import {
+  Delete,
+  Edit,
+  Search,
+} from '@element-plus/icons-vue'
 
 export default defineComponent({
   name: 'HotlineManage',
@@ -417,7 +421,9 @@ export default defineComponent({
       handleRowclick,
       handleRecord,
       // 
-      
+      Delete,
+      Edit,
+      Search,
     }
   },
 })

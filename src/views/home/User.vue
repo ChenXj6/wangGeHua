@@ -13,7 +13,7 @@
                           <div class="info-image" @click="showDialog">
                             <img :src="avatarImg" />
                             <span class="info-edit">
-                                <i class="el-icon-lx-camerafill"></i>
+                                <i class="camerafill"></i>
                             </span>
                         </div>
                         <div class="info-name">{{ user.operatorName }}</div>
@@ -50,12 +50,12 @@
                           <el-popconfirm title="确定要重置密码吗？" @confirm="onReset" style="float:right;display:inline-block;margin-left:10px">
                             <template #reference>
                               <el-button
-                                size="mini"
+                                size="small"
                                 type="primary"
                               >重置密码</el-button>
                             </template>
                           </el-popconfirm>
-                            <el-button size="mini" type="primary" @click="onSubmit" style="float:right;display:inline-block;">保存</el-button>
+                            <el-button size="small" type="primary" @click="onSubmit" style="float:right;display:inline-block;">保存</el-button>
                            
                         </el-form-item>
                     </el-form>

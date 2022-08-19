@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -23,7 +23,7 @@
                           @update:dataForm="handleTreeSelectChange">
           <template v-slot>
             <el-input v-model="dataForm.parentName"
-                      size="mini"
+                      size="small"
                       :readonly="true"
                       placeholder="点击选择上级类别"
                       style="cursor:pointer;"></el-input>
@@ -116,8 +116,8 @@ export default {
       span: 22,
       textAlign: 'right',
       btns: [
-        { type: 'primary', label: '确认', key: 'sub', icon: 'el-icon-lx-roundcheck', handle: handleSubmit },
-        { type: 'primary', label: '返回', key: 'back', icon: 'el-icon-lx-back', handle: handleBack },
+        { type: 'primary', label: '确认', key: 'sub', icon: 'CircleCheck', handle: handleSubmit },
+        { type: 'primary', label: '返回', key: 'back', icon: 'ArrowLeft', handle: handleBack },
       ]
     }
     route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))

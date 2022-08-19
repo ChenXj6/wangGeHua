@@ -6,7 +6,7 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+searchForm.gridCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.gridName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.gridName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -23,8 +23,7 @@
     </template>
     <template v-slot:operation="{data}">
         <el-button
-          size="small"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           @click="handleOperation(2, data)"
           circle
           type="success"
@@ -32,8 +31,7 @@
         <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              :icon="Delete"
               circle
               type="danger"
             />
@@ -44,6 +42,10 @@
   </div>
 </template>
 <script>
+import {
+  Delete,
+  Edit,
+} from '@element-plus/icons-vue'
 import { getCurrentInstance, onMounted, ref } from '@vue/runtime-core'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
@@ -146,6 +148,8 @@ export default {
       handleQuery()
     })
     return{
+      Delete,
+      Edit,
       infoTtableConfig,
       infoFormConfig,
       searchForm,

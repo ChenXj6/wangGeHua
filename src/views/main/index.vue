@@ -7,7 +7,6 @@
       </keep-alive>
     </div>
     <notice />
-
   </div>
 </template>
 <script>

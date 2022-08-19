@@ -48,11 +48,11 @@ export function renderTable() {
         placeholder: '请输入角色名',
         isClearable: true,
         span: 24,
-        options:[
-          {label:'目录',value:'1'},
-          {label:'菜单',value:'2'},
-          {label:'按钮',value:'3'},
-        ]
+        options: [
+          { label: '目录', value: '1' },
+          { label: '菜单', value: '2' },
+          { label: '按钮', value: '3' },
+        ],
       },
       {
         type: 'Input',
@@ -77,16 +77,14 @@ export function renderTable() {
         label: '菜单图标',
         prop: 'icon',
         value: '',
-        placeholder: '菜单图标 (如 el-icon-lx-weibo；el-icon-lx-emojifill)',
+        placeholder: '菜单图标 (如 weibo；emojifill)',
         isClearable: true,
         span: 24,
       },
     ],
-    rules:{
-      name: [
-        { required: true, message: '请输入角色名', trigger: 'blur' },
-      ],
-    }
+    rules: {
+      name: [{ required: true, message: '请输入角色名', trigger: 'blur' }],
+    },
   }
   return {
     tableConfig,

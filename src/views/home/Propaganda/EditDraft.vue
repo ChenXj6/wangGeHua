@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -15,12 +15,12 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
       <template v-slot:level1="">
-        <el-select v-model="dataForm.level1" clearable size="mini" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
+        <el-select v-model="dataForm.level1" clearable size="small" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
           <el-option
             v-for="item in level1Options"
             :key="item.id"
@@ -30,7 +30,7 @@
         </el-select>
       </template>
       <template v-slot:level2="">
-        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="mini" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
+        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="small" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
           <el-option
             v-for="item in level2Options"
             :key="item.id"
@@ -40,7 +40,7 @@
         </el-select>
       </template>
       <template v-slot:level3="">
-        <el-select v-model="dataForm.level3" clearable :disabled="!dataForm.level2" size="mini" placeholder="请选择文稿三级分类">
+        <el-select v-model="dataForm.level3" clearable :disabled="!dataForm.level2" size="small" placeholder="请选择文稿三级分类">
           <el-option
             v-for="item in level3Options"
             :key="item.id"
@@ -61,7 +61,7 @@
               limit="1"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="el-icon-lx-add"></i>
+              <i class="add"></i>
             </el-upload>
       </template>
       <template v-slot:content="">
@@ -74,12 +74,12 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="dataForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
       <template v-slot:level1="">
-        <el-select v-model="dataForm.level1" clearable size="mini" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
+        <el-select v-model="dataForm.level1" clearable size="small" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
           <el-option
             v-for="item in level1Options"
             :key="item.id"
@@ -89,7 +89,7 @@
         </el-select>
       </template>
       <template v-slot:level2="">
-        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="mini" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
+        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="small" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
           <el-option
             v-for="item in level2Options"
             :key="item.id"
@@ -99,7 +99,7 @@
         </el-select>
       </template>
       <template v-slot:level3="">
-        <el-select v-model="dataForm.level3" clearable :disabled="!dataForm.level2" size="mini" placeholder="请选择文稿三级分类">
+        <el-select v-model="dataForm.level3" clearable :disabled="!dataForm.level2" size="small" placeholder="请选择文稿三级分类">
           <el-option
             v-for="item in level3Options"
             :key="item.id"
@@ -121,7 +121,7 @@
               limit="1"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="el-icon-lx-add"></i>
+              <i class="add"></i>
             </el-upload>
             <el-upload
             v-else
@@ -133,7 +133,7 @@
               show-file-list
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <el-button type="primary" size="mini">上传文件</el-button>
+              <el-button type="primary" size="small">上传文件</el-button>
             </el-upload>
       </template>
     </VForm>
@@ -143,7 +143,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -277,8 +277,8 @@ export default {
       span:22,
       textAlign: 'right',
       btns: [
-        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
-        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+        {type:'primary',label:'确认',key:'sub',icon:'CircleCheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'ArrowLeft',handle:handleBack},
       ]
     }
     // 多级分类

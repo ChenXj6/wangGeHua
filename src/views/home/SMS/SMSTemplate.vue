@@ -20,7 +20,7 @@
         <el-button
           size="small"
           @click="handleEdit(data.data)"
-          icon="el-icon-lx-edit"
+          icon="edit"
           circle
           type="primary"
         ></el-button>
@@ -28,7 +28,7 @@
           <template #reference>
             <el-button
               size="small"
-              icon="el-icon-lx-delete"
+              icon="delete"
               circle
               type="danger"
             />

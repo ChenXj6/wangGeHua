@@ -2,7 +2,7 @@
   <div>
     <VForm :form-data="formConfig" :form-model="searchForm" :form-handle="formHandle">
       <template v-slot:approvalStatus>
-        <el-select v-model="searchForm.approvalStatus" size="mini" clearable placeholder="请选择事件状态">
+        <el-select v-model="searchForm.approvalStatus" size="small" clearable placeholder="请选择事件状态">
           <el-option
             v-for="item in approvalStatusOptions"
             :key="item.value"
@@ -12,7 +12,7 @@
         </el-select>
       </template>
       <template v-slot:eventFirstType>
-        <el-select v-model="searchForm.eventFirstType" size="mini" clearable placeholder="请选择事件类型">
+        <el-select v-model="searchForm.eventFirstType" size="small" clearable placeholder="请选择事件类型">
           <el-option
             v-for="item in eventFirstTypeOptions"
             :key="item.value"
@@ -22,7 +22,7 @@
         </el-select>
       </template>
       <template v-slot:dataSource>
-        <el-select v-model="searchForm.dataSource" size="mini" clearable placeholder="请选择事件来源">
+        <el-select v-model="searchForm.dataSource" size="small" clearable placeholder="请选择事件来源">
           <el-option
             v-for="item in dataSourceOptions"
             :key="item.value"
@@ -58,16 +58,14 @@
       </template>
       <template v-slot:operation="data">
         <el-button
-          size="small"
           @click="handleOperation(1, data.data)"
-          icon="el-icon-lx-search"
+          :icon="Search"
           circle
           type="success"
         />
         <el-button
           v-if="data.data.approvalStatus == 1"
-          size="small"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           @click="handleOperation(2, data.data)"
           circle
           type="priamry"
@@ -89,6 +87,11 @@ import {
   onUpdated,
   watch,
 } from '@vue/runtime-core'
+import {
+  Delete,
+  Edit,
+  Search,
+} from '@element-plus/icons-vue'
 
 
 import { renderTable } from './common/eventColl'
@@ -200,6 +203,9 @@ export default defineComponent({
       handleQuery()
     })
     return {
+      Delete,
+      Edit,
+      Search,
       table,
       multipleSelection,
       tableConfig,

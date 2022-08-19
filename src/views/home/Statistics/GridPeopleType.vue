@@ -8,7 +8,7 @@
                 :data="popupTreeData" :propa="popupTreeProps"
                 :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
                 <template v-slot>
-                  <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+                  <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
                 </template>
             </popup-tree-input>
           </template>

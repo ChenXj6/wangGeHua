@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{
             route.query.operation == 1
               ? "查看"
@@ -32,7 +32,7 @@
           <template v-slot>
             <el-input
               v-model="dataForm.officeName"
-              size="mini"
+              size="small"
               :readonly="true"
               placeholder="点击选择机构"
               style="cursor: pointer"
@@ -50,7 +50,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>

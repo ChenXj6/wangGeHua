@@ -9,6 +9,8 @@ import legacyPlugin from '@vitejs/plugin-legacy'  // 兼容处理
 // 按需引入组件
 import Components from 'unplugin-vue-components/vite'
 import AutoImport from 'unplugin-auto-import/vite'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 import {
   ElementPlusResolver
 } from 'unplugin-vue-components/resolvers'
@@ -30,10 +32,23 @@ export default defineConfig(({ command, mode }) => {
       }),
       vueJsx(),
       AutoImport({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [
+          ElementPlusResolver(),
+          IconsResolver({
+            prefix: 'Icon',
+          }),
+        ],
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [
+          ElementPlusResolver(),
+          IconsResolver({
+            enabledCollections: ['ep'],
+          }),
+        ],
+      }),
+      Icons({
+        autoInstall: true,
       }),
       legacyPlugin({
         targets: ['chrome 52', 'ie >= 11'], // 需要兼容的目标列表，可以设置多个

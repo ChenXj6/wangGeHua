@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -11,7 +11,7 @@
     <div style="margin-bottom: 20px"><hr /></div>
     <VForm v-if="route.query.type === 'build'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="buildFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree="">
-          <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" :key="timer" @change="(val)=>{handleChange(1,val,true)}">
+          <el-select v-model="dataForm.streetCode" size="small" clearable placeholder="请选择街道" :key="timer" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
               v-for="item in streetNameOptions"
               :key="item.value"
@@ -21,7 +21,7 @@
           </el-select>
         </template>
         <template v-slot:communityCode="">
-          <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区" :key="timer" @change="(val)=>{handleChange(2,val,true)}">
+          <el-select v-model="dataForm.communityCode" size="small" clearable placeholder="请选择社区" :key="timer" @change="(val)=>{handleChange(2,val,true)}">
             <el-option
               v-for="item in communityNameOptions"
               :key="item.value"
@@ -31,7 +31,7 @@
           </el-select>
         </template>
         <template v-slot:gridCode="">
-          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" :key="timer" @change="(val)=>{handleChange(3,val,true)}">
+          <el-select v-model="dataForm.gridCode" size="small" clearable placeholder="请选择网格" :key="timer" @change="(val)=>{handleChange(3,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
               :key="item.value"
@@ -57,13 +57,13 @@
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="el-icon-lx-add"></i>
+              <i class="add"></i>
             </el-upload>
       </template>
     </VForm>
     <VForm v-else-if="route.query.type === 'house'" :isDisabled="route.query.operation == 1" :form-data="houseFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree="">
-          <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+          <el-select v-model="dataForm.streetCode" size="small" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
               v-for="item in streetNameOptions"
               :key="item.value"
@@ -73,7 +73,7 @@
           </el-select>
         </template>
         <template v-slot:communityCode="">
-          <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+          <el-select v-model="dataForm.communityCode" size="small" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
             <el-option
               v-for="item in communityNameOptions"
               :key="item.value"
@@ -83,7 +83,7 @@
           </el-select>
         </template>
         <template v-slot:gridCode="">
-          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
+          <el-select v-model="dataForm.gridCode" size="small" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
               :key="item.value"
@@ -93,7 +93,7 @@
           </el-select>
         </template>
       <template v-slot:buildingId="">
-        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋" @change="(val)=>{handleGetBuild(2,val,true),handleGetHouse(1,val,true)}">
+        <el-select v-model="dataForm.buildingId" size="small" clearable placeholder="请选择楼栋" @change="(val)=>{handleGetBuild(2,val,true),handleGetHouse(1,val,true)}">
           <el-option
             v-for="item in buildingOptions"
             :key="item.value"
@@ -113,13 +113,13 @@
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="el-icon-lx-add"></i>
+              <i class="add"></i>
             </el-upload>
       </template>
     </VForm>
     <VForm v-else :form-data="peopleFormConfig" :isDisabled="route.query.operation == 1" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:tree="">
-          <el-select v-model="dataForm.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+          <el-select v-model="dataForm.streetCode" size="small" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
               v-for="item in streetNameOptions"
               :key="item.value"
@@ -129,7 +129,7 @@
           </el-select>
         </template>
         <template v-slot:communityCode="">
-          <el-select v-model="dataForm.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+          <el-select v-model="dataForm.communityCode" size="small" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
             <el-option
               v-for="item in communityNameOptions"
               :key="item.value"
@@ -139,7 +139,7 @@
           </el-select>
         </template>
         <template v-slot:gridCode="">
-          <el-select v-model="dataForm.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
+          <el-select v-model="dataForm.gridCode" size="small" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true),handleGetBuild(1,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
               :key="item.value"
@@ -149,7 +149,7 @@
           </el-select>
         </template>
       <template v-slot:buildingId="">
-        <el-select v-model="dataForm.buildingId" size="mini" clearable placeholder="请选择楼栋" @change="(val)=>{handleGetBuild(2,val,true),handleGetHouse(1,val,true)}">
+        <el-select v-model="dataForm.buildingId" size="small" clearable placeholder="请选择楼栋" @change="(val)=>{handleGetBuild(2,val,true),handleGetHouse(1,val,true)}">
           <el-option
             v-for="item in buildingOptions"
             :key="item.value"
@@ -159,7 +159,7 @@
         </el-select>
       </template>
       <template v-slot:house="">
-        <el-select v-model="dataForm.house" size="mini" clearable placeholder="请选择房屋" @change="(val) => {handleGetHouse(2,val,true)}">
+        <el-select v-model="dataForm.house" size="small" clearable placeholder="请选择房屋" @change="(val) => {handleGetHouse(2,val,true)}">
           <el-option
             v-for="item in houseOptions"
             :key="item.value"
@@ -179,7 +179,7 @@
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="el-icon-lx-add"></i>
+              <i class="add"></i>
             </el-upload>
       </template>
     </VForm>
@@ -201,7 +201,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -548,8 +548,8 @@ export default {
       span:22,
       textAlign: 'right',
       btns: [
-        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
-        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+        {type:'primary',label:'确认',key:'sub',icon:'CircleCheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'ArrowLeft',handle:handleBack},
       ]
     }
 

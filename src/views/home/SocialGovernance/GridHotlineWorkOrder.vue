@@ -18,17 +18,15 @@
     </template>
      <template v-slot:operation="data">
         <el-button
-          size="small"
           @click="handleOperation(2,data.data)"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           circle
           type="primary"
         ></el-button>
         <el-popconfirm title="确定要删除该类别吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              :icon="Delete"
               circle
               type="danger"
             />
@@ -40,6 +38,10 @@
 </template>
 
 <script>
+import {
+  Delete,
+  Edit,
+} from '@element-plus/icons-vue'
 import { getCurrentInstance, reactive, ref, onMounted, onBeforeMount } from '@vue/runtime-core'
 import { deepClone, formatterDate, listAssign, defaultObject } from '@/utils/util'
 import { renderTable } from './common/gridHotlineWorkOrder'
@@ -117,6 +119,8 @@ export default {
       formHandle,
       handleOperation,
       handleDelete,
+      Delete,
+      Edit,
     }
     }
 }

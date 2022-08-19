@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : (route.query.operation == 2 ? '编辑' : '添加') }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -11,7 +11,7 @@
     <div style="margin-bottom: 20px"><hr /></div>
     <VForm :isDisabled="route.query.operation == 1 || route.query.operation == 4" :form-data="editFormConfig" :form-model="formData" :form-handle="route.query.operation != 1 && route.query.operation != 4 ? formHandle : {}">
         <template v-slot:tree>
-          <el-select v-model="formData.streetCode" size="mini" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
+          <el-select v-model="formData.streetCode" size="small" clearable placeholder="请选择街道" @change="(val)=>{handleChange(1,val,true)}">
             <el-option
               v-for="item in streetNameOptions"
               :key="item.value"
@@ -21,7 +21,7 @@
           </el-select>
         </template>
         <template v-slot:communityCode>
-          <el-select v-model="formData.communityCode" size="mini" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
+          <el-select v-model="formData.communityCode" size="small" clearable placeholder="请选择社区" @change="(val)=>{handleChange(2,val,true)}">
             <el-option
               v-for="item in communityNameOptions"
               :key="item.value"
@@ -31,7 +31,7 @@
           </el-select>
         </template>
         <template v-slot:gridCode>
-          <el-select v-model="formData.gridCode" size="mini" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true)}">
+          <el-select v-model="formData.gridCode" size="small" clearable placeholder="请选择网格" @change="(val)=>{handleChange(3,val,true)}">
             <el-option
               v-for="item in gridNameOptions"
               :key="item.value"
@@ -69,7 +69,7 @@
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="el-icon-lx-add"></i>
+              <i class="add"></i>
             </el-upload>
       </template>
     </VForm>
@@ -77,12 +77,12 @@
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 处置记录
+            <i class="cascades"></i> 处置记录
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="margin-bottom: 20px"><hr /></div>
-      <el-table :data="tableData" style="width: 100%" size="mini">
+      <el-table :data="tableData" style="width: 100%" size="small">
         <el-table-column prop="createByName" label="发起人" width="120" />
         <el-table-column prop="launchRemark" label="发起意见" />
         <el-table-column prop="createDate" label="发起时间" width="150">
@@ -110,14 +110,14 @@
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 事件处置
+            <i class="cascades"></i> 事件处置
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="margin-bottom: 20px"><hr /></div>
       <el-form ref="recordFormRef" :model="dataForm" :rules="rules" label-width="150px">
         <el-form-item label="处置方式" prop="dealStatus">
-          <el-select v-model="dataForm.dealStatus" size="mini" placeholder="请选择处置方式">
+          <el-select v-model="dataForm.dealStatus" size="small" placeholder="请选择处置方式">
             <el-option
               v-for="item in dataSourceOptions"
               :key="item.value"
@@ -127,20 +127,20 @@
           </el-select>
         </el-form-item>
         <el-form-item label="流转人" v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3" prop="dealBy">
-          <el-input v-model="dataForm.launchRemark" size="mini" placeholder="" @click="handleChangeLaunch"></el-input>
+          <el-input v-model="dataForm.launchRemark" size="small" placeholder="" @click="handleChangeLaunch"></el-input>
         </el-form-item>
         <el-form-item label="处理时限" v-if="dataForm.dealStatus == 2 || dataForm.dealStatus == 3">
           <el-date-picker
             v-model="dataForm.updateDate"
             type="datetime"
-            size="mini"
+            size="small"
             value-format="YYYY-MM-DD HH:mm:ss"
             placeholder="请选择时间"
             style="width:100%"
           />
         </el-form-item>
         <el-form-item label="处理意见" prop="dealRemark">
-          <el-input v-model="dataForm.dealRemark" type="textarea" size="mini" placeholder=""></el-input>
+          <el-input v-model="dataForm.dealRemark" type="textarea" size="small" placeholder=""></el-input>
         </el-form-item>
       </el-form>
       
@@ -153,14 +153,14 @@
           type="primary"
           @click="handleRecord(recordFormRef)"
           size="small"
-          icon="el-icon-lx-roundcheck"
+          icon="roundcheck"
           >确定</el-button
         >
         <el-button
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -201,8 +201,8 @@
         </el-row>
       </div>
       <template #footer>
-        <el-button size="mini" type="primary" @click="handleSubmitUser">确定</el-button>
-        <el-button size="mini" type="primary" @click="userDialogVisible = false">返回</el-button>
+        <el-button size="small" type="primary" @click="handleSubmitUser">确定</el-button>
+        <el-button size="small" type="primary" @click="userDialogVisible = false">返回</el-button>
       </template>
     </el-dialog>
   </div>
@@ -473,8 +473,8 @@ export default {
       span:22,
       textAlign: 'right',
       btns: [
-        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
-        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+        {type:'primary',label:'确认',key:'sub',icon:'CircleCheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'ArrowLeft',handle:handleBack},
       ]
     }
 

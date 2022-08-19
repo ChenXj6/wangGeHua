@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{ route.query.operation == 1 ? '查看' : ( route.query.operation == 2 ? '编辑' : '添加' ) }}
         </el-breadcrumb-item>
       </el-breadcrumb>
@@ -15,7 +15,7 @@
           :data="popupTreeData" :propa="popupTreeProps"
           :nodeKey="''+dataForm.gridCode" @update:dataForm="handleTreeSelectChange">
           <template v-slot>
-            <el-input v-model="dataForm.gridName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+            <el-input v-model="dataForm.gridName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
           </template>
         </popup-tree-input>
       </template>
@@ -44,12 +44,12 @@
           :data="popupTreeData" :propa="popupTreeProps"
           :nodeKey="''+dataForm.gridCode" @update:dataForm="handleTreeSelectChange">
           <template v-slot>
-            <el-input v-model="dataForm.gridName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+            <el-input v-model="dataForm.gridName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
           </template>
         </popup-tree-input>
       </template>
       <template v-slot:manageProper="">
-        <el-input v-model="dataForm.investigePer" placeholder="点击获取人员" size="mini" @click="handleChangeLaunch"></el-input>
+        <el-input v-model="dataForm.investigePer" placeholder="点击获取人员" size="small" @click="handleChangeLaunch"></el-input>
       </template>
     </VForm>
     <VForm v-else-if="route.query.type == 'content'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="contentFormConfig" :form-model="dataForm">
@@ -58,7 +58,7 @@
           :data="popupTreeData" :propa="popupTreeProps"
           :nodeKey="''+dataForm.gridCode" @update:dataForm="handleTreeSelectChange">
           <template v-slot>
-            <el-input v-model="dataForm.gridName" disabled size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+            <el-input v-model="dataForm.gridName" disabled size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
           </template>
         </popup-tree-input>
       </template>
@@ -73,7 +73,7 @@
           list-type="picture-card"
           :on-change="(file,fileList) => changeFile(file,fileList)"
         >
-          <i class="el-icon-lx-add"></i>
+          <i class="add"></i>
         </el-upload>
       </template>
     </VForm>
@@ -81,12 +81,12 @@
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 排查记录
+            <i class="cascades"></i> 排查记录
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="margin-bottom: 20px"><hr /></div>
-      <el-table :data="tableData" style="width: 100%" size="mini">
+      <el-table :data="tableData" style="width: 100%" size="small">
         <el-table-column prop="originator" label="发起人" />
         <el-table-column prop="action" label="动作" />
         <el-table-column prop="processeTime" label="处理时间" width="200">
@@ -117,7 +117,7 @@
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -129,14 +129,14 @@
           type="primary"
           size="small"
           @click="handleClickRecord"
-          icon="el-icon-lx-roundcheck"
+          icon="CircleCheck"
           >处理</el-button
         >
         <el-button
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -170,8 +170,8 @@
         </el-row>
       </div>
       <template #footer>
-        <el-button size="mini" type="primary" @click="handleSubmitUser">确定</el-button>
-        <el-button size="mini" type="primary" @click="userDialogVisible = false">返回</el-button>
+        <el-button size="small" type="primary" @click="handleSubmitUser">确定</el-button>
+        <el-button size="small" type="primary" @click="userDialogVisible = false">返回</el-button>
       </template>
     </el-dialog>
 </template>
@@ -267,8 +267,8 @@ export default {
       span:22,
       textAlign: 'right',
       btns: [
-        {type:'primary',label:'确认',key:'sub',icon:'el-icon-lx-roundcheck',handle:handleSubmit},
-        {type:'primary',label:'返回',key:'back',icon:'el-icon-lx-back',handle:handleBack},
+        {type:'primary',label:'确认',key:'sub',icon:'CircleCheck',handle:handleSubmit},
+        {type:'primary',label:'返回',key:'back',icon:'ArrowLeft',handle:handleBack},
       ]
     }
     let popupTreeData = ref([])

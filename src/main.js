@@ -19,6 +19,7 @@ import { LabelLayout, UniversalTransition } from 'echarts/features';
 // 引入 Canvas 渲染器，注意引入 CanvasRenderer 或者 SVGRenderer 是必须的一步
 import { CanvasRenderer } from 'echarts/renderers';
 
+
 // 注册必须的组件
 echarts.use([
   TitleComponent,
@@ -60,6 +61,12 @@ console.log(`项目构建环境：${import.meta.env.MODE}`)
 // console.log(`当前运行后台地址：${import.meta.env.VITE_APP_BASE_API }`)
 
 installElementPlus(app)
+import 'element-plus/dist/index.css'
+
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 permission(app)
 app
   .use(store)

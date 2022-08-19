@@ -6,7 +6,7 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+searchForm.gridCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.gridName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.gridName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -20,8 +20,7 @@
     </template>
     <template v-slot:operation="{data}">
       <el-button
-          size="small"
-          icon="el-icon-lx-search"
+          icon="search"
           @click="handleOperation(1, data,'a')"
           circle
           title="查看隐患"
@@ -29,8 +28,7 @@
         />
         <el-button
           v-if="data.status == 1 && data.isDanger != 0"
-          size="small"
-          icon="el-icon-lx-edit"
+          icon="edit"
           @click="handleOperation(2, data)"
           circle
           title="隐患处理"
@@ -38,8 +36,7 @@
         />
         <el-button
           v-if="data.status == 2 && data.isDanger != 0"
-          size="small"
-          icon="el-icon-lx-forward"
+          icon="TopRight"
           circle
           title="隐患整改"
           @click="handleOperation(2, data,'rectification')"
@@ -48,8 +45,7 @@
         <!-- v-if="data.dangerstatus == 3 && data.isDanger != 0" -->
         <el-button
           v-if="data.status == 3 && data.isDanger != 0"
-          size="small"
-          icon="el-icon-lx-roundcheck"
+          icon="CircleCheck"
           circle
           title="隐患复查"
           @click="handleOperation(2, data,'review')"

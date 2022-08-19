@@ -6,7 +6,7 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -21,15 +21,13 @@
       </template>
       <template v-slot:operation="{data}">
         <el-button
-          size="small"
           @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
+          icon="search"
           circle
           type="success"
         />
         <el-button
-          size="small"
-          icon="el-icon-lx-edit"
+          icon="edit"
           @click="handleOperation(2, data)"
           circle
           type="priamry"
@@ -37,8 +35,7 @@
         <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              icon="delete"
               circle
               type="danger"
             />

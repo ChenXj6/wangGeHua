@@ -216,3 +216,8 @@ input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none !important;
 }
+
+::-webkit-scrollbar {
+  /*隐藏滚轮*/
+  display: none;
+}

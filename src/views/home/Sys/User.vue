@@ -12,19 +12,17 @@
     >
       <template v-slot:operation="data">
         <el-button
-          size="small"
           @click="handleEdit(data.data)"
-          icon="el-icon-lx-edit"
+          icon="edit"
           circle
           type="success"
         />
-        <el-button size="small" circle type="primary" @click="handleCommand(data.data)"><i class="el-icon-lx-people"></i></el-button>
-        <el-button size="small" circle type="primary" @click="handleData(data.data)"><i class="el-icon-lx-rank"></i></el-button>
+        <el-button circle type="primary" icon="UserFilled" @click="handleCommand(data.data)"></el-button>
+        <el-button circle type="primary" icon="Histogram" @click="handleData(data.data)"></el-button>
         <el-popconfirm title="确定要删除该用户吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              icon="delete"
               circle
               type="danger"
             />

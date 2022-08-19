@@ -18,9 +18,9 @@ export function renderTable() {
         minWidth: '60',
       },
       { prop: 'name', label: '名称', minWidth: '120' },
-      { prop: '', label: '类型', slot:'type', minWidth: '60' },
-      { prop: 'icon', label: '图标',icon:'icon'},
-      { prop: 'url', label: '菜单URL',minWidth:'150' },
+      { prop: '', label: '类型', slot: 'type', minWidth: '60' },
+      { prop: 'icon', label: '图标', icon: 'icon' },
+      { prop: 'url', label: '菜单URL', minWidth: '150' },
       {
         prop: 'perms',
         label: '授权标识',
@@ -55,11 +55,11 @@ export function renderTable() {
         placeholder: '请输入角色名',
         isClearable: true,
         span: 24,
-        options:[
-          {label:'目录',value:'1'},
-          {label:'菜单',value:'2'},
-          {label:'按钮',value:'3'},
-        ]
+        options: [
+          { label: '目录', value: '1' },
+          { label: '菜单', value: '2' },
+          { label: '按钮', value: '3' },
+        ],
       },
       {
         type: 'Input',
@@ -84,16 +84,14 @@ export function renderTable() {
         label: '菜单图标',
         prop: 'icon',
         value: '',
-        placeholder: '菜单图标 (如 el-icon-lx-weibo；el-icon-lx-emojifill)',
+        placeholder: '菜单图标 (如 weibo；emojifill)',
         isClearable: true,
         span: 24,
       },
     ],
-    rules:{
-      name: [
-        { required: true, message: '请输入角色名', trigger: 'blur' },
-      ],
-    }
+    rules: {
+      name: [{ required: true, message: '请输入角色名', trigger: 'blur' }],
+    },
   }
   return {
     tableConfig,

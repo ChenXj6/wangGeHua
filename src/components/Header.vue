@@ -3,12 +3,21 @@
     <!-- 折叠按钮 -->
     <div class="collapse-btn"
          @click="collapseChage">
-      <i v-if="!collapse && !pageStatus"
-         class="el-icon-s-fold"></i>
-      <i v-else-if="!pageStatus"
-         class="el-icon-s-unfold"></i>
-      <i v-else
-         class="el-icon-data-line"></i>
+      <!-- <i v-if="!collapse && !pageStatus"
+         class="el-icon-s-fold"></i> -->
+         
+    <el-icon  v-if="!collapse && !pageStatus">
+      <Fold />
+    </el-icon>
+    <el-icon  v-else-if="!pageStatus">
+      <Expand />
+    </el-icon>
+    <el-icon v-else>
+      <DataAnalysis/>
+    </el-icon>
+      <!-- <i class="unfold"></i> -->
+      <!-- <i 
+         class="el-icon-data-line"></i> -->
     </div>
     <div class="logo"
          @click="router.push('/map')">社会治理网格化智能工作平台</div>
@@ -29,15 +38,18 @@
         </div>
         <div class="go-back"
              @click="pageChange()">
-          <i class="change-state el-icon-sort"></i>
+             <el-icon>
+               <Sort/>
+             </el-icon>
+          <!-- <i class="change-state el-icon-sort"></i> -->
           <span>{{ status }}</span>
         </div>
-        <div class="full-screen"
+        <!-- <div class="full-screen"
              @click="handleFullScreen()">
           <i class="full-screen el-icon-full-screen"></i>
-        </div>
+        </div> -->
         <!-- 消息中心 -->
-        <div class="btn-bell">
+        <!-- <div class="btn-bell">
           <el-tooltip effect="dark"
                       :content="message ? `有${message}条未读消息` : `消息中心`"
                       placement="bottom">
@@ -47,7 +59,7 @@
           </el-tooltip>
           <span class="btn-bell-badge"
                 v-if="message"></span>
-        </div>
+        </div> -->
         <!-- 用户头像 -->
         <div class="user-avator">
           <img src="@/assets/img/img.jpg"
@@ -59,13 +71,14 @@
                      @command="handleCommand">
           <span class="el-dropdown-link">
             <!-- {{ username }} -->
-            <i class="el-icon-caret-bottom"></i>
+            <el-icon>
+              <ArrowDownBold/>
+            </el-icon>
           </span>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item command="user">个人中心</el-dropdown-item>
-              <el-dropdown-item divided
-                                command="loginout">退出登录</el-dropdown-item>
+              <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -213,6 +226,7 @@ export default {
 }
 .collapse-btn {
   float: left;
+  height: 60px;
   padding: 0 10px 0 25px;
   cursor: pointer;
   line-height: 60px;

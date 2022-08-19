@@ -11,17 +11,15 @@
     >
       <template v-slot:operation="data">
         <el-button
-          size="small"
           @click="handleEdit(data.data)"
-          icon="el-icon-lx-edit"
+          icon="edit"
           circle
           type="primary"
         ></el-button>
         <el-popconfirm v-if="data.data.level != 0" title="确定要删除该数据吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              icon="delete"
               circle
               type="danger"
             />
@@ -37,30 +35,30 @@
     >
     <el-form ref="form" :key="timer" :model="dataForm" :rules="rules" label-width="80px">
       <el-form-item label="名称" prop="name">
-        <el-input v-model="dataForm.name" size="mini" placeholder="名称" clearable></el-input>
+        <el-input v-model="dataForm.name" size="small" placeholder="名称" clearable></el-input>
       </el-form-item>
       <el-form-item label="上级菜单" prop="parentId">
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+dataForm.parentId" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="dataForm.parentName" size="mini" :readonly="true" placeholder="点击选择内容" style="cursor:pointer;"></el-input>
+              <el-input v-model="dataForm.parentName" size="small" :readonly="true" placeholder="点击选择内容" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </el-form-item>
       <el-form-item label="编码值" v-if="!dataForm.parentId" prop="perms">
-        <el-input v-model="dataForm.perms" size="mini" disabled placeholder="" clearable></el-input>
+        <el-input v-model="dataForm.perms" size="small" disabled placeholder="" clearable></el-input>
       </el-form-item>
       <el-form-item label="排序" prop="orderNum">
-        <el-input v-model="dataForm.orderNum" size="mini" placeholder="" clearable></el-input>
+        <el-input v-model="dataForm.orderNum" size="small" placeholder="" clearable></el-input>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input v-model="dataForm.remark" size="mini" placeholder="" clearable></el-input>
+        <el-input v-model="dataForm.remark" size="small" placeholder="" clearable></el-input>
       </el-form-item>
     </el-form>
     <div style="margin-top:4px;text-align:right">
-      <el-button type="default" size="mini" @click="dialogVisible = false" >取消</el-button>
-      <el-button type="primary" size="mini" @click="handleSave" >提交</el-button>
+      <el-button type="default" size="small" @click="dialogVisible = false" >取消</el-button>
+      <el-button type="primary" size="small" @click="handleSave" >提交</el-button>
     </div>
     </el-dialog>
   </div>

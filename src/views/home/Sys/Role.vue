@@ -13,19 +13,17 @@
     >
       <template v-slot:operation="data">
         <el-button
-          size="small"
           @click="handleEdit(data.data)"
-          icon="el-icon-lx-edit"
+          icon="edit"
           circle
           type="primary"
         ></el-button>
-        <el-button size="small" circle type="primary" @click="handleCommand(data.data)"><i class="el-icon-lx-tag"></i></el-button>
+        <el-button circle type="primary" icon="Discount" @click="handleCommand(data.data)"></el-button>
         
         <el-popconfirm title="确定要删除该角色吗？" @confirm="handleDelete(data.data.id)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              icon="delete"
               circle
               type="danger"
             />
@@ -55,7 +53,6 @@ import { getCurrentInstance, onMounted, reactive, ref } from '@vue/runtime-core'
 
 import { saveRole, editRole, deleteRole } from '@/api/sys/role'
 import { items } from '@/config/menu'
-import _Row from 'element-plus/lib/el-row'
 import { useRouter } from 'vue-router'
 
 export default {

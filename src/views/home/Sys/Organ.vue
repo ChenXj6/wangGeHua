@@ -24,17 +24,15 @@
     </template>
       <template v-slot:operation="data">
         <el-button
-          size="small"
           @click="handleOperation(2,data.data)"
-          icon="el-icon-lx-edit"
+          icon="edit"
           circle
           type="primary"
         ></el-button>
         <el-popconfirm title="确定要删除该数据吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              icon="delete"
               circle
               type="danger"
             />

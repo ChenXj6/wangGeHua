@@ -3,7 +3,7 @@
     <div class="crumbs">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item>
-          <i class="el-icon-lx-cascades"></i>
+          <i class="cascades"></i>
           {{
             route.query.operation == 1
               ? '查看'
@@ -45,7 +45,7 @@
           <template v-slot>
             <el-input
               v-model="dataForm.officeName"
-              size="mini"
+              size="small"
               :readonly="true"
               placeholder="点击选择机构"
               style="cursor: pointer"
@@ -72,7 +72,7 @@
           <template v-slot>
             <el-input
               v-model="dataForm.officeName"
-              size="mini"
+              size="small"
               :readonly="true"
               placeholder="点击选择机构"
               style="cursor: pointer"
@@ -85,12 +85,12 @@
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 处理记录
+            <i class="cascades"></i> 处理记录
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
       <div style="margin-bottom: 20px"><hr /></div>
-      <el-table :data="tableData" border style="width: 100%" size="mini">
+      <el-table :data="tableData" border style="width: 100%" size="small">
         <el-table-column prop="dealBy" label="承办单位" />
         <el-table-column prop="orderType" label="工单标签" />
         <el-table-column prop="handleTime" label="办理时效(天)" />
@@ -134,7 +134,7 @@
       <div class="crumbs">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item>
-            <i class="el-icon-lx-cascades"></i> 12345事件处置
+            <i class="cascades"></i> 12345事件处置
           </el-breadcrumb-item>
         </el-breadcrumb>
       </div>
@@ -142,7 +142,7 @@
       <el-form ref="recordFormRef" :model="orderForm" label-width="150px">
         <!-- 审核 -->
         <el-form-item v-if="route.query.operation == 4" label="审核结果" prop="dealStatus">
-          <el-select v-model="orderForm.verifyStatus" size="mini" placeholder="请选择审核结果">
+          <el-select v-model="orderForm.verifyStatus" size="small" placeholder="请选择审核结果">
             <el-option
               v-for="item in dataSourceOptions"
               :key="item.value"
@@ -164,7 +164,7 @@
                 <template v-slot>
                   <el-input
                     v-model="orderForm.orderName"
-                    size="mini"
+                    size="small"
                     :readonly="true"
                     placeholder="点击选择工单类别"
                     style="cursor: pointer"
@@ -177,21 +177,21 @@
         <el-form-item v-if="(route.query.operation == 7 || (route.query.operation == 4 && orderForm.verifyStatus == 2))" label="承办单位" prop="dealRemark">
           <el-input
               v-model="orderForm.dealBy"
-              size="mini"
+              size="small"
               placeholder=""
               @click="handleChangeLaunch"
             ></el-input>
         </el-form-item>
         <el-form-item v-if="route.query.operation == 4" label="审核意见" prop="dealRemark">
-          <el-input v-model="orderForm.processingResults" type="textarea" size="mini" placeholder=""></el-input>
+          <el-input v-model="orderForm.processingResults" type="textarea" size="small" placeholder=""></el-input>
         </el-form-item>
         <!-- 接单/退回 -->
         <el-form-item v-if="route.query.operation == 5" label="退回原因" prop="dealRemark">
-          <el-input v-model="orderForm.remarks" type="textarea" size="mini" placeholder=""></el-input>
+          <el-input v-model="orderForm.remarks" type="textarea" size="small" placeholder=""></el-input>
         </el-form-item>
         <!-- 回单 -->
         <el-form-item v-if="route.query.operation == 6" label="处理内容" prop="dealRemark">
-          <el-input v-model="orderForm.dealRemark" type="textarea" size="mini" placeholder=""></el-input>
+          <el-input v-model="orderForm.dealRemark" type="textarea" size="small" placeholder=""></el-input>
         </el-form-item>
         <el-form-item v-if="route.query.operation == 6" label="上传图片" prop="dealRemark">
           <el-upload
@@ -204,13 +204,13 @@
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="el-icon-lx-add"></i>
+              <i class="add"></i>
             </el-upload>
         </el-form-item>
         
         <!-- 撤回 -->
         <el-form-item v-if="route.query.operation == 8" label="撤回原因" prop="dealRemark">
-          <el-input v-model="orderForm.remarks" type="textarea" size="mini" placeholder=""></el-input>
+          <el-input v-model="orderForm.remarks" type="textarea" size="small" placeholder=""></el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -222,7 +222,7 @@
           type="primary"
           @click="handleWithdraw(recordFormRef)"
           size="small"
-          icon="el-icon-lx-roundcheck"
+          icon="CircleClose"
           >撤回</el-button
         >
         <el-button
@@ -230,7 +230,7 @@
           type="primary"
           @click="handleReass(recordFormRef)"
           size="small"
-          icon="el-icon-lx-roundcheck"
+          icon="Share"
           >转派</el-button
         >
         <el-button
@@ -238,7 +238,7 @@
           type="primary"
           @click="handleReceipt(recordFormRef)"
           size="small"
-          icon="el-icon-lx-roundcheck"
+          icon="Back"
           >回单</el-button
         >
         <el-button
@@ -246,7 +246,7 @@
           type="primary"
           @click="handleTake(recordFormRef)"
           size="small"
-          icon="el-icon-lx-roundcheck"
+          icon="roundcheck"
           >接单</el-button
         >
         <el-button
@@ -254,7 +254,7 @@
           type="primary"
           @click="handleReturn(recordFormRef)"
           size="small"
-          icon="el-icon-lx-forwardfill"
+          icon="Promotion"
           >退回</el-button
         >
         <el-button
@@ -262,14 +262,14 @@
           type="primary"
           @click="handleManage(recordFormRef)"
           size="small"
-          icon="el-icon-lx-roundcheck"
+          icon="roundcheck"
           >处置</el-button
         >
         <el-button
           type="primary"
           @click="handleBack"
           size="small"
-          icon="el-icon-lx-back"
+          icon="back"
           >返回</el-button
         >
       </div>
@@ -304,7 +304,7 @@
         </el-row>
       </div>
       <template #footer>
-        <el-button size="mini" type="primary" @click="userDialogVisible = false"
+        <el-button size="small" type="primary" @click="userDialogVisible = false"
           >返回</el-button
         >
       </template>
@@ -421,14 +421,14 @@ export default {
           type: 'primary',
           label: '确认',
           key: 'sub',
-          icon: 'el-icon-lx-roundcheck',
+          icon: 'CircleCheck',
           handle: handleSubmit,
         },
         {
           type: 'primary',
           label: '返回',
           key: 'back',
-          icon: 'el-icon-lx-back',
+          icon: 'ArrowLeft',
           handle: handleBack,
         },
       ],

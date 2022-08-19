@@ -4,9 +4,9 @@
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange" style="width:100%">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -24,9 +24,8 @@
         placement="top-start"
       >
         <el-button
-          size="small"
           @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
+          :icon="Search"
           circle
           type="success"
         />
@@ -38,8 +37,7 @@
         placement="top-start"
       >
         <el-button
-          size="small"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           @click="handleOperation(2, data)"
           circle
           type="priamry"
@@ -53,7 +51,7 @@
       >
         <el-button
           size="small"
-          icon="el-icon-lx-tagfill"
+          icon="tagfill"
           @click="addInfo(4,data)"
           circle
           type="priamry"
@@ -67,7 +65,7 @@
       >
         <el-button
           size="small"
-          icon="el-icon-lx-friend"
+          icon="friend"
           @click="addInfo(5,data)"
           circle
           type="priamry"
@@ -76,8 +74,7 @@
         <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              :icon="Delete"
               circle
               type="danger"
             />
@@ -98,6 +95,12 @@ import {
   onMounted,
   watch,
 } from '@vue/runtime-core'
+
+import {
+  Delete,
+  Edit,
+  Search,
+} from '@element-plus/icons-vue'
 
 import { renderTable } from './common/Info'
 import { deepClone, defaultObject } from '@/utils/util'
@@ -218,6 +221,9 @@ export default defineComponent({
       popupTreeProps,
       popupTreeData,
       addInfo,
+      Delete,
+      Edit,
+      Search,
     }
   },
 })

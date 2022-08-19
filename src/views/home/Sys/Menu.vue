@@ -13,7 +13,7 @@
     <template v-slot:type="{data}">
       <span class="tagClass"
                 ><el-button
-                  size="mini"
+                  size="small"
                   :type="data.type == 1 ? 'success' : ''"
                   >{{ data.type != 1 ? '目录' : '菜单' }}</el-button
                 ></span
@@ -21,17 +21,15 @@
     </template>
       <template v-slot:operation="data">
         <el-button
-          size="small"
           @click="handleEdit(data.data)"
-          icon="el-icon-lx-edit"
+          icon="edit"
           circle
           type="primary"
         ></el-button>
         <el-popconfirm title="确定要删除该角色吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
-              size="small"
-              icon="el-icon-lx-delete"
+              icon="delete"
               circle
               type="danger"
             />
@@ -47,38 +45,38 @@
     >
     <el-form ref="form" :model="dataForm" :rules="rules" label-width="80px">
       <el-form-item label="菜单类型">
-        <el-radio-group v-model="dataForm.type" size="mini">
+        <el-radio-group v-model="dataForm.type" size="small">
           <el-radio v-for="item in typeList" :label="item.value" :key="item.label">{{item.label}}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="`${typeList[dataForm.type].label}名称`" prop="name">
-        <el-input v-model="dataForm.name" size="mini" :placeholder="`${typeList[dataForm.type].label}名称`" clearable></el-input>
+        <el-input v-model="dataForm.name" size="small" :placeholder="`${typeList[dataForm.type].label}名称`" clearable></el-input>
       </el-form-item>
       <el-form-item label="上级菜单">
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+dataForm.parentId" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="dataForm.parentName" size="mini" :readonly="true" placeholder="点击选择内容" style="cursor:pointer;"></el-input>
+              <el-input v-model="dataForm.parentName" size="small" :readonly="true" placeholder="点击选择内容" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </el-form-item>
       <el-form-item v-if="dataForm.type != 0" label="授权标识">
-        <el-input v-model="dataForm.perms" size="mini" clearable></el-input>
+        <el-input v-model="dataForm.perms" size="small" clearable></el-input>
       </el-form-item>
       <el-form-item v-if="dataForm.type == 1" label="菜单路由">
-        <el-input v-model="dataForm.url" size="mini" placeholder="菜单路由" clearable></el-input>
+        <el-input v-model="dataForm.url" size="small" placeholder="菜单路由" clearable></el-input>
       </el-form-item>
       <el-form-item v-if="dataForm.type != 2" label="排序编号">
-        <el-input v-model="dataForm.orderNum" type="number" size="mini"></el-input>
+        <el-input v-model="dataForm.orderNum" type="number" size="small"></el-input>
       </el-form-item>
       <el-form-item v-if="dataForm.type != 2" label="菜单图标">
-        <el-input v-model="dataForm.icon" size="mini" placeholder="菜单图标 (如 el-icon-lx-weibo；el-icon-lx-emojifill)" clearable></el-input>
+        <el-input v-model="dataForm.icon" size="small" placeholder="菜单图标 (如 weibo；emojifill)" clearable></el-input>
       </el-form-item>
     </el-form>
     <div style="margin-top:4px;text-align:right">
-      <el-button type="default" size="mini" @click="dialogVisible = false" >取消</el-button>
-      <el-button type="primary" size="mini" @click="handleSave" >提交</el-button>
+      <el-button type="default" size="small" @click="dialogVisible = false" >取消</el-button>
+      <el-button type="primary" size="small" @click="handleSave" >提交</el-button>
     </div>
     </el-dialog>
   </div>

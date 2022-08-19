@@ -6,7 +6,7 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -20,7 +20,7 @@
           <template v-slot>
             <el-input
               v-model="searchForm.orderName"
-              size="mini"
+              size="small"
               :readonly="true"
               placeholder="点击选择工单类别"
               style="cursor: pointer"
@@ -40,53 +40,47 @@
       </template>
       <template v-slot:operation="{data}">
         <el-button
-          size="small"
           @click="handleOperation(1, data)"
-          icon="el-icon-lx-search"
+          :icon="Search"
           circle
           type="success"
         />
         <el-button
-          size="small"
           title="审核"
           v-if="data.status == 5 && data.buttonStatus == 1"
-          icon="el-icon-lx-edit"
+          :icon="Edit"
           @click="handleOperation(4, data)"
           circle
           type="priamry"
         />
         <el-button
-          size="small"
           title="接单/退回"
           v-if="data.status == 1 && data.buttonStatus != 1"
-          icon="el-icon-lx-forwardfill"
+          :icon="Promotion"
           @click="handleOperation(5, data)"
           circle
           type="priamry"
         />
         <el-button
-          size="small"
           title="回单"
           v-if="(data.status == 4 || data.status == 7) && data.buttonStatus != 1"
-          icon="el-icon-lx-back"
+          :icon="Back"
           @click="handleOperation(6, data)"
           circle
           type="priamry"
         />
         <el-button
-          size="small"
           title="转派"
           v-if="(data.status == 2 || data.status == 3 )  && data.buttonStatus == 1"
-          icon="el-icon-lx-share"
+          :icon="Share"
           @click="handleOperation(7, data)"
           circle
           type="priamry"
         />
         <el-button
-          size="small"
           title="撤回"
           v-if="data.status == 1 && data.buttonStatus == 1"
-          icon="el-icon-lx-roundclose"
+          :icon="CircleClose"
           @click="handleOperation(8, data)"
           circle
           type="priamry"
@@ -106,6 +100,15 @@ import {
   onMounted,
   watch,
 } from '@vue/runtime-core'
+import {
+  Delete,
+  Edit,
+  Search,
+  CircleClose,
+  Share,
+  Back,
+  Promotion,
+} from '@element-plus/icons-vue'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/management'
@@ -234,6 +237,13 @@ export default defineComponent({
       orderTreeProps,
       orderTreeData,
       handleOrderTreeSelectChange,
+      Delete,
+      Edit,
+      Search,
+      CircleClose,
+      Share,
+      Back,
+      Promotion,
     }
 
 

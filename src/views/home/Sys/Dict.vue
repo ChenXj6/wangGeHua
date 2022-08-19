@@ -4,7 +4,7 @@
       <el-col :span="4">
         <el-button style="margin: 10px 20px"
                    type="primary"
-                   size="mini" @click="handleAddType(1,{},1)">添加主类型</el-button>
+                   size="small" @click="handleAddType(1,{},1)">添加主类型</el-button>
       </el-col>
     </el-row>
     <el-row :gutter="10">
@@ -21,14 +21,14 @@
               <el-col :span="4">
                 <el-button type="primary"
                            style="margin: 10px 20px"
-                           size="mini"
+                           size="small"
                            @click="handleAddType(1,i,2)">添加子类型</el-button>
               </el-col>
               <el-col :span="8" :offset="6">
                 <span><b>{{ i.description }}</b></span>
               </el-col>
             </el-row>
-            <el-table :data="i.list" size="mini" border header-cell-style="text-align:center" style="width: 100%">
+            <el-table :data="i.list" size="small" border header-cell-style="text-align:center" style="width: 100%">
               <el-table-column prop="value" label="编码" align="center"/>
               <el-table-column prop="description" label="描述" align="center" />
               <el-table-column prop="createTime" label="创建时间" align="center">
@@ -43,14 +43,13 @@
               </el-table-column>
               <el-table-column label="操作" width="150" align="center">
                 <template #default="scope">
-                  <el-button size="small" type="primary" icon="el-icon-lx-edit" circle @click="handleEdit(scope.row)"
+                  <el-button size="small" type="primary" icon="edit" circle @click="handleEdit(scope.row)"
                     ></el-button
                   >
                   <el-popconfirm title="确定要删除该数据吗？" @confirm="handleDel(scope.row)">
                     <template #reference>
                       <el-button
-                        size="small"
-                        icon="el-icon-lx-delete"
+                        icon="delete"
                         circle
                         type="danger"
                       />

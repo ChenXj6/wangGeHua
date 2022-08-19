@@ -5,7 +5,7 @@
         <popup-tree-input :data="popupTreeData" :propa="popupTreeProps" :nodeKey="'' + searchForm.officeCode"
           @update:dataForm="handleTreeSelectChange">
           <template v-slot>
-            <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构"
+            <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构"
               style="cursor:pointer;"></el-input>
           </template>
         </popup-tree-input>
@@ -13,17 +13,17 @@
     </VForm>
     <V-table ref="table" :table-config="tableConfig" @select-change="(val) => (multipleSelection = val)">
       <template v-slot:staffName="{ data }">
-        <el-link size="mini" type="primary" @click.prevent="handleOperation(2, data)">{{ data.staffName }}</el-link>
+        <el-link size="small" type="primary" @click.prevent="handleOperation(2, data)">{{ data.staffName }}</el-link>
       </template>
       <template v-slot:isState="{data}">
         <span>{{ data.lotType == 1? '已核实' : '未核实' }}</span>
       </template>
       <template v-slot:operation="{ data }">
-        <el-button size="small" @click="handleOperation(1, data)" icon="el-icon-lx-search" circle type="success" />
-        <el-button size="small" icon="el-icon-lx-edit" @click="handleOperation(2, data)" circle type="priamry" />
+        <el-button @click="handleOperation(1, data)" icon="search" circle type="success" />
+        <el-button icon="edit" @click="handleOperation(2, data)" circle type="priamry" />
         <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
-            <el-button size="small" icon="el-icon-lx-delete" circle type="danger" />
+            <el-button icon="delete" circle type="danger" />
           </template>
         </el-popconfirm>
       </template>

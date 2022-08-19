@@ -6,7 +6,7 @@
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="mini" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -18,8 +18,7 @@
     >
       <template v-slot:operation="{data}">
         <el-button
-          size="small"
-          icon="el-icon-lx-edit"
+          icon="edit"
           @click="handleEdit(data)"
           circle
           type="primary"
@@ -48,13 +47,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label="审核意见" prop="opinion">
-            <el-input size="mini" type="textarea" v-model="reviewForm.opinion"></el-input>
+            <el-input size="small" type="textarea" v-model="reviewForm.opinion"></el-input>
           </el-form-item>
         </el-form>
       </div>
       <template #footer>
-        <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="handleConfirm">确 定</el-button>
+        <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="handleConfirm">确 定</el-button>
       </template>
     </el-dialog>
   </div>
