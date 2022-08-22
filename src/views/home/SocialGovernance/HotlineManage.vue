@@ -136,6 +136,23 @@
         >
       </template>
     </el-dialog>
+    <el-dialog
+      title="导入12345热线数据"
+      v-model="importDialogVisible"
+      width="500px">
+      <div style="display:flex;align-items:center;justify-content: center;">
+        <el-upload
+        class="upload-demo"
+        action="#"
+        :auto-upload="false"
+        :file-list="fileList"
+        show-file-list
+        :on-change="(file,fileList) => changeFile(file,fileList)"
+      >
+        <el-button type="primary">上传文件</el-button>
+      </el-upload>
+      </div>
+    </el-dialog>
 </template>
 <script>
 import { reactive, ref } from '@vue/reactivity'
@@ -153,7 +170,7 @@ import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/hotlineManage'
 import { deepClone, defaultObject } from '@/utils/util'
 import { getTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
-import { dispatchOrder,delHotline,exportHotline } from '@/api/SocialGovernance/HotlineManage'
+import { dispatchOrder,delHotline,exportHotline, importHotline } from '@/api/SocialGovernance/HotlineManage'
 import { getUserList } from "@/api/sys/user";
 import { downLoadFile } from '@/utils/util'
 import {
@@ -336,6 +353,28 @@ export default defineComponent({
         })
       }
     }
+    // 导入
+    // 图片相关配置
+    const fileList = ref([])
+    // 上传图片
+    const changeFile = (file) => {
+      let fileFormData = new FormData();
+      let currentFile = file.raw
+      fileFormData.append('Hotline',currentFile)
+      importHotline(fileFormData).then(res=>{
+        if(res.resCode == '000000'){
+          handleQuery()
+          importDialogVisible.value = false
+          proxy.$message.success('文件上传成功')
+        } else {
+          proxy.$message.success('文件上传失败')
+        }
+      })
+    }
+    const importDialogVisible = ref(false)
+    const handleImport = () => {
+      importDialogVisible.value = true
+    }
     // 导出
     const handleExport = () => {
       if(!isHaveSelect.value){
@@ -343,7 +382,7 @@ export default defineComponent({
         return
       }else{
         exportHotline(multipleSelection.value).then(res=>{
-          downLoadFile(res,'12345热线','application/vnd.ms-excel')
+          downLoadFile(res,'12345热线','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
         })
       }
     }
@@ -355,6 +394,7 @@ export default defineComponent({
         { type: 'primary', label: '添加', key: 'reset', handle: handleAdd },
         { type: 'primary', label: '派单', key: 'dispatch', handle: handleDispatch },
         { type: 'danger', label: '批量删除', key: 'delete', handle: handleDelte },
+        { type: 'success', label: '导入', key: 'import', handle: handleImport },
         { type: 'Primary', label: '导出', key: 'export', handle: handleExport },
       ],
     }
@@ -424,6 +464,10 @@ export default defineComponent({
       Delete,
       Edit,
       Search,
+      // 导入
+      importDialogVisible,
+      fileList,
+      changeFile,
     }
   },
 })

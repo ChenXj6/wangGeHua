@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title></title>
+<style type="text/css">
+  .eventBox{
+    width: 100%;
+    height: 100%;
+  }
+</style>
+</head>
+<body>
+  <div class="eventBox">
+  </div>
+</body>
+<script>
+let event = document.getElementsByClassName('eventBox')[0]
+let params = location.search.substr(1,location.search.length)
+let paramsObj = {}
+params.split('&').forEach(v=>{
+  let arr = v.split('=')
+  paramsObj[arr[0]] = arr[1]
+})
+const data =  JSON.parse(decodeURIComponent(paramsObj.data))
+
+
+let div = window.document.createElement('div')
+div.style.cssText = 'min-height:280px;position: relative;font-size:14px'
+// 
+div.innerHTML = `
+   <p><b>隐患名称：</b>${data?.dangerName}</p>  
+   <p><b>隐患地址：</b></b>${data?.address}</p>  
+   <p><b>责任人：</b>${data.manageProper}</p>
+   <p><b>责任人电话：</b>${data.managePhone}</p>
+   <p><b>隐患简介：</b>${data.synopsis}</p>
+  <p>&nbsp;</p>
+`
+event.appendChild(div)
+</script>
+</html>

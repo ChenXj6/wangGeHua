@@ -1,6 +1,13 @@
 import service from '@/utils/request';
 
-// 
+// 导入
+export const importHotline = query => {
+  return service.post(
+    `/api/realInfo/hotline/InputExcel`, query
+  )
+};
+
+// 导出
 export const exportHotline = query => {
   return service.post(
     `/api/realInfo/hotline/OutExcel`, query

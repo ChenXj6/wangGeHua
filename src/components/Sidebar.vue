@@ -94,8 +94,9 @@ export default {
 .sidebar::-webkit-scrollbar {
     width: 0;
 }
-.sidebar-el-menu {
+.sidebar-el-menu:not(.el-menu--collapse){
     width: 200px;
+    position: relative;
 }
 .sidebar > ul {
     /* height: 100%; */

@@ -49,7 +49,7 @@
           <template v-if="item.type === 'textarea'">
             <el-input
               v-model.trim="formModel[item.prop]"
-              :autosize="{ minRows: 2, maxRows: 4 }"
+              :autosize="{ minRows: 2, maxRows: 99 }"
               :placeholder="item.placeholder"
               type="textarea"
               size="small"
@@ -238,5 +238,8 @@ export default defineComponent({
 <style scoped>
 deep.el-date-editor.el-input, .el-date-editor.el-input__inner{
   width: 100% !important;
+}
+.btn-box{
+  padding-left: 10px;
 }
 </style>

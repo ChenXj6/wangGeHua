@@ -57,7 +57,7 @@
     </V-table>
     <!-- 党组织弹窗 -->
     <el-dialog
-        width="width"
+        width="70%"
         v-model="InfoDialogVisible">
         <VForm :form-data="infoFormConfig" :form-model="searchInfoForm" :form-handle="infoFormHandle">
       <template v-slot:status>
@@ -197,8 +197,19 @@ export default {
     })
     const infoTable = ref(null)
     const searchInfoParams = ref({})
+    function findElem(arrayToSearch, attr, val) {
+      for (var i = 0; i < arrayToSearch.length; i++) {
+            if (arrayToSearch[i][attr] == val) {
+                return i;
+            }
+        }
+        return -1;
+    }
     const handleOpenInfo = () => {
-      infoTtableConfig.columns.splice(infoTtableConfig.columns.length-1,1)
+      let result = findElem(infoTtableConfig.columns, 'label', '操作')
+      if(result > -1){
+        infoTtableConfig.columns.splice(result,1)
+      }
       InfoDialogVisible.value = true
       setTimeout(()=>{
         handleQueryInfo()

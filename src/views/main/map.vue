@@ -161,6 +161,7 @@
               <div class="tableBox">
                 <V-table
                 ref="tableBuilding"
+                height="320"
                 :table-config="tableConfig"
                 @select-change="(val) => (multipleSelection = val)"
               >
@@ -238,13 +239,12 @@
               <div class="tableBox">
                 <V-table
                 ref="tableEvent"
+                height="320"
                 :table-config="tableEventConfig"
                 @select-change="(val) => (multipleSelection = val)"
               >
                 <template v-slot:name="data">
                   <span
-                    type="success"
-                    @click.prevent="handleOperation(1, data.data)"
                     >{{ data.data.eventName }}</span
                   >
                 </template>
@@ -317,6 +317,7 @@
               <div class="tableBox">
                 <V-table
                 ref="tableHotline"
+                height="320"
                 :table-config="tableHotlineConfig"
                 @select-change="(val) => (multipleSelection = val)"
               >
@@ -414,17 +415,20 @@
                   </popup-tree-input>
                 </template>
               </VForm>
+            </el-col>
+            <el-col :span="24">
               <div class="tableBox">
                 <V-table
                 ref="hiddenDangerRef"
+                height="320"
                 :table-config="tableHiddenDangerConfig"
                 @select-change="(val) => (multipleSelection = val)"
               >
               <template v-slot:dangerName="{data}">
-                <el-link type="success" @click.prevent="javascript();">{{ data.dangerName }}</el-link>
+                <span>{{ data.dangerName }}</span>
               </template>
-                <template v-slot:operation="{}">
-                  <el-button type="primary" size="small" @click="handleOperation"
+                <template v-slot:operation="{data}">
+                  <el-button type="primary" size="small" @click="handleOperation(data)"
                     >定位</el-button
                   >
                 </template>
@@ -654,6 +658,8 @@ import neuropathyUr1 from "/src/assets/img/精神障碍.png"
 import drugDetoxificationUr1 from "/src/assets/img/社区戒毒.png"
 import correctUr1 from "/src/assets/img/社会矫正.png"
 import controlUr1 from "/src/assets/img/稳控对象.png"
+
+import hiddenDanger from '/src/assets/img/隐患记录.png'
 
 
 //重点管理人员>>戒毒
@@ -979,7 +985,7 @@ export default {
     watch(fullHeight, () => {
       reLoadMap();
       VMapRender();
-      setTimeout(() => drawMyRoute3(), 1000);
+      nextTick(() => drawMyRoute3());
     });
     // 点击导航栏 弹窗
     watch(
@@ -1476,21 +1482,27 @@ export default {
     };
 
     // 网格政务 >>> 事件查询
-      const eventClick = (item,data) => {
+    const eventClick = (item,data) => {
+      const name = eventFirstTypeOptions.value.filter((v) => v.value == data.eventFirstType)[0]?.label
       let {lng,lat} = randomAddress()
-      var html = `<div id="control" onClick="hj2(${lng},${lat},\'事件查询\',\'\http://192.168.1.146:8081/biaoqian/eventHandling.html?id=${data.id}&data=${encodeURIComponent(JSON.stringify(data))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
+      var html = `<div id="control" onClick="hj2(${lng},${lat},\'${name}\',\'\http://192.168.1.146:8081/biaoqian/eventHandling.html?id=${data.id}&data=${encodeURIComponent(JSON.stringify(data))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${controlUr1}" style="width:50px;margin-bottom: 5px;"></div>`
       vMap.showMapMark(lng, lat, html);
     }
 
-      const handleEventOperation = (data) => {
+    const handleEventOperation = (data) => {
       handleClickOpen('')
       eventClick(isOpenType.value,data)
-     
     };
 
+    const hiddenDangerClick = (item, data) => {
+      let {lng,lat} = randomAddress()
+      var html = `<div id="control" onClick="hj2(${lng},${lat},\'隐患内容\',\'\http://192.168.1.146:8081/biaoqian/hiddenDanger.html?id=${data.id}&data=${encodeURIComponent(JSON.stringify(data))}')" style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="${hiddenDanger}" style="width:50px;margin-bottom: 5px;"></div>`
+      vMap.showMapMark(lng, lat, html);
+    }
 
-    const handleOperation = () => {
-
+    const handleOperation = (data) => {
+      handleClickOpen('')
+      hiddenDangerClick(isOpenType.value, data)
     };
 
 
@@ -1694,9 +1706,9 @@ export default {
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(() => {
+        nextTick(() => {
           handleQuery();
-        }, 1000);
+        });
           getOList();
         // return;
       } else if(item.type == "eventQuery"){
@@ -1704,17 +1716,17 @@ export default {
         handleClickOpen('')
          show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(() => {
+        nextTick(() => {
             handleEventQuery();
-        }, 1000);
+        });
       } else if(item.type == "hotline"){
          isOpenType.value = item.type
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(() => {
+        nextTick(() => {
             handleHotlineQuery();
-        }, 1000);
+        });
       } else if(item.type == "release"){
         isOpenType.value = item.type
         handleClickOpen('')        
@@ -1755,9 +1767,9 @@ export default {
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(() => {
+        nextTick(() => {
             getInfo();
-        }, 1000);
+        });
       } else if (item.type == 'haidi') {
         isOpenType.value = item.type
         handleClickOpen('')
@@ -1828,10 +1840,6 @@ export default {
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        // setTimeout(()=>{
-        //   console.log(brandList.value,'222')
-        //   brandList.value.length && handleSelect(brandList.value[0])
-        // },100)
         nextTick(()=>{
           brandList.value.length && handleSelect(brandList.value[0])
         })
@@ -1880,9 +1888,9 @@ export default {
         show.value = item.title;
         handleClickOpen('isOpen')
         searchEventForm.value.eventFirstType = "8"
-        setTimeout(() => {
+        nextTick(() => {
           handleEventQuery();
-        }, 1000);
+        });
       } else if (item.type == 'alarm') {
         isOpenType.value = item.type
         handleClickOpen('')
@@ -1893,9 +1901,9 @@ export default {
         handleClickOpen('')
         show.value = item.title;
         handleClickOpen('isOpen')
-        setTimeout(() => {
+        nextTick(() => {
           handleHiddenDangerQuery();
-        }, 1000);
+        });
       } else if (item.type == 'pandemic') {
         getList(item.showType,item.level1,item.level2,item.level3)
         isOpenType.value = item.type
@@ -2343,8 +2351,8 @@ export default {
   height:100%;
 }
 .carousel_box .showBox{
-  max-height:500px ;
-  overflow-y: scroll;
+  max-height:500px;
+  /* overflow-y: scroll; */
 }
 ::v-deep .el-carousel__container{
   height: 400px;
@@ -2488,6 +2496,10 @@ h4 {
   line-height: 30px;
   border-bottom: 1px dashed #4190bd;
   cursor: pointer;
+}
+
+/deep/.el-form-item__label{
+  color: #fff !important;
 }
 </style>
 

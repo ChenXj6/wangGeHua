@@ -1,89 +1,82 @@
 <template>
   <div class="header">
-    <!-- 折叠按钮 -->
-    <div class="collapse-btn"
-         @click="collapseChage">
-      <!-- <i v-if="!collapse && !pageStatus"
-         class="el-icon-s-fold"></i> -->
-         
-    <el-icon  v-if="!collapse && !pageStatus">
-      <Fold />
-    </el-icon>
-    <el-icon  v-else-if="!pageStatus">
-      <Expand />
-    </el-icon>
-    <el-icon v-else>
-      <DataAnalysis/>
-    </el-icon>
-      <!-- <i class="unfold"></i> -->
-      <!-- <i 
-         class="el-icon-data-line"></i> -->
-    </div>
-    <div class="logo"
-         @click="router.push('/map')">社会治理网格化智能工作平台</div>
-    <div v-if="pageStatus"
-         class="header-content">
-      <header-sidebar />
-    </div>
-    <div class="header-right">
-      <div class="header-user-con">
-        <div class="dateWeather">
-          <div>
-            {{ nowTime }}
+    <el-row>
+      <el-col :span="4">
+        <!-- 折叠按钮 -->
+        <div class="collapse-btn"
+             @click="collapseChage">
+
+          <el-icon v-if="!collapse && !pageStatus">
+            <Fold />
+          </el-icon>
+          <el-icon v-else-if="!pageStatus">
+            <Expand />
+          </el-icon>
+          <el-icon v-else>
+            <DataAnalysis />
+          </el-icon>
+        </div>
+        <span class="logo"
+             @click="router.push('/map')">社会治理网格化智能工作平台</span>
+      </el-col>
+      <el-col :span="12">
+        <div v-if="pageStatus"
+             class="header-content">
+          <header-sidebar />
+        </div>
+      </el-col>
+      <el-col :span="6" :offset="2">
+        <div class="header-right">
+          <div class="header-user-con">
+            <div class="dateWeather">
+              <div>
+                {{ nowTime }}
+              </div>
+              <div>
+                <!-- <div id="he-plugin-simple"></div> -->
+                <Weather />
+              </div>
+            </div>
+            <div class="go-back"
+                 @click="pageChange()">
+              <el-icon>
+                <Sort />
+              </el-icon>
+              <!-- <i class="change-state el-icon-sort"></i> -->
+              <span>{{ status }}</span>
+            </div>
+            <div class="full-screen"
+                 @click="handleFullScreen()">
+              <el-icon>
+                <FullScreen />
+              </el-icon>
+            </div>
+            <!-- 用户头像 -->
+            <div class="user-avator">
+              <img src="@/assets/img/img.jpg"
+                   alt="author" />
+            </div>
+            <!-- 用户名下拉菜单 -->
+            <el-dropdown class="user-name"
+                         trigger="click"
+                         @command="handleCommand">
+              <span class="el-dropdown-link">
+                <!-- {{ username }} -->
+                <el-icon>
+                  <ArrowDownBold />
+                </el-icon>
+              </span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="user">个人中心</el-dropdown-item>
+                  <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
           </div>
-          <div>
-            <!-- <div id="he-plugin-simple"></div> -->
-            <Weather/>
-          </div>
         </div>
-        <div class="go-back"
-             @click="pageChange()">
-             <el-icon>
-               <Sort/>
-             </el-icon>
-          <!-- <i class="change-state el-icon-sort"></i> -->
-          <span>{{ status }}</span>
-        </div>
-        <!-- <div class="full-screen"
-             @click="handleFullScreen()">
-          <i class="full-screen el-icon-full-screen"></i>
-        </div> -->
-        <!-- 消息中心 -->
-        <!-- <div class="btn-bell">
-          <el-tooltip effect="dark"
-                      :content="message ? `有${message}条未读消息` : `消息中心`"
-                      placement="bottom">
-            <router-link to="/tabs">
-              <i class="el-icon-bell"></i>
-            </router-link>
-          </el-tooltip>
-          <span class="btn-bell-badge"
-                v-if="message"></span>
-        </div> -->
-        <!-- 用户头像 -->
-        <div class="user-avator">
-          <img src="@/assets/img/img.jpg"
-               alt="author" />
-        </div>
-        <!-- 用户名下拉菜单 -->
-        <el-dropdown class="user-name"
-                     trigger="click"
-                     @command="handleCommand">
-          <span class="el-dropdown-link">
-            <!-- {{ username }} -->
-            <el-icon>
-              <ArrowDownBold/>
-            </el-icon>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="user">个人中心</el-dropdown-item>
-              <el-dropdown-item command="loginout">退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-    </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -194,7 +187,7 @@ export default {
       timer.value = setInterval(nowTimes, 1000)
     }
     onMounted(() => {
-      nowTimes()      
+      nowTimes()
     })
     onBeforeUnmount(() => {
       clearInterval(timer.value)
@@ -229,7 +222,9 @@ export default {
   height: 60px;
   padding: 0 10px 0 25px;
   cursor: pointer;
-  line-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .header .logo {
   float: left;

@@ -32,13 +32,20 @@ export default {
       //   maximumAge: 50000 , //表明可以返回多长时间（即最长年龄，单位毫秒）内的可获取的缓存位置。如果设置为 0, 说明设备不能使用一个缓存位置，而且必须去获取一个真实的当前位置。默认0
       // })
       // return
-      const geoLocation = new BMapGL.Geolocation()
-      geoLocation.getCurrentPosition( async (position) => {
-        console.log(position,'....')
-        // city.value = position.address?.city || '北京'
-        // lat.value = position.point.lat.toFixed(2)
-        // lon.value = position.point.lng.toFixed(2)
-      })
+      // const geoLocation = new BMapGL.Geolocation()
+      // geoLocation.getCurrentPosition( async (position) => {
+      //   console.log(position,'....')
+      //   city.value = position.address?.city || '北京'
+      //   lat.value = position.point.lat.toFixed(2)
+      //   lon.value = position.point.lng.toFixed(2)
+      //   let weatherData = await getWeather(lon.value,lat.value)
+      // // console.log(weather)
+      //   const { icon,temp,text,windDir } = weatherData
+      //   weather.icon = icon 
+      //   weather.temp = temp 
+      //   weather.text = text 
+      //   weather.windDir = windDir 
+      // })
       city.value = '济南市'
       lat.value = '36.65' 
       lon.value = '117.12'

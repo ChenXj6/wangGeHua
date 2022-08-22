@@ -3,10 +3,11 @@
     :ref="tableConfig.name"
     :key="`${tableConfig.name}_${key}`"
     v-loading="loading"
-    style="width: 100%"
+    style="width: 100%;margin-top:10px"
     :data="tableConfig.data"
     border
     size="small"
+    :height="!!height ? height : null"
     :max-height="tableConfig.height"
     :row-class-name="tableConfig.rowClassFunc || rowClassFunc"
     :cell-class-name="tableConfig.cellClassFunc"
@@ -136,6 +137,10 @@ export default defineComponent({
       type: Function,
       default: () => {},
     },
+    height: {
+      type: Number,
+      default: () => 0
+    }
   },
   emits: ['selectChange', 'currentChange', 'sizeChange', 'rowClick'],
   setup(props, { emit }) {
@@ -144,6 +149,7 @@ export default defineComponent({
     } = getCurrentInstance()
     const loading = ref(false)
     const key = ref(0)
+    const height = ref(props.height)
     const currentPage = ref(1)
     const currentPageSize = ref(10)
     const total = ref(0)
@@ -304,6 +310,7 @@ export default defineComponent({
       rowClassFunc,
       isHide,
       options,
+      height,
     }
   },
 })
