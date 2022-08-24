@@ -296,8 +296,8 @@ export default {
     }
     const getLatAndLng = ({lat,lng}) => {
       // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      dataForm.value.longitude = lng
-      dataForm.value.latitude = lat
+      dataForm.value.longitude = lng.toFixed(6)
+      dataForm.value.latitude = lat.toFixed(6)
       mapDialogVisible.value = false
     }
     // 处置
@@ -405,6 +405,10 @@ export default {
     }
     // 
     const handleClickRecord = () => {
+      if(!dataForm.value.isDanger){
+        proxy.$message.warning('请选择是否存在隐患')
+        return
+      }
       delete dataForm.value.treeNames
       delete dataForm.value.manageProper
       delete dataForm.value.managePhone

@@ -55,7 +55,13 @@ export function renderTable() {
                 value: '',
                 span: 11,
               },
-        ]   
+        ],
+        rules:{
+          titleName: [{ required: true, message: '请输入标题名称', trigger: 'blur' }],
+          assessName: [{ required: true, message: '请输入考核名称', trigger: 'blur' }],
+          fullMarks: [{ required: true, message: '请输入满分成绩', trigger: ['blur'] }],
+          assessType: [{ required: true, message: '请选择考核类型', trigger: ['change','blur'] }],
+        }
     }
     return {
         InfoFormConfig

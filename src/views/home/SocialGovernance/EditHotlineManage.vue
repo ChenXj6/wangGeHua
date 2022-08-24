@@ -53,6 +53,56 @@
           </template>
         </popup-tree-input>
       </template>
+      <template v-slot:level1="">
+        <el-select v-model="dataForm.level1" clearable size="small" placeholder="请选择一级分类" @change="handleChangelevel1">
+          <el-option
+            v-for="item in level1Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level2="">
+        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="small" placeholder="请选择二级分类" @change="handleChangelevel2">
+          <el-option
+            v-for="item in level2Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level3="">
+        <el-select v-model="dataForm.level3" clearable :disabled="!dataForm.level2" size="small" placeholder="请选择三级分类" @change="handleChangelevel3">
+          <el-option
+            v-for="item in level3Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level4="">
+        <el-select v-model="dataForm.level4" clearable :disabled="!dataForm.level3" size="small" placeholder="请选择四级分类" @change="handleChangelevel4">
+          <el-option
+            v-for="item in level4Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level5="">
+        <el-select v-model="dataForm.level5" clearable :disabled="!dataForm.level4" size="small" placeholder="请选择五级分类">
+          <el-option
+            v-for="item in level5Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
     </VForm>
     <VForm
       v-else-if="route.query.type == 'manage'"
@@ -324,6 +374,7 @@ import mixin from '@/mixins/tagView.js'
 import { getUserList } from "@/api/sys/user";
 import { getTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
 import { renderTable } from './common/edit'
+import { getDictThTreeBy } from '@/api/sys/multilevel'
 import {
   saveHotlineManage,
   editHotlineManage,
@@ -338,6 +389,7 @@ import PopupTreeInput from '@/components/PopupTreeInput/index.vue'
 import { uploadApi } from '@/api/upload'
 import { searchDict } from '@/api/sys/dict'
 import { formatterDate,resetFormat as resetFormatStatus } from '@/utils/util'
+import { getOrganList } from '@/api/sys/organ'
 
 export default {
   name: 'editHotlineManage',
@@ -365,8 +417,65 @@ export default {
     const handleTreeSelectChange = ({ officeCode, officeName }) => {
       dataForm.value.officeCode = officeCode
       dataForm.value.officeName = officeName
-      getSOList(officeCode)
     }
+    const getOList = () => {
+      getOrganList({}).then(res=>{
+        if(res.resCode == '000000'){
+          popupTreeData.value = res.data
+        }
+      })
+    }
+    getOList()
+    // 分类
+    const level1Options = ref([])
+    const level2Options = ref([])
+    const level3Options = ref([])
+    const level4Options = ref([])
+    const level5Options = ref([])
+    const resetFormat = (data,option) => {
+      let arr = []
+      data.forEach(v=>{
+        let obj = {}
+        obj.label = v.name
+        obj.value = String(v.id)
+        arr.push(obj)
+      })
+      option.value = arr
+    }
+    const handleChangelevel1 = () => {
+      let id = dataForm.value.level1
+      dataForm.value.level2 = ''
+      dataForm.value.level3 = ''
+      dataForm.value.level4 = ''
+      dataForm.value.level5 = ''
+      getDictThTreeByApi({id},level2Options)
+    }
+    const handleChangelevel2 = () => {
+      let id = dataForm.value.level2
+      dataForm.value.level3 = ''
+      dataForm.value.level4 = ''
+      dataForm.value.level5 = ''
+      getDictThTreeByApi({id},level3Options)
+    }
+    const handleChangelevel3 = () => {
+      let id = dataForm.value.level3
+      dataForm.value.level4 = ''
+      dataForm.value.level5 = ''
+      getDictThTreeByApi({id},level4Options)
+    }
+    const handleChangelevel4 = () => {
+      let id = dataForm.value.level4
+      dataForm.value.level5 = ''
+      getDictThTreeByApi({id},level5Options)
+    }
+    const getDictThTreeByApi = (data,option) => {
+      getDictThTreeBy(data).then(res=>{
+        if(res.code == 200){
+          resetFormat(res.data,option)
+        }        
+      })
+    }
+    getDictThTreeByApi({perms:'0004'},level1Options)
     const handleSave = () => {
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
@@ -797,6 +906,16 @@ export default {
       handleTake,
       handleReturn,
       handleManage,
+      // 多级分类
+      level1Options,
+      level2Options,
+      level3Options,
+      level4Options,
+      level5Options,
+      handleChangelevel1,
+      handleChangelevel2,
+      handleChangelevel3,
+      handleChangelevel4,
     }
   },
 }

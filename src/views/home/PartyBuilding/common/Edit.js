@@ -1,4 +1,4 @@
-
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const partyFormConfig = {
@@ -90,9 +90,11 @@ export function renderTable() {
       ],
       longitude: [
         { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },
+        { validator:validator.checkLongitude, trigger: ['change','blur']  }
       ],
       latitude: [
         { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },
+        { validator:validator.checkLatitude, trigger: ['change','blur']  }
       ],
     }
   }

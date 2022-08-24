@@ -75,7 +75,7 @@ export function renderTable() {
         type:'slot',
         label:'事件类型',
         slotName:'eventFirstType',
-        placeholder: '请选择事件来源',
+        placeholder: '请选择事件类型',
         span:6,
       },
       // {

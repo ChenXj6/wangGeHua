@@ -10,6 +10,7 @@
           :label="item.label"
           :label-width="item.label ? (formData.labelWidth ? formData.labelWidth : '120px') : 0"
           :prop="item.prop"
+          inline-message
         >
         <!-- 多層 -->
         <template v-if="item.type === 'many'" style="margin-left: -80px">
@@ -241,5 +242,8 @@ deep.el-date-editor.el-input, .el-date-editor.el-input__inner{
 }
 .btn-box{
   padding-left: 10px;
+}
+:deep().el-form-item{
+  margin-bottom:15px !important ;
 }
 </style>

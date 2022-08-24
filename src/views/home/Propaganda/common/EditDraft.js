@@ -50,39 +50,7 @@ export function renderTable() {
         slotName: 'level3',
         isClearable: true,
         span: 11,
-      },
-      // {
-      //   type: 'selectSearch',
-      //   label: '文稿一级分类',
-      //   prop: 'level1',
-      //   value: '',
-      //   code:'1005',
-      //   placeholder: '请选择一级分类',
-      //   isClearable: true,
-      //   span: 11,
-      // },
-      // {
-      //   type: 'selectSearch',
-      //   label: '文稿二级分类',
-      //   prop: 'level2',
-      //   value: '',
-      //   code:'1005',
-      //   placeholder: '请选择二级分类',
-      //   isClearable: true,
-      //   span: 11,
-      // },
-      
-      // {
-      //   type: 'selectSearch',
-      //   label: '文稿三级分类',
-      //   prop: 'level3',
-      //   value: '',
-      //   code:'1005',
-      //   placeholder: '请选择三级分类',
-      //   isClearable: true,
-      //   span: 11,
-      // },
-      
+      },      
       {
         type: 'slot',
         label: '图片上传',
@@ -99,9 +67,18 @@ export function renderTable() {
       },
     ],
     rules:{
+      title:[
+        { required: true, message: '请输入标题', trigger: ['blur','change'] },
+      ],
       officeName:[
         { required: true, message: '请选择机构', trigger: ['blur','change'] },
-      ]
+      ],
+      level1:[
+        { required: true, message: '请选择文稿一级分类', trigger: ['blur','change'] },
+      ],
+      content:[
+        { required: true, message: '请输入内容', trigger: ['blur','change'] },
+      ],
     }
   }
   const MediaFormConfig = {

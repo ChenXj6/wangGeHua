@@ -165,14 +165,6 @@ export default {
     const route = useRoute();
     const { delCurrentTag } = mixin.setup();
     const { proxy } = getCurrentInstance();
-    const {
-      houseTableConfig,
-      peopleTableConfig,
-      peopleByHouseTableConfig,
-      buildFormConfig,
-      houseFormConfig,
-      peopleFormConfig,
-    } = renderTable.call(proxy);
     let dataForm = ref({});
     const { StaffFormConfig } = renderTable.call(proxy);
     const table1 = ref(null);
@@ -452,9 +444,6 @@ export default {
       handleBack,
       handleSubmit,
       StaffFormConfig,
-      houseTableConfig,
-      peopleTableConfig,
-      peopleByHouseTableConfig,
       streetNameOptions,
       communityNameOptions,
       gridNameOptions,

@@ -259,6 +259,14 @@ export default {
       }
       formRef.validate((vaild) => {
         if (vaild) {
+          if(route.query.type != 'draft'){
+            // String(dataForm.value.mediaPath).length <= 0 
+            console.log(fileList.value,dataForm.value.mediaPath)
+            if(String(dataForm.value.mediaPath).length <= 0 && dataForm.value.mediaPath != null){
+              proxy.$message.warning(`请添加图片、音频或视频，点击确定！`)
+              return
+            }
+          }
           handleSave().then(res=>{
             proxy.$message.success(`${route.query.operation == 2 ? '编辑' : '添加'}成功`)
             delCurrentTag(route)

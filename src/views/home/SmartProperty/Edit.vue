@@ -34,6 +34,26 @@
           </template>
         </popup-tree-input>
       </template>
+      <template v-slot:level1="">
+        <el-select v-model="dataForm.type1" clearable size="small" placeholder="请选择一级分类" @change="handleChangelevel1">
+          <el-option
+            v-for="item in level1Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level2="">
+        <el-select v-model="dataForm.type2" clearable :disabled="!dataForm.type1" size="small" placeholder="请选择二级分类">
+          <el-option
+            v-for="item in level2Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
     </VForm>
     <VForm v-if="route.query.type == 'Manage'" :key="timer" :isDisabled="route.query.operation == 1"
       :form-data="ManageFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
@@ -84,15 +104,23 @@
           </template>
         </popup-tree-input>
       </template>
-      <template v-slot:lonAndLat>
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input>
-          </el-col>
-          <el-col :span="12">
-            <el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input>
-          </el-col>
-        </el-row>
+      <template v-slot:eventLong="">
+          <el-input
+                  v-model="dataForm.longitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable                  
+                  @click="handleClick"
+                />
+        </template>
+      <template v-slot:eventLat="">
+                <el-input
+                  v-model="dataForm.latitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable
+                  @click="handleClick"
+                />
       </template>
     </VForm>
     <VForm v-if="route.query.type == 'rubbish'" :form-data="rubbishFormConfig"
@@ -107,15 +135,23 @@
           </template>
         </popup-tree-input>
       </template>
-      <template v-slot:lonAndLat>
-        <el-row :gutter="10">
-          <el-col :span="12">
-            <el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input>
-          </el-col>
-          <el-col :span="12">
-            <el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input>
-          </el-col>
-        </el-row>
+      <template v-slot:eventLong="">
+          <el-input
+                  v-model="dataForm.longitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable                  
+                  @click="handleClick"
+                />
+        </template>
+      <template v-slot:eventLat="">
+                <el-input
+                  v-model="dataForm.latitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable
+                  @click="handleClick"
+                />
       </template>
     </VForm>
     <el-row v-if="route.query.operation == 1">
@@ -146,6 +182,7 @@ import { saveCharge, editCharge } from '@/api/SmartProperty/Charge'
 
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
+import { getDictThTreeBy } from '@/api/sys/multilevel'
 export default {
   name: 'EditActual',
   mixins: [mixin],
@@ -158,6 +195,8 @@ export default {
     let dataForm = reactive({
       officeCode: '',
       officeName: '',
+      type1:'',
+      type2:'',
     })
     let timer = ref(new Date().getTime())
     let popupTreeData = ref([])
@@ -327,6 +366,32 @@ export default {
         { type: 'primary', label: '返回', key: 'back', icon: 'ArrowLeft', handle: handleBack },
       ]
     }
+    // 多级分类
+    const level1Options = ref([])
+    const level2Options = ref([])
+    const resetFormat = (data,option) => {
+      let arr = []
+      data.forEach(v=>{
+        let obj = {}
+        obj.label = v.name
+        obj.value = String(v.id)
+        arr.push(obj)
+      })
+      option.value = arr
+    }
+    const handleChangelevel1 = () => {
+      let id = dataForm.type1
+      dataForm.type2 = ''
+      getDictThTreeByApi({id},level2Options)
+    }
+    const getDictThTreeByApi = (data,option) => {
+      getDictThTreeBy(data).then(res=>{
+        if(res.code == 200){
+          resetFormat(res.data,option)
+        }        
+      })
+    }
+    getDictThTreeByApi({perms:'0005'},level1Options)
     // 表格相關操作5
     const handleQueryTable = () => {
       table1.value.getTableData({}, (res) => {
@@ -342,8 +407,8 @@ export default {
     }
     const getLatAndLng = ({ lat, lng }) => {
       // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      dataForm.longitude = lng
-      dataForm.latitude = lat
+      dataForm.longitude = lng.toFixed(6)
+      dataForm.latitude = lat.toFixed(6)
       mapDialogVisible.value = false
     }
     onBeforeMount(() => {
@@ -375,6 +440,10 @@ export default {
       mapDialogVisible,
       handleClick,
       getLatAndLng,
+      // 多级分类
+      level1Options,
+      level2Options,
+      handleChangelevel1,
     }
   },
 }

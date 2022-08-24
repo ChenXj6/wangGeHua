@@ -88,6 +88,22 @@
   },
 
   /**
+   * 车牌号校验
+   */
+   isLicenseNo(rule, value, callback) {
+    if (
+      value &&
+      (!/(^[\u4E00-\u9FA5]{1}[A-Z0-9]{6}$)|(^[A-Z]{2}[A-Z0-9]{2}[A-Z0-9\u4E00-\u9FA5]{1}[A-Z0-9]{4}$)|(^[\u4E00-\u9FA5]{1}[A-Z0-9]{5}[挂学警军港澳]{1}$)|(^[A-Z]{2}[0-9]{5}$)|(^(08|38){1}[A-Z0-9]{4}[A-Z0-9挂学警军港澳]{1}$)/.test(value))
+    ) {
+      callback(new Error('请输入正确格式的车牌号'))
+    } else {
+      callback()
+    }
+    return ;
+  },
+
+
+  /**
    * 正整数校验
    */
   integerP(rule, value, callback) {
@@ -290,7 +306,7 @@
   checkZeroToHundred(rule, value, callback) {
     const reg = /^(?:0|[1-9][0-9]?|100)$/
     if (!reg.test(value)) {
-      callback(new Error('请输入正整数，值为【0,100】'))
+      callback(new Error('请输入正整数，范围值为【0,100】'))
     } else {
       callback()
     }

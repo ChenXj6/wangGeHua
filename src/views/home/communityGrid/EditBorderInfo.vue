@@ -15,11 +15,7 @@
       </el-col>
     </el-row>
     <VForm :key="timer" :isDisabled="route.query.operation == 1" :form-data="InfoFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
-      <template v-slot:organ>
-        <el-form-item label="组织结构">
-          <!-- <el-input v-if="dataForm.streeName" size="small" disabled v-model="dataForm.streeName"></el-input>
-          <el-input v-else-if="dataForm.communityName" size="small" disabled v-model="dataForm.communityName"></el-input>
-          <el-input v-else size="small" disabled v-model="dataForm.gridName"></el-input> -->
+      <template v-slot:status>
           <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
             :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange" style="width:100%">
@@ -27,7 +23,6 @@
               <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
-        </el-form-item>
       </template>
       <template v-slot:remarks>
         <el-row>
@@ -131,7 +126,7 @@ export default {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
-    const { InfoFormConfig } = renderTable.call(proxy)
+    const { InfoFormConfig,EditInfoFormConfig } = renderTable.call(proxy)
     // const rules = {
     //   borderScope:[
     //     { required: true, message: '请输入边界信息', trigger: 'blur'},
@@ -156,6 +151,8 @@ export default {
       communityName:'',
       officeCode:'',
       officeName:'',
+      gridName:'',
+      gridCode:'',
       info:[
         {
           borderScope:'',
@@ -302,6 +299,7 @@ export default {
       handleBack,
       handleSubmit,
       InfoFormConfig,
+      EditInfoFormConfig,
       formHandle,
       addList,
       removeBtn,

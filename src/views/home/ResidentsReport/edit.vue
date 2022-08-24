@@ -485,8 +485,8 @@ export default {
     }
     const getLatAndLng = ({lat,lng}) => {
       // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      formData.value.eventLong = lng
-      formData.value.eventLat = lat
+      formData.value.eventLong = lng.toFixed(6)
+      formData.value.eventLat = lat.toFixed(6)
       mapDialogVisible.value = false
     }
     // 处理状态

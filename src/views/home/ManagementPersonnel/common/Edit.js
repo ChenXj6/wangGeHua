@@ -1,64 +1,8 @@
 // import { streetName, communityName, gridName, buildNature, buildType, isTrue, useMode, format, buildingNo, sex, marriageStatus, education, personnelAttributes, special, relationship, keyServicePersonType, keyManagePersonType } from '@/config/common'
 import { getHouseList,getPeopleList,getPeopleByHouseList } from '@/api/ActualInfo/build'
-
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
-  const houseTableConfig = {
-    name: 'table1',
-    data: [],
-    pagination: false, // 开启分页器
-    mutiSelect: false, // 开启选择
-    method: getHouseList, // 請求api
-    index: false, // 是否启用序号列 
-    total: 0,
-    isSortable: false, // 是否开启拖拽
-    columns: [
-      {
-        prop: 'unitNumber',
-        label: '单元号',
-        minWidth: '120',
-      },
-      { prop: 'house', label: '房间号', minWidth: '120' },
-      { prop: 'userName', label: '使用者姓名', minWidth: '120' },
-      { prop: 'userPhone', label: '使用者联系方式', minWidth: '120' },
-    ],
-  }
-  const peopleTableConfig = {
-    name: 'table2',
-    data: [],
-    pagination: false, // 开启分页器
-    mutiSelect: false, // 开启选择
-    method: getPeopleList, // 請求api
-    index: false, // 是否启用序号列
-    total: 0,
-    isSortable: false, // 是否开启拖拽
-    columns: [
-      {
-        prop: 'name',
-        label: '姓名',
-      },
-      { prop: 'idcard', label: '身份证号', minWidth: '120' },
-      // { prop: 'residenceNow', label: '具体住址',minWidth:'200'},
-    ],
-  }
-  const peopleByHouseTableConfig = {
-    name: 'table3',
-    data: [],
-    pagination: false, // 开启分页器
-    mutiSelect: false, // 开启选择
-    method: getPeopleByHouseList, // 請求api
-    index: false, // 是否启用序号列
-    total: 0,
-    isSortable: false, // 是否开启拖拽
-    columns: [
-      {
-        prop: 'name',
-        label: '姓名',
-      },
-      { prop: 'idcard', label: '身份证号', minWidth: '120' },
-      // { prop: 'residenceNow', label: '具体住址',},
-    ],
-  }
   const DrugFormConfig = {
     gutter: 10,
     formItems: [
@@ -417,7 +361,10 @@ export function renderTable() {
       officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
-      idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
+      idCard: [
+        { required: true, message: '请输入身份证号', trigger: ['blur', 'change'] },
+        { validator:validator.idCard, trigger: ['blur']  }
+      ],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
       houseId: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
     },
@@ -801,7 +748,10 @@ export function renderTable() {
       officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
-      idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
+      idCard: [
+        { required: true, message: '请输入身份证号', trigger: ['blur', 'change'] },
+        { validator:validator.idCard, trigger: ['blur']  }
+      ],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
       houseId: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
     },
@@ -1330,7 +1280,10 @@ export function renderTable() {
       officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
-      idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
+      idCard: [
+        { required: true, message: '请输入身份证号', trigger: ['blur', 'change'] },
+        { validator:validator.idCard, trigger: ['blur']  }
+      ],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
       houseId: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
     },
@@ -1754,7 +1707,10 @@ export function renderTable() {
       officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
-      idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
+      idCard: [
+        { required: true, message: '请输入身份证号', trigger: ['blur', 'change'] },
+        { validator:validator.idCard, trigger: ['blur']  }
+      ],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
       houseId: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
     },
@@ -2050,7 +2006,10 @@ export function renderTable() {
       officeCode: [{ required: true, message: '请选择网格', trigger: ['blur', 'change'] }],
       buildingId: [{ required: true, message: '请选择楼栋', trigger: ['blur', 'change'] }],
       communityCode: [{ required: true, message: '请选择社区', trigger: ['blur', 'change'] }],
-      idCard: [{ required: true, message: '请输入身份证号', trigger: ['blur', 'change'] }],
+      idCard: [
+        { required: true, message: '请输入身份证号', trigger: ['blur', 'change'] },
+        { validator:validator.idCard, trigger: ['blur']  }
+      ],
       staffName: [{ required: true, message: '请输入姓名', trigger: ['blur', 'change'] }],
       houseId: [{ required: true, message: '请选择房屋', trigger: ['blur', 'change'] }],
     },
@@ -2058,9 +2017,6 @@ export function renderTable() {
   }
   return {
     DrugFormConfig,
-    houseTableConfig,
-    peopleTableConfig,
-    peopleByHouseTableConfig,
     ReleaseFormConfig,
     RrectifyFormConfig,
     MentaldisordersFormConfig,

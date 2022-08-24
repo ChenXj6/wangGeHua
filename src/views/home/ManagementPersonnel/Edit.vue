@@ -249,7 +249,7 @@ export default {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
-    const { MentaldisordersFormConfig,PetitionFormConfig,RrectifyFormConfig,ReleaseFormConfig,DrugFormConfig,houseTableConfig, peopleTableConfig, peopleByHouseTableConfig } = renderTable.call(proxy)
+    const { MentaldisordersFormConfig,PetitionFormConfig,RrectifyFormConfig,ReleaseFormConfig,DrugFormConfig } = renderTable.call(proxy)
     let dataForm = ref({})
     const table1 = ref(null)
     const table2 = ref(null)
@@ -616,9 +616,6 @@ export default {
       RrectifyFormConfig,
       PetitionFormConfig,
       MentaldisordersFormConfig,
-      houseTableConfig,
-      peopleTableConfig,
-      peopleByHouseTableConfig,
       streetNameOptions,
       communityNameOptions,
       gridNameOptions,

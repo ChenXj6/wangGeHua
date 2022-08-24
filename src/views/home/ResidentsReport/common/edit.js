@@ -1,4 +1,5 @@
 import { getUserList } from '@/api/sys/user'
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const editFormConfig = {
@@ -143,10 +144,18 @@ export function renderTable() {
       communityCode: [{ required: true, message: '请选择社区', trigger: ['change','blur'] }],
       gridCode: [{ required: true, message: '请选择网格', trigger: ['change','blur'] }],
       eventPlace: [{ required: true, message: '请输入事件发生地', trigger: 'blur' }],
-      eventLong: [{ required: true, message: '请点击获取经纬度', trigger: ['change','blur'] }],
-      eventLat: [{ required: true, message: '请点击获取经纬度', trigger: ['change','blur'] }],
+      eventLong: [
+        { required: true, message: '请点击获取经纬度', trigger: ['change','blur'] },
+        { validator:validator.checkLongitude, trigger: ['blur']  }
+      ],
+      eventLat: [
+        { required: true, message: '请点击获取经纬度', trigger: ['change','blur'] },
+        { validator:validator.checkLatitude, trigger: ['blur']  }
+      ],
       eventFirstType:[{ required: true, message: '请选择事件类型', trigger: ['change','blur'] }],
       eventScope:[{ required: true, message: '请选择事件规模', trigger: ['change','blur'] }],
+      aboutPeopleNum:[{ validator:validator.checkZeroToHundred, trigger: ['change', 'blur']  }],
+      mainPeopleCertificateNum:[{ validator:validator.idCard, trigger: ['blur']  }],
       eventContent:[{ required: true, message: '请输入事件简述', trigger: 'blur' }],
     }
   }

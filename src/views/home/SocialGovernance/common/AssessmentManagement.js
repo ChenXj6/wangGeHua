@@ -12,8 +12,8 @@ export function renderTable() {
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
-        { prop: 'titleName', label: '标题名称',toolTip:true, minWidth: '120' }, 
-        { prop: 'assessName', label: '考核名称',toolTip:true, minWidth: '120' }, 
+        { prop: 'titleName', label: '标题名称',tooltip:true, minWidth: '120' }, 
+        { prop: 'assessName', label: '考核名称',tooltip:true, minWidth: '120' }, 
         // { prop: 'assessDetail', label: '考核细则',toolTip:true, minWidth: '120' },  
         { prop: 'fullMarks', label: '满分',toolTip:true, minWidth: '120' }, 
         // { prop: 'num', label: '次数',toolTip:true, minWidth: '120' }, 

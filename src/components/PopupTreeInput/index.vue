@@ -1,25 +1,25 @@
 <template>
   <div style="width:100%">
     <el-popover
-    :placement="placement"
-    trigger="click"
-    v-if="isShow"
-    width="300"
-  >
-   <el-tree
-        :data="data"
-        :props="propa"
-        node-key="nodeKey"
-        ref="popupTree"
-        @current-change="currentChangeHandle"
-        :default-expand-all="defaultExpandAll"
-        :highlight-current="true"
-        :expand-on-click-node="true">
-      </el-tree>
-    <template #reference>
-      <slot></slot>
-    </template>
-  </el-popover>
+      :placement="placement"
+      trigger="click"
+      v-if="isShow"
+      width="300"
+    >
+    <el-tree
+          :data="data"
+          :props="propa"
+          node-key="nodeKey"
+          ref="popupTree"
+          @current-change="currentChangeHandle"
+          :default-expand-all="defaultExpandAll"
+          :highlight-current="true"
+          :expand-on-click-node="true">
+        </el-tree>
+      <template #reference>
+        <slot></slot>
+      </template>
+    </el-popover>
   </div>
 </template>
 

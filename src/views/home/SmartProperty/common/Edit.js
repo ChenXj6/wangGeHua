@@ -1,4 +1,4 @@
-
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const CarFormConfig = {
@@ -75,12 +75,26 @@ export function renderTable() {
         span: 11,
         slotName: 'organ',
       },
+      // {
+      //   type: 'slot',
+      //   label: '经纬度',
+      //   prop: 'lonAndLat',
+      //   span: 11,
+      //   slotName: 'lonAndLat',
+      // },
       {
         type: 'slot',
         label: '经纬度',
-        prop: 'lonAndLat',
-        span: 11,
-        slotName: 'lonAndLat',
+        prop: 'longitude',
+        span: 6,
+        slotName:'eventLong'
+      },
+      {
+        type: 'slot',
+        label: '',
+        prop: 'latitude',
+        span: 5,
+        slotName:'eventLat'
       },
       {
         type: 'selectSearch',
@@ -126,6 +140,14 @@ export function renderTable() {
       deviceType: [{ required: true, message: '请选择设施类型', trigger: ['blur', 'change'] }],
       amount: [{ required: true, message: '请输入数量', trigger: ['blur', 'change'] }],
       synopsis: [{ required: true, message: '请输入简介', trigger: ['blur', 'change'] }],
+      longitude: [
+        { required: true, message: '请点击获取经纬度', trigger: ['change','blur'] },
+        { validator:validator.checkLongitude, trigger: ['blur']  }
+      ],
+      latitude: [
+        { required: true, message: '请点击获取经纬度', trigger: ['change','blur'] },
+        { validator:validator.checkLatitude, trigger: ['blur']  }
+      ],
     }
   }
   const rubbishFormConfig = {
@@ -150,9 +172,16 @@ export function renderTable() {
       {
         type: 'slot',
         label: '经纬度',
-        prop: '',
-        span: 11,
-        slotName: 'lonAndLat',
+        prop: 'longitude',
+        span: 6,
+        slotName:'eventLong'
+      },
+      {
+        type: 'slot',
+        label: '',
+        prop: 'latitude',
+        span: 5,
+        slotName:'eventLat'
       },
       {
         type: 'selectSearch',
@@ -195,6 +224,14 @@ export function renderTable() {
       pointName: [{ required: true, message: '请输入名称', trigger: ['blur', 'change'] }],
       officeCode: [{ required: true, message: '请选择归属网格', trigger: ['blur', 'change'] }],
       pointType: [{ required: true, message: '请选择垃圾类型', trigger: ['blur', 'change'] }],
+      longitude: [
+        { required: true, message: '请点击获取经纬度', trigger: ['change','blur'] },
+        { validator:validator.checkLongitude, trigger: ['blur']  }
+      ],
+      latitude: [
+        { required: true, message: '请点击获取经纬度', trigger: ['change','blur'] },
+        { validator:validator.checkLatitude, trigger: ['blur']  }
+      ],
     }
   }
   const VehicleFormConfig = {
@@ -251,7 +288,7 @@ export function renderTable() {
         value: '',
         format: 'YYYY-MM-DD HH:mm:ss',
         isClearable: true,
-        span: 8,
+        span: 11,
       },
       {
         type: 'Input',
@@ -282,7 +319,10 @@ export function renderTable() {
       },
     ],
     rules: {
-      licenseNum: [{ required: true, message: '请输入车牌号', trigger: ['blur', 'change'] }],
+      licenseNum: [
+        { required: true, message: '请输入车牌号', trigger: ['blur', 'change'] },
+        { validator:validator.isLicenseNo, trigger: ['blur']  }
+      ],
       officeCode: [{ required: true, message: '请选择归属网格', trigger: ['blur', 'change'] }],
       brand: [{ required: true, message: '请输入车辆品牌', trigger: ['blur', 'change'] }],
       vehicleType: [{ required: true, message: '请选择车辆类型', trigger: ['blur', 'change'] }],
@@ -342,20 +382,18 @@ export function renderTable() {
           span: 11,
         },
         {
-          type: 'selectSearch',
+          type: 'slot',
           label: '一级分类',
           prop: 'type1',
-          code: '1030',
-          placeholder: '请选择一级分类',
+          slotName: 'level1',
           isClearable: true,
           span: 11,
         },
         {
-          type: 'selectSearch',
+          type: 'slot',
           label: '二级分类',
           prop: 'type2',
-          code: '1028',
-          placeholder: '请选择二级分类',
+          slotName: 'level2',
           isClearable: true,
           span: 11,
         },
@@ -366,7 +404,7 @@ export function renderTable() {
           value: '',
           format: 'YYYY-MM-DD HH:mm:ss',
           isClearable: true,
-          span: 8,
+          span: 11,
         },
         {
           type: 'Input',
@@ -375,11 +413,24 @@ export function renderTable() {
           value: '',
           placeholder: '请输入金额',
           isClearable: true,
-          span: 8,
+          span: 11,
+        },
+        {
+          type: 'textarea',
+          label: '备注',
+          prop: 'remarks',
+          value: '',
+          placeholder: '',
+          isClearable: true,
+          span: 22,
         },
       ],
       rules: {
         officeCode: [{ required: true, message: '请选择归属网格', trigger: ['blur', 'change'] }],
+        name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
+        chargeTime: [{ required: true, message: '请选择时间', trigger: 'blur' }],
+        amount: [{ required: true, message: '请填写金额', trigger: 'blur' }],
+        type1:[{ required: true, message: '请选择一级分类', trigger: ['blur', 'change'] }],
       }
     }
   const ManageFormConfig = {

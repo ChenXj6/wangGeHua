@@ -1,4 +1,5 @@
 import { getUserList } from '@/api/sys/user'
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const hiddenFormConfig = {
@@ -33,14 +34,14 @@ export function renderTable() {
       {
         type: 'slot',
         label: '经纬度',
-        prop: 'lon',
+        prop: 'longitude',
         span: 6,
         slotName:'eventLong'
       },
       {
         type: 'slot',
         label: '',
-        prop: 'lat',
+        prop: 'latitude',
         span: 5,
         slotName:'eventLat'
       },
@@ -138,9 +139,11 @@ export function renderTable() {
       ],
       longitude: [
         { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },
+        { validator:validator.checkLongitude, trigger: ['blur']  }
       ],
       latitude: [
         { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },
+        { validator:validator.checkLongitude, trigger: ['blur']  }
       ],
     }
   }
@@ -258,7 +261,7 @@ export function renderTable() {
         label: '处理人',
         prop: 'processePer',
         value: '',
-        placeholder: '请填写名称',
+        placeholder: '请填写处理人姓名',
         isClearable: true,
         disabled:true,
         span: 11,
@@ -326,17 +329,26 @@ export function renderTable() {
       },
     ],
     rules:{
-      investigePer: [
-        { required: true, message: '请输入排查人员', trigger: ['blur','change'] },
+      dangerinfoName: [
+        { required: true, message: '请输入隐患名称', trigger: ['blur'] },
       ],
       gridName: [
         { required: true, message: '请选择所属机构', trigger: ['blur','change'] },
       ],
-      dangerType: [
-        { required: true, message: '请选择类型', trigger: ['blur','change'] },
+      processePer: [
+        { required: true, message: '请输入处理人', trigger: ['blur'] },
       ],
-      configType: [
-        { required: true, message: '请选择类型', trigger: ['blur','change'] },
+      processeTime: [
+        { required: true, message: '请输入处理时间', trigger: ['blur','change'] },
+      ],
+      rectificationTime: [
+        { required: true, message: '请输入整改时间', trigger: ['blur','change'] },
+      ],
+      reviewTime: [
+        { required: true, message: '请输入复查时间', trigger: ['blur','change'] },
+      ],
+      isDanger: [
+        { required: true, message: '请选择是否存在隐患', trigger: ['blur'] },
       ],
     }
   }

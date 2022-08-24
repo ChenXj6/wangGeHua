@@ -19,14 +19,12 @@
       <template v-slot:name="{data}">
         <span >{{ data.name }}</span>
       </template>
-      <template v-slot:type1="{data}">
+      <!-- <template v-slot:type1="{data}">
         <span>{{ data.type1 == 1 ? '停车收费' : '物业收费' }}</span>
       </template>
       <template v-slot:type2="{data}">
          <span>{{ data.type2 == 1 ? 'SUV' :  (data.type2 == 2 ? '皮卡' : '轿车') }}</span>
-
-
-      </template>
+      </template> -->
       <template v-slot:operation="{data}">
         <el-button
           @click="handleOperation(1, data)"

@@ -1,5 +1,5 @@
 <template>
-<el-dialog title="楼栋人员信息"
+<el-dialog :title="buildTitle"
                v-model="houseDialogVisible"
                width="60%"
                draggable
@@ -250,6 +250,7 @@ export default defineComponent({
     const peopleList = ref([]);
     const isHaveHouse = ref(true);
     const isHavePeople = ref(true);
+    const buildTitle = ref('')
     // 小区名字  楼号  单元号   房屋号
     const searchForm = ref({
       buildingId: '',
@@ -283,6 +284,8 @@ export default defineComponent({
           }else{
             unitList.value = res.data.unit;
             buildForm.value = res.data.build;
+            console.log(buildForm.value,'...')
+            buildTitle.value = buildForm.value?.countyName+ '-' + buildForm.value?.streetName+ '-' + buildForm.value?.communityName+ '-' + buildForm.value?.gridName+ '-' + buildForm.value?.villageName
             searchForm.value.buildingId = res.data.build.id
             searchForm.value.villageName = res.data.build.villageName;
             searchForm.value.buildingNumber = res.data.build.buildingNumber;
@@ -411,6 +414,7 @@ export default defineComponent({
       drawer,
       handleClose,
       houseDialogVisible,
+      buildTitle,
     }
   },
 })

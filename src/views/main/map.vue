@@ -208,6 +208,7 @@
                     v-model="searchEventForm.eventFirstType"
                     size="small"
                     clearable
+                    :disabled="isOpenType == 'smokeRecord'"
                     placeholder="请选择事件类型"
                   >
                     <el-option
@@ -458,7 +459,7 @@
       </el-icon>
     </div>
     <!-- 楼栋弹窗-->
-      <Building :key="buildTime" v-if="houseDialogVisible" :houseDialogVisible="houseDialogVisible" @update:houseDialogVisible="handleCloseBuild" :gisid="gisid" />
+    <Building :key="buildTime" v-if="houseDialogVisible" :houseDialogVisible="houseDialogVisible" @update:houseDialogVisible="handleCloseBuild" :gisid="gisid" />
     <!-- 事件处置弹窗 -->
     <el-dialog title="" v-model="eventHandleVisible" width="width">
       <div>
@@ -1888,6 +1889,7 @@ export default {
         show.value = item.title;
         handleClickOpen('isOpen')
         searchEventForm.value.eventFirstType = "8"
+        // formEventConfig
         nextTick(() => {
           handleEventQuery();
         });

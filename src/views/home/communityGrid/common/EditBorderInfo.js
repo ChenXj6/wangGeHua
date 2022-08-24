@@ -6,9 +6,42 @@ export function renderTable() {
     formItems: [
       {
         type: 'slot',
-        label: '',
-        span: 6,
-        slotName:'organ'
+        label: '机构名称',
+        slotName:'status',
+        span: 11,
+        prop:'officeCode',
+      },
+      {
+        type: 'Input',
+        label: '区名称',
+        prop: 'countyName',
+        value: '',
+        disabled:true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '街道名称',
+        prop: 'streetName',
+        value: '',
+        disabled:true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '社区名称',
+        prop: 'communityName',
+        value: '',
+        disabled:true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '网格名称',
+        prop: 'gridName',
+        value: '',
+        disabled:true,
+        span: 11,
       },
       {
         type: 'slot',
