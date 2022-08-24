@@ -251,6 +251,7 @@
               :on-remove="handleRemove"
               :auto-upload="false"
               :file-list="fileList"
+              accept="bmp,jpg,png,gif,webp,"
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
@@ -599,6 +600,11 @@ export default {
     const dialogImageUrl = ref('')
     // 上传图片
     const changeFile = (file) => {
+      if(file.size / 1024 / 1024 > 10){ 
+        fileList.value = []
+        proxy.$message.error('最大文件上传尺寸为10Mb')
+        return
+      }
       let fileFormData = new FormData();
       let currentFile = file.raw
       fileFormData.append('file',currentFile)

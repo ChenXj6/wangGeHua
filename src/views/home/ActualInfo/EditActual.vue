@@ -49,15 +49,21 @@
       <template v-slot:upload="">
         <el-upload
               class="upload-demo"
-              action=""
+              action="#"
               :on-preview="handlePreview"
               :on-remove="handleRemove"
               :auto-upload="false"
+              accept="bmp,jpg,png,gif,webp,"
               :file-list="fileList"
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="add"></i>
+              <el-icon><Plus/></el-icon>
+              <template #tip>
+                <div class="el-upload__tip tip">
+                  *最大上传文件大小10Mb
+                </div>
+              </template>
             </el-upload>
       </template>
     </VForm>
@@ -108,12 +114,18 @@
               action=""
               :on-preview="handlePreview"
               :on-remove="handleRemove"
+              accept="bmp,jpg,png,gif,webp,"
               :auto-upload="false"
               :file-list="fileList"
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="add"></i>
+              <el-icon><Plus/></el-icon>
+              <template #tip>
+                <div class="el-upload__tip tip">
+                  *最大上传文件大小10Mb
+                </div>
+              </template>
             </el-upload>
       </template>
     </VForm>
@@ -176,10 +188,16 @@
               :on-remove="handleRemove"
               :auto-upload="false"
               :file-list="fileList"
+              accept="bmp,jpg,png,gif,webp,"
               list-type="picture-card"
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
-              <i class="add"></i>
+              <el-icon><Plus/></el-icon>
+              <template #tip>
+                <div class="el-upload__tip tip">
+                  *最大上传文件大小10Mb
+                </div>
+              </template>
             </el-upload>
       </template>
     </VForm>
@@ -253,6 +271,11 @@ export default {
     const dialogImageUrl = ref('')
     // 上传图片
     const changeFile = (file) => {
+      if(file.size / 1024 / 1024 > 10){ 
+        fileList.value = []
+        proxy.$message.error('最大文件上传尺寸为10Mb')
+        return
+      }
       let fileFormData = new FormData();
       let currentFile = file.raw
       fileFormData.append('file',currentFile)

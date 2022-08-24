@@ -32,6 +32,12 @@
               :on-change="(file,fileList) => changeFile(file,fileList)"
             >
               <el-button type="primary" size="small">上传文件</el-button>
+              <el-icon><Plus/></el-icon>
+              <template #tip>
+                <div class="el-upload__tip tip">
+                  *最大上传文件大小10Mb
+                </div>
+              </template>
             </el-upload>
         </div>
       </template>
@@ -139,6 +145,11 @@ export default {
     const fileList = ref([])
     // 上传图片
     const changeFile = (file) => {
+      if(file.size / 1024 / 1024 > 10){ 
+        fileList.value = []
+        proxy.$message.error('最大文件上传尺寸为10Mb')
+        return
+      }
       let fileFormData = new FormData();
       let currentFile = file.raw
       fileFormData.append('file',currentFile)

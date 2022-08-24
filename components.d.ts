@@ -4,6 +4,7 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']

@@ -54,6 +54,8 @@
               :placeholder="item.placeholder"
               type="textarea"
               size="small"
+              show-word-limit
+              maxlength="500"
               :disabled="item.disabled"
               :clearable="item.isClearable"
             />
@@ -122,7 +124,7 @@
             </el-date-picker>
           </template>
           <!-- 自定義插槽 -->
-          <template v-else-if="item.type === 'slot'">
+          <template v-else-if="item.type === 'slot'" >
             <slot :name="item.slotName" :data="item"></slot>
           </template>
         </el-form-item>
@@ -245,5 +247,9 @@ deep.el-date-editor.el-input, .el-date-editor.el-input__inner{
 }
 :deep().el-form-item{
   margin-bottom:15px !important ;
+  min-height: 32px !important;
+}
+:deep().el-form-item__content{
+  
 }
 </style>

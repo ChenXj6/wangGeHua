@@ -221,3 +221,8 @@ input::-webkit-inner-spin-button {
   /*隐藏滚轮*/
   display: none;
 }
+
+.tip{
+  color: red !important;
+  font-style:italic;
+}

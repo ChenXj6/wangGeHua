@@ -146,10 +146,16 @@
         action="#"
         :auto-upload="false"
         :file-list="fileList"
+        accept="mp4,mp3"
         show-file-list
         :on-change="(file,fileList) => changeFile(file,fileList)"
       >
         <el-button type="primary">上传文件</el-button>
+        <template #tip>
+          <div class="el-upload__tip tip">
+            *最大上传文件大小10Mb
+          </div>
+        </template>
       </el-upload>
       </div>
     </el-dialog>
@@ -358,6 +364,11 @@ export default defineComponent({
     const fileList = ref([])
     // 上传图片
     const changeFile = (file) => {
+      if(file.size / 1024 / 1024 > 10){ 
+        fileList.value = []
+        proxy.$message.error('最大文件上传尺寸为10Mb')
+        return
+      }
       let fileFormData = new FormData();
       let currentFile = file.raw
       fileFormData.append('Hotline',currentFile)
