@@ -14,6 +14,9 @@
             </keep-alive>
           </transition>
         </router-view>
+        <div class="logo">
+          <span>版权所有©中软国际科技服务有限公司(前端v4.5120220820，后端v4.5320220406)</span>
+        </div>
       </div>
     </div>
   </div>
@@ -44,5 +47,17 @@ export default {
 };
 </script>
 <style scoped>
-
+.logo{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  line-height: 20px;
+  color: #999;
+}
 </style>
