@@ -36,6 +36,26 @@
           <el-col :span="12"><el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input></el-col>
         </el-row>
       </template>
+      <template v-slot:type1="">
+        <el-select v-model="dataForm.type1" clearable size="small" placeholder="请选择一级分类" @change="handleChangelevel1">
+          <el-option
+            v-for="item in level1Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:type2="">
+        <el-select v-model="dataForm.type2" clearable :disabled="!dataForm.type1" size="small" placeholder="请选择二级分类">
+          <el-option
+            v-for="item in level2Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
     </VForm>
     <VForm v-else-if="route.query.type === 'building'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="buildingFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
@@ -107,6 +127,7 @@ import { addTax,updateTax } from '@/api/Economics/tax'
 import { addItem,updateItem } from '@/api/Economics/itemList'
 import { addBuilding,updateBuilding } from '@/api/Economics/building'
 import { addIndustry,updateIndustry } from '@/api/Economics/industry'
+import { getDictThTreeBy } from '@/api/sys/multilevel'
 export default {
   name:'Edit',
   setup() {
@@ -243,6 +264,32 @@ export default {
       })
     }
     getOList()
+        // 分类
+    const level1Options = ref([])
+    const level2Options = ref([])
+    const resetFormat = (data,option) => {
+      let arr = []
+      data.forEach(v=>{
+        let obj = {}
+        obj.label = v.name
+        obj.value = String(v.id)
+        arr.push(obj)
+      })
+      option.value = arr
+    }
+    const handleChangelevel1 = () => {
+      let id = dataForm.value.type1
+      dataForm.value.type2 = ''
+      getDictThTreeByApi({id},level2Options)
+    }
+    const getDictThTreeByApi = (data,option) => {
+      getDictThTreeBy(data).then(res=>{
+        if(res.code == 200){
+          resetFormat(res.data,option)
+        }        
+      })
+    }
+    getDictThTreeByApi({perms:'0006'},level1Options)
     // 获取经纬度
     const mapDialogVisible = ref(false)
     const handleClick = () => {
@@ -276,6 +323,10 @@ export default {
       handleClick,
       mapDialogVisible,
       getLatAndLng,
+      // 多级分类
+      level1Options,
+      level2Options,
+      handleChangelevel1,
     }
   },
 }

@@ -24,7 +24,12 @@
               size="small"
               :disabled="item.disabled"
               :clearable="item.isClearable"
-            />
+            >
+              <template v-if="!!item.append" #append>
+                <!-- <el-button size="small" icon="Search" /> -->
+                <span>{{ item.append }}</span>
+              </template>
+            </el-input>
           </template>
           <!--  -->
           <template v-if="item.type === 'selectSearch'">
@@ -95,6 +100,28 @@
               :disabled="item.disabled"
               :format="item.format"
               :value-format="item.format || 'YYYY-MM-DD'"
+            >
+            </el-date-picker>
+          </template>
+          <template v-else-if="item.type === 'year'">
+            <el-date-picker
+              v-model="formModel[item.prop]"
+              type="year"
+              size="small"
+              :disabled="item.disabled"
+              :format="item.format"
+              :value-format="item.format || 'YYYY'"
+            >
+            </el-date-picker>
+          </template>
+          <template v-else-if="item.type === 'month'">
+            <el-date-picker
+              v-model="formModel[item.prop]"
+              type="month"
+              size="small"
+              :disabled="item.disabled"
+              :format="item.format"
+              :value-format="item.format || 'MM'"
             >
             </el-date-picker>
           </template>

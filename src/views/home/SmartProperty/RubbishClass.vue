@@ -19,9 +19,6 @@
     <template v-slot:name="{data}">
         <el-link size="small" type="primary" @click.prevent="handleOperation(1, data)">{{ data.pointName }}</el-link>
       </template>
-      <template v-slot:pointType="{data}">
-        <span>{{ data.pointType == 1 ? '可回收物' : (data.pointType == 2 ? '有害垃圾' : (data.pointType == 3 ? '厨余垃圾' : '其他垃圾')) }}</span>
-      </template>
       <template v-slot:latAndLong="{data}">
         <span>{{ data.latitude }},{{ data.longitude }}</span>
       </template>

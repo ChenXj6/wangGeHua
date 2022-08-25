@@ -157,10 +157,12 @@ export default {
           multipleSelection.value.forEach(v=>{
             tableData.value.forEach((val,index)=>{
               if(v.roleId == val.id){
-                table.value.toggleRowSelection(tableData.value[index],true)
+                nextTick(()=>{
+                  table.value.toggleRowSelection(tableData.value[index],true)
+                })
               }
-            })            
-          })
+            }) 
+          })            
         }
       })
     }

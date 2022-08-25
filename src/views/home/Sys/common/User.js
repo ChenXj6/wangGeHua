@@ -1,5 +1,5 @@
 import { getUserList } from '@/api/sys/user'
-
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const tableConfig = {
@@ -20,7 +20,7 @@ export function renderTable() {
       },
       { prop: 'operatorId', label: '账号', minWidth: '100' },
       { prop: 'operatorName', label: '姓名' },
-      { prop: 'roleId', label: '角色', tooltip: true },
+      // { prop: 'roleId', label: '角色', tooltip: true },
       {
         prop: 'createTime',
         label: '创建时间',
@@ -99,43 +99,23 @@ export function renderTable() {
         isClearable: true,
         span: 24,
       },
-      {
-        type: 'Input',
-        label: '部门',
-        prop: 'deptId',
-        value: '',
-        placeholder: '请输入部门',
-        isClearable: true,
-        span: 24,
-      },
-      {
-        type: 'Input',
-        label: '角色',
-        prop: 'roleId',
-        value: '',
-        placeholder: '请输入角色',
-        isClearable: true,
-        span: 24,
-      },
       // {
-      //   type: 'select',
+      //   type: 'Input',
       //   label: '部门',
       //   prop: 'deptId',
       //   value: '',
-      //   placeholder: '请选择部门',
+      //   placeholder: '请输入部门',
       //   isClearable: true,
       //   span: 24,
-      //   options:[]
       // },
       // {
-      //   type: 'select',
+      //   type: 'Input',
       //   label: '角色',
       //   prop: 'roleId',
       //   value: '',
-      //   placeholder: '请选择角色',
+      //   placeholder: '请输入角色',
       //   isClearable: true,
       //   span: 24,
-      //   options:[]
       // },
     ],
     rules:{
@@ -149,6 +129,8 @@ export function renderTable() {
         { required: true, message: '请选择所在部门', trigger: 'change' },
       ],
       roleId: [{ required: true, message: '请选择角色', trigger: 'change' }],
+      mobile: [{ validator:validator.phoneNumber, trigger: ['blur']  }],
+      email: [{ validator:validator.emailValue, trigger: ['blur']  }],
     }
   }
   return {

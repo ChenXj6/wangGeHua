@@ -69,9 +69,8 @@
 
 
              const handleTreeSelectChange = ({ officeCode, officeName }) => {
-                dataForm.value.officeCode = officeCode
-                dataForm.value.officeName = officeName
-                getSOList(officeCode)
+                dataForm.officeCode = officeCode
+                dataForm.officeName = officeName
              }
 
 
@@ -92,7 +91,10 @@
                 })
             }
             const handleSubmit = (formRef) => {
-                // dataForm.synopsis = instance.txt.html();
+              if(dataForm.sjScoe > dataForm.maxSocre || dataForm.sjScoe < 0){
+                proxy.$message.warning(`实际得分填写错误，请重新填写!`)
+                return
+              }
                 formRef.validate((vaild) => {
                     if (vaild) {
                         handleSave().then(res => {

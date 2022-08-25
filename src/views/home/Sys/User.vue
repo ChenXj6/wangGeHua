@@ -51,7 +51,7 @@ import { renderTable } from './common/User'
 import { deepClone, formatterDate } from '@/utils/util'
 import { getCurrentInstance, onMounted, reactive, ref } from '@vue/runtime-core'
 
-import { saveUser, deleteUser } from '@/api/sys/user.js'
+import { saveUser, deleteUser ,updateUser} from '@/api/sys/user.js'
 import { listAssign, defaultObject } from '@/utils/util'
 import { useRouter } from 'vue-router'
 
@@ -108,13 +108,25 @@ export default {
     const handleSave = (formRef) => {
       formRef.validate((valid) => {
         if (valid) {
-          saveUser(dataForm).then((res) => {
-            if (res.code === 200) {
-              proxy.$message.success('操作成功')
-              handleQuery()
-              dialogVisible.value = false
-            }
-          })
+          if(operation.value){
+            saveUser(dataForm).then((res) => {
+              if (res.code === 200) {
+                proxy.$message.success('操作成功')
+                handleQuery()
+                dialogVisible.value = false
+              }
+            })
+          }else{
+            updateUser(dataForm).then((res) => {
+              if (res.code === 200) {
+                proxy.$message.success('编辑成功')
+                handleQuery()
+                dialogVisible.value = false
+              }else{
+                proxy.$message.warning(res.msg)
+              }
+            })
+          }
         } else {
           return
         }
@@ -167,6 +179,12 @@ export default {
       table.currentPage = 1
       handleQueryTable()
     }
+    const handleReset = (formEL) => {
+      formEL.resetFields()
+      defaultObject(searchForm)
+      searchParams.value = {}
+      handleQuery()
+    }
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
         const data = res.list || []
@@ -178,6 +196,7 @@ export default {
       span: 4,
       btns: [
         { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
+        { type: 'primary', label: '重置', key: 'reset', handle: handleReset },
         { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
       ],
     }

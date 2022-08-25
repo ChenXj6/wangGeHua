@@ -53,7 +53,7 @@ export function renderTable() {
       },      
       {
         type: 'slot',
-        label: '图片上传',
+        label: '封面图片上传',
         prop: '',
         span: 22,
         slotName:'upload'

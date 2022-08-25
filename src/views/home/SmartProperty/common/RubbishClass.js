@@ -19,7 +19,7 @@ export function renderTable() {
         slot:'name',
       },
       { prop: 'treeNames', label: '归属网格', minWidth: '150' },
-      { prop: '', slot:'pointType', label: '类型', minWidth: '120' },
+      { type:'code',prop: 'pointType', code:'1024', label: '类型', minWidth: '120' },
       { prop: '', slot:'latAndLong', label: '经纬度', minWidth: '150' },
       { prop: '', label: '操作', slot: 'operation', minWidth: '120' },
     ],

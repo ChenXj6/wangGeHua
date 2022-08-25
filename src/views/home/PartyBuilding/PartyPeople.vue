@@ -88,7 +88,7 @@ import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/PartyPeople'
 import { renderTable as renderInfoTable } from './common/PartyInfo'
-import { deepClone,resetFormat,defaultObject  } from '@/utils/util'
+import { deepClone,resetFormat,defaultObject,findElem } from '@/utils/util'
 import { useRouter } from 'vue-router'
 import { searchDict } from '@/api/sys/dict'
 import { delPartyPeople } from '@/api/PartyBuilding/partyPeople'
@@ -197,14 +197,6 @@ export default {
     })
     const infoTable = ref(null)
     const searchInfoParams = ref({})
-    function findElem(arrayToSearch, attr, val) {
-      for (var i = 0; i < arrayToSearch.length; i++) {
-            if (arrayToSearch[i][attr] == val) {
-                return i;
-            }
-        }
-        return -1;
-    }
     const handleOpenInfo = () => {
       let result = findElem(infoTtableConfig.columns, 'label', '操作')
       if(result > -1){

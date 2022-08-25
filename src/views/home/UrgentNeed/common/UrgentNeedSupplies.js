@@ -47,15 +47,15 @@ export function renderTable() {
         isClearable: true,
         span: 6,
       },
-      // {
-      //   type: 'selectSearch',
-      //   label: '小类型',
-      //   prop: 'type2',
-      //   placeholder: '请选择物资小类',
-      //   code:'1011',
-      //   isClearable: true,
-      //   span: 6,
-      // },
+      {
+        type: 'selectSearch',
+        label: '物资状态',
+        prop: 'suppliesStatus',
+        placeholder: '请选择物资状态',
+        code:'1073',
+        isClearable: true,
+        span: 6,
+      },
     ],
   }
   return {

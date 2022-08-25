@@ -24,7 +24,7 @@ export function renderTable() {
       { prop: 'unitNumber', label: '单元名称' },
       { prop: 'houseNumber', label: '房屋名称' },
       { prop: 'staffName', label: '姓名' },
-      { prop: '', slot:'staffType', label: '类型' },
+      { type:'code', prop: 'staffType', code:'1015', label: '类型' },
       { prop: 'residenceNow', label: '所在地', minWidth: '150' },
       { prop: '', slot:'isState', label: '核实状态' },
       { prop: '', label: '操作', slot: 'operation', minWidth: '150' },

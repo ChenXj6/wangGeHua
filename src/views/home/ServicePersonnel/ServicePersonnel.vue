@@ -15,14 +15,6 @@
       <template v-slot:staffName="{ data }">
         <el-link size="small" type="primary" @click.prevent="handleOperation(2, data)">{{ data.staffName }}</el-link>
       </template>
-      <template v-slot:staffType="{ data }">
-        <span>{{ data.staffType == 1 ? '志愿者' : data.staffType == 2 ? '失业人员' : data.staffType == 3 ? '高龄老人' :
-            data.staffType == 4 ? '烈士家属' :
-              data.staffType == 5 ? '台属人员' : data.staffType == 6 ? '残疾人' : data.staffType == 7 ? '育龄妇女' : data.staffType ==
-                8 ? '适龄入伍' : data.staffType == 9 ? '退役军人' : data.staffType == 10 ? '独居老人' : data.staffType == 11 ? '优抚老人' :
-                  '其他'
-        }}</span>
-      </template>
       <template v-slot:operation="{ data }">
         <el-button @click="handleOperation(1, data)" icon="search" circle type="success" />
         <el-button icon="edit" @click="handleOperation(2, data)" circle type="priamry" />

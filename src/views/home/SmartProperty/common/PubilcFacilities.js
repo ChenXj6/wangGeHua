@@ -40,7 +40,7 @@ export function renderTable() {
       {
         type: 'Input',
         label: '名称',
-        prop: 'villageName',
+        prop: 'deviceName',
         value: '',
         placeholder: '请输入名称',
         isClearable: true,

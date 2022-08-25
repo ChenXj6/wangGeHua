@@ -23,7 +23,6 @@ export function renderTable() {
       { prop: 'levelName1', label: '文稿一级分类', tooltip: true, minWidth: '120' },
       { prop: 'levelName2', label: '文稿二级分类', tooltip: true, minWidth: '120' },
       { prop: 'levelName3', label: '文稿三级分类', tooltip: true, minWidth: '120' },
-      { prop: 'sort', label: '排序号', tooltip: true, minWidth: '120' },
       { type:'code',code:'1006',prop: 'isRecommend', label: '是否推荐', tooltip: true, minWidth: '120' },
       { prop: '', label: '操作', slot: 'operation', minWidth: '130' },
     ],

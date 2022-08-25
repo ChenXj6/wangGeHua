@@ -84,7 +84,8 @@
     </el-dialog>
     <!-- 党组织弹窗 -->
     <el-dialog
-        width="width"
+        title="党组织列表"
+        width="50%"
         v-model="InfoDialogVisible">
         <VForm :form-data="infoFormConfig" :form-model="searchForm" :form-handle="infoFormHandle">
       <template v-slot:status>
@@ -99,6 +100,7 @@
     </VForm>
     <V-table
       ref="table"
+      height="320"
       :table-config="infoTtableConfig"
       @row-click="rowClick"
     >
@@ -109,13 +111,13 @@
     </el-dialog>
 </template>
 <script>
-import { getCurrentInstance, onBeforeMount, onMounted, reactive, ref } from '@vue/runtime-core'
+import { getCurrentInstance, nextTick, onBeforeMount, onMounted, reactive, ref } from '@vue/runtime-core'
 import { useRoute } from 'vue-router'
 import mixin from '@/mixins/tagView.js'
 
 import { renderTable } from './common/Edit'
 import { renderTable as renderInfoTable } from './common/PartyInfo'
-import { deepClone,resetFormat,defaultObject  } from '@/utils/util'
+import { deepClone,resetFormat,defaultObject,findElem  } from '@/utils/util'
 import { getOrganList } from '@/api/sys/organ'
 import { searchDict } from '@/api/sys/dict'
 import { addParty,updateParty } from '@/api/PartyBuilding/partyInfo'
@@ -241,11 +243,14 @@ export default {
     const table = ref(null)
     const searchParams = ref({})
     const handleOpenInfo = () => {
-      infoTtableConfig.columns.splice(infoTtableConfig.columns.length-1,1)
+      let result = findElem(infoTtableConfig.columns, 'label', '操作')
+      if(result > -1){
+        infoTtableConfig.columns.splice(result,1)
+      }
       InfoDialogVisible.value = true
-      setTimeout(()=>{
+      nextTick(()=>{
         handleQuery()
-      },0)
+      })
     }
     const orgTypeOptions = ref([])
     const getOptionsByCode = (basictype,data) => {

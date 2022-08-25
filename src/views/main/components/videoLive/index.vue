@@ -75,6 +75,7 @@
 import { getPubilcList } from '@/api/SmartProperty/pubilc'
 
 import { ref } from "@vue/reactivity"
+import { findElem } from '@/utils/util'
 import { computed, getCurrentInstance, nextTick, onBeforeMount, onMounted } from "@vue/runtime-core"
 
 const { proxy } = getCurrentInstance()
@@ -97,14 +98,6 @@ const getVideoList = () => {
 const isActive = computed(()=>{
   checkMultipleSelection.value
 })
-function findElem(arrayToSearch, attr, val) {
-   for (var i = 0; i < arrayToSearch.length; i++) {
-        if (arrayToSearch[i][attr] == val) {
-            return i;
-        }
-    }
-    return -1;
-}
 const handleCheck = (data) => {
   if(checkMultipleSelection.value.length > 9){
     proxy.$message.warning('最多同时选择查看6个监控！')

@@ -7,6 +7,13 @@ export const saveUser = query => {
   )
 };
 
+// 用户
+export const updateUser = query => {
+  return service.post(
+    `/api/sys/user/update`, query
+  )
+};
+
 // 删除用户
 export const deleteUser = query => {
   return service.post(

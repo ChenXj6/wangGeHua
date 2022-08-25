@@ -321,6 +321,7 @@ export default {
     getOList();
     // 提交
     const handleSave = () => {
+      console.log(1111)
       return new Promise((resolve, reject) => {
         // true: 编辑；false:添加
         if (route.query.operation == 2) {
@@ -442,7 +443,6 @@ export default {
       table2,
       table3,
       handleBack,
-      handleSubmit,
       StaffFormConfig,
       streetNameOptions,
       communityNameOptions,

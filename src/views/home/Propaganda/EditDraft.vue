@@ -189,7 +189,7 @@ import { saveMedia,updateMedia } from '@/api/Propaganda/media'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList,getSmallOrganList } from '@/api/sys/organ'
 import { getDictThTreeBy } from '@/api/sys/multilevel'
-import { isNull } from '@/utils/util'
+import { isNull,findElem } from '@/utils/util'
 import { uploadApi } from '@/api/upload.js'
 export default {
   name:'EditActual',
@@ -345,6 +345,33 @@ export default {
     const fileList = ref([])
     const dialogVisible = ref(false)
     const dialogImageUrl = ref('')
+    const isAbleUpload = () => {
+      if(level1Options.value.length>0 && !!dataForm.value.level1){
+        let flag = true
+        level1Options.value.forEach(v=>{
+          if(v.label.toUpperCase() == 'APP'){
+            if(String(dataForm.value.level1) === String(v.value)){
+              flag = true
+            }else{
+              flag = false
+            }
+          }else{
+            flag = false
+          }
+        })
+        if(!flag){
+          fileList.value = []
+          proxy.$message.warning('文稿一级分类为APP时，才可以上传图片！', {grouping:true})
+          return false
+        }else{
+          return true
+        }
+      }else{
+        fileList.value = []
+        proxy.$message.warning('请先选择文稿一级分类')
+        return false
+      }
+    }
     // 上传图片
     const changeFile = (file) => {
       if(file.size / 1024 / 1024 > 10){ 
@@ -352,6 +379,8 @@ export default {
         proxy.$message.error('最大文件上传尺寸为10Mb')
         return
       }
+      let result = isAbleUpload()
+      if(!result) return
       let fileFormData = new FormData();
       let currentFile = file.raw
       fileFormData.append('file',currentFile)

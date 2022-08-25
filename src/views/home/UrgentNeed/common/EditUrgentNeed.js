@@ -1,4 +1,4 @@
-
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const teamsFormConfig = {
@@ -72,6 +72,9 @@ export function renderTable() {
       ],
       teamName: [
         { required: true, message: '请输入姓名', trigger: ['blur','change'] },
+      ],
+      phone: [
+        { validator:validator.phoneNumber, trigger: ['blur']  }
       ],
       longitude: [
         { required: true, message: '请点击选择经纬度', trigger: ['blur','change'] },

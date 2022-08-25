@@ -11,6 +11,18 @@ const showMessage = Symbol('showMessage') // 为了实现Class的私有属性
  */
 
 
+// 查找数组中是否存在指定属性的属性值
+//arrayToSearch:目标数组  attr:目标属性  val:目标属性值
+export function findElem(arrayToSearch, attr, val) {
+  for (var i = 0; i < arrayToSearch.length; i++) {
+        if (arrayToSearch[i][attr] == val) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
 // 判断是否为null
 export const isNull = (data) => {
   if(!data && typeof data != 'undefined' && data != 0 ){
@@ -568,7 +580,7 @@ export const getPaths = (arr, baseUrl) => {
  *  single默认值true，因为项目需求，默认只弹出一个，可以根据实际需要设置
  */
 export class DonMessage {
-  success(options, single = fal) {
+  success(options, single = false) {
     this[showMessage]('success', options, single)
   }
   warning(options, single = true) {

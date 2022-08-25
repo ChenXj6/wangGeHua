@@ -11,7 +11,7 @@
       <el-col :span="24">
         <!-- v-model="activeTabs" -->
         <el-tabs
-                  v-model="activeTabs"
+                v-model="activeTabs"
                  tab-position="left"
                  class="demo-tabs"
                  style="height: 600px"
@@ -28,7 +28,7 @@
                 <span><b>{{ i.description }}</b></span>
               </el-col>
             </el-row>
-            <el-table :data="i.list" size="small" border header-cell-style="text-align:center" style="width: 100%">
+            <el-table :data="i.list" size="small" border  style="width: 100%">
               <el-table-column prop="value" label="编码" align="center"/>
               <el-table-column prop="description" label="描述" align="center" />
               <el-table-column prop="createTime" label="创建时间" align="center">

@@ -156,11 +156,11 @@ export function renderTable() {
       },
       {
         type: 'selectSearch',
-        label: '职业类别',
-        prop: 'staffType',
+        label: '职业',
+        prop: 'occupation',
         span: 11,
         code : '1032',
-        placeholder: '请选择职业类别',
+        placeholder: '请选择职业',
         isClearable: true,
       },
       {

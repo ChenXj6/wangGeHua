@@ -1,5 +1,5 @@
 import { getHouseList,getPeopleList,getPeopleByHouseList } from '@/api/ActualInfo/build'
-
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const taxFormConfig = {
@@ -35,12 +35,13 @@ export function renderTable() {
         label: '金额',
         prop: 'amount',
         value: '',
+        append:'元',
         placeholder: '请填写金额',
         isClearable: true,
         span: 11,
       },
       {
-        type: 'Input',
+        type: 'year',
         label: '所属年份',
         prop: 'year',
         value: '',
@@ -49,7 +50,7 @@ export function renderTable() {
         span: 11,
       },
       {
-        type: 'Input',
+        type: 'month',
         label: '所属月份',
         prop: 'month',
         value: '',
@@ -141,20 +142,19 @@ export function renderTable() {
         span: 11,
       },
       {
-        type: 'selectSearch',
+        type: 'slot',
         label: '一级分类',
         prop: 'type1',
-        placeholder: '请选择类型',
-        code:'1054',
+        value: '',
         isClearable: true,
+        slotName: 'type1',
         span: 11,
       },
       {
-        type: 'selectSearch',
+        type: 'slot',
         label: '二级分类',
         prop: 'type2',
-        placeholder: '请选择类型',
-        code:'1054',
+        slotName: 'type2',
         isClearable: true,
         span: 11,
       },
@@ -346,6 +346,9 @@ export function renderTable() {
       },
     ],
     rules:{
+      amount:[
+        { validator:validator.integerP, trigger: ['blur']  }
+      ],
       industryType: [
         { required: true, message: '请选择类型', trigger: ['blur','change'] },
       ],
