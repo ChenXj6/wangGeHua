@@ -63,9 +63,9 @@
       <template v-slot:status>
         <popup-tree-input
             :data="popupTreeData" :propa="popupTreeProps"
-            :nodeKey="''+searchForm.officeCode" @update:dataForm="handleTreeSelectChange">
+            :nodeKey="''+searchInfoForm.officeCode" @update:dataForm="handleTreeSelectInfoChange">
             <template v-slot>
-              <el-input v-model="searchForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+              <el-input v-model="searchInfoForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
             </template>
         </popup-tree-input>
       </template>
@@ -83,7 +83,7 @@
   </div>
 </template>
 <script>
-import { getCurrentInstance, onMounted, ref } from '@vue/runtime-core'
+import { getCurrentInstance, nextTick, onMounted, ref } from '@vue/runtime-core'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/PartyPeople'
@@ -162,6 +162,10 @@ export default {
       searchForm.value.officeCode = officeCode
       searchForm.value.officeName = officeName
     }
+    const handleTreeSelectInfoChange = ({officeCode,officeName}) => {
+      searchInfoForm.value.officeCode = officeCode
+      searchInfoForm.value.officeName = officeName
+    }
     getOList()
     // 查看/编辑
     const handleOperation = (type, rowData) => {
@@ -203,9 +207,9 @@ export default {
         infoTtableConfig.columns.splice(result,1)
       }
       InfoDialogVisible.value = true
-      setTimeout(()=>{
+      nextTick(()=>{
         handleQueryInfo()
-      },0)
+      })
     }
         // 表格相關操作
     const handleQueryInfo = () => {
@@ -266,6 +270,7 @@ export default {
       InfoDialogVisible,
       searchInfoForm,
       orgTypeOptions,
+      handleTreeSelectInfoChange,
     }
   },
 }

@@ -135,11 +135,25 @@ export function renderTable() {
         prop:'officeName',
         span: 11,
       },
+      // {
+      //   type: 'slot',
+      //   label: '楼栋经/纬度',
+      //   slotName:'lonAndLat',
+      //   span: 11,
+      // },
       {
         type: 'slot',
-        label: '楼栋经/纬度',
-        slotName:'lonAndLat',
-        span: 11,
+        label: '楼栋经纬度',
+        prop: 'longitude',
+        span: 6,
+        slotName:'eventLong'
+      },
+      {
+        type: 'slot',
+        label: '',
+        prop: 'latitude',
+        span: 5,
+        slotName:'eventLat'
       },
       {
         type: 'slot',
@@ -159,7 +173,7 @@ export function renderTable() {
         span: 11,
       },
       {
-        type: 'Input',
+        type: 'year',
         label: '所属年份',
         prop: 'year',
         value: '',
@@ -168,7 +182,7 @@ export function renderTable() {
         span: 11,
       },
       {
-        type: 'Input',
+        type: 'month',
         label: '所属月份',
         prop: 'month',
         value: '',
@@ -181,6 +195,7 @@ export function renderTable() {
         label: '金额',
         prop: 'amount',
         value: '',
+        append:'元',
         placeholder: '请填写金额',
         isClearable: true,
         span: 11,

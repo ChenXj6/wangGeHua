@@ -19,6 +19,7 @@
       <template v-slot:operation="{data}">
         <el-button
           icon="edit"
+          title="审核"
           @click="handleEdit(data)"
           circle
           type="primary"

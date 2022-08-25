@@ -41,7 +41,7 @@ export function renderTable() {
       },
       {
         type: 'slot',
-        label: '事件经纬度',
+        label: '经纬度',
         prop: 'longitude',
         span: 6,
         slotName:'eventLong'

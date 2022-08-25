@@ -30,7 +30,7 @@ export function renderTable() {
                 label: '时间',
                 prop: 'createDate',
                 value: [],
-                format: 'YYYY-MM-DD',
+                format: 'YYYY-MM-DD HH:mm:ss',
                 isClearable: true,
                 span: 6,
               },

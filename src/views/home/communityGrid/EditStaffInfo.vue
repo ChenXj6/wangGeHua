@@ -205,11 +205,26 @@
                 </el-table-column>
                 <el-table-column prop="prop" label="政治面貌">
                   <template #default="scope">
-                    <el-input
+                    <el-select
                       v-model="scope.row.politicsstatus"
+                      placeholder="请选择政治面貌"
                       size="small"
-                      placeholder=""
-                    ></el-input>
+                      key="1009"
+                      @focus="
+                        () => {
+                          querySearchAsync('1050')
+                        }
+                      "
+                      clearable
+                      :loading="loading"
+                    >
+                      <el-option
+                        v-for="i in options['1050']"
+                        :label="i.label"
+                        :value="i.value"
+                        :key="i.value"
+                      ></el-option>
+                    </el-select>
                   </template>
                 </el-table-column>
                 <el-table-column

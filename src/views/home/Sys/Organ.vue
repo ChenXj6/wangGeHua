@@ -116,6 +116,12 @@ export default {
       table.currentPage = 1
       handleQueryTable()
     }
+    const handleReset = (formEL) => {
+      formEL.resetFields()
+      defaultObject(searchForm)
+      searchParams.value = {}
+      handleQuery()
+    }
     const handleQueryTable = () => {
       table.value.getTableData(searchParams.value, (res) => {
         tableConfig.data = res
@@ -126,6 +132,7 @@ export default {
       span: 4,
       btns: [
         { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
+        { type: 'primary', label: '重置', key: 'reset', handle: handleReset },
         { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
       ],
     }

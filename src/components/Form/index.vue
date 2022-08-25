@@ -22,6 +22,7 @@
               v-model.trim="formModel[item.prop]"
               :placeholder="item.placeholder"
               size="small"
+              :maxlength="maxlength ? maxlength: '20'"
               :disabled="item.disabled"
               :clearable="item.isClearable"
             >
@@ -170,6 +171,7 @@
             :key="i.key"
             :type="i.type"
             :icon="i.icon"
+            :title="i.title"
             :disabled="i.disabled"
             :size="i.size ?? 'small'"
             @click="i.handle && i.handle(formRef)"

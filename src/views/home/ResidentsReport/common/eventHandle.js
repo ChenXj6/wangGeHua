@@ -8,7 +8,7 @@ export function renderTable() {
     pagination: true, // 开启分页器
     mutiSelect: false, // 开启选择
     method: getHandleList, // 請求api
-    index: false, // 是否启用序号列
+    index: true, // 是否启用序号列
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [

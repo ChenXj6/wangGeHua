@@ -21,10 +21,10 @@ export function renderTable() {
       { prop: '', label: '类型', slot: 'type', minWidth: '60' },
       { prop: 'icon', label: '图标', icon: 'icon' },
       { prop: 'url', label: '菜单URL', minWidth: '150' },
-      {
-        prop: 'perms',
-        label: '授权标识',
-      },
+      // {
+      //   prop: 'perms',
+      //   label: '授权标识',
+      // },
       {
         prop: 'orderNum',
         label: '排序',
@@ -90,7 +90,7 @@ export function renderTable() {
       },
     ],
     rules: {
-      name: [{ required: true, message: '请输入角色名', trigger: 'blur' }],
+      name: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
     },
   }
   return {

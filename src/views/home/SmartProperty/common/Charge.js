@@ -71,7 +71,7 @@ export function renderTable() {
         label: '日期',
         prop: 'date',
         value: [],
-        format: 'YYYY-MM-DD',
+        format: 'YYYY-MM-DD HH:mm:ss',
         isClearable: true,
         span: 6,
       },

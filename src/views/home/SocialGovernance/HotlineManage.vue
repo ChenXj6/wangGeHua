@@ -66,6 +66,7 @@
           type="priamry"
         />
         <el-button
+          v-if="data.hotlineStatus == 1"
           :icon="Delete"
           @click="handleDel(data)"
           circle

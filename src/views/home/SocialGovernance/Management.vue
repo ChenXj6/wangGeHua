@@ -36,7 +36,7 @@
     >
        <template v-slot:orderNo="{ data }">
         <!-- @click.prevent="handleOperation(2, data)" -->
-        <el-link type="success" @click.prevent="javascript:;">{{ data.orderNo }}</el-link>
+        <el-link type="success" @click.prevent="handleOperation(1, data)">{{ data.orderNo }}</el-link>
       </template>
       <template v-slot:operation="{data}">
         <el-button

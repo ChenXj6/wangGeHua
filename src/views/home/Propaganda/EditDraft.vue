@@ -20,7 +20,7 @@
         </popup-tree-input>
       </template>
       <template v-slot:level1="">
-        <el-select v-model="dataForm.level1" clearable size="small" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
+        <el-select v-model="dataForm.level1" size="small" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
           <el-option
             v-for="item in level1Options"
             :key="item.id"
@@ -30,7 +30,7 @@
         </el-select>
       </template>
       <template v-slot:level2="">
-        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="small" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
+        <el-select v-model="dataForm.level2" :disabled="!dataForm.level1" size="small" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
           <el-option
             v-for="item in level2Options"
             :key="item.id"
@@ -85,7 +85,7 @@
         </popup-tree-input>
       </template>
       <template v-slot:level1="">
-        <el-select v-model="dataForm.level1" clearable size="small" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
+        <el-select v-model="dataForm.level1" size="small" placeholder="请选择文稿一级分类" @change="handleChangelevel1">
           <el-option
             v-for="item in level1Options"
             :key="item.id"
@@ -95,7 +95,7 @@
         </el-select>
       </template>
       <template v-slot:level2="">
-        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="small" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
+        <el-select v-model="dataForm.level2" :disabled="!dataForm.level1" size="small" placeholder="请选择文稿二级分类" @change="handleChangelevel2">
           <el-option
             v-for="item in level2Options"
             :key="item.id"
@@ -333,8 +333,6 @@ export default {
     const getDictThTreeByApi = (data,option) => {
       getDictThTreeBy(data).then(res=>{
         if(res.code == 200){
-          // console.log(res.data,';;;')
-          // option.value = res.data
           resetFormat(res.data,option)
         }        
       })

@@ -17,7 +17,7 @@ export function renderTable() {
         label: 'ID',
         minWidth: '100',
       },
-      { prop: 'name', label: '角色名', minWidth: '100' },
+      { prop: 'name', label: '角色名', tooltip:true, minWidth: '100' },
       { prop: 'remark', label: '备注', minWidth: '120', tooltip: true },
       { prop: 'createBy', label: '创建人' },
       {

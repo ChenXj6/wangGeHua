@@ -61,9 +61,9 @@
             </template>
         </popup-tree-input>
       </el-form-item>
-      <el-form-item v-if="dataForm.type != 0" label="授权标识">
+      <!-- <el-form-item v-if="dataForm.type != 0" label="授权标识">
         <el-input v-model="dataForm.perms" size="small" clearable></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item v-if="dataForm.type == 1" label="菜单路由">
         <el-input v-model="dataForm.url" size="small" placeholder="菜单路由" clearable></el-input>
       </el-form-item>
@@ -82,7 +82,7 @@
   </div>
 </template>
 <script>
-import { getCurrentInstance, reactive, ref, onMounted, onBeforeMount } from '@vue/runtime-core'
+import { getCurrentInstance, reactive, ref, onMounted, onBeforeMount, nextTick } from '@vue/runtime-core'
 import { deepClone, formatterDate, listAssign, defaultObject } from '@/utils/util'
 
 import { renderTable } from './common/Menu'
@@ -117,7 +117,7 @@ export default {
     })
     const rules = reactive({
       name: [
-        { required: true, message: '请输入角色名', trigger: 'blur' },
+        { required: true, message: '请输入菜单名称', trigger: 'blur' },
       ],
     })
     let popupTreeData = ref([])
@@ -133,11 +133,15 @@ export default {
     const operation = ref(false) // true:新增, false:编辑
     // 表單操作按鈕配置
     const handleEdit = async (data) => {
+      
       data.type = String(data.type)
       !(data.parentId) && (data.parentName = '顶级菜单')
       listAssign(dataForm, data)
       operation.value = false
       dialogVisible.value = true
+      nextTick(()=>{
+        form.value.clearValidate('name')
+      })
     }
     const handleAdd = async () => {
       defaultObject(dataForm)
@@ -145,6 +149,9 @@ export default {
       dataForm.type = '1'
       operation.value = true
       dialogVisible.value = true
+      nextTick(()=>{
+        form.value.clearValidate('name')
+      })
     }
     const handleDelete = ({id}) => {
       deleteMenu({id}).then(res=>{

@@ -1,5 +1,6 @@
 <template>
   <div class="coclpit-content">
+    <!-- <component v-for="i in view" :key="i" :is="i" /> -->
     <div>
       <h1 style="text-align: center;margin-bottom:40px">{{ currentTitle }}</h1>
     </div>
@@ -114,7 +115,10 @@
 </template>
 <script>
 import { getCurrentInstance, nextTick, onMounted, ref } from '@vue/runtime-core'
+import A from './a.vue'
+import B from './b.vue'
 export default {
+  components:{A,B},
   setup () {
     const { proxy } = getCurrentInstance()
     // 驾驶舱看板
@@ -550,8 +554,9 @@ export default {
     onMounted(() => {
       drawEcharts()
     })
+    const view = ref(['A','B'])
     return {
-      billboardList, personnelDetails, openMenu, isOpen, menuList, currentMenu, changeSelect,currentTitle
+      billboardList, personnelDetails, openMenu, isOpen, menuList, currentMenu, changeSelect,currentTitle,view
     }
   },
 }

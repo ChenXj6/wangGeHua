@@ -169,11 +169,18 @@ export default {
         popupTreeData.value = obj.concat(popupTreeData.value)
       })
     }
+    const handleReset = (formEL) => {
+      formEL.resetFields()
+      defaultObject(searchForm)
+      searchParams.value = {}
+      handleQuery()
+    }
     // 表单按钮组
     const formHandle = {
       span: 4,
       btns: [
         { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
+        { type: 'primary', label: '重置', key: 'reset', handle: handleReset },
         { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
       ],
     }

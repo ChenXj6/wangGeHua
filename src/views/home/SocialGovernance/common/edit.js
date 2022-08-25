@@ -15,7 +15,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'date',
+                type: 'datetime',
                 label: '办结时限',
                 prop: 'concludeTime',
                 value: '',
@@ -66,7 +66,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'date',
+                type: 'datetime',
                 label: '接收时间',
                 prop: 'receivingTime',
                 value: '',
@@ -182,7 +182,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'date',
+                type: 'datetime',
                 label: '录入时间',
                 prop: 'inputTime',
                 value: '',
@@ -248,7 +248,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'date',
+                type: 'datetime',
                 label: '回复（回退或申请）时间',
                 prop: 'fallbackTime',
                 value: '',
@@ -313,7 +313,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'date',
+                type: 'datetime',
                 label: '申请延期至：',
                 prop: 'applyDelayTime',
                 value: '',
@@ -346,7 +346,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'date',
+                type: 'datetime',
                 label: '答复时间：',
                 prop: 'replyTime',
                 value: '',
@@ -371,7 +371,7 @@ export function renderTable() {
                 span: 11,
               },
               {
-                type: 'date',
+                type: 'datetime',
                 label: '下级回复时间：',
                 prop: 'subordinateReplyTime',
                 value: '',

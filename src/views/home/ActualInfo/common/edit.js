@@ -1,5 +1,5 @@
 import { getHouseList,getPeopleList,getPeopleByHouseList } from '@/api/ActualInfo/build'
-
+import validator from '@/utils/validator'
 // 启用序号列会与sortable拖拽发生冲突   不要一起使用!!!!
 export function renderTable() {
   const houseTableConfig = {
@@ -132,6 +132,7 @@ export function renderTable() {
         type: 'Input',
         label: '地上楼层数',
         prop: 'floorNumber',
+        append: '层',
         value: '',
         placeholder: '请填写地上楼层数',
         isClearable: true,
@@ -150,6 +151,7 @@ export function renderTable() {
         type: 'Input',
         label: '地上总户数',
         prop: 'houseNumber',
+        append: '户',
         value: '',
         placeholder: '请填写地上总户数',
         isClearable: true,
@@ -160,6 +162,7 @@ export function renderTable() {
         label: '地下楼层数',
         prop: 'undergroundNumber',
         value: '',
+        append: '层',
         placeholder: '请填写地下楼层数',
         isClearable: true,
         span: 11,
@@ -169,15 +172,24 @@ export function renderTable() {
         label: '地下房间数',
         prop: 'undergroundHouse',
         value: '',
+        append: '间',
         placeholder: '请填写地下房间数',
         isClearable: true,
         span: 11,
       },
       {
         type: 'slot',
-        label: '楼栋经/纬度',
-        slotName:'lonAndLat',
-        span: 11,
+        label: '事件经纬度',
+        prop: 'longitude',
+        span: 6,
+        slotName:'eventLong'
+      },
+      {
+        type: 'slot',
+        label: '',
+        prop: 'latitude',
+        span: 5,
+        slotName:'eventLat'
       },
       {
         type: 'selectSearch',
@@ -194,6 +206,7 @@ export function renderTable() {
         label: '建筑面积',
         prop: 'builtupArea',
         value: '',
+        append: 'm²',
         placeholder: '请填写建筑面积',
         isClearable: true,
         span: 11,
@@ -300,6 +313,12 @@ export function renderTable() {
       hiddenDanger: [
         { required: true, message: '请选择是否存在隐患', trigger: 'blur' },
       ],
+      propertyTelephone:[
+        { validator:validator.phoneNumber, trigger: 'blur' },
+      ],
+      housemasterPhone:[
+        { validator:validator.phoneNumber, trigger: 'blur' },
+      ],
     }
   }
   const houseFormConfig = {
@@ -348,6 +367,7 @@ export function renderTable() {
         label: '楼层',
         prop: 'floorId',
         value: '',
+        append: '层',
         placeholder: '请输入楼层',
         isClearable: true,
         span: 11,
@@ -403,6 +423,7 @@ export function renderTable() {
         label: '房屋建筑面积',
         prop: 'housearea',
         value: '',
+        append: 'm²',
         placeholder: '请输入房屋建筑面积',
         isClearable: true,
         span: 11,
@@ -492,6 +513,18 @@ export function renderTable() {
       ],
       houseNumber: [
         { required: true, message: '请输入房间号', trigger: 'blur' },
+      ],
+      ownerPhone:[
+        { validator:validator.phoneNumber, trigger: 'blur' },
+      ],
+      ownerIdcard:[
+        { validator:validator.idCard, trigger: 'blur' },
+      ],
+      userIdno:[
+        { validator:validator.idCard, trigger: 'blur' },
+      ],
+      userPhone:[
+        { validator:validator.phoneNumber, trigger: 'blur' },
       ],
     }
   }
@@ -742,8 +775,9 @@ export function renderTable() {
       name: [
         { required: true, message: '请输入姓名', trigger: 'blur' },
       ],
-      idCard: [
+      idcard: [
         { required: true, message: '请输入身份证号码', trigger: 'blur' },
+        { validator:validator.idCard, trigger: 'blur' },
       ],
       gender: [
         { required: true, message: '请选择性别', trigger: ['blur','change'] },
@@ -753,6 +787,10 @@ export function renderTable() {
       ],
       contactPhone: [
         { required: true, message: '请输入联系方式', trigger: 'blur' },
+        { validator:validator.phoneNumber, trigger: 'blur' },
+      ],
+      emergencyPhone:[
+        { validator:validator.phoneNumber, trigger: 'blur' },
       ],
     }
   }

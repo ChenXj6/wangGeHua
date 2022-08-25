@@ -30,11 +30,23 @@
           </template>
         </popup-tree-input>
       </template>
-      <template v-slot:lonAndLat="">
-        <el-row :gutter="10">
-          <el-col :span="12"><el-input v-model="dataForm.longitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input></el-col>
-          <el-col :span="12"><el-input v-model="dataForm.latitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input></el-col>
-        </el-row>
+      <template v-slot:eventLong="">
+          <el-input
+                  v-model="dataForm.longitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable                  
+                  @click="handleClick"
+                />
+        </template>
+      <template v-slot:eventLat="">
+                <el-input
+                  v-model="dataForm.latitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable
+                  @click="handleClick"
+                />
       </template>
       <template v-slot:type1="">
         <el-select v-model="dataForm.type1" clearable size="small" placeholder="请选择一级分类" @change="handleChangelevel1">
@@ -297,8 +309,8 @@ export default {
     }
     const getLatAndLng = ({lat,lng}) => {
       // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      dataForm.value.longitude = lng
-      dataForm.value.latitude = lat
+      dataForm.value.longitude = lng.toFixed(6)
+      dataForm.value.latitude = lat.toFixed(6)
       mapDialogVisible.value = false
     }
     // 初始化数据

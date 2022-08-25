@@ -14,11 +14,12 @@
         <el-button
           @click="handleEdit(data.data)"
           icon="edit"
+          title='编辑'
           circle
           type="success"
         />
-        <el-button circle type="primary" icon="UserFilled" @click="handleCommand(data.data)"></el-button>
-        <el-button circle type="primary" icon="Histogram" @click="handleData(data.data)"></el-button>
+        <el-button circle type="primary" title='分配角色权限' icon="UserFilled" @click="handleCommand(data.data)"></el-button>
+        <el-button circle type="primary" title='分配数据权限' icon="Histogram" @click="handleData(data.data)"></el-button>
         <el-popconfirm title="确定要删除该用户吗？" @confirm="handleDelete(data.data)">
           <template #reference>
             <el-button
@@ -195,7 +196,7 @@ export default {
     const formHandle = {
       span: 4,
       btns: [
-        { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
+        { type: 'primary', label: '查询',  key: 'search', handle: handleQuery },
         { type: 'primary', label: '重置', key: 'reset', handle: handleReset },
         { type: 'primary', label: '新增', key: 'add', handle: handleAdd },
       ],

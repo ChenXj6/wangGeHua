@@ -40,11 +40,23 @@
             </el-option>
           </el-select>
         </template>
-      <template v-slot:lonAndLat="">
-        <el-row :gutter="10">
-          <el-col :span="12"><el-input v-model="dataForm.buildingLongitude" placeholder="请点击获取经纬度" size="small" @click="handleClick"></el-input></el-col>
-          <el-col :span="12"><el-input v-model="dataForm.buildingLatitude" placeholder="请输入经纬度" size="small" @click="handleClick"></el-input></el-col>
-        </el-row>
+      <template v-slot:eventLong="">
+          <el-input
+                  v-model="dataForm.buildingLongitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable                  
+                  @click="handleClick"
+                />
+        </template>
+      <template v-slot:eventLat="">
+                <el-input
+                  v-model="dataForm.buildingLatitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable
+                  @click="handleClick"
+                />
       </template>
       <template v-slot:upload="">
         <el-upload
@@ -604,8 +616,8 @@ export default {
     }
     const getLatAndLng = ({lat,lng}) => {
       // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      dataForm.value.buildingLongitude = lng
-      dataForm.value.buildingLatitude = lat
+      dataForm.value.buildingLongitude = lng.toFixed(6)
+      dataForm.value.buildingLatitude = lat.toFixed(6)
       mapDialogVisible.value = false
     }
     //

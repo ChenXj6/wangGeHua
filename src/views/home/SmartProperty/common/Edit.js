@@ -403,7 +403,7 @@ export function renderTable() {
           span: 11,
         },
         {
-          type: 'date',
+          type: 'datetime',
           label: '时间',
           prop: 'chargeTime',
           value: '',
@@ -463,7 +463,7 @@ export function renderTable() {
         label: '管理小区名称',
         prop: 'manageVillage',
         value: '',
-        placeholder: '请输入物业名称',
+        placeholder: '请输入管理小区名称',
         isClearable: true,
         span: 11,
       },
@@ -497,6 +497,10 @@ export function renderTable() {
     ],
     rules: {
       officeCode: [{ required: true, message: '请选择归属网格', trigger: ['blur', 'change'] }],
+      name: [{ required: true, message: '请输入物业名称', trigger: ['blur'] }],
+      chargePerson: [{ required: true, message: '请输入负责人姓名', trigger: ['blur'] }],
+      manageVillage: [{ required: true, message: '请输入管理小区名称', trigger: ['blur'] }],
+      name: [{ required: true, message: '请输入物业名称', trigger: ['blur'] }],
       phone: [{ validator: validator.phoneNumber, trigger: ['blur', 'change'] }],
     }
   }
