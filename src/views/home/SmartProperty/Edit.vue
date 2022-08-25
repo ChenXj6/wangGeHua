@@ -381,7 +381,7 @@ export default {
     }
     const handleChangelevel1 = () => {
       let id = dataForm.type1
-      dataForm.type2 = ''
+      // dataForm.type2 = ''
       getDictThTreeByApi({id},level2Options)
     }
     const getDictThTreeByApi = (data,option) => {

@@ -167,6 +167,8 @@ export default {
             })
           }
           if(route.query.type == 'item'){
+            delete dataForm.value.TypeName1
+            delete dataForm.value.TypeName2
             updateItem(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -204,6 +206,8 @@ export default {
             })
           }
           if(route.query.type == 'item'){
+            delete dataForm.value.TypeName1
+            delete dataForm.value.TypeName2
             addItem(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
@@ -291,7 +295,7 @@ export default {
     }
     const handleChangelevel1 = () => {
       let id = dataForm.value.type1
-      dataForm.value.type2 = ''
+      // dataForm.value.type2 = ''
       getDictThTreeByApi({id},level2Options)
     }
     const getDictThTreeByApi = (data,option) => {
@@ -315,7 +319,7 @@ export default {
     }
     // 初始化数据
     route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
-    console.log(route.query.type)
+    // console.log(route.query.type)
     onMounted(() => {
       route.query.operation === 3 &&( dataForm.value = {})
     })

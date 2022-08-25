@@ -445,10 +445,10 @@ export default {
     }
     const handleChangelevel1 = () => {
       let id = dataForm.value.level1
-      dataForm.value.level2 = ''
-      dataForm.value.level3 = ''
-      dataForm.value.level4 = ''
-      dataForm.value.level5 = ''
+      // dataForm.value.level2 = ''
+      // dataForm.value.level3 = ''
+      // dataForm.value.level4 = ''
+      // dataForm.value.level5 = ''
       getDictThTreeByApi({id},level2Options)
     }
     const handleChangelevel2 = () => {
