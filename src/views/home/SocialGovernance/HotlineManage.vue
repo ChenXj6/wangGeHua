@@ -177,7 +177,7 @@ import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/hotlineManage'
 import { deepClone, defaultObject } from '@/utils/util'
 import { getTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
-import { dispatchOrder,delHotline,exportHotline, importHotline } from '@/api/SocialGovernance/HotlineManage'
+import { dispatchOrder,delHotline,exportHotline, importHotline,exportZipHotline } from '@/api/SocialGovernance/HotlineManage'
 import { getUserList } from "@/api/sys/user";
 import { downLoadFile } from '@/utils/util'
 import {
@@ -398,8 +398,19 @@ export default defineComponent({
         })
       }
     }
+    const handleExportZip = () => {
+      if(!isHaveSelect.value){
+        proxy.$message.warning('请至少选择一条数据！')
+        return
+      }else{
+        exportZipHotline(multipleSelection.value).then(res=>{
+          downLoadFile(res,'12345承办单.zip','application/zip')
+        })
+      }
+    }
     // 表單操作按鈕配置
     const formHandle = {
+      span:12,
       btns: [
         { type: 'primary', label: '查询', key: 'search', handle: handleQuery },
         { type: 'primary', label: '重置', key: 'reset', handle: handleReset },
@@ -407,7 +418,8 @@ export default defineComponent({
         { type: 'primary', label: '派单', key: 'dispatch', handle: handleDispatch },
         { type: 'danger', label: '批量删除', key: 'delete', handle: handleDelte },
         { type: 'success', label: '导入', key: 'import', handle: handleImport },
-        { type: 'Primary', label: '导出', key: 'export', handle: handleExport },
+        { type: 'primary', label: '导出', key: 'export', handle: handleExport },
+        { type: 'primary', label: '导出承办单', key: 'exportzip', handle: handleExportZip },
       ],
     }
 

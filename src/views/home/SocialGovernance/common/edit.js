@@ -19,7 +19,7 @@ export function renderTable() {
                 label: '办结时限',
                 prop: 'concludeTime',
                 value: '',
-                format: 'YYYY-MM-DD HH:mm:ss',
+                format: 'YYYY-M-D H:mm:ss',
                 isClearable: true,
                 span: 11,
               },

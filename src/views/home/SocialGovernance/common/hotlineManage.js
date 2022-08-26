@@ -92,14 +92,14 @@ export function renderTable() {
                 isClearable: true,
                 span: 6,
               },
-              {
-                type: 'Input',
-                label: '问题描述',
-                prop: 'problemDescription',
-                placeholder:'请输入问题描述',
-                isClearable: true,
-                span: 6,
-              }, 
+              // {
+              //   type: 'Input',
+              //   label: '问题描述',
+              //   prop: 'problemDescription',
+              //   placeholder:'请输入问题描述',
+              //   isClearable: true,
+              //   span: 6,
+              // }, 
               {
                 type: 'Input',
                 label: '转办意见',

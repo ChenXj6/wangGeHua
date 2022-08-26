@@ -10,9 +10,24 @@ export const importHotline = query => {
 // 导出
 export const exportHotline = query => {
   return service.post(
-    `/api/realInfo/hotline/OutExcel`, query
+    `/api/realInfo/hotline/OutExcel`, query,
+    {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded;chartset=uft-8' },
+      responseType: `blob`,
+    }
   )
 };
+// 导出承办单
+export const exportZipHotline = query => {
+  return service.post(
+    `/api/realInfo/hotline/downZip`, query,
+    {
+      headers: { 'Content-Type': 'application/json;application/octet-stream;chartset=uft-8' },
+      responseType: `blob`,
+    }
+  )
+};
+
 
 // 
 export const delHotline = query => {

@@ -133,7 +133,7 @@
               size="small"
               :disabled="item.disabled"
               :format="item.format"
-              :value-format="item.format || 'YYYY-MM-DD'"
+              :value-format="item.format || 'YYYY-MM-DD HH:mm:ss'"
             >
             </el-date-picker>
           </template>

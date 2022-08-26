@@ -51,7 +51,7 @@ export default {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 100%;
+  /* width: 50%; */
   height: 20px;
   display: flex;
   justify-content: center;
@@ -59,5 +59,6 @@ export default {
   font-size: 12px;
   line-height: 20px;
   color: #999;
+  margin: 10px 10px 0;
 }
 </style>

@@ -8,7 +8,7 @@
     border
     size="small"
     :height="!!height ? height : null"
-    :max-height="tableConfig.maxHeight ?? 630"
+    :max-height="tableConfig.maxHeight ?? 610"
     :row-class-name="tableConfig.rowClassFunc || rowClassFunc"
     :cell-class-name="tableConfig.cellClassFunc"
     :default-sort="tableConfig.defaultSort"
