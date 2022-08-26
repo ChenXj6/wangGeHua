@@ -130,6 +130,56 @@
           </template>
         </popup-tree-input>
       </template>
+      <template v-slot:level1="">
+        <el-select v-model="dataForm.level1" clearable size="small" placeholder="请选择一级分类" @change="handleChangelevel1">
+          <el-option
+            v-for="item in level1Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level2="">
+        <el-select v-model="dataForm.level2" clearable :disabled="!dataForm.level1" size="small" placeholder="请选择二级分类" @change="handleChangelevel2">
+          <el-option
+            v-for="item in level2Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level3="">
+        <el-select v-model="dataForm.level3" clearable :disabled="!dataForm.level2" size="small" placeholder="请选择三级分类" @change="handleChangelevel3">
+          <el-option
+            v-for="item in level3Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level4="">
+        <el-select v-model="dataForm.level4" clearable :disabled="!dataForm.level3" size="small" placeholder="请选择四级分类" @change="handleChangelevel4">
+          <el-option
+            v-for="item in level4Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
+      <template v-slot:level5="">
+        <el-select v-model="dataForm.level5" clearable :disabled="!dataForm.level4" size="small" placeholder="请选择五级分类">
+          <el-option
+            v-for="item in level5Options"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </template>
     </VForm>
     <div v-if="route.query.operation == 1 || route.query.type == 'manage'">
       <div class="crumbs">
@@ -443,30 +493,38 @@ export default {
       })
       option.value = arr
     }
-    const handleChangelevel1 = () => {
+    const handleChangelevel1 = (flag = false) => {
       let id = dataForm.value.level1
-      // dataForm.value.level2 = ''
-      // dataForm.value.level3 = ''
-      // dataForm.value.level4 = ''
-      // dataForm.value.level5 = ''
       getDictThTreeByApi({id},level2Options)
+      if(!flag){
+        dataForm.value.level2 = ''
+        dataForm.value.level3 = ''
+        dataForm.value.level4 = ''
+        dataForm.value.level5 = ''
+      }
     }
-    const handleChangelevel2 = () => {
+    const handleChangelevel2 = (flag = false) => {
       let id = dataForm.value.level2
-      dataForm.value.level3 = ''
-      dataForm.value.level4 = ''
-      dataForm.value.level5 = ''
+      if(!flag){
+        dataForm.value.level3 = ''
+        dataForm.value.level4 = ''
+        dataForm.value.level5 = ''
+      }
       getDictThTreeByApi({id},level3Options)
     }
-    const handleChangelevel3 = () => {
+    const handleChangelevel3 = (flag = false) => {
       let id = dataForm.value.level3
-      dataForm.value.level4 = ''
-      dataForm.value.level5 = ''
+      if(!flag){
+        dataForm.value.level4 = ''
+        dataForm.value.level5 = ''
+      }
       getDictThTreeByApi({id},level4Options)
     }
-    const handleChangelevel4 = () => {
+    const handleChangelevel4 = (flag = false) => {
       let id = dataForm.value.level4
-      dataForm.value.level5 = ''
+      if(!flag){
+        dataForm.value.level5 = ''
+      }
       getDictThTreeByApi({id},level5Options)
     }
     const getDictThTreeByApi = (data,option) => {
@@ -864,7 +922,13 @@ export default {
     route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
     // console.log(dataForm.value,route.query.operation,';;;')
     if(route.query.operation == 1 || route.query.type == 'manage'){
-      getRecordByEventId()
+      getRecordByEventId(true)
+    }
+    if( route.query.type == 'manage' || (route.query.operation == 1 || route.query.type == 'hotline')){
+      handleChangelevel1(true)
+      handleChangelevel2(true)
+      handleChangelevel3(true)
+      handleChangelevel4(true)
     }
     return {
       dataForm,

@@ -379,9 +379,11 @@ export default {
       })
       option.value = arr
     }
-    const handleChangelevel1 = () => {
+    const handleChangelevel1 = (flag = false) => {
       let id = dataForm.type1
-      // dataForm.type2 = ''
+      if(!flag){
+        dataForm.type2 = ''
+      }
       getDictThTreeByApi({id},level2Options)
     }
     const getDictThTreeByApi = (data,option) => {
@@ -414,7 +416,7 @@ export default {
     onBeforeMount(() => {
       timer.value = new Date().getTime()
     })
-    route.query.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.treeNames)
+    route.query.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.treeNames,handleChangelevel1(true))
 
     onMounted(() => {
       route.query.operation === 3 && (dataForm = {})

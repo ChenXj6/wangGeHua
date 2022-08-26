@@ -293,8 +293,11 @@ export default {
       })
       option.value = arr
     }
-    const handleChangelevel1 = () => {
+    const handleChangelevel1 = (flag = false) => {
       let id = dataForm.value.type1
+      if(!flag){
+        dataForm.value.type2 = ''
+      }
       // dataForm.value.type2 = ''
       getDictThTreeByApi({id},level2Options)
     }
@@ -323,6 +326,9 @@ export default {
     onMounted(() => {
       route.query.operation === 3 &&( dataForm.value = {})
     })
+    if(route.query.operation != 3){
+      handleChangelevel1(true)
+    }
     return {
       dataForm,
       route,

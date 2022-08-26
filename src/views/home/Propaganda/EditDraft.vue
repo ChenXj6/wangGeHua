@@ -322,12 +322,19 @@ export default {
       })
       option.value = arr
     }
-    const handleChangelevel1 = () => {
+    const handleChangelevel1 = (flag = false) => {
       let id = dataForm.value.level1
+      if(!flag){
+        dataForm.value.level2 = ''
+        dataForm.value.level3 = ''
+      }
       getDictThTreeByApi({id},level2Options)
     }
-    const handleChangelevel2 = () => {
+    const handleChangelevel2 = (flag = false) => {
       let id = dataForm.value.level2
+      if(!flag){
+        dataForm.value.level3 = ''
+      }
       getDictThTreeByApi({id},level3Options)
     }
     const getDictThTreeByApi = (data,option) => {
@@ -454,8 +461,8 @@ export default {
     })
     route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)))
     if(route.query.operation != 3){
-      handleChangelevel1()
-      handleChangelevel2()
+      handleChangelevel1(true)
+      handleChangelevel2(true)
     }
     onMounted(() => {
       if(route.query.type === 'draft'){

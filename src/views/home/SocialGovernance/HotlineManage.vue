@@ -60,6 +60,7 @@
           type="success"
         />
         <el-button
+          v-if="data.hotlineStatus == 1"
           :icon="Edit"
           @click="handleOperation(2, data)"
           circle

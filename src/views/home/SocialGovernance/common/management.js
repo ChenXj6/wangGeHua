@@ -82,7 +82,7 @@ export function renderTable() {
               {
                 type: 'Input',
                 label: '工单编号',
-                prop: 'orderNO',
+                prop: 'orderNo',
                 placeholder:'请输入工单编号',
                 isClearable: true,
                 span: 6,

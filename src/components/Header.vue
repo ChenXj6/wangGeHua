@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <el-row>
-      <el-col :span="4">
+      <el-col :span="5">
         <!-- 折叠按钮 -->
         <div class="collapse-btn"
              @click="collapseChage">
@@ -25,7 +25,7 @@
           <header-sidebar />
         </div>
       </el-col>
-      <el-col :span="6" :offset="2">
+      <el-col :span="5" :offset="2">
         <div class="header-right">
           <div class="header-user-con">
             <div class="dateWeather">
