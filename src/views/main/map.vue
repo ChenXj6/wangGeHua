@@ -814,9 +814,8 @@ export default {
     };
     const handleEventReset = (formEL) => {
       formEL.resetFields()
-      searchEventForm.value = {};
+      defaultObject(searchEventForm.value)
       searchEventForm.value.operatorId =JSON.parse(sessionStorage.getItem('user')).user.operatorId,
-      // defaultObject(searchEventForm.value)
       handleEventQuery();
     };
 
