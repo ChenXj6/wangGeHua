@@ -106,7 +106,7 @@
       </template>
       <template v-slot:eventLong="">
           <el-input
-                  v-model="dataForm.longitude"
+                  v-model.trim="dataForm.longitude"
                   placeholder="请点击获取经纬度"
                   size="small"
                   clearable                  
@@ -115,7 +115,7 @@
         </template>
       <template v-slot:eventLat="">
                 <el-input
-                  v-model="dataForm.latitude"
+                  v-model.trim="dataForm.latitude"
                   placeholder="请点击获取经纬度"
                   size="small"
                   clearable
@@ -192,11 +192,13 @@ export default {
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
     const { CarFormConfig, PubilcFormConfig, rubbishFormConfig, VehicleFormConfig, ParkLotFormConfig,ChargeFormConfig,ManageFormConfig } = renderTable.call(proxy)
-    let dataForm = reactive({
+    let dataForm = ref({
       officeCode: '',
       officeName: '',
       type1:'',
       type2:'',
+      longitude:'',
+      latitude:'',
     })
     let timer = ref(new Date().getTime())
     let popupTreeData = ref([])
@@ -205,8 +207,8 @@ export default {
       children: "children"
     }
     const handleTreeSelectChange = ({ officeCode, officeName }) => {
-      dataForm.officeCode = officeCode
-      dataForm.officeName = officeName
+      dataForm.value.officeCode = officeCode
+      dataForm.value.officeName = officeName
     }
     const getOList = () => {
       getOrganList({}).then(res => {
@@ -222,7 +224,7 @@ export default {
         // true: 编辑；false:添加
         if (route.query.operation == 2) {
           if (route.query.type == 'car') {
-            editCarPark(dataForm).then(res => {
+            editCarPark(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -230,7 +232,7 @@ export default {
               }
             })
           } else if (route.query.type == 'pubilc') {
-            editPubilc(dataForm).then(res => {
+            editPubilc(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -238,7 +240,7 @@ export default {
               }
             })
           } if (route.query.type == 'Vehicle') {
-            editVehicle(dataForm).then(res => {
+            editVehicle(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -247,7 +249,7 @@ export default {
             })
           }
           if (route.query.type == 'ParkLot') {
-            editParkLot(dataForm).then(res => {
+            editParkLot(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -256,7 +258,7 @@ export default {
             })
           } 
           if (route.query.type == 'Manage') {
-            editManage(dataForm).then(res => {
+            editManage(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -264,7 +266,7 @@ export default {
               }
             })
           }  if (route.query.type == 'Charge') {
-            editCharge(dataForm).then(res => {
+            editCharge(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -272,7 +274,7 @@ export default {
               }
             })
           } else {
-            editRubbish(dataForm).then(res => {
+            editRubbish(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -282,7 +284,7 @@ export default {
           }
         } else {
           if (route.query.type == 'car') {
-            saveCarPark(dataForm).then(res => {
+            saveCarPark(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -290,7 +292,7 @@ export default {
               }
             })
           } if (route.query.type == 'pubilc') {
-            savePubilc(dataForm).then(res => {
+            savePubilc(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -298,7 +300,7 @@ export default {
               }
             })
           } if (route.query.type == 'Vehicle') {
-            saveVehicle(dataForm).then(res => {
+            saveVehicle(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -306,7 +308,7 @@ export default {
               }
             })
           } if (route.query.type == 'ParkLot') {
-            saveParkLot(dataForm).then(res => {
+            saveParkLot(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -314,7 +316,7 @@ export default {
               }
             })
           }  if (route.query.type == 'Charge') {
-            saveCharge(dataForm).then(res => {
+            saveCharge(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -322,7 +324,7 @@ export default {
               }
             })
           } if (route.query.type == 'Manage') {
-            saveManage(dataForm).then(res => {
+            saveManage(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -330,7 +332,7 @@ export default {
               }
             })
           }else {
-            saveRubbish(dataForm).then(res => {
+            saveRubbish(dataForm.value).then(res => {
               if (res.resCode === '000000') {
                 resolve(res.message)
               } else {
@@ -380,9 +382,9 @@ export default {
       option.value = arr
     }
     const handleChangelevel1 = (flag = false) => {
-      let id = dataForm.type1
+      let id = dataForm.value.type1
       if(!flag){
-        dataForm.type2 = ''
+        dataForm.value.type2 = ''
       }
       getDictThTreeByApi({id},level2Options)
     }
@@ -408,18 +410,18 @@ export default {
       mapDialogVisible.value = true
     }
     const getLatAndLng = ({ lat, lng }) => {
-      // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      dataForm.longitude = lng.toFixed(6)
-      dataForm.latitude = lat.toFixed(6)
+      // console.log(`获取到的经纬度为：${lng.toFixed(6)}-${lat.toFixed(6)}`)
+      dataForm.value.longitude = lng.toFixed(6)
+      dataForm.value.latitude = lat.toFixed(6)
       mapDialogVisible.value = false
     }
     onBeforeMount(() => {
       timer.value = new Date().getTime()
     })
-    route.query.operation != 3 && (dataForm = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.treeNames,handleChangelevel1(true))
+    route.query.operation != 3 && (dataForm.value = JSON.parse(decodeURIComponent(route.query.data)), delete dataForm.value.treeNames,handleChangelevel1(true))
 
     onMounted(() => {
-      route.query.operation === 3 && (dataForm = {})
+      route.query.operation === 3 && (dataForm.value = {})
       // handleQueryTable()
     })
     return {

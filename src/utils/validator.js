@@ -267,7 +267,7 @@
    *
    */
   checkLongitude(rule, value, callback) {
-    const longrg = /^(\-|\+)?(((\d|[1-9]\d|1[0-7]\d|0{1,3})\.\d{0,6})|(\d|[1-9]\d|1[0-7]\d|0{1,3})|180\.0{0,6}|180)$/
+    const longrg = /^[\-\+]?(0(\.\d{1,6})?|([1-9](\d)?)(\.\d{1,6})?|1[0-7]\d{1}(\.\d{1,6})?|180\.0{1,6})$/
     if (!longrg.test(value)) {
       callback(new Error('经度整数部分为0-180,小数部分为0到6位!'))
     } else {
@@ -280,7 +280,7 @@
    *
    */
   checkLatitude(rule, value, callback) {
-    var latreg = /^(\-|\+)?([0-8]?\d{1}\.\d{0,6}|90\.0{0,6}|[0-8]?\d{1}|90)$/
+    var latreg = /^[\-\+]?((0|([1-8]\d?))(\.\d{1,6})?|90(\.0{1,6})?)$/
     if (!latreg.test(value)) {
       callback(new Error('纬度整数部分为0-90,小数部分为0到6位!'))
     } else {

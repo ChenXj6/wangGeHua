@@ -588,8 +588,8 @@ export default {
     }
     const getLatAndLng = ({ lat, lng }) => {
       // console.log(`获取到的经纬度为：${lng}-${lat}`)
-      dataForm.longitude = lng
-      dataForm.latitude = lat
+      dataForm.longitude = lng.toFixed(6)
+      dataForm.latitude = lat.toFixed(6)
       mapDialogVisible.value = false
     }
     onBeforeMount(() => {
