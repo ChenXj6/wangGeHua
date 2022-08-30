@@ -43,7 +43,7 @@
               </el-table-column>
               <el-table-column label="操作" width="150" align="center">
                 <template #default="scope">
-                  <el-button size="small" type="primary" icon="edit" circle @click="handleEdit(scope.row)"
+                  <el-button type="primary" icon="edit" circle @click="handleEdit(scope.row)"
                     ></el-button
                   >
                   <el-popconfirm title="确定要删除该数据吗？" @confirm="handleDel(scope.row)">

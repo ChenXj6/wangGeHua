@@ -209,7 +209,7 @@
             {{ formatterDate(scope.row.replyOrderDate) }}
           </template>
         </el-table-column>
-        <el-table-column prop="dealRemark" label="退回原因/回单内容" />
+        <el-table-column prop="handle_backoff" label="退回原因/回单内容/撤回内容" />
         <el-table-column prop="filePath" label="办理文件">
           <template #default="scope">
             <img :src="url + scope.row.filePath" alt="" style="width:100%">

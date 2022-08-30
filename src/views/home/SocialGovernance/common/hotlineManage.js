@@ -84,7 +84,7 @@ export function renderTable() {
                 span: 6,
               }, 
               {
-                type: 'datetime',
+                type: 'dateTime',
                 label: '接收时间',
                 prop: 'receivingTime',
                 value: '',
@@ -134,7 +134,7 @@ export function renderTable() {
                 span: 6,
               },
               {
-                type: 'datetime',
+                type: 'dateTime',
                 label: '办结时限',
                 prop: 'concludeTime',
                 value: '',

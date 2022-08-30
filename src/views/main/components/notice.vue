@@ -2,74 +2,49 @@
   <div class="noticeBox">
     <div class="notice-title-box">
       <div class="notice-title">
-        <h4>消息中心</h4>
-        <i
-          v-if="isHaveNotice"
-          :class="`el-icon-arrow-${isUnfold ? 'up' : 'down'}`"
-          @click="stowAndUnfold"
-        ></i>
+        <h4>工单提醒</h4>
       </div>
     </div>
-    <!-- {{ noticeList }}111 -->
-    <template v-if="isHaveNotice">      
-      <!-- <vue3-seamless-scroll :data="noticeList" class="warp"> -->
-        <ul ref="noticeListBox" class="notice-item-box">
-          <li v-for="item in noticeList" :key="item.id" class="notice-item">
-            <span class="notice-item-content">{{ item.eventName }}，</span>
-            <el-link type="warning" @click.prevent="handleViewDetail(item)">请查看</el-link>
-          </li>
-        </ul>
-      <!-- </vue3-seamless-scroll> -->
-    </template>
-    <div v-else class="no-notice">暂无最新消息</div>
+    <div class="box">
+      <p>派单后&nbsp;4小时&nbsp;未接单&nbsp;的12345热线工单共<el-link type="warning" @click.prevent="handleViewDetail()">{{ overdueTime }}</el-link>条</p>
+      <p>临期前&nbsp;2天&nbsp;未回复&nbsp;的12345热线工单共<el-link type="warning" @click.prevent="handleViewDetail(4)">{{ overdueDay }}</el-link>条</p>
+    </div>
   </div>
 </template>
 <script>
-import { computed, getCurrentInstance, onMounted, ref,watch } from '@vue/runtime-core'
+import { computed, getCurrentInstance, onBeforeMount, onMounted, reactive, ref,toRefs,watch } from '@vue/runtime-core'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { noticeList } from '@/api/weather'
+import { listAssign } from '@/utils/util'
 export default {
   setup() {
     const store = useStore()
     const router = useRouter()
     const { proxy } = getCurrentInstance()
-    const isUnfold = ref(true)
-    const noticeListBox = ref(null)
+    const noticeObj = reactive({
+      overdueDay:0,
+      overdueTime:0,
+    })
     // 消息通知
-    const isHaveNotice = computed(() => !!noticeList.value.length)
-    const noticeList = computed(() => store.state.eventList)
-    const stowAndUnfold = () => {
-      if (isUnfold.value) {
-        noticeListBox.value.style.height = 0
-      } else {
-        noticeListBox.value.style.height = '250px'
-      }
-      isUnfold.value = !isUnfold.value
+    const getList = () => {
+      let dealCode = JSON.parse(sessionStorage.getItem('user')).user.operatorId
+      noticeList({dealCode}).then(res=>{
+        listAssign(noticeObj,res)
+      })
     }
     
-    const handleViewDetail = (data,type = 4) => {
-      if(data.recordState == 0 && (data.approvalStatus != 4 && data.approvalStatus != 5)){
-        data = JSON.stringify(data)
-        router.push({
-          path: '/editResidentsReport',
-          query: { data: encodeURIComponent(data), operation: type },
-        })
-      }else{
-        proxy.$message.warning('该事件已被处理')
-      }
-      
+    const handleViewDetail = (type = 1) => {
+      router.push({
+        name: 'Management',
+        params: { operation: type },
+      })
     }
-    // onMounted(()=>{
-      
-      // console.log(noticeList.value,'notice2')
-    // })
-    // noticeList.value = JSON.parse(localStorage.getItem('eventName')) || []
+    onBeforeMount(()=>{
+      getList()
+    })
     return {
-      isHaveNotice,
-      noticeList,
-      stowAndUnfold,
-      isUnfold,
-      noticeListBox,
+      ...toRefs(noticeObj),
       handleViewDetail,
     }
   },
@@ -111,26 +86,34 @@ export default {
     clear: both;
     margin: 5px 0;
   }
-  .notice-item-box {
+  .box{
     width: 100%;
-    max-height: 250px;
-    overflow: scroll;
-    transition: height 0.3s ease;
-    .notice-item {
-      font-size: 14px;
-      padding: 5px 0;
-      .notice-item-content {
-        display: inline-block;
-      }
-    }
-  }
-  .no-notice {
-    height: 100px;
+    min-height: 100px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 14px;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-around;
   }
+  // .notice-item-box {
+  //   width: 100%;
+  //   min-height: 250px;
+  //   overflow: scroll;
+  //   transition: height 0.3s ease;
+  //   .notice-item {
+  //     font-size: 14px;
+  //     padding: 5px 0;
+  //     .notice-item-content {
+  //       display: inline-block;
+  //     }
+  //   }
+  // }
+  // .no-notice {
+  //   height: 100px;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-items: center;
+  //   font-size: 14px;
+  // }
 }
 .notice-item-box::-webkit-scrollbar {
   display: none;

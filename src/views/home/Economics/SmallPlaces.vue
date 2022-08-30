@@ -15,28 +15,23 @@
       ref="table"
       :table-config="tableConfig"
     >
-    <template v-slot:revenueName="{data}">
-      <el-link type="success" @click.prevent="''">{{ data.revenueName }}</el-link>
-    </template>
-    <template v-slot:revenueType="{data}">
-      <span >{{revenueTypeOptions.filter(v=>v.value == data.revenueType)[0]?.label}}</span>
+    <template v-slot:placeName="{data}">
+      <el-link type="success" @click.prevent="handleOperation(2, data)">{{ data.placeName }}</el-link>
     </template>
     <template v-slot:operation="{data}">
-        <!-- <el-button
-          size="small"
+        <el-button
           @click="handleOperation(1, data)"
           icon="search"
           circle
           type="success"
-        /> -->
-        <!-- @click="handleOperation(2, data)" -->
+        />
         <el-button
           icon="edit"
+          @click="handleOperation(2, data)"
           circle
-          type="success"
+          type="primary"
         />
-        <!-- @confirm="handleDel(data.id)" -->
-        <el-popconfirm title="确定要删除吗？" >
+        <el-popconfirm title="确定要删除吗？" @confirm="handleDel(data.id)">
           <template #reference>
             <el-button
               icon="delete"
@@ -57,7 +52,7 @@ import { renderTable } from './common/SmallPlaces'
 import { deepClone, formatterDate,resetFormat,defaultObject } from '@/utils/util'
 import { useRouter } from 'vue-router'
 import { searchDict } from '@/api/sys/dict'
-import { delTax } from '@/api/Economics/tax'
+import { delPlace } from '@/api/Economics/smallplace'
 export default {
   name: 'TaxList',
   components:[PopupTreeInput],
@@ -87,7 +82,7 @@ export default {
       handleOperation(3,{})
     }
     const handleDel = (id) => {
-      delTax({id}).then(res=>{
+      delPlace({id}).then(res=>{
         if(res.resCode == '000000'){
           handleQuery()
           proxy.$message.success('数据删除成功！')
@@ -101,7 +96,7 @@ export default {
       btns: [
         {type:'primary',label:'查询',key:'search',handle:handleQuery},
         {type:'primary',label:'重置',key:'reset',handle:handleReset},
-        // {type:'primary',label:'新增',key:'reset',handle:handleAdd},
+        {type:'primary',label:'新增',key:'reset',handle:handleAdd},
       ]
     }
     const handleQueryTable = () => {
@@ -133,7 +128,7 @@ export default {
       let data = JSON.stringify(rowData)
       router.push({
         path: '/editEconomics',
-        query: { data : encodeURIComponent(data), operation: type, type:'tax' },
+        query: { data : encodeURIComponent(data), operation: type, type:'place' },
       })
     }
     //

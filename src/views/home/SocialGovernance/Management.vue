@@ -91,7 +91,7 @@
 </template>
 <script>
 import { reactive, ref } from '@vue/reactivity'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import {
   computed,
   defineComponent,
@@ -112,13 +112,14 @@ import {
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 import { renderTable } from './common/management'
-import { deepClone, defaultObject } from '@/utils/util'
+import { deepClone, defaultObject,formatterDate } from '@/utils/util'
 import { getTree } from '@/api/SocialGovernance/GridHotlineWorkOrder'
 export default defineComponent({
     name: 'Management',
     components:[PopupTreeInput],
     setup() {
     const router = useRouter()
+    const route = useRoute()
     const { proxy } = getCurrentInstance()
     const { tableConfig,formConfig } = renderTable.call(proxy)
     const table = ref(null)
@@ -154,6 +155,24 @@ export default defineComponent({
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm)
+      for (const key in searchParams.value) {
+        if (
+          Array.isArray(searchParams.value[key]) &&
+          searchParams.value[key].length > 0
+        ) {
+          searchParams.value[`${key}Start`] = formatterDate(
+            searchParams.value[key][0]
+          )
+          searchParams.value[`${key}End`] = formatterDate(
+            searchParams.value[key][1]
+          )
+          delete searchParams.value[key]
+        }
+        if(Array.isArray(searchParams.value[key]) &&
+          searchParams.value[key].length == 0){
+            delete searchParams.value[key]
+        }
+      }
       table.currentPage = 1
       handleQueryTable()
     }
@@ -214,6 +233,9 @@ export default defineComponent({
     const handleOrderTreeSelectChange = ({hotlineWorkOrderName,id}) => {
       searchForm.orderType = id
       searchForm.orderName = hotlineWorkOrderName
+    }
+    if(route.params.operation){
+      searchForm.status = route.params.operation
     }
     getOList()
     getOrderList()

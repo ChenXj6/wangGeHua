@@ -855,6 +855,15 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/User.vue")
       },
+      {
+        path: "/coclpitGovern",
+        name: "coclpitGovern",
+        meta: {
+          title: '驾驶舱配置'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/CoclpitGovern.vue")
+      },
+      
     ]
   },
   {

@@ -372,10 +372,125 @@ export function renderTable() {
       ],
     }
   }
+  const placeFormConfig = {
+    gutter:10,
+    formItems: [
+      {
+        type: 'Input',
+        label: '场所名称',
+        prop: 'placeName',
+        value: '',
+        placeholder: '请填写场所名称',
+        isClearable: true,
+        span: 22,
+      },
+      {
+        type: 'Input',
+        label: '场所地址',
+        prop: 'address',
+        value: '',
+        placeholder: '请填写场所地址',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'slot',
+        label: '归属网格',
+        slotName:'gridCode',
+        prop:'officeName',
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '场所负责人姓名',
+        prop: 'personName',
+        value: '',
+        placeholder: '请填写场所负责人姓名',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '负责人联系方式',
+        prop: 'personPhone',
+        value: '',
+        placeholder: '请填写场所负责人联系方式',
+        isClearable: true,
+        span: 11,
+      },
+      // {
+      //   type: 'slot',
+      //   label: '经纬度',
+      //   prop: 'longitude',
+      //   span: 6,
+      //   slotName:'eventLong'
+      // },
+      // {
+      //   type: 'slot',
+      //   label: '',
+      //   prop: 'latitude',
+      //   span: 5,
+      //   slotName:'eventLat'
+      // },
+      {
+        type: 'selectSearch',
+        label: '类型',
+        prop: 'type',
+        placeholder: '请选择类型',
+        code:'1093',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'Input',
+        label: '使用面积',
+        prop: 'area',
+        value: '',
+        append:'m²',
+        placeholder: '请填写使用面积',
+        isClearable: true,
+        span: 11,
+      },
+      {
+        type: 'textarea',
+        label: '备注',
+        prop: 'remarks',
+        value: '',
+        placeholder: '',
+        isClearable: true,
+        span: 22,
+      },
+    ],
+    rules:{
+      placeName: [
+        { required: true, message: '请输入场所名称', trigger: ['blur'] },
+      ],
+      officeName: [
+        { required: true, message: '请选择归属网格', trigger: ['blur','change'] },
+      ],
+      type: [
+        { required: true, message: '请选择类型', trigger: ['blur','change'] },
+      ],
+      address: [
+        { required: true, message: '请输入场所详址', trigger: ['blur'] },
+      ],
+      area: [
+        { required: true, message: '请输入场所面积', trigger: ['blur'] },
+      ],
+      personName: [
+        { required: true, message: '请填写场所负责人姓名', trigger: ['blur'] },
+      ],
+      personPhone: [
+        { required: true, message: '请填写场所负责人联系方式', trigger: ['blur'] },
+        { validator:validator.phoneNumber, trigger: ['blur'] }
+      ],
+    }
+  }
   return {
     taxFormConfig,
     itemFormConfig,
     buildingFormConfig,
     industryFormConfig,
+    placeFormConfig,
   }
 }

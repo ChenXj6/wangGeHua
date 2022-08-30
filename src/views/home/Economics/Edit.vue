@@ -98,7 +98,7 @@
                 />
       </template>
     </VForm>
-    <VForm v-else :key="timer" :isDisabled="route.query.operation == 1" :form-data="industryFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
+    <VForm v-else-if="route.query.type === 'industry'" :key="timer" :isDisabled="route.query.operation == 1" :form-data="industryFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
       <template v-slot:gridCode="">
         <popup-tree-input
           :data="popupTreeData" :propa="popupTreeProps"
@@ -107,6 +107,35 @@
             <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
           </template>
         </popup-tree-input>
+      </template>
+    </VForm>
+    <VForm v-else :key="timer" :isDisabled="route.query.operation == 1" :form-data="placeFormConfig" :form-model="dataForm" :form-handle="route.query.operation != 1 ? formHandle : {}">
+      <template v-slot:gridCode="">
+        <popup-tree-input
+          :data="popupTreeData" :propa="popupTreeProps"
+          :nodeKey="''+dataForm.officeCode" @update:dataForm="handleTreeSelectChange">
+          <template v-slot>
+            <el-input v-model="dataForm.officeName" size="small" :readonly="true" placeholder="点击选择机构" style="cursor:pointer;"></el-input>
+          </template>
+        </popup-tree-input>
+      </template>
+      <template v-slot:eventLong="">
+          <el-input
+                  v-model="dataForm.longitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable                  
+                  @click="handleClick"
+                />
+        </template>
+      <template v-slot:eventLat="">
+                <el-input
+                  v-model="dataForm.latitude"
+                  placeholder="请点击获取经纬度"
+                  size="small"
+                  clearable
+                  @click="handleClick"
+                />
       </template>
     </VForm>
     <el-row v-if="route.query.operation == 1">
@@ -139,6 +168,7 @@ import { addTax,updateTax } from '@/api/Economics/tax'
 import { addItem,updateItem } from '@/api/Economics/itemList'
 import { addBuilding,updateBuilding } from '@/api/Economics/building'
 import { addIndustry,updateIndustry } from '@/api/Economics/industry'
+import { addPlace,updatePlace } from '@/api/Economics/smallplace'
 import { getDictThTreeBy } from '@/api/sys/multilevel'
 export default {
   name:'Edit',
@@ -146,7 +176,7 @@ export default {
     const route = useRoute()
     const { delCurrentTag } = mixin.setup()
     const { proxy } = getCurrentInstance()
-    const { taxFormConfig,itemFormConfig,buildingFormConfig,industryFormConfig } = renderTable.call(proxy)
+    const { taxFormConfig,itemFormConfig,buildingFormConfig,industryFormConfig, placeFormConfig } = renderTable.call(proxy)
     const dataForm = ref({
       officeCode:'',
       officeName:'',
@@ -195,6 +225,15 @@ export default {
             }
             })
           }
+          if(route.query.type == 'place'){
+            updatePlace(dataForm.value).then(res=>{
+              if(res.resCode === '000000'){
+              resolve(res.message)
+            } else {
+              reject(res.resCode)
+            }
+            })
+          }
         } else {
           if(route.query.type == 'tax'){
             addTax(dataForm.value).then(res=>{
@@ -227,6 +266,15 @@ export default {
           }
           if(route.query.type == 'industry'){
             addIndustry(dataForm.value).then(res=>{
+              if(res.resCode === '000000'){
+              resolve(res.message)
+            } else {
+              reject(res.resCode)
+            }
+            })
+          }
+          if(route.query.type == 'place'){
+            addPlace(dataForm.value).then(res=>{
               if(res.resCode === '000000'){
               resolve(res.message)
             } else {
@@ -338,6 +386,7 @@ export default {
       itemFormConfig,
       buildingFormConfig,
       industryFormConfig,
+      placeFormConfig,
       formHandle,
       handleTreeSelectChange,
       popupTreeProps,
