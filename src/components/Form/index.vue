@@ -22,24 +22,24 @@
               v-model.trim="formModel[item.prop]"
               :placeholder="item.placeholder"
               size="small"
+              :type="item.dataType"
               :maxlength="maxlength ? maxlength: '20'"
               :disabled="item.disabled"
               :clearable="item.isClearable"
             >
               <template v-if="!!item.append" #append>
-                <!-- <el-button size="small" icon="Search" /> -->
                 <span>{{ item.append }}</span>
               </template>
             </el-input>
           </template>
           <!--  -->
+          <!-- @focus="()=>{querySearchAsync(item.code)}" -->
           <template v-if="item.type === 'selectSearch'">
             <el-select
               v-model="formModel[item.prop]"
               :placeholder="item.placeholder"
               size="small"
-              :key="item.prop"
-              @focus="()=>{querySearchAsync(item.code)}"
+              :key="item.prop"              
               :clearable="item.isClearable"
               :disabled="item.disabled"
               :loading="loading"
@@ -178,11 +178,10 @@
             >{{ i.label }}</el-button
           >
         </div>
-        
       </el-col>
-      
     </el-row>
   </el-form>
+  
 </template>
 <script>
 import {

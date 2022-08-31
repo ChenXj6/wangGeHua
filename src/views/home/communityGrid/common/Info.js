@@ -12,8 +12,15 @@ export function renderTable() {
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
-      { prop: 'officeName', label: '名称',toolTip:true, minWidth: '120' },
-      { prop: 'officeCode', label: '编码',toolTip:true, minWidth: '120' },
+      { prop: 'areaName', label: '区',toolTip:true, minWidth: '120' },
+      { prop: 'qbm', label: '区编码',toolTip:true, minWidth: '120' },
+      { prop: 'streetName', label: '街道名称',toolTip:true, minWidth: '120' },
+      { prop: 'jdbm', label: '街道编码',toolTip:true, minWidth: '120' },
+      { prop: 'communityName', label: '社区名称',toolTip:true, minWidth: '120' },
+      { prop: 'sqbm', label: '社区编码',toolTip:true, minWidth: '120' },
+
+      { prop: 'officeName', label: '网格名称',toolTip:true, minWidth: '120' },
+      { prop: 'officeCode', label: '网格编码',toolTip:true, minWidth: '120' },
       {
         prop: 'gridCharacter',
         label: '网格性质',

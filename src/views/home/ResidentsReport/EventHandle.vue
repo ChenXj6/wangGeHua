@@ -60,12 +60,14 @@
         <el-button
           @click="handleOperation(1, data.data)"
           :icon="Search"
+          title="查看"
           circle
           type="success"
         />
         <el-button
           v-if="data.data.recordState == 0 && (data.data.approvalStatus != 4 && data.data.approvalStatus != 5)"
           :icon="Promotion"
+          title="处置"
           circle
           type="priamry"
           @click="handleOperation(4, data.data)"
@@ -73,6 +75,7 @@
         <el-popconfirm v-if="data.data.approvalStatus == 1 || data.data.approvalStatus == 2 || data.data.approvalStatus == 4" :title="`是否${data.data.approvalStatus == 4 || data.data.approvalStatus == 5 ? '解挂' : '临时挂起'}该条数据`" @confirm="handleLock(data.data)">
           <template #reference>
             <el-button
+              title="挂起"
               :icon="`${data.data.approvalStatus == 4 ? 'Unlock' : 'Lock'}`"
               circle
               type="priamry"

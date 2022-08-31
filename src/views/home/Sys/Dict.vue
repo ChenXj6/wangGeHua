@@ -16,7 +16,7 @@
                  class="demo-tabs"
                  style="height: 600px"
                  @tab-click="handleClick">
-          <el-tab-pane v-for="i in tabList" :key="i.value" :label="i.description" :name="i.description">
+          <el-tab-pane v-for="i in tabList" :key="i.value" :label="i.description" :name="i.description" lazy>
             <el-row :gutter="10">
               <el-col :span="4">
                 <el-button type="primary"

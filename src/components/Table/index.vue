@@ -209,7 +209,7 @@ export default defineComponent({
       return date && $moment(date).format(formatter)
     })
     const pageSizeList = computed(
-      () => tableConfig.pageSizeList || [1, 2, 10, 50, 100]
+      () => tableConfig.pageSizeList || [10, 20, 50, 100]
     )
     // 表格操作
     // 序号随分页联动

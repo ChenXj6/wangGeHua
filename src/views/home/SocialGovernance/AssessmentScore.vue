@@ -49,7 +49,7 @@ import {
   Search,
 } from '@element-plus/icons-vue'
 import { renderTable } from './common/AssessmentScore'
-import { deepClone, defaultObject } from '@/utils/util'
+import { deepClone, defaultObject,formatterDate } from '@/utils/util'
 import PopupTreeInput from "@/components/PopupTreeInput/index.vue"
 import { getOrganList } from '@/api/sys/organ'
 export default defineComponent({
@@ -83,6 +83,24 @@ export default defineComponent({
     // 表格相關操作
     const handleQuery = () => {
       searchParams.value = deepClone(searchForm)
+      for (const key in searchParams.value) {
+        if (
+          Array.isArray(searchParams.value[key]) &&
+          searchParams.value[key].length > 0
+        ) {
+          searchParams.value[`${key}Start`] = formatterDate(
+            searchParams.value[key][0]
+          )
+          searchParams.value[`${key}End`] = formatterDate(
+            searchParams.value[key][1]
+          )
+          delete searchParams.value[key]
+        }
+        if(Array.isArray(searchParams.value[key]) &&
+          searchParams.value[key].length == 0){
+            delete searchParams.value[key]
+        }
+      }
       table.currentPage = 1
       handleQueryTable()
     }

@@ -12,8 +12,8 @@ export function renderTable() {
     total: 0,
     isSortable: false, // 是否开启拖拽
     columns: [
-        { prop: 'startTime', label: '开始时间',toolTip:true, minWidth: '140' },
-        { prop: 'endTime', label: '结束时间',toolTip:true, minWidth: '140' },
+        { prop: 'startTime', label: '开始时间',formatter: 'YYYY-MM-DD HH:mm:ss',toolTip:true, minWidth: '140' },
+        { prop: 'endTime', label: '结束时间',formatter: 'YYYY-MM-DD HH:mm:ss',toolTip:true, minWidth: '140' },
         // { prop: 'officeName', label: '考核组织',toolTip:true, minWidth: '120' },
         { prop: 'assessType', type:'code', label: '考核类型',code:'1089', minWidth: '120' },
         { prop: 'maxSocre', label: '满分',toolTip:true, minWidth: '120' }, 

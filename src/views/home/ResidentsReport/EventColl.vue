@@ -60,12 +60,14 @@
         <el-button
           @click="handleOperation(1, data.data)"
           :icon="Search"
+          title="查看"
           circle
           type="success"
         />
         <el-button
           v-if="data.data.approvalStatus == 1"
           :icon="Edit"
+          title="编辑"
           @click="handleOperation(2, data.data)"
           circle
           type="priamry"

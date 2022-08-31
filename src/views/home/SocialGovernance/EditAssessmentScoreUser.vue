@@ -91,10 +91,12 @@
                 })
             }
             const handleSubmit = (formRef) => {
-              if(dataForm.sjScoe > dataForm.maxSocre || dataForm.sjScoe < 0){
-                proxy.$message.warning(`实际得分填写错误，请重新填写!`)
+              if(Number(dataForm.sjScoe) < 0){
+                proxy.$message.warning(`实际得分应大于等于0，请重新填写!`)
                 return
-              }
+              }else if (Number(dataForm.sjScoe) > Number(dataForm.maxSocre)){
+                proxy.$message.warning(`实际得分应小于等于满分，请重新填写!`)
+              }else{
                 formRef.validate((vaild) => {
                     if (vaild) {
                         handleSave().then(res => {
@@ -107,6 +109,7 @@
                         return
                     }
                 })
+              }
             }
             const handleBack = () => {
                 delCurrentTag(route)
