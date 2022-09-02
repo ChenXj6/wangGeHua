@@ -863,7 +863,14 @@ const routes = [
         },
         component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/CoclpitGovern.vue")
       },
-      
+      {
+        path: "/daily",
+        name: "daily",
+        meta: {
+          title: '日志查询'
+        },
+        component: () => import( /* webpackChunkName: "table" */ "@/views/home/Sys/daily.vue")
+      },
     ]
   },
   {

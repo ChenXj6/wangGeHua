@@ -24,7 +24,7 @@
       v-if="tableConfig.index"
       label=""
       type="index"
-      width="50"
+      width="60"
       align="center"
       :index="indexMethod"
     />

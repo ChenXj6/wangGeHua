@@ -231,7 +231,7 @@ export default {
         })
       }
       // 如果只选择了一个下级，则把他的父级也勾选
-      if(!!data.parentId){
+      if(!!Number(data.parentId)){
         let result = node.checkedKeys.indexOf(data.parentId) >= 0
         !result && node.checkedKeys.push(data.parentId)
       }
@@ -394,7 +394,6 @@ export default {
 }
 .custom-tree-node > span:nth-child(2) >span {
   min-width: 100px;
-  
 }
 .tagClass {
   height: 30px;

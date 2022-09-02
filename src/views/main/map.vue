@@ -2436,7 +2436,7 @@ h4 {
 /* 驾驶舱 */
 .coclpitDialog {
   width: 100%;
-  /* height: 500px;  */
+  height: 100%; 
   min-height: 300px;
   border: 1px solid #bad23c;
   box-sizing: border-box;

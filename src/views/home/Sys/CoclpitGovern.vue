@@ -38,12 +38,44 @@
   <el-dialog
     title="驾驶舱展示配置"
     v-model="dialogVisible"
-    width="50%"
+    width="95%"
     :before-close="dialogBeforeClose">
-    <div></div>
+    <el-row class="box" gutter="20">
+      <el-col :span="12">
+        <el-tree
+          ref="treeRef"
+          :data="treeList"
+          :props="props"
+          node-key="id"
+          default-expand-all
+          show-checkbox
+          check-strictly
+          :default-checked-keys="checkTreeList"
+          @check="handleCheckChange"
+        >
+        <template #default="{ node, data }">
+            <span class="custom-tree-node">
+              <span>{{ data.name }}</span>
+              <span>
+                <span class="tagClass" v-if="!!data.showType && data.children.length <= 0">
+                  <el-button
+                    size="small"
+                    :type="(  data.showType == '1') ? 'primary' : 'success'"
+                    >{{ (  data.showType == '1') ? '文本' : '图表' }}</el-button
+                  ></span>
+                  <span v-else><el-button size="small" type="info">模块</el-button></span>
+              </span>
+            </span>
+          </template>
+        </el-tree>
+      </el-col>
+      <!-- <el-col class="bg" :span="18">
+        <Coclpit ref="CoclpitRef"/>
+      </el-col> -->
+    </el-row>
     <template #footer>
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      <el-button type="primary" @click="handleSet">保 存</el-button>
     </template>
   </el-dialog>
   <!-- 新增&&编辑 -->
@@ -58,12 +90,15 @@
   </el-dialog>
 </template>
 <script>
-import { getCurrentInstance, onMounted, reactive, ref } from '@vue/runtime-core'
+import { defineAsyncComponent, getCurrentInstance, nextTick, onMounted, reactive, ref } from '@vue/runtime-core'
 import { renderTable } from './common/CoclpitGovern'
 import { deepClone, defaultObject } from '@/utils/util'
 import { useRouter } from 'vue-router'
-import { saveCoclpit,deleteCoclpit,updateCoclpit } from '@/api/sys/coclpitGovern'
+import { saveCoclpit,deleteCoclpit,updateCoclpit,getCoclpitTree,getCheckCoclpitTree,setConfig } from '@/api/sys/coclpitGovern'
 export default {
+  components:{
+    // Coclpit:defineAsyncComponent(() => import('@/views/main/components/coclpit.vue'))
+  },
   setup() {
     const { proxy } = getCurrentInstance()
     const router = useRouter()
@@ -80,8 +115,14 @@ export default {
     const dialogBeforeClose = () => {
       dialogVisible.value = false
     }
+    const CoclpitRef = ref(null)
     const handleControl = () => {
+      getTreeList()
+      getCheckTree()
       dialogVisible.value = true
+      // nextTick(()=>{
+      //   console.log(CoclpitRef.value.isOpen)
+      // })
     }
     // 表格相關操作
     const handleQuery = () => {
@@ -181,6 +222,91 @@ export default {
         {type:'primary',label:'保 存',key:'add',handle:handleAddItem},
       ]
     }
+    // 
+    const treeRef = ref(null)
+    const treeList = ref([])
+    const checkTreeList = ref([])
+    const treeCheckArr = ref([])
+    const getTreeList = () => {
+      getCoclpitTree().then(res=>{
+        if(res.resCode == '000000'){
+          treeList.value = res.data
+        }
+      })
+    }
+    const getCheckTree = () => {
+      getCheckCoclpitTree().then(res=>{
+        if(res.resCode == '000000'){          
+          let arr = []
+          res.data.forEach((v,i)=>{
+            arr[i] = v.id
+          })
+          checkTreeList.value = arr
+        }
+      })
+    }
+    const props = {
+      label: 'name',
+      children: 'children',
+    }
+    // el-tree 选择逻辑
+    const handleCheckChange = (data,node) => {
+      let result = node.checkedKeys.indexOf(data.id) >= 0
+      if(data.children.length > 0 && result){ // 如果直接选择了父级，下级全部勾选
+        data.children.forEach(val=>{
+          if(node.checkedKeys.indexOf(val.id) >= 0){
+            node.checkedKeys.forEach((v,i)=>{
+              if(val.id == v){
+                node.checkedKeys.splice(i,1)              
+              }
+            })
+          }else{
+            node.checkedKeys.push(val.id)
+          }
+        })
+      }else if(!result){  // 如果点击取消了父级，下级全部移除
+        data.children.forEach(val=>{
+          if(node.checkedKeys.indexOf(val.id) >= 0){
+            node.checkedKeys.forEach((v,i)=>{
+              if(val.id == v){
+                node.checkedKeys.splice(i,1)              
+              }
+            })
+          }
+        })
+      }
+      // 如果只选择了一个下级，则把他的父级也勾选
+      if(!!Number(data.parentId)){
+        let result = node.checkedKeys.indexOf(data.parentId) >= 0
+        !result && node.checkedKeys.push(data.parentId)
+      }
+      // 把半选中的父级改为选中
+      node.halfCheckedKeys.forEach((v,i)=>{
+        node.checkedKeys.push(v)
+        node.halfCheckedKeys.splice(i,1)
+      })
+      treeRef.value.setCheckedKeys(node.checkedKeys,false)
+      // 给接口所用数据赋值
+      let checkArr = node.checkedKeys
+      if(checkArr.length == 0) treeCheckArr.value = []
+      let arr = []
+      checkArr.forEach(v=>{
+        arr.push(v)
+      })
+      treeCheckArr.value = arr
+    }
+    const handleSet = () => {
+      let id = treeCheckArr.value.join(';')
+      setConfig({id}).then(res=>{
+        if(res.resCode == '000000'){
+          proxy.$message.success('修改成功')
+          handleQuery()
+          dialogVisible.value = false
+        }else{
+          proxy.$message('保存失败，请稍后重试')
+        }
+      })
+    }
     onMounted(()=>{
       handleQuery()
     })
@@ -202,10 +328,38 @@ export default {
       addFormHandle,
       addDialogVisible,
       addDialogBeforeClose,
+      treeRef,
+      props,
+      handleCheckChange,
+      treeList,
+      checkTreeList,
+      handleSet,
+      CoclpitRef,
     }
   },
 }
 </script>
 <style scoped>
-
+.bg{
+  background: #424242;
+}
+.box{
+  height: 500px;
+}
+.custom-tree-node {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-right: 8px;
+}
+.custom-tree-node > span:nth-child(2) {
+  width: 400px;
+  display: flex;
+  justify-content: flex-start;
+}
+.custom-tree-node > span:nth-child(2) >span {
+  min-width: 100px;
+}
 </style>

@@ -1,562 +1,171 @@
 <template>
   <div class="coclpit-content">
-    <!-- <component v-for="i in view" :key="i" :is="i" /> -->
     <div>
-      <h1 style="text-align: center;margin-bottom:40px">{{ currentTitle }}</h1>
+      <h1 style="text-align: center; margin-bottom: 40px">
+        {{ currentTitle }}
+      </h1>
     </div>
-    <el-row :gutter="10" >
+    <el-row :gutter="10">
       <el-col :span="isOpen ? 22 : 24">
-        <template v-if="currentMenu == 0">
-          <el-row :gutter="10"
-                  class="itemBox1">
-            <el-col :span="3"
-                    v-for="item in billboardList"
-                    :key="item.id">
-              <div class="item">
-                <p class="itemTitle">{{ item.title }}</p>
-                <p class="itemNum">{{ item.num }}<span class="itemUnit">{{ item.unit }}</span></p>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row :gutter="10"
-                  class="itemBox2">
-            <el-col :span="3"
-                    v-for="item in personnelDetails"
-                    :key="item.id">
-              <div class="item">
-                <p class="itemNum">{{ item.num }}<span class="itemUnit">{{ item.unit }}</span></p>
-                <p class="itemTitle">{{ item.title }}</p>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row :gutter="10" style="margin-bottom:20px">
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="main1"
-                     ref="main1"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="main2"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="main3"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="main4"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-          </el-row>
-          <el-row :gutter="10">
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="main5"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="main6"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="main7"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="main8"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-          </el-row>
-        </template>
-        <template v-else-if="currentMenu == 1">
-          <el-row :gutter="10">
-            <el-col :span="6">
-              <el-card shadow="hover">
-                <div id="epidemic"
-                     style="width: 100%;height:200px;"></div>
-              </el-card>
-            </el-col>
-          </el-row>
-        </template>
+        <div class="showBox">
+          <div class="viewBox" v-if="viewList.length > 0">
+            <el-row gutter="10">
+              <el-col :span="4" v-for="item in viewList" :key="item">
+                <Component :is="item"></Component>
+              </el-col>
+            </el-row>
+          </div>
+          <div class="eachrtBox" v-if="eachrtList.length > 0">
+            <el-row gutter="10">
+              <el-col :span="6" v-for="item in eachrtList" :key="item">
+                <Component :is="item"></Component>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+        <!--  -->
       </el-col>
-      <el-col v-if="isOpen"
-              :span="2">
+      <el-col v-if="isOpen" :span="2">
         <div class="menuList">
-          <div class="menuItem"
-               v-for="item in menuList"
-               :key="item.id"
-               :class="currentMenu == item.id ? 'active':''"
-               @click="changeSelect(item)">{{ item.title }}</div>
+          <div
+            class="menuItem"
+            v-for="item in menuList"
+            :key="item.id"
+            :class="currentMenu == item.id ? 'active' : ''"
+            @click="changeSelect(item)"
+          >
+            {{ item.title }}
+          </div>
         </div>
       </el-col>
     </el-row>
     <div class="flag">
       <div @click="openMenu">
-        <i class="el-icon-s-fold"></i>&nbsp;
+        <Fold style="width: 14px; height: 14px" />&nbsp;
         <span>{{ isOpen ? '折叠' : '展开' }}</span>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { getCurrentInstance, nextTick, onMounted, ref } from '@vue/runtime-core'
-import A from './a.vue'
-import B from './b.vue'
+import {
+  defineAsyncComponent,
+  getCurrentInstance,
+  nextTick,
+  onBeforeMount,
+  onMounted,
+  ref,
+} from '@vue/runtime-core'
+import { getConfig } from '@/api/sys/coclpitGovern'
+import { searchDict } from '@/api/sys/dict'
+import { defaultObject, listAssign } from '@/utils/util'
 export default {
-  components:{A,B},
-  setup () {
+  components: {
+    PartyOrganizations: defineAsyncComponent(() =>
+      import('./components/PartyOrganizations.vue')
+    ),
+    AdvancedPartyMembers: defineAsyncComponent(() =>
+      import('./components/AdvancedPartyMembers.vue')
+    ),
+    PartyMembers: defineAsyncComponent(() =>
+      import('./components/PartyMembers.vue')
+    ),
+    PartyMemberType: defineAsyncComponent(() =>
+      import('./components/PartyMemberType.vue')
+    ),
+    PartyMemberAge: defineAsyncComponent(() =>
+      import('./components/PartyMemberAge.vue')
+    ),
+    PartyMemberEducation: defineAsyncComponent(() =>
+      import('./components/PartyMemberEducation.vue')
+    ),
+    PartyMemberChangeTrend: defineAsyncComponent(() =>
+      import('./components/PartyMemberChangeTrend.vue')
+    ),
+    PartyMemberNowYearTrend: defineAsyncComponent(() =>
+      import('./components/PartyMemberNowYearTrend.vue')
+    ),
+    PartyMemberTitle: defineAsyncComponent(() =>
+      import('./components/PartyMemberTitle.vue')
+    ),
+  },
+  setup() {
     const { proxy } = getCurrentInstance()
     // 驾驶舱看板
-    const billboardList = ref([
-      { id: 1, title: '街道', num: 2, unit: '个' },
-      { id: 2, title: '基础网格', num: 80, unit: '个' },
-      { id: 3, title: '专属网格', num: 16, unit: '个' },
-      { id: 4, title: '常住户', num: 28802, unit: '户' },
-      { id: 5, title: '社区', num: 11, unit: '个' },
-      { id: 6, title: '单位', num: 695, unit: '个' },
-      { id: 7, title: '楼栋', num: 658, unit: '个' },
-      { id: 8, title: '重点服务人员', num: 3871, unit: '个' },
-    ])
-    const personnelDetails = ref([
-      { id: 1, title: '网格书记', num: 49, unit: '名' },
-      { id: 2, title: '网格长', num: 29, unit: '名' },
-      { id: 3, title: '网格员', num: 114, unit: '名' },
-      { id: 4, title: '帮包服务队', num: 70, unit: '个' },
-      { id: 5, title: '事件处置', num: 4488, unit: '件' },
-      { id: 6, title: '12345工单', num: 6091, unit: '件' },
-      { id: 7, title: '雪亮工程监控', num: 594, unit: '路' },
-      { id: 8, title: '重点监控管理人员', num: 162, unit: '人' },
-    ])
-    const myChart1 = ref(null)
-    const myChart2 = ref(null)
-    const myChart3 = ref(null)
-    const myChart4 = ref(null)
-    const myChart5 = ref(null)
-    const myChart6 = ref(null)
-    const myChart7 = ref(null)
-    const myChart8 = ref(null)
-    const drawEcharts = () => {
-      myChart1.value = proxy.$echart.init(document.getElementById('main1'))
-      myChart2.value = proxy.$echart.init(document.getElementById('main2'))
-      myChart3.value = proxy.$echart.init(document.getElementById('main3'))
-      myChart4.value = proxy.$echart.init(document.getElementById('main4'))
-      myChart5.value = proxy.$echart.init(document.getElementById('main5'))
-      myChart6.value = proxy.$echart.init(document.getElementById('main6'))
-      myChart7.value = proxy.$echart.init(document.getElementById('main7'))
-      myChart8.value = proxy.$echart.init(document.getElementById('main8'))
-      // 绘制图表
-      myChart1.value.setOption({
-        title: {
-          text: '网格人员力量类型统计'
-        },
-        tooltip: {},
-        xAxis: {
-          data: ['网格书记', '网格长', '网格员', '帮包服务队']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '人数以及人员类型',
-            type: 'bar',
-            data: [49, 26, 114, 70]
-          }
-        ]
-      });
-      // 饼图
-      myChart2.value.setOption({
-        title: {
-          text: '网格人员类型占比统计',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'bottom'
-        },
-        series: [
-          {
-            name: '人员占比',
-            type: 'pie',
-            radius: '50%',
-            data: [
-              { value: 49, name: '网格书记' },
-              { value: 26, name: '网格长' },
-              { value: 114, name: '网格员' },
-              { value: 70, name: '帮包服务队' },
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      })
-      // 绘制图表
-      myChart3.value.setOption({
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow',
-            label: {
-              show: true
-            }
-          }
-        },
-        calculable: true,
-        legend: {
-          data: ['总数量', '已完成'],
-          itemGap: 5
-        },
-        grid: {
-          top: '12%',
-          left: '1%',
-          right: '10%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            data: ['网格书记', '网格长', '网格员', '帮包服务队']
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '处理数量',
-            axisLabel: {
-              formatter: function (a) {
-                a = +a;
-                return isFinite(a) ? proxy.$echart.format.addCommas(+a / 1000) : '';
-              }
-            }
-          }
-        ],
-        dataZoom: [
-          {
-            show: true,
-            start: 94,
-            end: 100
-          },
-          {
-            type: 'inside',
-            start: 94,
-            end: 100
-          },
-          {
-            show: true,
-            yAxisIndex: 0,
-            filterMode: 'empty',
-            width: 30,
-            height: '80%',
-            showDataShadow: false,
-            left: '93%'
-          }
-        ],
-        series: [
-          {
-            name: 'Budget 2011',
-            type: 'bar',
-            data: [0, 0, 0, 0, 0]
-          },
-          {
-            name: 'Budget 2012',
-            type: 'bar',
-            data: [0, 0, 0, 0, 0]
-          }
-        ]
-      });
-      // 绘制图表
-      myChart4.value.setOption({
-        // title: {
-        //   text: '事项处置效率排名',
-        //   subtext:'完成数/总数',
-        // },
-        tooltip: {},
-        xAxis: {
-          data: ['东区社区', '西区社区', '南区社区', '北区社区', '泉星社区', '绿地社区']
-        },
-        legend: [
-          {
-            name: '总数量',
-          },
-          {
-            name: '效率',
-          },
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '处理数量',
-          },
-          {
-            type: 'value',
-            name: '处理效率',
-          }
-        ],
-        series: [
-          {
-            name: '总数量',
-            type: 'bar',
-            data: [49, 26, 114, 70, 20, 30]
-          },
-          {
-            name: '效率',
-            type: 'line',
-            data: [10, 20, 40, 65, 50, 86]
-          }
-        ]
-      });
-      // 饼图
-      myChart5.value.setOption({
-        title: {
-          text: '事项处置完成率统计',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'bottom'
-        },
-        series: [
-          {
-            name: '',
-            type: 'pie',
-            radius: '50%',
-            data: [
-              { value: 835, name: '西区社区' },
-              { value: 794, name: '南区社区' },
-              { value: 781, name: '北区社区' },
-              { value: 764, name: '绿地社区' },
-              { value: 710, name: '东区社区' },
-              { value: 619, name: '泉星社区' },
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      })
-      // 绘制图表
-      myChart6.value.setOption({
-        // title: {
-        //   text: '事项处置效率排名',
-        //   subtext:'完成数/总数',
-        // },
-        tooltip: {},
-        xAxis: {
-          data: ['东区社区', '西区社区', '南区社区', '北区社区', '泉星社区', '绿地社区'],
-          min: 0,
-        },
-        legend: [
-          {
-            name: '总数量',
-          },
-          {
-            name: '已完成',
-          },
-        ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '处理数量',
-          }
-        ],
-        series: [
-          {
-            name: '总数量',
-            type: 'bar',
-            data: [2, 18, 8, 3, 0, 0]
-          },
-          {
-            name: '已完成',
-            type: 'bar',
-            data: [0, 18, 5, 0, 0, 0]
-          }
-        ]
-      });
-      // 绘制图表
-      myChart7.value.setOption({
-        title: {
-          text: '事项处置效率排名',
-          // subtext:'完成数/总数',
-        },
-        tooltip: {},
-        xAxis: {
-          data: ['工人南村街道'],
-          min: 0,
-        },
-        // legend: [
-        //   {
-        //     name:'总数量',
-        //   },
-        //   {
-        //     name:'已完成',
-        //   },
-        // ],
-        yAxis: [
-          {
-            type: 'value',
-            name: '处理数量',
-          },
-          {
-            type: 'value',
-            name: '处置效率',
-            min: 0,
-            max: 100,
-          }
-        ],
-        series: [
-          {
-            name: '总数量',
-            type: 'bar',
-            data: [2, 18, 8, 3, 0, 0]
-          },
-          {
-            name: '已完成',
-            type: 'bar',
-            data: [0, 18, 5, 0, 0, 0]
-          },
-          {
-            name: '处理效率',
-            type: 'line',
-            data: [0, 18, 5, 0, 0, 0]
-          }
-        ]
-      });
-      // 饼图
-      myChart8.value.setOption({
-        title: {
-          text: '南村街道12345热线办理比例分析图',
-          left: 'center'
-        },
-        tooltip: {
-          trigger: 'item'
-        },
-        legend: {
-          orient: 'vertical',
-          bottom: 'bottom'
-        },
-        series: [
-          {
-            name: '',
-            type: 'pie',
-            radius: '50%',
-            label: {
-              normal: {
-                show: true,
-                formatter: '{b}: {c}件({d}%)' //自定义显示格式(b:name, c:value, d:百分比)
-              }
-            },
-            data: [
-              { value: 2138, name: '城乡建设' },
-              { value: 420, name: '社会事业' },
-              { value: 2812, name: '城市综合' },
-              { value: 39, name: '三农问题' },
-              { value: 179, name: '人力资源保障' },
-              { value: 139, name: '经济综合' },
-              { value: 32, name: '其他' },
-              { value: 501, name: '疫情防控' },
-              { value: 0, name: '城市更新' },
-              { value: 13, name: '自然资源' },
-            ],
-            emphasis: {
-              itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      })
-    }
-    const epidemic = ref(null)
-    const epidemicEcharts = () => {
-      epidemic.value = proxy.$echart.init(document.getElementById('epidemic'))
-      epidemic.value.setOption({
-        title: {
-          text: '疫苗接种',
-          left: 'center'
-        },
-        tooltip: {},
-        xAxis: {
-          data: ['东区社区', '西区社区', '南区社区', '北区社区','泉星社区','绿地社区']
-        },
-        yAxis: {},
-        series: [
-          {
-            name: '已接种人数',
-            type: 'bar',
-            data: [3791, 5267, 2785, 3872,4740,5567]
-          }
-        ]
-      });
-    }
+    // 折叠/展开
     const isOpen = ref(true)
     const openMenu = () => {
+      console.log('1111')
       isOpen.value = !isOpen.value
-      resetDom()
     }
-    const currentMenu = ref(0)
+    const currentMenu = ref('0')
     const currentTitle = ref('驾驶舱')
     const menuList = ref([
-      { id: 0, title: '驾驶舱看板' },
-      { id: 1, title: '疫情看板' },
-      { id: 2, title: '党建看板' },
-      { id: 3, title: '网格看板' },
-      { id: 4, title: '民生看板' },
-      { id: 5, title: '应急看板' },
-      { id: 6, title: '物业看板' },
-      { id: 7, title: '经济看板' },
+      { id: '0', title: '驾驶舱看板', ownModule: '', isShowFlag: '1' },
     ])
-    const resetDom = () => {
-      if(currentMenu.value == 0){
-        nextTick(()=>{
-          drawEcharts()
-        })
-      }else if(currentMenu.value == 1){
-        nextTick(()=>{
-          epidemicEcharts()
-        })
-      }
-    }
-    const changeSelect = ({ id,title }) => {
-      currentMenu.value = id
-      currentTitle.value = title
-      resetDom()
-    }
-    onMounted(() => {
-      drawEcharts()
+    let currentObj = ref({
+      ownModule: '',
+      isShowFlag: '1',
     })
-    const view = ref(['A','B'])
+    const changeSelect = (item) => {
+      defaultObject(currentObj.value)
+      currentMenu.value = item.id
+      currentTitle.value = item.title
+      listAssign(currentObj.value, item)
+      getConfigList(currentObj.value)
+    }
+
+    // 初始化驾驶舱右边栏
+    const querySearchAsync = (basictype) => {
+      searchDict({ basictype }).then((res) => {
+        if (res.resCode == '000000' && Array.isArray(res.data)) {
+          let arr = []
+          res.data.forEach((v) => {
+            let obj = {}
+            obj.id = v.value
+            obj.title = v.description
+            obj.ownModule = v.value
+            obj.isShowFlag = ''
+            arr.push(obj)
+          })
+          menuList.value = [...menuList.value, ...arr]
+          listAssign(currentObj.value, menuList.value[0])
+        } else {
+          return
+        }
+      })
+    }
+    const viewList = ref([])
+    const eachrtList = ref([])
+    const getConfigList = (data) => {
+      getConfig(data).then((res) => {
+        if (res.resCode == '000000' && Array.isArray(res.data)) {
+          viewList.value = []
+          eachrtList.value = []
+          res.data.forEach((v) => {
+            if (v.showType == '1') {
+              viewList.value.push(v.componentName)
+            } else {
+              eachrtList.value.push(v.componentName)
+            }
+          })
+        }
+      })
+    }
+
+    onBeforeMount(() => {
+      querySearchAsync('1095')
+      getConfigList(currentObj.value)
+    })
     return {
-      billboardList, personnelDetails, openMenu, isOpen, menuList, currentMenu, changeSelect,currentTitle,view
+      openMenu,
+      isOpen,
+      menuList,
+      currentMenu,
+      changeSelect,
+      currentTitle,
+      viewList,
+      eachrtList,
     }
   },
 }
@@ -612,8 +221,7 @@ export default {
 }
 .coclpit-content {
   overflow: scroll;
-  /* min-height: 500px; */
-  /* max-height: 700px; */
+  height: 95%;
   scrollbar-width: none;
   scrollbar-color: transparent transparent;
   scrollbar-track-color: transparent;
@@ -650,9 +258,34 @@ export default {
 }
 .flag {
   position: absolute;
-  top: 100px;
+  top: 140px;
   right: 60px;
   font-size: 14px;
   cursor: pointer;
+}
+.flag > div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  width: 50px;
+  align-items: center;
+}
+/*  */
+.showBox {
+  width: 100%;
+  height: 100%;
+}
+.viewBox {
+  width: 100%;
+  min-height: 250px;
+  max-height: 260px;
+  margin-bottom: 10px;
+  overflow: scroll;
+}
+.eachrtBox {
+  width: 100%;
+  min-height: 200px;
+  max-height: 420px;
+  overflow: scroll;
 }
 </style>
