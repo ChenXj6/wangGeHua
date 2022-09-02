@@ -2,10 +2,10 @@
   <div class="partymembersBox">
     <el-card class="box-card" shadow="hover">
       <template #header>
-        <span class="fontTitle">党员职称统计</span>
+        <span class="fontTitle">本年税收类型</span>
       </template>
       <div class="itemBox">
-        <div id="main6" ref="main1" style="width: 100%;height:160px;"></div>
+        <div id="main9" ref="main1" style="width: 100%;height:160px;"></div>
       </div>
     </el-card>
   </div>
@@ -16,43 +16,39 @@ import { getCurrentInstance, nextTick, onBeforeMount, onMounted, watch } from "@
 import { getWg } from '@/api/coclpit'
 
 const { proxy } = getCurrentInstance()
-let myChart1 = null
+const myChart1 = ref(null)
 const echartsData = ref([
-    { name: '局长', value: 1 },
-    { name: '处长', value: 2 },
-    { name: '科长', value: 3 },
-    { name: '主任科员', value: 6 },
-    { name: '巡视员', value: 10 },
-    { name: '办事员', value: 12 },
-    { name: '科员', value: 2 },
+        { value: 1048, name: '固定资产投资' },
+        { value: 735, name: '一般公共预算' },
       ])
 const drawEcharts = () => {
-  myChart1 = proxy.$echart.init(document.getElementById('main6'))
+  myChart1.value = proxy.$echart.init(document.getElementById('main9'))
   // 饼图
-  myChart1.setOption({
+  myChart1.value.setOption({
     tooltip: {
       trigger: 'item',
-      formatter: '{a} <br/>{b} : {c}人 ({d}%)'
+      // position:'right',
+      formatter: '{b} : <br/>{c}万元 ({d}%)'
     },
   series: [
     {
-      name: '学历',
+      name: '税收类型',
       type: 'pie',
-      top: '0',
+      top: '10%',
+      // radius: '50%',
       label: {
-        alignTo: 'edge',
-        formatter: '{b}\n{c} 人 {d}%',
-        minMargin: 5,
-        edgeDistance: 5,
+        normal: {
+          show: true,
+          formatter: '{b} : \n \n{c}万元'
+        }
       },
-      labelLine:{
-        length2: 5
-      },
-      radius: [20,70],
       itemStyle: {
         borderColor: '#fff',
-        borderWidth: 5
+        borderWidth: 2
       },
+      // label: {
+      //   show: true,
+      // },
       data: echartsData.value
     }
   ]

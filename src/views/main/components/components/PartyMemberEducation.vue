@@ -34,17 +34,13 @@ const drawEcharts = () => {
     },
   series: [
     {
-      name: '学历',
+      name: '党员学历',
       type: 'pie',
       top: '0',
       label: {
         normal: {
           show: true,
-          formatter: function(v) { //让series 中的文字进行换行
-            //文字中遇到空格就换行,让value换行可以先把value变成字符串再slice操作
-            let text = v.name.split(" ").join("\n") + ':\n' + v.value + "人 ";
-            return text;
-          }
+          formatter:'{b}\n{c} 人 {d}%'
         }
       },
       radius: ['30%','80%'],

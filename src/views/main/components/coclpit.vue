@@ -11,14 +11,18 @@
           <div class="viewBox" v-if="viewList.length > 0">
             <el-row gutter="10">
               <el-col :span="4" v-for="item in viewList" :key="item">
+                <transition name="move" mode="out-in">
                 <Component :is="item"></Component>
+              </transition>
               </el-col>
             </el-row>
           </div>
           <div class="eachrtBox" v-if="eachrtList.length > 0">
             <el-row gutter="10">
               <el-col :span="6" v-for="item in eachrtList" :key="item">
+                <transition name="move" mode="out-in">
                 <Component :is="item"></Component>
+              </transition>
               </el-col>
             </el-row>
           </div>
@@ -88,6 +92,27 @@ export default {
     PartyMemberTitle: defineAsyncComponent(() =>
       import('./components/PartyMemberTitle.vue')
     ),
+    RevenueTotalTax: defineAsyncComponent(() =>
+      import('./components/RevenueTotalTax.vue')
+    ),
+    RevenueTotalTaxTrend: defineAsyncComponent(() =>
+      import('./components/RevenueTotalTaxTrend.vue')
+    ),
+    RevenueNowYearTrend: defineAsyncComponent(() =>
+      import('./components/RevenueNowYearTrend.vue')
+    ),
+    RevenueNowYearByType: defineAsyncComponent(() =>
+      import('./components/RevenueNowYearByType.vue')
+    ),
+    NinePlaceByType: defineAsyncComponent(() =>
+      import('./components/NinePlaceByType.vue')
+    ),
+    NinePlaceNumbers: defineAsyncComponent(() =>
+      import('./components/NinePlaceNumbers.vue')
+    ),
+    ProjectNowYear: defineAsyncComponent(() =>
+      import('./components/ProjectNowYear.vue')
+    ),
   },
   setup() {
     const { proxy } = getCurrentInstance()
@@ -95,7 +120,6 @@ export default {
     // 折叠/展开
     const isOpen = ref(true)
     const openMenu = () => {
-      console.log('1111')
       isOpen.value = !isOpen.value
     }
     const currentMenu = ref('0')
@@ -220,6 +244,7 @@ export default {
   text-align: center;
 }
 .coclpit-content {
+  user-select: none;
   overflow: scroll;
   height: 95%;
   scrollbar-width: none;

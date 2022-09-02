@@ -41,7 +41,7 @@
     width="95%"
     :before-close="dialogBeforeClose">
     <el-row class="box" gutter="20">
-      <el-col :span="12">
+      <el-col :span="12" style="height:100%;overflow: scroll">
         <el-tree
           ref="treeRef"
           :data="treeList"
@@ -165,12 +165,12 @@ export default {
       })
     }
     // 新增 true/编辑 false
-    const operation = ref(false) 
+    const operation = ref(false)
     const handleOperation = (type, rowData) => {
       timer.value = new Date().getTime()
       operation.value = type
       addForm.value = deepClone(rowData)
-      addDialogVisible.value = true      
+      addDialogVisible.value = true
     }
     const addForm = ref({})
     const addDialogVisible = ref(false)
@@ -205,7 +205,7 @@ export default {
             proxy.$message.success(`${!operation.value ? '编辑' : '添加'}成功`)
           }).catch(err=>{
             proxy.$message.warning(`操作失败，请稍后再试！`)
-          })     
+          })
         } else {
           return
         }
@@ -222,7 +222,7 @@ export default {
         {type:'primary',label:'保 存',key:'add',handle:handleAddItem},
       ]
     }
-    // 
+    //
     const treeRef = ref(null)
     const treeList = ref([])
     const checkTreeList = ref([])
@@ -236,7 +236,7 @@ export default {
     }
     const getCheckTree = () => {
       getCheckCoclpitTree().then(res=>{
-        if(res.resCode == '000000'){          
+        if(res.resCode == '000000'){
           let arr = []
           res.data.forEach((v,i)=>{
             arr[i] = v.id
@@ -257,7 +257,7 @@ export default {
           if(node.checkedKeys.indexOf(val.id) >= 0){
             node.checkedKeys.forEach((v,i)=>{
               if(val.id == v){
-                node.checkedKeys.splice(i,1)              
+                node.checkedKeys.splice(i,1)
               }
             })
           }else{
@@ -269,7 +269,7 @@ export default {
           if(node.checkedKeys.indexOf(val.id) >= 0){
             node.checkedKeys.forEach((v,i)=>{
               if(val.id == v){
-                node.checkedKeys.splice(i,1)              
+                node.checkedKeys.splice(i,1)
               }
             })
           }
