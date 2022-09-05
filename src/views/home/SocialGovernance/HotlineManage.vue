@@ -76,7 +76,7 @@
       </template>
     </V-table>
   </div>
-  <el-dialog title="派单" v-model="eventHandleVisible" width="width">
+  <el-dialog title="派单" v-model="eventHandleVisible" width="40%">
       <div>
         <el-form
           ref="recordFormRef"
@@ -126,7 +126,7 @@
               </el-table-column>
               <el-table-column prop="operatorId" label="账号" >
               </el-table-column>
-              <el-table-column prop="operatorName" label="姓名" width="width">
+              <el-table-column prop="operatorName" label="姓名">
               </el-table-column>
             </el-table>
           </el-col>
@@ -292,7 +292,7 @@ export default defineComponent({
       dataForm.value.dealBy = val.operatorName;
       dataForm.value.dealCode = val.operatorId;
       userDialogVisible.value = false
-      
+
     }
     const handleQueryUserTable = () => {
       getUserList({ pageNum: 1, pageSize: 50 }).then((res) => {
@@ -332,7 +332,7 @@ export default defineComponent({
       dataForm.value.concludeTime = multipleSelection.value[0].concludeTime
       dataForm.value.receivingTime = multipleSelection.value[0].receivingTime
       eventHandleVisible.value = true
-      
+
     }
     const handleRecord = async (formRef) => {
         await formRef.validate((vaild) => {
@@ -384,7 +384,7 @@ export default defineComponent({
     const fileList = ref([])
     // 上传图片
     const changeFile = (file) => {
-      if(file.size / 1024 / 1024 > 10){ 
+      if(file.size / 1024 / 1024 > 10){
         fileList.value = []
         proxy.$message.error('最大文件上传尺寸为10Mb')
         return
@@ -503,7 +503,7 @@ export default defineComponent({
       userDialogVisible,
       handleRowclick,
       handleRecord,
-      // 
+      //
       Delete,
       Edit,
       Search,

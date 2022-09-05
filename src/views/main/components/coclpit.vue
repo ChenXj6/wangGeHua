@@ -55,9 +55,7 @@
 import {
   defineAsyncComponent,
   getCurrentInstance,
-  nextTick,
   onBeforeMount,
-  onMounted,
   ref,
 } from '@vue/runtime-core'
 import { getConfig } from '@/api/sys/coclpitGovern'
@@ -66,52 +64,64 @@ import { defaultObject, listAssign } from '@/utils/util'
 export default {
   components: {
     PartyOrganizations: defineAsyncComponent(() =>
-      import('./components/PartyOrganizations.vue')
+      import('./components/text/PartyOrganizations.vue')
     ),
     AdvancedPartyMembers: defineAsyncComponent(() =>
-      import('./components/AdvancedPartyMembers.vue')
+      import('./components/text/AdvancedPartyMembers.vue')
     ),
     PartyMembers: defineAsyncComponent(() =>
-      import('./components/PartyMembers.vue')
+      import('./components/text/PartyMembers.vue')
     ),
     PartyMemberType: defineAsyncComponent(() =>
-      import('./components/PartyMemberType.vue')
+      import('./components/charts/PartyMemberType.vue')
     ),
     PartyMemberAge: defineAsyncComponent(() =>
-      import('./components/PartyMemberAge.vue')
+      import('./components/charts/PartyMemberAge.vue')
     ),
     PartyMemberEducation: defineAsyncComponent(() =>
-      import('./components/PartyMemberEducation.vue')
+      import('./components/charts/PartyMemberEducation.vue')
     ),
     PartyMemberChangeTrend: defineAsyncComponent(() =>
-      import('./components/PartyMemberChangeTrend.vue')
+      import('./components/charts/PartyMemberChangeTrend.vue')
     ),
     PartyMemberNowYearTrend: defineAsyncComponent(() =>
-      import('./components/PartyMemberNowYearTrend.vue')
+      import('./components/charts/PartyMemberNowYearTrend.vue')
     ),
     PartyMemberTitle: defineAsyncComponent(() =>
-      import('./components/PartyMemberTitle.vue')
+      import('./components/charts/PartyMemberTitle.vue')
     ),
     RevenueTotalTax: defineAsyncComponent(() =>
-      import('./components/RevenueTotalTax.vue')
+      import('./components/text/RevenueTotalTax.vue')
     ),
     RevenueTotalTaxTrend: defineAsyncComponent(() =>
-      import('./components/RevenueTotalTaxTrend.vue')
+      import('./components/charts/RevenueTotalTaxTrend.vue')
     ),
     RevenueNowYearTrend: defineAsyncComponent(() =>
-      import('./components/RevenueNowYearTrend.vue')
+      import('./components/charts/RevenueNowYearTrend.vue')
     ),
     RevenueNowYearByType: defineAsyncComponent(() =>
-      import('./components/RevenueNowYearByType.vue')
+      import('./components/charts/RevenueNowYearByType.vue')
     ),
     NinePlaceByType: defineAsyncComponent(() =>
-      import('./components/NinePlaceByType.vue')
+      import('./components/charts/NinePlaceByType.vue')
     ),
     NinePlaceNumbers: defineAsyncComponent(() =>
-      import('./components/NinePlaceNumbers.vue')
+      import('./components/text/NinePlaceNumbers.vue')
     ),
     ProjectNowYear: defineAsyncComponent(() =>
-      import('./components/ProjectNowYear.vue')
+      import('./components/text/ProjectNowYear.vue')
+    ),
+    ProjectNowYearByType: defineAsyncComponent(() =>
+      import('./components/charts/ProjectNowYearByType.vue')
+    ),
+    ProjectTrend: defineAsyncComponent(() =>
+      import('./components/charts/ProjectTrend.vue')
+    ),
+    CompanyBuilding: defineAsyncComponent(() =>
+      import('./components/charts/CompanyBuilding.vue')
+    ),
+    IndustryNumbers: defineAsyncComponent(() =>
+      import('./components/charts/IndustryNumbers.vue')
     ),
   },
   setup() {
@@ -302,14 +312,14 @@ export default {
 }
 .viewBox {
   width: 100%;
-  min-height: 250px;
+  /* min-height: 250px; */
   max-height: 260px;
   margin-bottom: 10px;
   overflow: scroll;
 }
 .eachrtBox {
   width: 100%;
-  min-height: 200px;
+  /* min-height: 200px; */
   max-height: 420px;
   overflow: scroll;
 }

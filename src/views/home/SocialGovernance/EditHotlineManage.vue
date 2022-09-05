@@ -226,7 +226,7 @@
             {{isDangerOptions.filter(v=>v.value == scope.row.dealStatus)[0]?.label}}
           </template>
         </el-table-column>
-        
+
       </el-table>
     </div>
     <el-row :gutter="10"><div style="margin-top:20px"></div></el-row>
@@ -308,7 +308,7 @@
               <i class="add"></i>
             </el-upload>
         </el-form-item>
-        
+
         <!-- 撤回 -->
         <el-form-item v-if="route.query.operation == 8" label="撤回原因" prop="dealRemark">
           <el-input v-model="orderForm.remarks" type="textarea" size="small" placeholder=""></el-input>
@@ -398,7 +398,7 @@
               </el-table-column>
               <el-table-column prop="operatorId" label="账号" >
               </el-table-column>
-              <el-table-column prop="operatorName" label="姓名" width="width">
+              <el-table-column prop="operatorName" label="姓名">
               </el-table-column>
             </el-table>
           </el-col>
@@ -531,7 +531,7 @@ export default {
       getDictThTreeBy(data).then(res=>{
         if(res.code == 200){
           resetFormat(res.data,option)
-        }        
+        }
       })
     }
     getDictThTreeByApi({perms:'0004'},level1Options)
@@ -658,7 +658,7 @@ export default {
     const dialogImageUrl = ref('')
     // 上传图片
     const changeFile = (file) => {
-      if(file.size / 1024 / 1024 > 10){ 
+      if(file.size / 1024 / 1024 > 10){
         fileList.value = []
         proxy.$message.error('最大文件上传尺寸为10Mb')
         return
@@ -669,8 +669,8 @@ export default {
       fileFormData.append('fileName',file.name)
       uploadApi(fileFormData).then(res=>{
         if(res.resCode == '000000'){
-          // fileList   
-          // console.log((dataForm.value.certificates == null && dataForm.value.certificatesName == null) || (String(dataForm.value.certificates).length <= 0 && String(dataForm.value.certificatesName).length <= 0))      
+          // fileList
+          // console.log((dataForm.value.certificates == null && dataForm.value.certificatesName == null) || (String(dataForm.value.certificates).length <= 0 && String(dataForm.value.certificatesName).length <= 0))
           if((orderForm.value.filePath == null && orderForm.value.fileName == null) || (String(orderForm.value.filePath).length <= 0 && String(orderForm.value.fileName).length <= 0)){
             orderForm.value.filePath = res.message
             orderForm.value.fileName = file.name
@@ -734,7 +734,7 @@ export default {
       dialogVisible.value = true
       dialogImageUrl.value = url
     }
-    // 
+    //
     let orderTreeData = ref([])
     const orderTreeProps = {
       label: 'hotlineWorkOrderName',
@@ -804,7 +804,7 @@ export default {
         }
       })
     }
-    // 回单 
+    // 回单
     const handleReceipt = (formRef) => {
       orderForm.value.id = dataForm.value.recordId
       formRef.validate((vaild) => {
@@ -826,7 +826,7 @@ export default {
         }
       })
     }
-    // 接单 
+    // 接单
     const handleTake = (formRef) => {
       orderForm.value.id = dataForm.value.id
       orderForm.value.recordId = dataForm.value.recordId
@@ -850,7 +850,7 @@ export default {
         }
       })
     }
-    // 退回 
+    // 退回
     const handleReturn = (formRef) => {
       orderForm.value.id = dataForm.value.id
       orderForm.value.recordId = dataForm.value.recordId
@@ -874,7 +874,7 @@ export default {
         }
       })
     }
-    // 审核 处置  
+    // 审核 处置
     const handleManage = (formRef) => {
       orderForm.value.id = dataForm.value.id
       orderForm.value.recordId = dataForm.value.recordId
@@ -906,7 +906,7 @@ export default {
         }
       })
     }
-    // 
+    //
     const isDangerOptions = ref([])
     const getOptionsByCode = (basictype,data) => {
       searchDict({basictype}).then(res=>{
@@ -963,7 +963,7 @@ export default {
       dialogImageUrl,
       handlePreview,
       url,
-      // 
+      //
       orderTreeProps,
       orderTreeData,
       handleOrderTreeSelectChange,

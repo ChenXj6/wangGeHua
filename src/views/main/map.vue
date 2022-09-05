@@ -461,7 +461,7 @@
     <!-- 楼栋弹窗-->
     <Building :key="buildTime" v-if="houseDialogVisible" :houseDialogVisible="houseDialogVisible" @update:houseDialogVisible="handleCloseBuild" :gisid="gisid" />
     <!-- 事件处置弹窗 -->
-    <el-dialog title="" v-model="eventHandleVisible" width="width">
+    <el-dialog title="" v-model="eventHandleVisible" width="50%">
       <div>
         <el-form
           ref="recordFormRef"
@@ -615,7 +615,7 @@ import { getMedia } from '@/api/Propaganda/media'
 // 应急指挥
 import { getSupp } from '@/api/UrgentNeed/supplies'
 import { getSmoke } from '@/api/UrgentNeed/smoke'
-// 
+//
 import Coclpit from './components/coclpit.vue'
 import Building from './components/building.vue'
 
@@ -748,10 +748,10 @@ export default {
         }
       };
     });
-    
 
-    
-    const handleHotlineOperation = () => {  
+
+
+    const handleHotlineOperation = () => {
        var html = '<div id="release" onClick="hj2(14328,8812,\'西区公寓\',\'http://www.baidu.com\',400,300)" style="cursor: pointer;display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>西区公寓</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
       vMap.showMapMark(14328, 8812, html);
       return;
@@ -766,7 +766,7 @@ export default {
 
     let searchEventParams = ref({}); // 事件查询表单数据备份
     let searchHotlineParams = ref({}); // 12345热线查询表单数据备份
-  
+
 
     // 组织结构
     let popupTreeData = ref([]);
@@ -1055,7 +1055,7 @@ export default {
         tagShow.value[v] = false
       })
     }
-    
+
     const tagClick = (tagNanme,isShow,{lng,lat,html}) => {
       Object.keys(tagList.value).forEach(v=>{
         if(v == tagNanme){
@@ -1199,7 +1199,7 @@ export default {
       });
     };
 
-    
+
     // websocket 事件触发
     // 自行触发弹窗函数
     const eventDialogStyle = () => {
@@ -1302,7 +1302,7 @@ export default {
       data.length && handleSelect(data[0])
     })
     // 数字党建 >>> 工作展示模块
-    const workShowList = ref([])    
+    const workShowList = ref([])
     // 数字党建弹窗控制模块
     const getPartyInfoList = (orgType) => {
       return new Promise((resolve,reject)=>{
@@ -1583,7 +1583,7 @@ export default {
 
     // 民生保障 >>> 服务机构
     const serviceClick = (orgType,type) => {
-      
+
       tagShow.value[type] = !tagShow.value[type]
       getHaidi(orgType).then(res=>{
           if(res.list.length > 0){
@@ -1600,7 +1600,7 @@ export default {
     }
     // 民生保障 >>> 应急
     const meetClick = (type1,type) => {
-      
+
       tagShow.value[type] = !tagShow.value[type]
       getSuppList(type1).then(res=>{
           if(res.list.length > 0){
@@ -1617,7 +1617,7 @@ export default {
     }
     // 应急指挥 >>> 烟感&一键报警器
     const smokeClick = (deviceType,type) => {
-      
+
       tagShow.value[type] = !tagShow.value[type]
       getSmokeList(deviceType).then(res=>{
           if(res.list.length > 0){
@@ -1643,7 +1643,7 @@ export default {
         partyClick(2,item.type)
       } else if (item.type == 'partyBranch') {
         isOpenType.value = item.type
-        handleClickOpen('')        
+        handleClickOpen('')
         partyClick(3,item.type)
         return
       } else if (item.type == 'partyVan') {
@@ -1669,7 +1669,7 @@ export default {
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )        
+        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )
         return
       }else if (item.type == 'workResults') {
         isOpenType.value = item.type
@@ -1682,7 +1682,7 @@ export default {
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )        
+        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )
         return
       }
       // else if (item.type == "building") {
@@ -1694,9 +1694,9 @@ export default {
       //     }else{
       //       proxy.$message.warning('暂无此类数据!')
       //     }
-      //   },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )        
+      //   },err=> proxy.$message.error('残联服务中心数据请求错误！请稍后重试') )
       //   return
-      // } 
+      // }
       else if (item.type == "building") {
         tagShow.value[item.type] = !tagShow.value[item.type]
         floorTagClick(item,tagShow.value[item.type])
@@ -1729,30 +1729,30 @@ export default {
         });
       } else if(item.type == "release"){
         isOpenType.value = item.type
-        handleClickOpen('')        
+        handleClickOpen('')
         releaseClick(item.type)
       } else if(item.type == "neuropathy"){
         isOpenType.value = item.type
-        handleClickOpen('')        
+        handleClickOpen('')
         neuropathyClick(item.type)
       } else if(item.type == "someDayEvent"){
         isOpenType.value = item.type
-        handleClickOpen('')   
+        handleClickOpen('')
         sameDayClick(item.type)
         //  var html = '<div id="release" onClick="hj2(16600,9484,\'计算小楼\',\'http://www.baidu.com\',400,300)" style="display:inline;height:18px; line-height:18px;border:#FFFFFF solid 1px;padding:1px 2px 0px 2px;color:#FFFFFF;text-align:center; background-color:#ff9000"><nobr>计算小楼</nobr></div><div style="height:9px;text-align:center;margin:-3px 0px 0px 0px"><img src="http://ustc.you800.com/images/textdiv_arrow.gif"></div>'
         // vMap.showMapMark(16600, 9484, html);
         // return;
       } else if(item.type == "drugDetoxification"){
         isOpenType.value = item.type
-        handleClickOpen('')        
+        handleClickOpen('')
         drugDetoxificationClick(item.type)
       } else if(item.type == "correct"){
         isOpenType.value = item.type
-        handleClickOpen('')   
+        handleClickOpen('')
         correctClick(item.type)
       } else if(item.type == "control"){
         isOpenType.value = item.type
-        handleClickOpen('')   
+        handleClickOpen('')
         controlClick(item.type)
       } else if(item.type == "monitorLocation"){
         isOpenType.value = item.type
@@ -1781,7 +1781,7 @@ export default {
         return
       } else if (item.type == 'parkingLotPosition') {
         isOpenType.value = item.type
-        handleClickOpen('')        
+        handleClickOpen('')
         lotClick(item.type)
       } else if (item.type == 'roadGatePosition') {
         isOpenType.value = item.type
@@ -1807,12 +1807,12 @@ export default {
         return
       }else if (item.type == 'keyProjects') {
         isOpenType.value = item.type
-        handleClickOpen('')        
+        handleClickOpen('')
         keyProjectsClick(item.type)
       }else if (item.type == 'service') {
         isOpenType.value = item.type
         handleClickOpen('')
-        
+
         let type = item.type + item.staffType
         tagShow.value[type] = !tagShow.value[type]
         getStaff(item.staffType).then(res=>{
@@ -1862,7 +1862,7 @@ export default {
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )        
+        },err=> proxy.$message.error('工作展示数据请求错误！请稍后重试') )
         return
       } else if (item.type == 'supplies') {
         isOpenType.value = item.type
@@ -1959,7 +1959,7 @@ export default {
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('培训宣传数据请求错误！请稍后重试') )        
+        },err=> proxy.$message.error('培训宣传数据请求错误！请稍后重试') )
         return
       } else if (item.type == 'training') {
         isOpenType.value = item.type
@@ -1972,7 +1972,7 @@ export default {
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('应急培训数据请求错误！请稍后重试') )        
+        },err=> proxy.$message.error('应急培训数据请求错误！请稍后重试') )
         return
       } else if (item.type == 'casewarning') {
         isOpenType.value = item.type
@@ -1985,7 +1985,7 @@ export default {
           }else{
             proxy.$message.warning('暂无此类数据!')
           }
-        },err=> proxy.$message.error('案列警告数据请求错误！请稍后重试') )        
+        },err=> proxy.$message.error('案列警告数据请求错误！请稍后重试') )
         return
       }
 
@@ -2004,7 +2004,7 @@ export default {
       })
     }
 
-//公共设施 
+//公共设施
     const getCommunalFacilities = (deviceType) => {
        return new Promise((resolve,reject)=>{
         getPubilcList({pageNum:1,pageSize:9999,deviceType}).then(res=>{
@@ -2084,7 +2084,7 @@ export default {
       })
     }
 
-    //经济运行>>重点企业,商务楼宇 
+    //经济运行>>重点企业,商务楼宇
     const getBuildingList = (cbType) => {
        return new Promise((resolve,reject)=>{
         buildingList({pageNum:1,pageSize:9999,cbType}).then(res=>{
@@ -2097,7 +2097,7 @@ export default {
       })
     }
 
-    //经济运行>>重点项目 
+    //经济运行>>重点项目
       const getItemList = (orgType) => {
       return new Promise((resolve,reject)=>{
         itemList({pageNum:1,pageSize:9999,orgType}).then(res=>{
@@ -2134,7 +2134,7 @@ export default {
         })
       })
     }
-    
+
 
     // 应急指挥 >>> 应急物资
     const getSuppList = (type1) => {
@@ -2194,7 +2194,7 @@ export default {
       searchHiddenDangerForm.officeCode = officeCode;
       searchHiddenDangerForm.officeName = officeName;
     };
-    // 
+    //
     onBeforeMount(() => {
       initTagState()
       getOptionsByCode(1026, dataSourceOptions);
@@ -2248,7 +2248,7 @@ export default {
       brandList,
       workShowList,
       gisid,
-      // 
+      //
       tagShow,
       searchInfoParams,
       formConfig,
@@ -2292,12 +2292,12 @@ export default {
       formHiddenDangerConfig,
       tableHiddenDangerConfig,
       handleHiddenSelectChange,
-      // 
+      //
       buildTime,
       houseDialogVisible,
       handleCloseBuild,
       handleLocationOperation,
-      // 
+      //
     }
   }
   //#endregion
@@ -2365,7 +2365,7 @@ export default {
 }
 .headerDialog {
   width: 100%;
-  height: 100%; 
+  height: 100%;
   min-height: 500px;
   border: 1px solid #bad23c;
   box-sizing: border-box;
@@ -2436,7 +2436,7 @@ h4 {
 /* 驾驶舱 */
 .coclpitDialog {
   width: 100%;
-  height: 100%; 
+  height: 100%;
   min-height: 300px;
   border: 1px solid #bad23c;
   box-sizing: border-box;
